@@ -91,7 +91,6 @@ class System_helper
         $mpdf->WriteHTML($html);
         $mpdf->Output();
         exit;
-
     }
 
 }
