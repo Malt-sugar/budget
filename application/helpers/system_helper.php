@@ -32,50 +32,11 @@ class System_helper
         return $config;
     }
 
-    public static function get_rnd_code($variety,$display_style=0)
-    {
-        $CI = & get_instance();
-
-        $rndCode = $variety['crop_code'].'-'.$variety['type_code'].'-'.str_pad($variety['variety_index'],3,'0',STR_PAD_LEFT);
-        $varietyConfig = $CI->config->item('variety_type');
-
-        if($variety['variety_type']==1)
-        {
-            if($display_style==0)
-            {
-                $rndCode = $rndCode.'-'.$variety['principal_code'];
-            }
-            else
-            {
-                $rndCode = $rndCode.'-XXX';
-            }
-        }
-        else
-        {
-            $rndCode = $rndCode.'-'.$varietyConfig[$variety['variety_type']];
-        }
-
-        if($display_style==0)
-        {
-            $rndCode = $rndCode.'-'.$variety['year'];
-            $rndCode = $rndCode.'-'.$variety['variety_no'];
-        }
-
-        if($variety['replica_status']==1)
-        {
-            $rndCode = $rndCode.'-R';
-        }
-        else
-        {
-            $rndCode = $rndCode.'-S';
-        }
-
-        return $rndCode;
-    }
     public static function display_date($date)
     {
         return date('d-M-Y',$date);
     }
+
     public static function get_time($str)
     {
         $time=strtotime($str);
@@ -87,18 +48,6 @@ class System_helper
         {
             return $time;
         }
-    }
-    
-    public static function get_ordered_crops()
-    {
-        $CI = & get_instance();
-        $CI->db->select('rnd_crop.id, rnd_crop.crop_name');
-        $CI->db->from('rnd_crop');
-        $CI->db->order_by('ordering','ASC');
-        $CI->db->order_by('id','ASC');
-        $CI->db->where('status != ',$CI->config->item('status_delete'));
-        $result=$CI->db->get()->result_array();
-        return $result;
     }
 
     public static function upload_file($save_dir="images")
@@ -132,6 +81,7 @@ class System_helper
 
         return $uploaded_files;
     }
+
     public static function get_pdf($html)
     {
         include(FCPATH."mpdf60/mpdf.php");
