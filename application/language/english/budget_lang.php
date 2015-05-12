@@ -19,6 +19,11 @@ $lang['NO_DATA_FOUND']='No Data Found';
 $lang['LABEL_YES'] = 'Yes';
 $lang['LABEL_NO'] = 'No';
 $lang['LABEL_SELECT_YEAR'] = 'Select Year';
+$lang['LABEL_YEAR'] = 'Year';
+$lang['LABEL_DIVISION'] = 'Division';
+$lang['LABEL_ZONE'] = 'Zone';
+$lang['LABEL_TERRITORY'] = 'Territory';
+$lang['LABEL_CUSTOMER'] = 'Customer';
 
 //login
 $lang['MSG_USERNAME_PASSWORD_INVALID'] = 'Username and Password did not match or Invalid';
@@ -31,6 +36,11 @@ $lang['ACTION_NEW'] = 'New';
 $lang['ACTION_LOGOUT'] = 'Logout';
 $lang['ACTION_BACK'] = 'Back';
 $lang['ACTION_SAVE'] = 'Save';
+
+// Customer Sales target
+
+
+
 
 
 

@@ -22,12 +22,28 @@ abstract class ROOT_Controller extends CI_Controller
             die();
         }
     }
+
+    public function load_view($view_name,$data=null,$display=false)
+    {
+        $file=BASEPATH.'/'.$view_name.'.php';
+        $view='/'.$view_name;
+
+        if (file_exists($file))
+        {
+            $view='/'.$view_name;
+
+        }
+
+        return $this->load->view($view,$data,$display);
+    }
+
     public function jsonReturn($array)
     {
         header('Content-type: application/json');
         echo json_encode($array);
         exit();
     }
+
     public function login_page($message="")
     {
         $ajax['status']=true;
@@ -41,6 +57,7 @@ abstract class ROOT_Controller extends CI_Controller
         $ajax['page_url']=base_url()."home/login";
         $this->jsonReturn($ajax);
     }
+
     public function dashboard_page($message="")
     {
         $ajax['status']=true;

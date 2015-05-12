@@ -1,23 +1,67 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
-?>
-
-<option value=""><?php echo $this->lang->line('SELECT');?></option>
-<?php
-if(!isset($selected))
+$options=array();
+if(!isset($drop_down_default_option))
 {
-    $selected='';
+    $drop_down_default_option=true;
 }
-if(isset($value)&& isset($name))
+if($drop_down_default_option)
 {
-
-
-    for($i=0;$i<sizeof($value);$i++)
+    $options[]=array('value'=>'','text'=>$this->lang->line('SELECT'));
+}
+if(!isset($drop_down_selected))
+{
+    $drop_down_selected='';
+}
+if(isset($drop_down_options)&& is_array($drop_down_options))
+{
+    $keys=array_keys($drop_down_options);
+    $first_element=$drop_down_options[$keys[0]];
+    if(is_array($first_element))
     {
-    ?>
-        <option value="<?php echo $value[$i];?>" <?php if($selected==$value[$i]){ echo "selected";}?>><?php echo $name[$i];?></option>
-
-    <?php
+        $keys=array_keys($first_element);
+        $option_value_key=$keys[0];
+        $option_text_key=$keys[1];
+        if(($keys[0]=='value')||($keys[1]=='value'))
+        {
+            $option_value_key='value';
+        }
+        if(($keys[0]=='text')||($keys[1]=='text'))
+        {
+            $option_text_key='text';
+        }
+        foreach($drop_down_options as $option)
+        {
+            $options[]=array('value'=>$option[$option_value_key],'text'=>$option[$option_text_key]);
+        }
     }
+    else
+    {
+        foreach($drop_down_options as $option)
+        {
+            $options[]=array('value'=>$option,'text'=>$option);
+        }
+    }
+
 }
-?>
+foreach($options as $option)
+{
+    ?>
+    <option value="<?php echo $option['value']; ?>"
+        <?php
+        if(is_array($drop_down_selected))
+        {
+            if(in_array($option['value'], $drop_down_selected))
+            {
+                echo 'selected';
+            }
+        }
+        elseif($drop_down_selected==$option['value'])
+        {
+            echo "selected";
+        }
+        ?>>
+        <?php echo $option['text'];?>
+    </option>
+<?php
+}
 

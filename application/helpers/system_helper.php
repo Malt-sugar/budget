@@ -75,7 +75,6 @@ class System_helper
                 {
                     $uploaded_files[$key]=array("status"=>true,"info"=>$CI->upload->data());
                 }
-
             }
         }
 
