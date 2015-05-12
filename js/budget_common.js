@@ -221,25 +221,12 @@ function display_browse_image(brose_bttion,display_id)
 function turn_off_triggers()
 {
     $(document).off("change", "#year");
-    $(document).off("change", "#season_id");
-    $(document).off("change", "#crop_id");
-    $(document).off("change", "#crop_type_id");
-    $(document).off("change", "#principal_id");
-    $(document).off("change", "#variety_id");
-    $(document).off("change", "#day_number");
-    $(document).off("change", "#flowering_time");
-    $(document).off("blur",".crop_ordering");//at crop list.
-    $(document).off("change",'input[name="variety_type"]:radio');//at create_crop_variety
-    $(document).off("change","#select_all_variety");//at general sample delivery
-    $(document).off("change", ".browse_button");//data-15-image,setup-15-days
-    $(document).off("change", "#number_of_fifteendays");//setup-15-days
-    $(document).off("change", "#harvest_no");//setup-15-days
-    $(document).off("change", "#fruit_image_type");//data_image_fruit
-    $(document).off("change", "#fruit_image_type");//data_image_fruit
-    $(document).off("click", "#variety_button");//trail analysis report
-    $(document).off("click", "#load_report");//trail analysis report
-    $(document).off("click", "#load_pdf");//trail analysis report
-    $(document).off("click", ".full_text_report");//trail analysis report
+    $(document).off("change", "#division");
+    $(document).off("change", "#zone");
+    $(document).off("change", "#territory");
+    $(document).off("change", "#customer");
+    $(document).off("change", "#crop");
+    $(document).off("change", "#type");
 }
 
 function isNumberKey(evt)

@@ -24,6 +24,11 @@ $lang['LABEL_DIVISION'] = 'Division';
 $lang['LABEL_ZONE'] = 'Zone';
 $lang['LABEL_TERRITORY'] = 'Territory';
 $lang['LABEL_CUSTOMER'] = 'Customer';
+$lang['LABEL_CROP'] = 'Crop';
+$lang['LABEL_TYPE'] = 'Type';
+$lang['LABEL_VARIETY'] = 'Variety';
+$lang['LABEL_QUANTITY'] = 'Quantity';
+$lang['LABEL_QUANTITY_KG'] = 'Quantity (KG)';
 
 //login
 $lang['MSG_USERNAME_PASSWORD_INVALID'] = 'Username and Password did not match or Invalid';

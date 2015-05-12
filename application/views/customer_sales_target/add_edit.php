@@ -31,47 +31,47 @@
             </div>
         </div>
 
-        <div class="row show-grid">
-            <div class="col-xs-4">
-                <label class="control-label pull-right"><?php echo $this->lang->line('LABEL_DIVISION');?><span style="color:#FF0000">*</span></label>
-            </div>
-            <div class="col-sm-4 col-xs-8">
-                <select name="division" class="form-control" id="division">
-                    <?php
-                        $this->load->view('dropdown',array('drop_down_options'=>$divisions,'drop_down_selected'=>''));
-                    ?>
-                </select>
-            </div>
-        </div>
+<!--        <div class="row show-grid">-->
+<!--            <div class="col-xs-4">-->
+<!--                <label class="control-label pull-right">--><?php //echo $this->lang->line('LABEL_DIVISION');?><!--<span style="color:#FF0000">*</span></label>-->
+<!--            </div>-->
+<!--            <div class="col-sm-4 col-xs-8">-->
+<!--                <select name="division" class="form-control" id="division">-->
+<!--                    --><?php
+//                        $this->load->view('dropdown',array('drop_down_options'=>$divisions,'drop_down_selected'=>''));
+//                    ?>
+<!--                </select>-->
+<!--            </div>-->
+<!--        </div>-->
+<!---->
+<!--        <div class="row show-grid zone" style="display: none;">-->
+<!--            <div class="col-xs-4">-->
+<!--                <label class="control-label pull-right">--><?php //echo $this->lang->line('LABEL_ZONE');?><!--<span style="color:#FF0000">*</span></label>-->
+<!--            </div>-->
+<!---->
+<!--            <div class="col-sm-4 col-xs-8">-->
+<!--                <select name="zone" class="form-control" id="zone">-->
+<!--                    --><?php
+//                        $this->load->view('dropdown',array('drop_down_options'=>$zones,'drop_down_selected'=>''));
+//                    ?>
+<!--                </select>-->
+<!--            </div>-->
+<!--        </div>-->
+<!---->
+<!--        <div class="row show-grid territory" style="display: none;">-->
+<!--            <div class="col-xs-4">-->
+<!--                <label class="control-label pull-right">--><?php //echo $this->lang->line('LABEL_TERRITORY');?><!--<span style="color:#FF0000">*</span></label>-->
+<!--            </div>-->
+<!--            <div class="col-sm-4 col-xs-8">-->
+<!--                <select name="territory" class="form-control" id="territory">-->
+<!--                    --><?php
+//                        $this->load->view('dropdown',array('drop_down_options'=>$territories,'drop_down_selected'=>''));
+//                    ?>
+<!--                </select>-->
+<!--            </div>-->
+<!--        </div>-->
 
-        <div class="row show-grid zone" style="display: none;">
-            <div class="col-xs-4">
-                <label class="control-label pull-right"><?php echo $this->lang->line('LABEL_ZONE');?><span style="color:#FF0000">*</span></label>
-            </div>
-
-            <div class="col-sm-4 col-xs-8">
-                <select name="zone" class="form-control" id="zone">
-                    <?php
-                        $this->load->view('dropdown',array('drop_down_options'=>$zones,'drop_down_selected'=>''));
-                    ?>
-                </select>
-            </div>
-        </div>
-
-        <div class="row show-grid territory" style="display: none;">
-            <div class="col-xs-4">
-                <label class="control-label pull-right"><?php echo $this->lang->line('LABEL_TERRITORY');?><span style="color:#FF0000">*</span></label>
-            </div>
-            <div class="col-sm-4 col-xs-8">
-                <select name="territory" class="form-control" id="territory">
-                    <?php
-                        $this->load->view('dropdown',array('drop_down_options'=>$territories,'drop_down_selected'=>''));
-                    ?>
-                </select>
-            </div>
-        </div>
-
-        <div class="row show-grid customer" style="display: none;">
+        <div class="row show-grid customer">
             <div class="col-xs-4">
                 <label class="control-label pull-right"><?php echo $this->lang->line('LABEL_CUSTOMER');?><span style="color:#FF0000">*</span></label>
             </div>
@@ -83,6 +83,36 @@
                 </select>
             </div>
         </div>
+
+        <div class="row show-grid crop" style="display: none;">
+            <div class="col-xs-4">
+                <label class="control-label pull-right"><?php echo $this->lang->line('LABEL_CROP');?><span style="color:#FF0000">*</span></label>
+            </div>
+            <div class="col-sm-4 col-xs-8">
+                <select name="crop" class="form-control" id="crop">
+                    <?php
+                        $this->load->view('dropdown',array('drop_down_options'=>$crops,'drop_down_selected'=>''));
+                    ?>
+                </select>
+            </div>
+        </div>
+
+        <div class="row show-grid type" style="display: none;">
+            <div class="col-xs-4">
+                <label class="control-label pull-right"><?php echo $this->lang->line('LABEL_TYPE');?><span style="color:#FF0000">*</span></label>
+            </div>
+            <div class="col-sm-4 col-xs-8">
+                <select name="type" class="form-control" id="type">
+                    <?php
+                        $this->load->view('dropdown',array('drop_down_options'=>$types,'drop_down_selected'=>''));
+                    ?>
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <div class="row widget" id="customer_varieties">
+
     </div>
 
     <div class="clearfix"></div>
@@ -94,34 +124,105 @@
         turn_off_triggers();
         $(".form_valid").validationEngine();
 
-        $(document).on("change", "#division", function()
+//        $(document).on("change", "#division", function()
+//        {
+//            if($(this).val().length>0)
+//            {
+//                $(".zone").show();
+//            }
+//            else
+//            {
+//                $(".zone").hide();
+//                $("#zone").val('');
+//                $(".territory").hide();
+//                $("#territory").val('');
+//                $(".customer").hide();
+//                $("#customer").val('');
+//            }
+//        });
+//
+//        $(document).on("change","#zone",function()
+//        {
+//            // alert($(this).val());
+//            if($(this).val().length>0)
+//            {
+//                $(".territory").show();
+//                $.ajax({
+//                    url: base_url+"budget_common/get_dropDown_territory_by_zone/",
+//                    type: 'POST',
+//                    dataType: "JSON",
+//                    data:{zone_id:$("#zone").val()},
+//                    success: function (data, status)
+//                    {
+//
+//                    },
+//                    error: function (xhr, desc, err)
+//                    {
+//                        console.log("error");
+//                    }
+//                });
+//            }
+//            else
+//            {
+//                $(".territory").hide();
+//                $("#territory").val('');
+//                $(".customer").hide();
+//                $("#customer").val('');
+//            }
+//        });
+//
+//        $(document).on("change","#territory",function()
+//        {
+//            // alert($(this).val());
+//            if($(this).val().length>0)
+//            {
+//                $(".customer").show();
+//                $.ajax({
+//                    url: base_url+"budget_common/get_dropDown_customer_by_territory/",
+//                    type: 'POST',
+//                    dataType: "JSON",
+//                    data:{zone_id:$("#zone").val(), territory_id:$(this).val()},
+//                    success: function (data, status)
+//                    {
+//
+//                    },
+//                    error: function (xhr, desc, err)
+//                    {
+//                        console.log("error");
+//                    }
+//                });
+//            }
+//            else
+//            {
+//                $(".customer").hide();
+//                $("#customer").val('');
+//            }
+//        });
+
+        $(document).on("change","#customer",function()
         {
             if($(this).val().length>0)
             {
-                $(".zone").show();
+                $(".crop").show();
             }
             else
             {
-                $(".zone").hide();
-                $("#zone").val('');
-                $(".territory").hide();
-                $("#territory").val('');
-                $(".customer").hide();
-                $("#customer").val('');
+                $(".crop").hide();
+                $("#customer_varieties").html('');
             }
         });
 
-        $(document).on("change","#zone",function()
+        $(document).on("change","#crop",function()
         {
             // alert($(this).val());
             if($(this).val().length>0)
             {
-                $(".territory").show();
+                $(".type").show();
                 $.ajax({
-                    url: base_url+"budget_common/get_dropDown_territory_by_zone/",
+                    url: base_url+"budget_common/get_dropDown_type_by_crop/",
                     type: 'POST',
                     dataType: "JSON",
-                    data:{zone_id:$("#zone").val()},
+                    data:{crop_id:$(this).val()},
                     success: function (data, status)
                     {
 
@@ -134,39 +235,33 @@
             }
             else
             {
-                $(".territory").hide();
-                $("#territory").val('');
-                $(".customer").hide();
-                $("#customer").val('');
+                $(".type").hide();
+                $("#type").val('');
+                $("#customer_varieties").html('');
             }
         });
 
-        $(document).on("change","#territory",function()
+        $(document).on("change","#type",function()
         {
-            // alert($(this).val());
-            if($(this).val().length>0)
-            {
-                $(".customer").show();
-                $.ajax({
-                    url: base_url+"budget_common/get_dropDown_customer_by_territory/",
-                    type: 'POST',
-                    dataType: "JSON",
-                    data:{zone_id:$("#zone").val(), territory_id:$(this).val()},
-                    success: function (data, status)
-                    {
+            $.ajax({
+                url: base_url+"budget_common/get_dropDown_variety_by_crop_type/",
+                type: 'POST',
+                dataType: "JSON",
+                data:{crop_id:$("#crop").val(), type_id:$(this).val()},
+                success: function (data, status)
+                {
 
-                    },
-                    error: function (xhr, desc, err)
-                    {
-                        console.log("error");
-                    }
-                });
-            }
-            else
-            {
-                $(".customer").hide();
-                $("#customer").val('');
-            }
+                },
+                error: function (xhr, desc, err)
+                {
+                    console.log("error");
+                }
+            });
+        });
+
+        $(document).on("keyup", ".variety_quantity", function()
+        {
+            this.value = this.value.replace(/[^0-9\.]/g,'');
         });
 
     });

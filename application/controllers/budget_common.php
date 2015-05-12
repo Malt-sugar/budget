@@ -42,4 +42,42 @@ class Budget_common extends ROOT_Controller
         $ajax['content'][] = array("id"=>"#customer","html"=>$this->load->view("dropdown",array('drop_down_options'=>$data),true));
         $this->jsonReturn($ajax);
     }
+
+    public function get_dropDown_type_by_crop()
+    {
+        $crop_id = $this->input->post('crop_id');
+
+        $types = $this->budget_common_model->get_type_by_crop($crop_id);
+
+        foreach($types as $type)
+        {
+            $data[] = array('value'=>$type['product_type_id'], 'text'=>$type['product_type']);
+        }
+
+        $ajax['status'] = true;
+        $ajax['content'][] = array("id"=>"#type","html"=>$this->load->view("dropdown",array('drop_down_options'=>$data),true));
+        $this->jsonReturn($ajax);
+    }
+
+    public function get_dropDown_variety_by_crop_type()
+    {
+        $crop_id = $this->input->post('crop_id');
+        $type_id = $this->input->post('type_id');
+
+        $data['varieties'] = $this->budget_common_model->get_variety_by_crop_type($crop_id, $type_id);
+
+        if(sizeof($data['varieties'])>0)
+        {
+            $data['title'] = 'Variety List';
+            $ajax['status'] = true;
+            $ajax['content'][]=array("id"=>"#customer_varieties","html"=>$this->load->view("customer_sales_target/variety_list",$data,true));
+            $this->jsonReturn($ajax);
+        }
+        else
+        {
+            $ajax['status'] = true;
+            $ajax['content'][]=array("id"=>"#customer_varieties","html"=>"","",true);
+            $this->jsonReturn($ajax);
+        }
+    }
 }

@@ -59,6 +59,7 @@ class Customer_sales_target extends ROOT_Controller
 
     public function rnd_add_edit($id)
     {
+        $user = User_helper::get_user();
         if ($id != 0)
         {
             $data['typeInfo'] = $this->customer_sales_target_model->get_type_row($id);
@@ -70,19 +71,12 @@ class Customer_sales_target extends ROOT_Controller
             $data['divisions'] = Query_helper::get_info('ait_division_info',array('division_id value','division_name text'),array('del_status = 0'));
             $data['zones'] = Query_helper::get_info('ait_zone_info',array('zone_id value','zone_name text'),array('del_status = 0'));
             $data['territories'] = Query_helper::get_info('ait_territory_info',array('territory_id value','territory_name text'),array('del_status = 0'));
-            $data['customers'] = Query_helper::get_info('ait_distributor_info',array('distributor_id value','distributor_name text'),array('del_status = 0'));
+            $data['customers'] = Query_helper::get_info('ait_distributor_info',array('distributor_id value','distributor_name text'),array('del_status = 0',"zone_id ='$user->zone_id'","territory_id ='$user->territory_id'"));
+            $data['crops'] = Query_helper::get_info('ait_crop_info',array('crop_id value','crop_name text'),array('del_status = 0'));
+            $data['types'] = Query_helper::get_info('ait_product_type',array('product_type_id value','product_type text'),array('del_status = 0'));
 
-            $data['title']="Customer/ T.I. Sales target";
-            $data["typeInfo"] = Array(
-                'id' => 0,
-                'crop_id' => '',
-                'type_name' => '',
-                'type_code' => '',
-                'terget_length' => '',
-                'terget_weight' => '',
-                'terget_yeild' => '',
-                'expected_seed_per_gram' => ''
-            );
+            $data['title']="Customer/ T. I. Sales target";
+
             $ajax['page_url']=base_url()."customer_sales_target/index/add";
         }
 
@@ -97,12 +91,7 @@ class Customer_sales_target extends ROOT_Controller
         $id = $this->input->post("type_id");
         $user = User_helper::get_user();
 
-        $data = Array(
-            'terget_length'=>$this->input->post('target_length'),
-            'terget_weight'=>$this->input->post('target_weight'),
-            'terget_yeild'=>$this->input->post('target_yield'),
-            'expected_seed_per_gram'=>$this->input->post('expected_seed_per_gram')
-        );
+        $data = Array();
 
         if(!$this->check_validation())
         {
@@ -114,35 +103,47 @@ class Customer_sales_target extends ROOT_Controller
         {
             if($id>0)
             {
-                $this->db->trans_start();  //DB Transaction Handle START
+          //      $this->db->trans_start();  //DB Transaction Handle START
 
-                $data['modified_by'] = $user->user_id;
-                $data['modification_date'] = time();
-
-                Query_helper::update('rnd_crop_type',$data,array("id = ".$id));
-
-                $this->db->trans_complete();   //DB Transaction Handle END
-
-                if ($this->db->trans_status() === TRUE)
-                {
-                    $this->message=$this->lang->line("MSG_UPDATE_SUCCESS");
-                }
-                else
-                {
-                    $this->message=$this->lang->line("MSG_NOT_UPDATED_SUCCESS");
-                }
+//                $data['modified_by'] = $user->user_id;
+//                $data['modification_date'] = time();
+//
+//                Query_helper::update('rnd_crop_type',$data,array("id = ".$id));
+//
+//                $this->db->trans_complete();   //DB Transaction Handle END
+//
+//                if ($this->db->trans_status() === TRUE)
+//                {
+//                    $this->message=$this->lang->line("MSG_UPDATE_SUCCESS");
+//                }
+//                else
+//                {
+//                    $this->message=$this->lang->line("MSG_NOT_UPDATED_SUCCESS");
+//                }
             }
             else
             {
                 $this->db->trans_start();  //DB Transaction Handle START
 
-                $data['crop_id'] = $this->input->post('crop_id');
-                $data['type_name'] = $this->input->post('type_name');
-                $data['type_code'] = $this->input->post('type_code');
-                $data['created_by'] = $user->user_id;
-                $data['creation_date'] = time();
+                $data['division'] = $user->division_id;
+                $data['zone'] = $user->zone_id;
+                $data['territory'] = $user->territory_id;
+                $data['customer'] = $this->input->post('customer');
+                $data['year'] = $this->input->post('year');
+                $data['crop'] = $this->input->post('crop');
+                $data['type'] = $this->input->post('type');
 
-                Query_helper::add('rnd_crop_type',$data);
+                $data['create_by'] = $user->user_id;
+                $data['create_date'] = time();
+
+                $quantityPost = $this->input->post('quantity');
+
+                foreach($quantityPost as $variety_id=>$quantity)
+                {
+                    $data['variety'] = $variety_id;
+                    $data['quantity'] = $quantity;
+                    Query_helper::add('budget_sales_target',$data);
+                }
 
                 $this->db->trans_complete();   //DB Transaction Handle END
 
@@ -165,35 +166,29 @@ class Customer_sales_target extends ROOT_Controller
     private function check_validation()
     {
         $valid=true;
-        if(Validation_helper::validate_empty($this->input->post('crop_id')))
+        if(Validation_helper::validate_empty($this->input->post('year')))
         {
             $valid=false;
-            $this->message.="Crop Name Cann't Be Empty<br>";
+            $this->message.="Year Cann't Be Empty<br>";
         }
 
-        if(Validation_helper::validate_empty($this->input->post('type_name')))
+        if(Validation_helper::validate_empty($this->input->post('customer')))
         {
             $valid=false;
-            $this->message.="Type Name Cann't Be Empty<br>";
-        }
-        elseif($this->create_type_model->check_type_name_existence($this->input->post('type_name'),$this->input->post('crop_id'),$this->input->post('type_id')))
-        {
-            $valid=false;
-            $this->message.="Type Name Exists<br>";
+            $this->message.="Customer Name Cann't Be Empty<br>";
         }
 
-        if(Validation_helper::validate_empty($this->input->post('type_code')))
+        if(Validation_helper::validate_empty($this->input->post('crop')))
         {
             $valid=false;
-            $this->message.="Type Code Cann't Be Empty<br>";
+            $this->message.="Crop Cann't Be Empty<br>";
         }
-        elseif($this->create_type_model->check_type_code_existence($this->input->post('type_code'),$this->input->post('crop_id'),$this->input->post('type_id')))
+
+        if(Validation_helper::validate_empty($this->input->post('type')))
         {
             $valid=false;
-            $this->message.="Type Code Exists<br>";
+            $this->message.="Type Cann't Be Empty<br>";
         }
-
-
 
         return $valid;
     }
