@@ -63,8 +63,10 @@ class Budget_common extends ROOT_Controller
     {
         $crop_id = $this->input->post('crop_id');
         $type_id = $this->input->post('type_id');
+        $year = $this->input->post('year');
+        $customer_id = $this->input->post('customer');
 
-        $data['varieties'] = $this->budget_common_model->get_variety_by_crop_type($crop_id, $type_id);
+        $data['varieties'] = $this->budget_common_model->get_variety_by_crop_type($crop_id, $type_id, $year, $customer_id);
 
         if(sizeof($data['varieties'])>0)
         {

@@ -1,6 +1,7 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
     $data["link_new"]=base_url()."customer_sales_target/index/add";
-    $data["link_back"]=base_url()."customer_sales_target";
+    $data["link_back"]="#";
+    $data["hide_back"]="1";
     $this->load->view("action_buttons_edit",$data);
 
 ?>
@@ -247,7 +248,7 @@
                 url: base_url+"budget_common/get_dropDown_variety_by_crop_type/",
                 type: 'POST',
                 dataType: "JSON",
-                data:{crop_id:$("#crop").val(), type_id:$(this).val()},
+                data:{crop_id:$("#crop").val(), type_id:$(this).val(), year:$("#year").val(), customer:$("#customer").val()},
                 success: function (data, status)
                 {
 

@@ -1,5 +1,8 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
+echo '<pre>';
+print_r($varieties);
+echo '</pre>';
 ?>
 
 <div class="clearfix"></div>
