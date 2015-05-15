@@ -80,7 +80,7 @@ $autoload['helper'] = array('url','user','validation','query','system');
 |
 */
 
-$autoload['config'] = array('budget_config');
+$autoload['config'] = array('budget_config', 'user_group_config');
 
 
 /*
@@ -109,7 +109,7 @@ $autoload['language'] = array('budget');
 |
 */
 
-$autoload['model'] = array();
+$autoload['model'] = array('budget_common_model');
 
 
 /* End of file autoload.php */

@@ -11,10 +11,27 @@ class Budget_common extends ROOT_Controller
         $this->load->model("budget_common_model");
     }
 
-    public function get_dropDown_territory_by_zone()
+
+    public function get_zone_by_access()
+    {
+        $division_id = $this->input->post('division_id');
+        $zones = $this->budget_common_model->get_zone_by_access($division_id);
+
+        foreach($zones as $zone)
+        {
+            $data[] = array('value'=>$zone['zone_id'], 'text'=>$zone['zone_name']);
+        }
+
+        $ajax['status'] = true;
+        $ajax['content'][] = array("id"=>"#zone","html"=>$this->load->view("dropdown",array('drop_down_options'=>$data),true));
+        $this->jsonReturn($ajax);
+    }
+
+    public function get_territory_by_access()
     {
         $zone_id = $this->input->post('zone_id');
-        $territories = $this->budget_common_model->get_territory_by_zone($zone_id);
+
+        $territories = $this->budget_common_model->get_territory_by_access($zone_id);
 
         foreach($territories as $territory)
         {
@@ -46,6 +63,7 @@ class Budget_common extends ROOT_Controller
     public function get_dropDown_type_by_crop()
     {
         $crop_id = $this->input->post('crop_id');
+        $current_id = $this->input->post('current_id');
 
         $types = $this->budget_common_model->get_type_by_crop($crop_id);
 
@@ -55,7 +73,7 @@ class Budget_common extends ROOT_Controller
         }
 
         $ajax['status'] = true;
-        $ajax['content'][] = array("id"=>"#type","html"=>$this->load->view("dropdown",array('drop_down_options'=>$data),true));
+        $ajax['content'][] = array("id"=>'#type'.$current_id,"html"=>$this->load->view("dropdown",array('drop_down_options'=>$data),true));
         $this->jsonReturn($ajax);
     }
 
@@ -65,6 +83,7 @@ class Budget_common extends ROOT_Controller
         $type_id = $this->input->post('type_id');
         $year = $this->input->post('year');
         $customer_id = $this->input->post('customer');
+        $current_id = $this->input->post('current_id');
 
         $data['varieties'] = $this->budget_common_model->get_variety_by_crop_type($crop_id, $type_id, $year, $customer_id);
 
@@ -72,13 +91,13 @@ class Budget_common extends ROOT_Controller
         {
             $data['title'] = 'Variety List';
             $ajax['status'] = true;
-            $ajax['content'][]=array("id"=>"#customer_varieties","html"=>$this->load->view("customer_sales_target/variety_list",$data,true));
+            $ajax['content'][]=array("id"=>'#variety'.$current_id,"html"=>$this->load->view("customer_sales_target/variety_list",$data,true));
             $this->jsonReturn($ajax);
         }
         else
         {
             $ajax['status'] = true;
-            $ajax['content'][]=array("id"=>"#customer_varieties","html"=>"","",true);
+            $ajax['content'][]=array("id"=>'#variety'.$current_id,"html"=>"","",true);
             $this->jsonReturn($ajax);
         }
     }

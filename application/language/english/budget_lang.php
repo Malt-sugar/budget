@@ -29,6 +29,8 @@ $lang['LABEL_TYPE'] = 'Type';
 $lang['LABEL_VARIETY'] = 'Variety';
 $lang['LABEL_QUANTITY'] = 'Quantity';
 $lang['LABEL_QUANTITY_KG'] = 'Quantity (KG)';
+$lang['ADD_MORE'] = 'Add More';
+$lang['DELETE'] = 'Delete';
 
 //login
 $lang['MSG_USERNAME_PASSWORD_INVALID'] = 'Username and Password did not match or Invalid';
@@ -44,7 +46,7 @@ $lang['ACTION_SAVE'] = 'Save';
 
 // Customer Sales target
 
-
+$lang['SALES_TARGET']='Sales Target';
 
 
 

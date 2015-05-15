@@ -31,7 +31,8 @@ class Customer_sales_target extends ROOT_Controller
     {
         $user = User_helper::get_user();
 
-        $data['divisions'] = Query_helper::get_info('ait_division_info',array('division_id value','division_name text'),array('del_status = 0'));
+        $data['years'] = Query_helper::get_info('ait_year',array('year_id value','year_name text'),array('del_status = 0'));
+        $data['divisions'] = $this->budget_common_model->get_division_by_access();
         $data['zones'] = Query_helper::get_info('ait_zone_info',array('zone_id value','zone_name text'),array('del_status = 0'));
         $data['territories'] = Query_helper::get_info('ait_territory_info',array('territory_id value','territory_name text'),array('del_status = 0'));
         $data['customers'] = Query_helper::get_info('ait_distributor_info',array('distributor_id value','distributor_name text'),array('del_status = 0',"zone_id ='$user->zone_id'","territory_id ='$user->territory_id'"));
@@ -75,6 +76,7 @@ class Customer_sales_target extends ROOT_Controller
             $data['create_date'] = time();
 
             $quantityPost = $this->input->post('quantity');
+            $existings = $this->customer_sales_target_model->get_existing_sales_targets($data['year'], $data['crop_id'], $data['type_id'], $data['customer_id']);
 
             foreach($quantityPost as $variety_id=>$quantity)
             {
