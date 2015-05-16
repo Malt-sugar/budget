@@ -195,12 +195,12 @@
 
             $('.budget_add_more_content .budget_add_more_holder .crop_id').attr('id','crop'+current_id);
             $('.budget_add_more_content .budget_add_more_holder .type_id').attr('id','type'+current_id);
+
             $('.budget_add_more_content .budget_add_more_holder .variety_quantity').attr('data-variety-current-id',current_id);
             $('.budget_add_more_content .budget_add_more_holder .variety_quantity').attr('id','variety'+current_id);
 
             var html=$('.budget_add_more_content').html();
             $('#budget_add_more_container').append(html);
-
         });
 
         // Delete more button for Education
