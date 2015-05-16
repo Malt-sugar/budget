@@ -101,4 +101,5 @@ class Budget_common extends ROOT_Controller
             $this->jsonReturn($ajax);
         }
     }
+
 }

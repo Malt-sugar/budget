@@ -48,6 +48,10 @@ $lang['ACTION_SAVE'] = 'Save';
 
 $lang['SALES_TARGET']='Sales Target';
 
+// Minimum Stock Quantity
+
+$lang['LABEL_MINIMUM_STOCK_QUANTITY']='Minimum Stock Quantity';
+
 
 
 
