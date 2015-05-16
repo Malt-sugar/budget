@@ -203,7 +203,7 @@
             $('#budget_add_more_container').append(html);
         });
 
-        // Delete more button for Education
+        // Incremented Row Delete Button
         $(document).on("click", ".budget_add_more_delete", function(event)
         {
             $(this).closest('.budget_add_more_container').remove();

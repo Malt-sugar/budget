@@ -227,6 +227,11 @@ function turn_off_triggers()
     $(document).off("change", "#customer");
     $(document).off("change", "#crop");
     $(document).off("change", "#type");
+    $(document).off("click", ".budget_add_more_button");
+    $(document).off("click", ".budget_add_more_delete");
+    $(document).off("change", ".crop_id");
+    $(document).off("change", ".type_id");
+    $(document).off("keyup", ".variety_quantity");
 }
 
 function isNumberKey(evt)
