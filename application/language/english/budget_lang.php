@@ -53,7 +53,21 @@ $lang['SALES_TARGET']='Sales Target';
 $lang['LABEL_MINIMUM_STOCK_QUANTITY']='Minimum Stock Quantity';
 
 
+// Budgeted Purchase Setup
 
+$lang['LABEL_USD_CONVERSION_RATE']='USD Conversion Rate';
+$lang['LABEL_LC_EXP']='LC Exp (%)';
+$lang['LABEL_INSURANCE_EXP']='Insurance Exp (%)';
+$lang['LABEL_PACKING_MATERIAL']='Packing Material (%)';
+$lang['LABEL_CARRIAGE_INWARDS']='Carriage Inwards (%)';
+$lang['LABEL_AIR_FREIGHT_AND_DOCS']='Air Freight & Docs (%)';
+
+// Sales Prediction Setup
+
+$lang['LABEL_SALES_PREDICTION_SETUP']='Sales Prediction Setup';
+$lang['LABEL_HO_AND_GENERAL_EXP_PERCENT']='H.O & General Exp (%)';
+$lang['LABEL_MARKETING_PERCENT']='Marketing (%)';
+$lang['LABEL_FINANCE_COST_PERCENT']='Finance Cost (%)';
 
 
 
