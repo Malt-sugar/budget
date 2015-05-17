@@ -3,9 +3,10 @@
 if (!defined('BASEPATH'))
     exit('No direct script access allowed');
 
-class Sales_prediction_setup_model extends CI_Model
+class Budgeted_purchase_model extends CI_Model
 {
-    public function __construct() {
+    public function __construct()
+    {
         parent::__construct();
     }
 

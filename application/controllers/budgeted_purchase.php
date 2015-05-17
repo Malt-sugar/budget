@@ -1,14 +1,14 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 require APPPATH.'/libraries/root_controller.php';
 
-class Sales_prediction_setup extends ROOT_Controller
+class Budgeted_purchase extends ROOT_Controller
 {
     private  $message;
     public function __construct()
     {
         parent::__construct();
         $this->message="";
-        $this->load->model("sales_prediction_setup_model");
+        $this->load->model("budgeted_purchase_model");
     }
 
     public function index($task="add",$id=0)
@@ -30,16 +30,15 @@ class Sales_prediction_setup extends ROOT_Controller
     public function rnd_add_edit()
     {
         $user = User_helper::get_user();
-
         $data['years'] = Query_helper::get_info('ait_year',array('year_id value','year_name text'),array('del_status = 0'));
         $data['crops'] = Query_helper::get_info('ait_crop_info',array('crop_id value','crop_name text'),array('del_status = 0'));
         $data['types'] = Query_helper::get_info('ait_product_type',array('product_type_id value','product_type text'),array('del_status = 0'));
 
-        $data['title']="Sales Prediction Setup";
-        $ajax['page_url']=base_url()."sales_prediction_setup/index/add";
+        $data['title']="Budgeted Purchase";
+        $ajax['page_url']=base_url()."budgeted_purchase/index/add";
 
         $ajax['status']=true;
-        $ajax['content'][]=array("id"=>"#content","html"=>$this->load->view("sales_prediction_setup/add_edit",$data,true));
+        $ajax['content'][]=array("id"=>"#content","html"=>$this->load->view("budgeted_purchase/add_edit",$data,true));
 
         $this->jsonReturn($ajax);
     }

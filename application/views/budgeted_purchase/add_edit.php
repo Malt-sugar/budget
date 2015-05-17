@@ -1,10 +1,10 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
-    $data["link_new"]=base_url()."sales_prediction_setup/index/add";
+    $data["link_new"]=base_url()."budgeted_purchase/index/add";
     $data["link_back"]="#";
     $data["hide_back"]="1";
     $this->load->view("action_buttons_edit",$data);
 ?>
-<form class="form_valid" id="save_form" action="<?php echo base_url();?>sales_prediction_setup/index/save" method="post">
+<form class="form_valid" id="save_form" action="<?php echo base_url();?>budgeted_purchase/index/save" method="post">
     <div class="row widget">
         <div class="widget-header">
             <div class="title">
@@ -26,35 +26,7 @@
             </div>
         </div>
 
-        <div class="row show-grid">
-            <div class="col-xs-4">
-                <label class="control-label pull-right"><?php echo $this->lang->line('LABEL_HO_AND_GENERAL_EXP_PERCENT');?><span style="color:#FF0000">*</span></label>
-            </div>
-            <div class="col-sm-4 col-xs-8">
-                <input type="text" name="" class="form-control" />
-            </div>
-        </div>
-
-        <div class="row show-grid">
-            <div class="col-xs-4">
-                <label class="control-label pull-right"><?php echo $this->lang->line('LABEL_MARKETING_PERCENT');?><span style="color:#FF0000">*</span></label>
-            </div>
-            <div class="col-sm-4 col-xs-8">
-                <input type="text" name="" class="form-control" />
-            </div>
-        </div>
-
-        <div class="row show-grid">
-            <div class="col-xs-4">
-                <label class="control-label pull-right"><?php echo $this->lang->line('LABEL_FINANCE_COST_PERCENT');?><span style="color:#FF0000">*</span></label>
-            </div>
-            <div class="col-sm-4 col-xs-8">
-                <input type="text" name="" class="form-control" />
-            </div>
-        </div>
-    </div>
-
-<!--    ////////////////////////////////////////////////////// SALES PREDICTION /////////////////////////////////////////////////////////-->
+<!--    ////////////////////////////////////////////////////// BUDGETED PURCHASE /////////////////////////////////////////////////////////-->
 
     <div id="budget_add_more_container" class="budget_add_more_container">
         <div class="row widget">
