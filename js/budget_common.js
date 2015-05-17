@@ -232,6 +232,7 @@ function turn_off_triggers()
     $(document).off("change", ".crop_id");
     $(document).off("change", ".type_id");
     $(document).off("keyup", ".variety_quantity");
+    $(document).off("keyup", ".number_only_class");
 }
 
 function isNumberKey(evt)

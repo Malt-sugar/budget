@@ -125,21 +125,20 @@ class Budgeted_purchase extends ROOT_Controller
         return $valid;
     }
 
-
     public function get_dropDown_variety_by_crop_type()
     {
         $crop_id = $this->input->post('crop_id');
         $type_id = $this->input->post('type_id');
         $current_id = $this->input->post('current_id');
 
-        $data['varieties'] = $this->sales_prediction_setup_model->get_variety_by_crop_type($crop_id, $type_id);
+        $data['varieties'] = $this->budgeted_purchase_model->get_variety_by_crop_type($crop_id, $type_id);
 
         if(sizeof($data['varieties'])>0)
         {
             $data['serial']=$current_id;
             $data['title'] = 'Variety List';
             $ajax['status'] = true;
-            $ajax['content'][]=array("id"=>'#variety'.$current_id,"html"=>$this->load->view("sales_prediction_setup/variety_list",$data,true));
+            $ajax['content'][]=array("id"=>'#variety'.$current_id,"html"=>$this->load->view("budgeted_purchase/variety_list",$data,true));
             $this->jsonReturn($ajax);
         }
         else

@@ -31,6 +31,7 @@ $lang['LABEL_QUANTITY'] = 'Quantity';
 $lang['LABEL_QUANTITY_KG'] = 'Quantity (KG)';
 $lang['ADD_MORE'] = 'Add More';
 $lang['DELETE'] = 'Delete';
+$lang['NO_VARIETY_EXIST'] = 'No Variety Exists';
 
 //login
 $lang['MSG_USERNAME_PASSWORD_INVALID'] = 'Username and Password did not match or Invalid';
@@ -72,6 +73,16 @@ $lang['LABEL_TARGETED_PROFIT_PERCENT']='Targeted Profit (%)';
 $lang['LABEL_SALES_COMMISSION_PERCENT']='Sales Commission (%)';
 $lang['LABEL_SALES_BONUS_PERCENT']='Sales Bonus';
 $lang['LABEL_OTHER_INCENTIVE_PERCENT']='Other Incentive';
+
+// Budgeted Purchase
+
+$lang['LABEL_BUDGETED_PURCHASE']='Budgeted Purchase';
+$lang['LABEL_PI_VALUE']='PI Value';
+$lang['LABEL_PURCHASE_QUANTITY']='Purchase Quantity';
+$lang['LABEL_PRICE_PER_KG_USD']='Price /KG USD';
+$lang['LABEL_TOTAL_PRICE_USD']='Total Price USD';
+$lang['LABEL_COGS']='COGS';
+$lang['LABEL_TOTAL_COGS']='Total COGS';
 
 
 

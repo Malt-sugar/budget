@@ -22,19 +22,19 @@
                     </tr>
                     <tr>
                         <td><?php echo $this->lang->line('LABEL_TARGETED_PROFIT_PERCENT');?></td>
-                        <td><input type="text" class="form-control" name="targeted_profit[<?php echo $serial;?>][<?php echo $variety['varriety_id'];?>]" value="" /></td>
+                        <td><input type="text" class="form-control number_only_class" name="targeted_profit[<?php echo $serial;?>][<?php echo $variety['varriety_id'];?>]" value="" /></td>
                     </tr>
                     <tr>
                         <td><?php echo $this->lang->line('LABEL_SALES_COMMISSION_PERCENT');?></td>
-                        <td><input type="text" class="form-control" name="sales_commission[<?php echo $serial;?>][<?php echo $variety['varriety_id'];?>]" value="" /></td>
+                        <td><input type="text" class="form-control number_only_class" name="sales_commission[<?php echo $serial;?>][<?php echo $variety['varriety_id'];?>]" value="" /></td>
                     </tr>
                     <tr>
                         <td><?php echo $this->lang->line('LABEL_SALES_BONUS_PERCENT');?></td>
-                        <td><input type="text" class="form-control" name="sales_bonus[<?php echo $serial;?>][<?php echo $variety['varriety_id'];?>]" value="" /></td>
+                        <td><input type="text" class="form-control number_only_class" name="sales_bonus[<?php echo $serial;?>][<?php echo $variety['varriety_id'];?>]" value="" /></td>
                     </tr>
                     <tr>
                         <td><?php echo $this->lang->line('LABEL_OTHER_INCENTIVE_PERCENT');?></td>
-                        <td><input type="text" class="form-control" name="other_incentive[<?php echo $serial;?>][<?php echo $variety['varriety_id'];?>]" value="" /></td>
+                        <td><input type="text" class="form-control number_only_class" name="other_incentive[<?php echo $serial;?>][<?php echo $variety['varriety_id'];?>]" value="" /></td>
                     </tr>
                 <?php
                 }

@@ -234,7 +234,7 @@
             });
         });
 
-        $(document).on("keyup", ".variety_quantity", function()
+        $(document).on("keyup", ".number_only_class", function()
         {
             this.value = this.value.replace(/[^0-9\.]/g,'');
         });

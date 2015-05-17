@@ -25,14 +25,15 @@
                 </select>
             </div>
         </div>
+    </div>
 
-<!--    ////////////////////////////////////////////////////// BUDGETED PURCHASE /////////////////////////////////////////////////////////-->
+<!--    ////////////////////////////////////////////////////// BUDGETED PURCHASE //////////////////////////////////////////////    -->
 
     <div id="budget_add_more_container" class="budget_add_more_container">
         <div class="row widget">
             <div class="widget-header">
                 <div class="title">
-                    <?php echo $this->lang->line('LABEL_SALES_PREDICTION_SETUP'); ?>
+                    <?php echo $this->lang->line('LABEL_BUDGETED_PURCHASE'); ?>
                 </div>
                 <div class="clearfix"></div>
             </div>
@@ -191,7 +192,7 @@
             var current_id=parseInt($(this).parents().next('.variety_quantity').attr('data-variety-current-id'));
 
             $.ajax({
-                url: base_url+"sales_prediction_setup/get_dropDown_variety_by_crop_type/",
+                url: base_url+"budgeted_purchase/get_dropDown_variety_by_crop_type/",
                 type: 'POST',
                 dataType: "JSON",
                 data:{crop_id:$("#crop"+current_id).val(), type_id:$(this).val(), current_id: current_id},
@@ -206,7 +207,7 @@
             });
         });
 
-        $(document).on("keyup", ".variety_quantity", function()
+        $(document).on("keyup", ".number_only_class", function()
         {
             this.value = this.value.replace(/[^0-9\.]/g,'');
         });
