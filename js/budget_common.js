@@ -4,6 +4,7 @@ $(document).ready(function()
     {
         $("#loading").show();
     });
+
     $(document).ajaxSuccess(function(event,xhr,options)
     {
         if(xhr.responseJSON)
@@ -14,9 +15,8 @@ $(document).ready(function()
             }
 
         }
-
-
     });
+
     $(document).ajaxComplete(function(event,xhr,options)
     {
         if(xhr.responseJSON)
@@ -35,6 +35,7 @@ $(document).ready(function()
             }
         }
     });
+
     $(document).ajaxError(function(event,xhr,options)
     {
 
@@ -43,6 +44,7 @@ $(document).ready(function()
         animate_message("Server Error");
 
     });
+
     //binds form submission with ajax
     $(document).on("submit", "form", function(event)
     {
@@ -69,6 +71,7 @@ $(document).ready(function()
             }
         });
     });
+
     //bind any anchor tag to ajax request
     $(document).on("click", "a", function(event)
     {
@@ -105,8 +108,6 @@ $(document).ready(function()
     load_main_page();
     // binds form submission and fields to the validation engine
 
-
-
     //action for menu-item click
     $(document).on("click", ".main-menu-container .menu-item", function(event)
     {
@@ -126,8 +127,8 @@ $(document).ready(function()
             }
         });
         return false;
-
     });
+
     //action for submenu click
     $(document).on("click", ".sub-menu-container .menu-item", function(event)
     {
@@ -145,12 +146,9 @@ $(document).ready(function()
 
             }
         });
-
-
     });
-
-
 });
+
 function load_main_page()
 {
     $.ajax({
@@ -182,6 +180,7 @@ function load_main_page()
         }
     });
 }
+
 function load_template(content)
 {
     for(i=0;i<content.length;i++)
@@ -191,6 +190,7 @@ function load_template(content)
         //console.log(content[i].html);
     }
 }
+
 function animate_message(message)
 {
     $("#message").hide();
@@ -199,6 +199,7 @@ function animate_message(message)
     //$('#message').toggle("slide",{direction:"right"},500);
 
 }
+
 //call this function
 //first parameter will be this
 //2nd parameter will be with # for id . for class
@@ -216,7 +217,6 @@ function display_browse_image(brose_bttion,display_id)
         reader.readAsDataURL(brose_bttion.files[0]);
     }
 }
-
 
 function turn_off_triggers()
 {
