@@ -22,19 +22,19 @@
                     </tr>
                     <tr>
                         <td><?php echo $this->lang->line('LABEL_TARGETED_PROFIT_PERCENT');?></td>
-                        <td><input type="text" class="form-control number_only_class" name="targeted_profit[<?php echo $serial;?>][<?php echo $variety['varriety_id'];?>]" value="" /></td>
+                        <td><input type="text" class="form-control number_only_class" name="detail[<?php echo $serial;?>][<?php echo $variety['varriety_id'];?>][targeted_profit]" value="" /></td>
                     </tr>
                     <tr>
                         <td><?php echo $this->lang->line('LABEL_SALES_COMMISSION_PERCENT');?></td>
-                        <td><input type="text" class="form-control number_only_class" name="sales_commission[<?php echo $serial;?>][<?php echo $variety['varriety_id'];?>]" value="" /></td>
+                        <td><input type="text" class="form-control number_only_class" name="detail[<?php echo $serial;?>][<?php echo $variety['varriety_id'];?>][sales_commission]" value="" /></td>
                     </tr>
                     <tr>
                         <td><?php echo $this->lang->line('LABEL_SALES_BONUS_PERCENT');?></td>
-                        <td><input type="text" class="form-control number_only_class" name="sales_bonus[<?php echo $serial;?>][<?php echo $variety['varriety_id'];?>]" value="" /></td>
+                        <td><input type="text" class="form-control number_only_class" name="detail[<?php echo $serial;?>][<?php echo $variety['varriety_id'];?>][sales_bonus]" value="" /></td>
                     </tr>
                     <tr>
                         <td><?php echo $this->lang->line('LABEL_OTHER_INCENTIVE_PERCENT');?></td>
-                        <td><input type="text" class="form-control number_only_class" name="other_incentive[<?php echo $serial;?>][<?php echo $variety['varriety_id'];?>]" value="" /></td>
+                        <td><input type="text" class="form-control number_only_class" name="detail[<?php echo $serial;?>][<?php echo $variety['varriety_id'];?>][other_incentive]" value="" /></td>
                     </tr>
                 <?php
                 }

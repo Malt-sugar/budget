@@ -46,8 +46,41 @@ class Sales_prediction_setup extends ROOT_Controller
 
     public function rnd_save()
     {
+//        print_r($this->input->post());
+//        exit;
+
         $user = User_helper::get_user();
         $data = Array();
+        $year = $this->input->post('year');
+        $crop_type_Post = $this->input->post('target');
+        $detail_post = $this->input->post('detail');
+
+        foreach($crop_type_Post as $cropTypeKey=>$crop_type)
+        {
+            foreach($detail_post as $profitKey=>$detail)
+            {
+                if($profitKey==$cropTypeKey)
+                {
+                    $data['year'] = $year;
+                    $data['crop_id'] = $crop_type['crop'];
+                    $data['type_id'] = $crop_type['type'];
+
+                    foreach($detail as $variety_id=>$detail_type)
+                    {
+                        $data['variety_id'] = $variety_id;
+
+                        foreach($detail_type as $type=>$amount)
+                        {
+                            $data[$type] = $amount;
+                        }
+
+                        print_r($data);
+                    }
+                }
+            }
+        }
+
+        exit;
 
         if(!$this->check_validation())
         {

@@ -84,5 +84,11 @@ $lang['LABEL_TOTAL_PRICE_USD']='Total Price USD';
 $lang['LABEL_COGS']='COGS';
 $lang['LABEL_TOTAL_COGS']='Total COGS';
 
+// Achievement Bonus Setup
+
+$lang['LABEL_FROM']='From';
+$lang['LABEL_TO']='To';
+$lang['LABEL_BONUS']='Bonus';
+$lang['LABEL_OTHER_INCENTIVE']='Other Incentive';
 
 
