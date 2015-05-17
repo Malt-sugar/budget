@@ -57,7 +57,7 @@ class Sales_prediction_setup extends ROOT_Controller
 
         foreach($crop_type_Post as $cropTypeKey=>$crop_type)
         {
-            foreach($detail_post as $profitKey=>$detail)
+            foreach($detail_post as $profitKey=>$details)
             {
                 if($profitKey==$cropTypeKey)
                 {
@@ -65,7 +65,7 @@ class Sales_prediction_setup extends ROOT_Controller
                     $data['crop_id'] = $crop_type['crop'];
                     $data['type_id'] = $crop_type['type'];
 
-                    foreach($detail as $variety_id=>$detail_type)
+                    foreach($details as $variety_id=>$detail_type)
                     {
                         $data['variety_id'] = $variety_id;
 
@@ -92,26 +92,7 @@ class Sales_prediction_setup extends ROOT_Controller
         {
             $this->db->trans_start();  //DB Transaction Handle START
 
-            $data['division_id'] = $user->division_id;
-            $data['zone_id'] = $user->zone_id;
-            $data['territory_id'] = $user->territory_id;
-            $data['customer_id'] = $this->input->post('customer');
-            $data['year'] = $this->input->post('year');
-            $data['crop_id'] = $this->input->post('crop');
-            $data['type_id'] = $this->input->post('type');
-
-            $data['create_by'] = $user->user_id;
-            $data['create_date'] = time();
-
-            $quantityPost = $this->input->post('quantity');
-            $existings = $this->customer_sales_target_model->get_existing_sales_targets($data['year'], $data['crop_id'], $data['type_id'], $data['customer_id']);
-
-            foreach($quantityPost as $variety_id=>$quantity)
-            {
-                $data['variety'] = $variety_id;
-                $data['quantity'] = $quantity;
-                Query_helper::add('budget_sales_target',$data);
-            }
+            
 
             $this->db->trans_complete();   //DB Transaction Handle END
 
