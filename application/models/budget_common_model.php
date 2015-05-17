@@ -115,4 +115,24 @@ class Budget_common_model extends CI_Model
 
         return $results;
     }
+
+    public function get_ordered_crops()
+    {
+        $this->db->select('aci.crop_id value, aci.crop_name text');
+        $this->db->from('ait_crop_info aci');
+        $this->db->order_by('aci.order_crop');
+        $this->db->where('aci.del_status', 0);
+        $results = $this->db->get()->result_array();
+        return $results;
+    }
+
+    public function get_ordered_crop_types()
+    {
+        $this->db->select('apt.product_type_id value, apt.product_type text');
+        $this->db->from('ait_product_type apt');
+        $this->db->order_by('apt.order_crop');
+        $this->db->where('apt.del_status', 0);
+        $results = $this->db->get()->result_array();
+        return $results;
+    }
 }

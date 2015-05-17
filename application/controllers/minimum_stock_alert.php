@@ -31,8 +31,8 @@ class Minimum_stock_alert extends ROOT_Controller
     {
         $user = User_helper::get_user();
 
-        $data['crops'] = Query_helper::get_info('ait_crop_info',array('crop_id value','crop_name text'),array('del_status = 0'));
-        $data['types'] = Query_helper::get_info('ait_product_type',array('product_type_id value','product_type text'),array('del_status = 0'));
+        $data['crops'] = $this->budget_common_model->get_ordered_crops();
+        $data['types'] = $this->budget_common_model->get_ordered_crop_types();
 
         $data['title']="Minimum Stock Quantity";
         $ajax['page_url']=base_url()."minimum_stock_alert/index/add";

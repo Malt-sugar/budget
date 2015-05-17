@@ -36,8 +36,8 @@ class Customer_sales_target extends ROOT_Controller
         $data['zones'] = Query_helper::get_info('ait_zone_info',array('zone_id value','zone_name text'),array('del_status = 0'));
         $data['territories'] = Query_helper::get_info('ait_territory_info',array('territory_id value','territory_name text'),array('del_status = 0'));
         $data['customers'] = Query_helper::get_info('ait_distributor_info',array('distributor_id value','distributor_name text'),array('del_status = 0',"zone_id ='$user->zone_id'","territory_id ='$user->territory_id'"));
-        $data['crops'] = Query_helper::get_info('ait_crop_info',array('crop_id value','crop_name text'),array('del_status = 0'));
-        $data['types'] = Query_helper::get_info('ait_product_type',array('product_type_id value','product_type text'),array('del_status = 0'));
+        $data['crops'] = $this->budget_common_model->get_ordered_crops();
+        $data['types'] = $this->budget_common_model->get_ordered_crop_types();
 
         $data['title']="Customer/ T. I. Sales target";
 
