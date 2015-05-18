@@ -132,4 +132,25 @@ class Query_helper
 
     }
 
+    public static function filter_access()
+    {
+        $CI =& get_instance();
+        $user = User_helper::get_user();
+
+        if($user->budget_group > $CI->config->item('user_group_marketing'))
+        {
+            $CI->db->where('aul.division_id', $user->division_id);
+        }
+
+        if($user->budget_group > $CI->config->item('user_group_division'))
+        {
+            $CI->db->where('aul.zone_id', $user->zone_id);
+        }
+
+        if($user->budget_group > $CI->config->item('user_group_zone'))
+        {
+            $CI->db->where('aul.territory_id', $user->territory_id);
+        }
+    }
+
 }

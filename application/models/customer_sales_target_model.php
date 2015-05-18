@@ -5,8 +5,8 @@ if (!defined('BASEPATH'))
 
 class Customer_sales_target_model extends CI_Model
 {
-
-    public function __construct() {
+    public function __construct()
+    {
         parent::__construct();
     }
 
@@ -14,19 +14,33 @@ class Customer_sales_target_model extends CI_Model
     {
         $user = User_helper::get_user();
         $this->db->from('budget_sales_target bst');
-
+        $this->db->select('bst.customer_id, bst.year');
         $this->db->group_by('bst.customer_id');
         $this->db->group_by('bst.year');
-
         $this->db->where('bst.status',$this->config->item('status_active'));
 
-        $count = $this->db->count_all_results();
-        //echo $this->db->last_query();
-        return $count;
+        if($user->budget_group > $this->config->item('user_group_marketing'))
+        {
+            $this->db->where('bst.division_id', $user->division_id);
+        }
+
+        if($user->budget_group > $this->config->item('user_group_division'))
+        {
+            $this->db->where('bst.zone_id', $user->zone_id);
+        }
+
+        if($user->budget_group > $this->config->item('user_group_zone'))
+        {
+            $this->db->where('bst.territory_id', $user->territory_id);
+        }
+
+        $result = $this->db->get()->result_array();
+        return sizeof($result);
     }
 
     public function get_sales_target_info($page=null)
     {
+        $user = User_helper::get_user();
         $limit=$this->config->item('view_per_page');
         $start=$page*$limit;
         $this->db->from('budget_sales_target bst');
@@ -41,6 +55,21 @@ class Customer_sales_target_model extends CI_Model
 
         $this->db->group_by('bst.customer_id');
         $this->db->group_by('bst.year');
+
+        if($user->budget_group > $this->config->item('user_group_marketing'))
+        {
+            $this->db->where('bst.division_id', $user->division_id);
+        }
+
+        if($user->budget_group > $this->config->item('user_group_division'))
+        {
+            $this->db->where('bst.zone_id', $user->zone_id);
+        }
+
+        if($user->budget_group > $this->config->item('user_group_zone'))
+        {
+            $this->db->where('bst.territory_id', $user->territory_id);
+        }
 
         $this->db->where('bst.status',$this->config->item('status_active'));
         $this->db->limit($limit,$start);

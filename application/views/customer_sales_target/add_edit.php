@@ -1,7 +1,7 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
     $data["link_new"]=base_url()."customer_sales_target/index/add";
-    $data["link_back"]="#";
-    $data["hide_back"]="1";
+    $data["link_back"]=base_url()."customer_sales_target";
+    //$data["hide_back"]="1";
     $this->load->view("action_buttons_edit",$data);
 ?>
 <form class="form_valid" id="save_form" action="<?php echo base_url();?>customer_sales_target/index/save" method="post">
