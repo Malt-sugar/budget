@@ -80,7 +80,7 @@
         </div>
     </div>
 
-<!--    ////////////////////////////////////////////////////// SALES TARGET /////////////////////////////////////////////////////////-->
+<!--    ////////////////////////////////////////////////////// SALES TARGET ////////////////////////////////////////////////   -->
 
     <div id="budget_add_more_container" class="budget_add_more_container" style="display: none;">
         <div class="row widget">
@@ -345,6 +345,7 @@
             {
                 $(this).parents().next('.type').hide();
                 $(this).parents().next('.type').val('');
+                $(this).parents().next('.type').next('.variety_quantity').html('');
             }
         });
 
@@ -353,21 +354,27 @@
             var current_id=parseInt($(this).parents().next('.variety_quantity').attr('data-variety-current-id'));
 
             //alert($("#crop"+current_id).val());
+            if($(this).val().length>0)
+            {
+                $.ajax({
+                    url: base_url+"customer_sales_target/get_dropDown_variety_by_crop_type/",
+                    type: 'POST',
+                    dataType: "JSON",
+                    data:{crop_id:$("#crop"+current_id).val(), type_id:$(this).val(), year:$("#year").val(), customer:$("#customer").val(), current_id: current_id},
+                    success: function (data, status)
+                    {
 
-            $.ajax({
-                url: base_url+"budget_common/get_dropDown_variety_by_crop_type/",
-                type: 'POST',
-                dataType: "JSON",
-                data:{crop_id:$("#crop"+current_id).val(), type_id:$(this).val(), year:$("#year").val(), customer:$("#customer").val(), current_id: current_id},
-                success: function (data, status)
-                {
-
-                },
-                error: function (xhr, desc, err)
-                {
-                    console.log("error");
-                }
-            });
+                    },
+                    error: function (xhr, desc, err)
+                    {
+                        console.log("error");
+                    }
+                });
+            }
+            else
+            {
+                $(this).parents().next('.variety_quantity').html('');
+            }
         });
 
         $(document).on("keyup", ".variety_quantity", function()
