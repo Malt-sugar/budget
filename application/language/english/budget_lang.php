@@ -32,6 +32,7 @@ $lang['LABEL_QUANTITY_KG'] = 'Quantity (KG)';
 $lang['ADD_MORE'] = 'Add More';
 $lang['DELETE'] = 'Delete';
 $lang['NO_VARIETY_EXIST'] = 'No Variety Exists';
+$lang['LABEL_CUSTOMER_NAME'] = 'Customer Name';
 
 //login
 $lang['MSG_USERNAME_PASSWORD_INVALID'] = 'Username and Password did not match or Invalid';

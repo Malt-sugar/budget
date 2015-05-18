@@ -6,8 +6,8 @@
 ?>
 
 <div class="clearfix"></div>
-<div class="row show-grid">
 
+<div class="row show-grid">
     <div class="col-lg-12">
         <table class="table table-hover table-bordered">
             <?php

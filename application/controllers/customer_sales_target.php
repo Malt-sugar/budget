@@ -11,11 +11,15 @@ class Customer_sales_target extends ROOT_Controller
         $this->load->model("customer_sales_target_model");
     }
 
-    public function index($task="add",$id=0)
+    public function index($task="list", $id=0, $customer_id=0, $year_id=0)
     {
-        if($task=="add" || $task=="edit")
+        if($task=="list")
         {
-            $this->rnd_add_edit($id);
+            $this->rnd_list($id);
+        }
+        elseif($task=="add" || $task=="edit")
+        {
+            $this->rnd_add_edit($customer_id, $year_id);
         }
         elseif($task=="save")
         {
@@ -23,11 +27,36 @@ class Customer_sales_target extends ROOT_Controller
         }
         else
         {
-            $this->rnd_add_edit($id);
+            $this->rnd_add_edit($customer_id, $year_id);
         }
     }
 
-    public function rnd_add_edit()
+    public function rnd_list($page=0)
+    {
+        $config = System_helper::pagination_config(base_url() . "customer_sales_target/index/list/",$this->customer_sales_target_model->get_total_customers(),4);
+        $this->pagination->initialize($config);
+        $data["links"] = $this->pagination->create_links();
+
+        if($page>0)
+        {
+            $page=$page-1;
+        }
+
+        $data['sales_targets'] = $this->customer_sales_target_model->get_sales_target_info($page);
+        $data['title']="Customer Sales Target List";
+
+        $ajax['status']=true;
+        $ajax['content'][]=array("id"=>"#content","html"=>$this->load->view("customer_sales_target/list",$data,true));
+        if($this->message)
+        {
+            $ajax['message']=$this->message;
+        }
+        $ajax['page_url']=base_url()."customer_sales_target/index/list/".($page+1);
+
+        $this->jsonReturn($ajax);
+    }
+
+    public function rnd_add_edit($id, $year_id)
     {
         $user = User_helper::get_user();
 
@@ -39,12 +68,11 @@ class Customer_sales_target extends ROOT_Controller
         $data['crops'] = $this->budget_common_model->get_ordered_crops();
         $data['types'] = $this->budget_common_model->get_ordered_crop_types();
 
-        $data['title']="Customer/ T. I. Sales target";
+        $data['title'] = "Customer/ T. I. Sales target";
+        $ajax['page_url'] = base_url()."customer_sales_target/index/add";
 
-        $ajax['page_url']=base_url()."customer_sales_target/index/add";
-
-        $ajax['status']=true;
-        $ajax['content'][]=array("id"=>"#content","html"=>$this->load->view("customer_sales_target/add_edit",$data,true));
+        $ajax['status'] = true;
+        $ajax['content'][] = array("id"=>"#content","html"=>$this->load->view("customer_sales_target/add_edit",$data,true));
 
         $this->jsonReturn($ajax);
     }
@@ -143,7 +171,7 @@ class Customer_sales_target extends ROOT_Controller
         else
         {
             $ajax['status'] = true;
-            $ajax['content'][]=array("id"=>'#variety'.$current_id,"html"=>"<label class='label label-danger'>No Variety Exist</label>","",true);
+            $ajax['content'][]=array("id"=>'#variety'.$current_id,"html"=>"<label class='label label-danger'>".$this->lang->line('NO_VARIETY_EXIST')."</label>","",true);
             $this->jsonReturn($ajax);
         }
     }

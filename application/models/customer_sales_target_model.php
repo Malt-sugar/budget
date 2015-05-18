@@ -10,16 +10,44 @@ class Customer_sales_target_model extends CI_Model
         parent::__construct();
     }
 
-    public function get_existing_sales_targets($year, $crop, $type, $customer)
+    public function get_total_customers()
     {
         $user = User_helper::get_user();
-        $this->db->select('bst.variety_id');
         $this->db->from('budget_sales_target bst');
-        $this->db->where('bst.year',$year);
-        $this->db->where('bst.crop_id',$crop);
+
+        $this->db->group_by('bst.customer_id');
+        $this->db->group_by('bst.year');
+
+        $this->db->where('bst.status',$this->config->item('status_active'));
+
+        $count = $this->db->count_all_results();
+        //echo $this->db->last_query();
+        return $count;
+    }
+
+    public function get_sales_target_info($page=null)
+    {
+        $limit=$this->config->item('view_per_page');
+        $start=$page*$limit;
+        $this->db->from('budget_sales_target bst');
+        $this->db->select('bst.*');
+        $this->db->select('ati.territory_name');
+        $this->db->select('adi.distributor_name');
+        $this->db->select('ay.year_name');
+
+        $this->db->join('ait_territory_info ati', 'ati.territory_id = bst.territory_id', 'left');
+        $this->db->join('ait_distributor_info adi', 'adi.distributor_id = bst.customer_id', 'left');
+        $this->db->join('ait_year ay', 'ay.year_id = bst.year', 'left');
+
+        $this->db->group_by('bst.customer_id');
+        $this->db->group_by('bst.year');
+
+        $this->db->where('bst.status',$this->config->item('status_active'));
+        $this->db->limit($limit,$start);
+        $this->db->order_by("bst.id","DESC");
 
         $query = $this->db->get();
-        return $query->row_array();
+        return $query->result_array();
     }
 
     public function get_variety_by_crop_type($crop_id, $type_id, $year, $customer_id)

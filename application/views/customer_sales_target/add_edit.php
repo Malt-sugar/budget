@@ -321,7 +321,6 @@
         {
             var current_id=parseInt($(this).parents().next('.type').find('.type_id').attr('data-type-current-id'));
 
-            //alert(current_id);
             if($(this).val().length>0)
             {
                 $(this).parents().next('.type').show();
@@ -353,7 +352,6 @@
         {
             var current_id=parseInt($(this).parents().next('.variety_quantity').attr('data-variety-current-id'));
 
-            //alert($("#crop"+current_id).val());
             if($(this).val().length>0)
             {
                 $.ajax({
