@@ -3,6 +3,36 @@
     $data["link_back"]=base_url()."customer_sales_target";
     //$data["hide_back"]="1";
     $this->load->view("action_buttons_edit",$data);
+
+//echo '<pre>';
+//print_r($targets);
+//echo '</pre>';
+
+$arranged_targets = array();
+foreach($targets as $target)
+{
+    $arranged_targets['division_id'] = $target['division_id'];
+    $arranged_targets['zone_id'] = $target['zone_id'];
+    $arranged_targets['territory_id'] = $target['territory_id'];
+    $arranged_targets['customer_id'] = $target['customer_id'];
+    $arranged_targets['year'] = $target['year'];
+
+    $arranged_targets['crop'][$target['crop_id']]['crop_id'] = $target['crop_id'];
+    $arranged_targets['crop'][$target['crop_id']]['type_id'] = $target['type_id'];
+    $arranged_targets['crop'][$target['crop_id']]['variety'][$target['variety_id']]['variety_id']=$target['variety_id'];
+    $arranged_targets['crop'][$target['crop_id']]['variety'][$target['variety_id']]['quantity']=$target['quantity'];
+    $arranged_targets['crop'][$target['crop_id']]['variety'][$target['variety_id']]['is_approved_by_zi']=$target['is_approved_by_zi'];
+    $arranged_targets['crop'][$target['crop_id']]['variety'][$target['variety_id']]['is_approved_by_di']=$target['is_approved_by_di'];
+    $arranged_targets['crop'][$target['crop_id']]['variety'][$target['variety_id']]['is_approved_by_hom']=$target['is_approved_by_hom'];
+    $arranged_targets['crop'][$target['crop_id']]['variety'][$target['variety_id']]['created_by']=$target['created_by'];
+
+}
+
+//echo sizeof($arranged_targets['crop']);
+//echo '<pre>';
+//print_r($arranged_targets);
+//echo '</pre>';
+
 ?>
 <form class="form_valid" id="save_form" action="<?php echo base_url();?>customer_sales_target/index/save" method="post">
     <div class="row widget">
@@ -18,9 +48,9 @@
                 <label class="control-label pull-right"><?php echo $this->lang->line('LABEL_YEAR');?><span style="color:#FF0000">*</span></label>
             </div>
             <div class="col-sm-4 col-xs-8">
-                <select name="year" id="year" class="form-control validate[required]">
+                <select name="year" id="year" class="form-control validate[required]" <?php if(strlen($arranged_targets['year'])>1){echo 'disabled';}?>>
                     <?php
-                        $this->load->view('dropdown',array('drop_down_options'=>$years,'drop_down_selected'=>''));
+                        $this->load->view('dropdown',array('drop_down_options'=>$years,'drop_down_selected'=>$arranged_targets['year']));
                     ?>
                 </select>
             </div>
@@ -31,49 +61,49 @@
                 <label class="control-label pull-right"><?php echo $this->lang->line('LABEL_DIVISION');?><span style="color:#FF0000">*</span></label>
             </div>
             <div class="col-sm-4 col-xs-8">
-                <select name="division" class="form-control" id="division">
+                <select name="division" class="form-control" id="division" <?php if(strlen($arranged_targets['division_id'])>1){echo 'disabled';}?>>
                     <?php
-                        $this->load->view('dropdown',array('drop_down_options'=>$divisions,'drop_down_selected'=>''));
+                        $this->load->view('dropdown',array('drop_down_options'=>$divisions,'drop_down_selected'=>$arranged_targets['division_id']));
                     ?>
                 </select>
             </div>
         </div>
 
-        <div class="row show-grid zone" style="display: none;">
+        <div class="row show-grid zone" style="display: <?php if(strlen($arranged_targets['zone_id'])>1){echo 'show';}else{echo 'none';}?>;">
             <div class="col-xs-4">
                 <label class="control-label pull-right"><?php echo $this->lang->line('LABEL_ZONE');?><span style="color:#FF0000">*</span></label>
             </div>
 
             <div class="col-sm-4 col-xs-8">
-                <select name="zone" class="form-control" id="zone">
+                <select name="zone" class="form-control" id="zone" <?php if(strlen($arranged_targets['zone_id'])>1){echo 'disabled';}?>>
                     <?php
-                        $this->load->view('dropdown',array('drop_down_options'=>$zones,'drop_down_selected'=>''));
+                        $this->load->view('dropdown',array('drop_down_options'=>$zones,'drop_down_selected'=>$arranged_targets['zone_id']));
                     ?>
                 </select>
             </div>
         </div>
 
-        <div class="row show-grid territory" style="display: none;">
+        <div class="row show-grid territory" style="display: <?php if(strlen($arranged_targets['territory_id'])>1){echo 'show';}else{echo 'none';}?>;">
             <div class="col-xs-4">
                 <label class="control-label pull-right"><?php echo $this->lang->line('LABEL_TERRITORY');?><span style="color:#FF0000">*</span></label>
             </div>
             <div class="col-sm-4 col-xs-8">
-                <select name="territory" class="form-control" id="territory">
+                <select name="territory" class="form-control" id="territory" <?php if(strlen($arranged_targets['territory_id'])>1){echo 'disabled';}?>>
                     <?php
-                        $this->load->view('dropdown',array('drop_down_options'=>$territories,'drop_down_selected'=>''));
+                        $this->load->view('dropdown',array('drop_down_options'=>$territories,'drop_down_selected'=>$arranged_targets['territory_id']));
                     ?>
                 </select>
             </div>
         </div>
 
-        <div class="row show-grid customer" style="display: none;">
+        <div class="row show-grid customer" style="display: <?php if(strlen($arranged_targets['customer_id'])>1){echo 'show';}else{echo 'none';}?>;">
             <div class="col-xs-4">
                 <label class="control-label pull-right"><?php echo $this->lang->line('LABEL_CUSTOMER');?><span style="color:#FF0000">*</span></label>
             </div>
             <div class="col-sm-4 col-xs-8">
-                <select name="customer" class="form-control" id="customer">
+                <select name="customer" class="form-control" id="customer" <?php if(strlen($arranged_targets['customer_id'])>1){echo 'disabled';}?>>
                     <?php
-                        $this->load->view('dropdown',array('drop_down_options'=>$customers,'drop_down_selected'=>''));
+                        $this->load->view('dropdown',array('drop_down_options'=>$customers,'drop_down_selected'=>$arranged_targets['customer_id']));
                     ?>
                 </select>
             </div>

@@ -56,7 +56,7 @@ class Customer_sales_target extends ROOT_Controller
         $this->jsonReturn($ajax);
     }
 
-    public function rnd_add_edit($id, $year_id)
+    public function rnd_add_edit($customer_id, $year_id)
     {
         $user = User_helper::get_user();
 
@@ -64,12 +64,21 @@ class Customer_sales_target extends ROOT_Controller
         $data['divisions'] = $this->budget_common_model->get_division_by_access();
         $data['zones'] = Query_helper::get_info('ait_zone_info',array('zone_id value','zone_name text'),array('del_status = 0'));
         $data['territories'] = Query_helper::get_info('ait_territory_info',array('territory_id value','territory_name text'),array('del_status = 0'));
-        $data['customers'] = Query_helper::get_info('ait_distributor_info',array('distributor_id value','distributor_name text'),array('del_status = 0',"zone_id ='$user->zone_id'","territory_id ='$user->territory_id'"));
+        $data['customers'] = Query_helper::get_info('ait_distributor_info',array('distributor_id value','distributor_name text'),array('del_status = 0'));
         $data['crops'] = $this->budget_common_model->get_ordered_crops();
         $data['types'] = $this->budget_common_model->get_ordered_crop_types();
 
-        $data['title'] = "Customer/ T. I. Sales target";
-        $ajax['page_url'] = base_url()."customer_sales_target/index/add";
+        if(strlen($customer_id)>1 && strlen($year_id)>1)
+        {
+            $data['targets'] = $this->customer_sales_target_model->get_sales_target_detail($customer_id, $year_id);
+            $data['title'] = "Edit Customer/ T. I. Sales target";
+            $ajax['page_url']=base_url()."customer_sales_target/index/edit/".$customer_id.'/'.$year_id;
+        }
+        else
+        {
+            $data['title'] = "Customer/ T. I. Sales target";
+            $ajax['page_url'] = base_url()."customer_sales_target/index/add";
+        }
 
         $ajax['status'] = true;
         $ajax['content'][] = array("id"=>"#content","html"=>$this->load->view("customer_sales_target/add_edit",$data,true));

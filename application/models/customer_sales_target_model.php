@@ -79,6 +79,18 @@ class Customer_sales_target_model extends CI_Model
         return $query->result_array();
     }
 
+    public function get_sales_target_detail($customer_id, $year_id)
+    {
+        $this->db->from('budget_sales_target bst');
+        $this->db->select('bst.*');
+        $this->db->where('bst.customer_id', $customer_id);
+        $this->db->where('bst.year', $year_id);
+        $this->db->where('bst.status',$this->config->item('status_active'));
+
+        $results = $this->db->get()->result_array();
+        return $results;
+    }
+
     public function get_variety_by_crop_type($crop_id, $type_id, $year, $customer_id)
     {
         $user = User_helper::get_user();
