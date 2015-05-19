@@ -76,22 +76,7 @@ class Customer_sales_target extends ROOT_Controller
         }
         else
         {
-            $data['targets'] = array(
-//                'id'=>'',
-//                'division_id'=>'',
-//                'zone_id'=>'',
-//                'territory_id'=>'',
-//                'customer_id'=>'',
-//                'year'=>'',
-//                'crop_id'=>'',
-//                'type_id'=>'',
-//                'variety_id'=>'',
-//                'quantity'=>'',
-//                'is_approved_by_zi'=>'',
-//                'is_approved_by_di'=>'',
-//                'is_approved_by_hom'=>'',
-//                'created_by'=>''
-            );
+            $data['targets'] = array();
             $data['title'] = "Customer/ T. I. Sales target";
             $ajax['page_url'] = base_url()."customer_sales_target/index/add";
         }
@@ -126,27 +111,74 @@ class Customer_sales_target extends ROOT_Controller
             $crop_type_Post = $this->input->post('target');
             $quantity_post = $this->input->post('quantity');
 
-            foreach($crop_type_Post as $cropTypeKey=>$crop_type)
+            if(strlen($this->input->post('customer_id'))>1 && strlen($this->input->post('year_id'))>1)
             {
-                foreach($quantity_post as $quantityKey=>$quantity)
-                {
-                    if($quantityKey==$cropTypeKey)
-                    {
-                        $data['year'] = $year;
-                        $data['division_id'] = $division;
-                        $data['zone_id'] = $zone;
-                        $data['territory_id'] = $territory;
-                        $data['customer_id'] = $customer;
-                        $data['crop_id'] = $crop_type['crop'];
-                        $data['type_id'] = $crop_type['type'];
+                // Initial update
+                $update_status = array('status'=>0);
+                Query_helper::update('budget_sales_target',$update_status,array('customer_id ='.$this->input->post('customer_id'), 'year ='.$this->input->post('year_id')));
+                $existing_varieties = $this->customer_sales_target_model->get_existing_sales_targets($this->input->post('customer_id'), $this->input->post('year_id'));
 
-                        foreach($quantity as $variety_id=>$amount)
+                foreach($crop_type_Post as $cropTypeKey=>$crop_type)
+                {
+                    foreach($quantity_post as $quantityKey=>$quantity)
+                    {
+                        if($quantityKey==$cropTypeKey)
                         {
-                            $data['variety_id'] = $variety_id;
-                            $data['quantity'] = $amount;
-                            $data['created_by'] = $user->user_id;
-                            $data['creation_date'] = time();
-                            Query_helper::add('budget_sales_target',$data);
+                            $data['year'] = $year;
+                            $data['division_id'] = $division;
+                            $data['zone_id'] = $zone;
+                            $data['territory_id'] = $territory;
+                            $data['customer_id'] = $customer;
+                            $data['crop_id'] = $crop_type['crop'];
+                            $data['type_id'] = $crop_type['type'];
+
+                            foreach($quantity as $variety_id=>$amount)
+                            {
+                                $data['variety_id'] = $variety_id;
+                                $data['quantity'] = $amount;
+
+                                if(in_array($variety_id, $existing_varieties))
+                                {
+                                    $data['modified_by'] = $user->user_id;
+                                    $data['modification_date'] = time();
+                                    $data['status'] = 1;
+                                    Query_helper::update('budget_sales_target',$data,array('customer_id ='.$this->input->post('customer_id'), 'year ='.$this->input->post('year_id'), 'crop_id ='.$data['crop_id'], 'type_id ='.$data['type_id'], 'variety_id ='.$variety_id));
+                                }
+                                else
+                                {
+                                    $data['created_by'] = $user->user_id;
+                                    $data['creation_date'] = time();
+                                    Query_helper::add('budget_sales_target',$data);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            else
+            {
+                foreach($crop_type_Post as $cropTypeKey=>$crop_type)
+                {
+                    foreach($quantity_post as $quantityKey=>$quantity)
+                    {
+                        if($quantityKey==$cropTypeKey)
+                        {
+                            $data['year'] = $year;
+                            $data['division_id'] = $division;
+                            $data['zone_id'] = $zone;
+                            $data['territory_id'] = $territory;
+                            $data['customer_id'] = $customer;
+                            $data['crop_id'] = $crop_type['crop'];
+                            $data['type_id'] = $crop_type['type'];
+
+                            foreach($quantity as $variety_id=>$amount)
+                            {
+                                $data['variety_id'] = $variety_id;
+                                $data['quantity'] = $amount;
+                                $data['created_by'] = $user->user_id;
+                                $data['creation_date'] = time();
+                                Query_helper::add('budget_sales_target',$data);
+                            }
                         }
                     }
                 }
@@ -163,7 +195,7 @@ class Customer_sales_target extends ROOT_Controller
                 $this->message=$this->lang->line("MSG_NOT_SAVED_SUCCESS");
             }
 
-            $this->rnd_add_edit();//this is similar like redirect
+            $this->rnd_list();//this is similar like redirect
         }
 
     }
