@@ -115,6 +115,7 @@ class Customer_sales_target extends ROOT_Controller
             {
                 $customer_id = $this->input->post('customer_id');
                 $year_id = $this->input->post('year_id');
+
                 // Initial update
                 $update_status = array('status'=>0);
                 Query_helper::update('budget_sales_target',$update_status,array("customer_id ='$customer_id'", "year ='$year_id'"));
