@@ -168,6 +168,19 @@ if(is_array($targets) && sizeof($targets)>0)
                     <div class="title">
                         <?php echo $this->lang->line('SALES_TARGET'); ?>
                     </div>
+                    <?php
+                    foreach($crop['variety'] as $perm)
+                    {
+                        $created_by = $perm['created_by'];
+                    }
+
+                    if(User_helper::check_edit_permission($created_by))
+                    {
+                    ?>
+                        <button type="button" class="btn btn-danger pull-right budget_add_more_delete"><?php echo $this->lang->line('DELETE'); ?></button>
+                    <?php
+                    }
+                    ?>
                     <div class="clearfix"></div>
                 </div>
 
@@ -234,7 +247,7 @@ if(is_array($targets) && sizeof($targets)>0)
                                                 <tr>
                                                     <td><?php echo $detail['variety_name']?></td>
                                                     <td>
-                                                        <input type="text" class="form-control variety_quantity" name="quantity[<?php echo $sl;?>][<?php echo $varKey;?>]" value="<?php if(isset($detail['quantity'])){echo $detail['quantity'];}?>" />                                                        <input type="hidden" name="" />
+                                                        <input type="text" class="form-control variety_quantity" <?php if(!User_helper::check_edit_permission($detail['created_by'])){echo 'readonly';}?> name="quantity[<?php echo $sl;?>][<?php echo $varKey;?>]" value="<?php if(isset($detail['quantity'])){echo $detail['quantity'];}?>" />                                                        <input type="hidden" name="" />
                                                     </td>
                                                 </tr>
                                             <?php

@@ -50,4 +50,25 @@ class User_helper
             }
         }
     }
+
+    public static function check_edit_permission($created_by)
+    {
+        $CI = & get_instance();
+        $user = User_helper::get_user();
+        $logged_user_level = $user->budget_group;
+
+        $CI->db->from('ait_user_login bst');
+        $CI->db->select('bst.budget_group');
+        $CI->db->where('user_id', "$created_by");
+        $result = $CI->db->get()->row_array();
+
+        if($logged_user_level > $result['budget_group'])
+        {
+            return false;
+        }
+        else
+        {
+            return true;
+        }
+    }
 }
