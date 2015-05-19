@@ -76,6 +76,22 @@ class Customer_sales_target extends ROOT_Controller
         }
         else
         {
+            $data['targets'] = array(
+//                'id'=>'',
+//                'division_id'=>'',
+//                'zone_id'=>'',
+//                'territory_id'=>'',
+//                'customer_id'=>'',
+//                'year'=>'',
+//                'crop_id'=>'',
+//                'type_id'=>'',
+//                'variety_id'=>'',
+//                'quantity'=>'',
+//                'is_approved_by_zi'=>'',
+//                'is_approved_by_di'=>'',
+//                'is_approved_by_hom'=>'',
+//                'created_by'=>''
+            );
             $data['title'] = "Customer/ T. I. Sales target";
             $ajax['page_url'] = base_url()."customer_sales_target/index/add";
         }
