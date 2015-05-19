@@ -19,7 +19,7 @@ foreach($targets as $target)
 
     $arranged_targets['crop'][$target['crop_id']]['crop_id'] = $target['crop_id'];
     $arranged_targets['crop'][$target['crop_id']]['type_id'] = $target['type_id'];
-    $arranged_targets['crop'][$target['crop_id']]['variety'][$target['variety_id']]['variety_id']=$target['variety_id'];
+    $arranged_targets['crop'][$target['crop_id']]['variety'][$target['variety_id']]['variety_name']=$target['variety_name'];
     $arranged_targets['crop'][$target['crop_id']]['variety'][$target['variety_id']]['quantity']=$target['quantity'];
     $arranged_targets['crop'][$target['crop_id']]['variety'][$target['variety_id']]['is_approved_by_zi']=$target['is_approved_by_zi'];
     $arranged_targets['crop'][$target['crop_id']]['variety'][$target['variety_id']]['is_approved_by_di']=$target['is_approved_by_di'];
@@ -110,9 +110,14 @@ foreach($targets as $target)
         </div>
     </div>
 
-<!--    ////////////////////////////////////////////////////// SALES TARGET ////////////////////////////////////////////////   -->
+    <!--    /////////////////////////////////////////////////// SALES TARGET //////////////////////////////////////////////   -->
 
-    <div id="budget_add_more_container" class="budget_add_more_container" style="display: none;">
+    <div id="budget_add_more_container">
+    <?php
+    foreach($arranged_targets['crop'] as $key=>$crop)
+    {
+    ?>
+    <div class="budget_add_more_container" style="display: <?php if(sizeof($arranged_targets['crop'])>0){echo 'show';}else{echo 'none';}?>;">
         <div class="row widget">
             <div class="widget-header">
                 <div class="title">
@@ -126,33 +131,74 @@ foreach($targets as $target)
                     <label class="control-label pull-right"><?php echo $this->lang->line('LABEL_CROP');?></label>
                 </div>
                 <div class="col-xs-2">
-                    <select name="target[0][crop]" class="form-control crop_id" id="crop0">
+                    <select name="target[0][crop]" class="form-control crop_id" id="crop0" <?php if(strlen($crop['crop_id'])>1){echo 'disabled';}?>>
                         <?php
-                        $this->load->view('dropdown',array('drop_down_options'=>$crops,'drop_down_selected'=>''));
+                        $this->load->view('dropdown',array('drop_down_options'=>$crops,'drop_down_selected'=>$crop['crop_id']));
                         ?>
                     </select>
                 </div>
             </div>
     
-            <div class="type" style="display: none;">
+            <div class="type" style="display: <?php if(sizeof($arranged_targets['crop'])>0){echo 'show';}else{echo 'none';}?>;">
                 <div class="col-xs-1">
                     <label class="control-label pull-right"><?php echo $this->lang->line('LABEL_TYPE');?></label>
                 </div>
                 <div class="col-xs-2">
-                    <select name="target[0][type]" class="form-control type_id" id="type0" data-type-current-id="0">
+                    <select name="target[0][type]" class="form-control type_id" id="type0" <?php if(strlen($crop['type_id'])>1){echo 'disabled';}?> data-type-current-id="0">
                         <?php
-                        $this->load->view('dropdown',array('drop_down_options'=>$types,'drop_down_selected'=>''));
+                        $this->load->view('dropdown',array('drop_down_options'=>$types,'drop_down_selected'=>$crop['type_id']));
                         ?>
                     </select>
                 </div>
             </div>
     
             <div class="col-xs-6 variety_quantity" id="variety0" data-variety-current-id="0">
+                <?php
+                    if(sizeof($arranged_targets['crop'])>0)
+                    {
+                        ?>
+                        <div class="row show-grid">
+                            <div class="col-lg-12">
+                                <table class="table table-hover table-bordered">
+                                    <?php
+                                    if(is_array($crop['variety']) && sizeof($crop['variety'])>0)
+                                    {
+                                        ?>
+                                        <th><?php echo $this->lang->line('LABEL_VARIETY')?></th>
+                                        <th><?php echo $this->lang->line('LABEL_QUANTITY_KG')?></th>
+                                        <?php
+                                        foreach($crop['variety'] as $varKey=>$detail)
+                                        {
+                                            ?>
+                                            <tr>
+                                                <td><?php echo $detail['variety_name']?></td>
+                                                <td><input type="text" class="form-control variety_quantity" name="quantity[<?php echo $key;?>][<?php echo $varKey;?>]" value="<?php if(isset($detail['quantity'])){echo $detail['quantity'];}?>" /></td>
+                                            </tr>
+                                        <?php
+                                        }
+                                    }
+                                    else
+                                    {
+                                        ?>
+                                        <tr><td class="label-danger"><?php echo $this->lang->line('NO_VARIETY_EXIST');?></td></tr>
+                                    <?php
+                                    }
+                                    ?>
+                                </table>
+                            </div>
+                        </div>
+                    <?php
+                    }
+                ?>
             </div>
         </div>
     </div>
+    <?php
+    }
+    ?>
+    </div>
 
-    <div class="row text-center" id="add_more" style="display: none;">
+    <div class="row text-center" id="add_more" style="display: <?php if(sizeof($arranged_targets['crop'])>0){echo 'show';}else{echo 'none';}?>;">
         <button type="button" class="btn btn-warning budget_add_more_button"><?php echo $this->lang->line('ADD_MORE');?></button>
     </div>
 
@@ -162,7 +208,7 @@ foreach($targets as $target)
 </form>
 
 <div class="budget_add_more_content" style="display: none;">
-    <div class="row widget budget_add_more_holder budget_add_more_container"  data-current-id="0">
+    <div class="row widget budget_add_more_holder budget_add_more_container"  data-current-id="<?php echo (sizeof($arranged_targets['crop'])-1);?>">
         <div class="widget-header">
             <div class="title">
                 <?php echo $this->lang->line('SALES_TARGET'); ?>

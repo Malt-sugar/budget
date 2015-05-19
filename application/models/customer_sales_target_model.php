@@ -83,10 +83,13 @@ class Customer_sales_target_model extends CI_Model
     {
         $this->db->from('budget_sales_target bst');
         $this->db->select('bst.*');
+        $this->db->select('avi.varriety_name variety_name');
+
         $this->db->where('bst.customer_id', $customer_id);
         $this->db->where('bst.year', $year_id);
         $this->db->where('bst.status',$this->config->item('status_active'));
 
+        $this->db->join('ait_varriety_info avi', 'avi.varriety_id = bst.variety_id', 'left');
         $results = $this->db->get()->result_array();
         return $results;
     }
