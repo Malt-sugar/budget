@@ -113,9 +113,11 @@ class Customer_sales_target extends ROOT_Controller
 
             if(strlen($this->input->post('customer_id'))>1 && strlen($this->input->post('year_id'))>1)
             {
+                $customer_id = $this->input->post('customer_id');
+                $year_id = $this->input->post('year_id');
                 // Initial update
                 $update_status = array('status'=>0);
-                Query_helper::update('budget_sales_target',$update_status,array('customer_id ='.$this->input->post('customer_id'), 'year ='.$this->input->post('year_id')));
+                Query_helper::update('budget_sales_target',$update_status,array("customer_id ='$customer_id'", "year ='$year_id'"));
                 $existing_varieties = $this->customer_sales_target_model->get_existing_sales_targets($this->input->post('customer_id'), $this->input->post('year_id'));
 
                 foreach($crop_type_Post as $cropTypeKey=>$crop_type)
@@ -142,7 +144,9 @@ class Customer_sales_target extends ROOT_Controller
                                     $data['modified_by'] = $user->user_id;
                                     $data['modification_date'] = time();
                                     $data['status'] = 1;
-                                    Query_helper::update('budget_sales_target',$data,array('customer_id ='.$this->input->post('customer_id'), 'year ='.$this->input->post('year_id'), 'crop_id ='.$data['crop_id'], 'type_id ='.$data['type_id'], 'variety_id ='.$variety_id));
+                                    $crop_id = $data['crop_id'];
+                                    $type_id = $data['type_id'];
+                                    Query_helper::update('budget_sales_target',$data,array("customer_id ='$customer_id'", "year ='$year'", "crop_id ='$crop_id'", "type_id ='$type_id'", "variety_id ='$variety_id'"));
                                 }
                                 else
                                 {

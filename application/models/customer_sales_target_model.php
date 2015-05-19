@@ -131,7 +131,7 @@ class Customer_sales_target_model extends CI_Model
     public function get_existing_sales_targets($customer, $year)
     {
         $this->db->from('budget_sales_target bst');
-        $this->db->select('bst.quantity, bst.is_approved_by_zi');
+        $this->db->select('bst.*');
         $this->db->where('bst.year',$year);
         $this->db->where('bst.customer_id',$customer);
         $results = $this->db->get()->result_array();
