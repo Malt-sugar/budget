@@ -183,6 +183,7 @@ class Customer_sales_target extends ROOT_Controller
                                 $data['created_by'] = $user->user_id;
                                 $data['creation_date'] = time();
 
+                                // Auto Approvals; based on logged user level.
                                 if($user->budget_group == $this->config->item('user_group_zone'))
                                 {
                                     $data['is_approved_by_zi'] = 1;

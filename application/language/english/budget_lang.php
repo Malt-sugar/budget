@@ -56,6 +56,11 @@ $lang['SET_DIVISION']='Please Set Division!';
 $lang['SET_TERRITORY']='Please Set Territory!';
 $lang['SET_CUSTOMER']='Please Set Customer!';
 $lang['SET_ZONE']='Please Set Zone!';
+$lang['LABEL_APPROVED_BY_ZI']='ZI Approval';
+$lang['LABEL_APPROVED_BY_DI']='DI Approval';
+$lang['LABEL_APPROVED_BY_HOM']='HOM Approval';
+$lang['LABEL_APPROVED']='Approved';
+$lang['LABEL_NOT_YET']='Not Yet';
 
 // Minimum Stock Quantity
 
