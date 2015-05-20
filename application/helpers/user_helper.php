@@ -86,7 +86,7 @@ class User_helper
         {
             return true;
         }
-        elseif($hom_approval==1 && $logged_user_level < $CI->config->item('user_group_marketing'))
+        elseif($hom_approval==1 && $logged_user_level <= $CI->config->item('user_group_marketing'))
         {
             return true;
         }
