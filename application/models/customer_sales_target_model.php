@@ -94,7 +94,7 @@ class Customer_sales_target_model extends CI_Model
         return $results;
     }
 
-    public function get_variety_by_crop_type($crop_id, $type_id, $year, $customer_id)
+    public function get_variety_by_crop_type($crop_id, $type_id)
     {
         $user = User_helper::get_user();
         $this->db->select('avi.*');
@@ -102,29 +102,6 @@ class Customer_sales_target_model extends CI_Model
         $this->db->where('avi.crop_id',$crop_id);
         $this->db->where('avi.product_type_id',$type_id);
         $results = $this->db->get()->result_array();
-
-        if(is_array($results) && sizeof($results)>0)
-        {
-            foreach($results as &$result)
-            {
-                $this->db->from('budget_sales_target bst');
-                $this->db->select('bst.quantity, bst.is_approved_by_zi');
-                $this->db->where('bst.created_by',$user->user_id);
-                $this->db->where('bst.year',$year);
-                $this->db->where('bst.customer_id',$customer_id);
-                $this->db->where('bst.variety_id', $result['varriety_id']);
-                $this->db->where('bst.crop_id', $result['crop_id']);
-                $this->db->where('bst.type_id', $result['product_type_id']);
-                $sales = $this->db->get()->row_array();
-
-                if($sales)
-                {
-                    $result['quantity'] = $sales['quantity'];
-                    $result['is_approved_by_zi'] = $sales['is_approved_by_zi'];
-                }
-            }
-        }
-
         return $results;
     }
 

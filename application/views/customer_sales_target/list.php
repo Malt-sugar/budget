@@ -83,9 +83,9 @@
                                 if(User_helper::check_edit_permission($sales_target['created_by']) && User_helper::check_edit_permission_after_approval($sales_target['is_approved_by_zi'], $sales_target['is_approved_by_di'], $sales_target['is_approved_by_hom']))
                                 {
                                 ?>
-                                <a href="<?php echo base_url();?>customer_sales_target/index/edit/<?php echo $sales_target['id'];?>/<?php echo $sales_target['customer_id'];?>/<?php echo $sales_target['year'];?>">
-                                    <img src="<?php echo base_url();?>images/edit_record.png">
-                                </a>
+                                    <a href="<?php echo base_url();?>customer_sales_target/index/edit/<?php echo $sales_target['id'];?>/<?php echo $sales_target['customer_id'];?>/<?php echo $sales_target['year'];?>">
+                                        <img src="<?php echo base_url();?>images/edit_record.png">
+                                    </a>
                                     <?php
                                 }
                                 else

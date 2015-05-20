@@ -22,7 +22,7 @@
                 ?>
                 <tr>
                     <td><?php echo $variety['varriety_name']?></td>
-                    <td><input type="text" class="form-control variety_quantity" name="quantity[<?php echo $serial;?>][<?php echo $variety['varriety_id']?>]" value="<?php if(isset($variety['quantity'])){echo $variety['quantity'];}?>" /></td>
+                    <td><input type="text" class="form-control variety_quantity" name="quantity[<?php echo $serial;?>][<?php echo $variety['varriety_id']?>]" value="" /></td>
                 </tr>
                 <?php
                 }

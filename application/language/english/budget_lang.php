@@ -62,6 +62,7 @@ $lang['LABEL_APPROVED_BY_HOM']='HOM Approval';
 $lang['LABEL_APPROVED']='Approved';
 $lang['LABEL_NOT_YET']='Not Yet';
 $lang['NO_EDIT_PERMISSION']='No Edit Permission';
+$lang['DUPLICATE_CROP_TYPE']='Duplicate Crop Type!';
 
 // Minimum Stock Quantity
 

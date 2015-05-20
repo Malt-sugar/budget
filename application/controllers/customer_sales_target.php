@@ -71,13 +71,13 @@ class Customer_sales_target extends ROOT_Controller
         if(strlen($customer_id)>1 && strlen($year_id)>1)
         {
             $data['targets'] = $this->customer_sales_target_model->get_sales_target_detail($customer_id, $year_id);
-            $data['title'] = "Edit Customer/ T. I. Sales target";
+            $data['title'] = "Edit Customer Sales target";
             $ajax['page_url']=base_url()."customer_sales_target/index/edit/".$customer_id.'/'.$year_id;
         }
         else
         {
             $data['targets'] = array();
-            $data['title'] = "Customer/ T. I. Sales target";
+            $data['title'] = "Customer Sales target";
             $ajax['page_url'] = base_url()."customer_sales_target/index/add";
         }
 
@@ -228,6 +228,23 @@ class Customer_sales_target extends ROOT_Controller
         $valid=true;
 
         $crop_type_Post = $this->input->post('target');
+
+        foreach($crop_type_Post as $crop_type)
+        {
+             $crop_type_array[] = array('crop'=>$crop_type['crop'], 'type'=>$crop_type['type']);
+        }
+
+        $new_arr = array_unique($crop_type_array, SORT_REGULAR);
+
+        if($crop_type_array != $new_arr)
+        {
+            $valid=false;
+            $this->message .= $this->lang->line("DUPLICATE_CROP_TYPE").'<br>';
+        }
+
+        $customer_id = $this->input->post('customer_id');
+        $year_id = $this->input->post('year_id');
+
         $quantity_post = $this->input->post('quantity');
         $year = $this->input->post('year');
         $division = $this->input->post('division');
@@ -271,24 +288,25 @@ class Customer_sales_target extends ROOT_Controller
             $this->message .= $this->lang->line("SET_TARGET").'<br>';
         }
 
-        if($this->customer_sales_target_model->check_customer_existence($this->input->post('customer'), $this->input->post('year')))
+        if(strlen($customer_id)==1 && strlen($year_id)==1)
         {
-            $valid=false;
-            $this->message .= $this->lang->line("CUSTOMER_EXIST_THIS_YEAR").'<br>';
+            if($this->customer_sales_target_model->check_customer_existence($this->input->post('customer'), $this->input->post('year')))
+            {
+                $valid=false;
+                $this->message .= $this->lang->line("CUSTOMER_EXIST_THIS_YEAR").'<br>';
+            }
         }
 
         return $valid;
     }
 
-    public function get_dropDown_variety_by_crop_type()
+    public function get_varieties_by_crop_type()
     {
         $crop_id = $this->input->post('crop_id');
         $type_id = $this->input->post('type_id');
-        $year = $this->input->post('year');
-        $customer_id = $this->input->post('customer');
         $current_id = $this->input->post('current_id');
 
-        $data['varieties'] = $this->customer_sales_target_model->get_variety_by_crop_type($crop_id, $type_id, $year, $customer_id);
+        $data['varieties'] = $this->customer_sales_target_model->get_variety_by_crop_type($crop_id, $type_id);
 
         if(sizeof($data['varieties'])>0)
         {
@@ -317,8 +335,6 @@ class Customer_sales_target extends ROOT_Controller
         {
             $ajax['status'] = false;
             $ajax['message'] = $this->lang->line('CUSTOMER_EXIST_THIS_YEAR');
-//            $ajax['content'][]=array("id"=>'#budget_add_more_container',"html"=>'',true);
-//            $ajax['content'][]=array("id"=>'#add_more',"html"=>'',true);
             $this->jsonReturn($ajax);
         }
         else
