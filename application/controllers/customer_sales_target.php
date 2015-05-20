@@ -182,6 +182,23 @@ class Customer_sales_target extends ROOT_Controller
                                 $data['quantity'] = $amount;
                                 $data['created_by'] = $user->user_id;
                                 $data['creation_date'] = time();
+
+                                if($user->budget_group == $this->config->item('user_group_zone'))
+                                {
+                                    $data['is_approved_by_zi'] = 1;
+                                }
+                                elseif($user->budget_group == $this->config->item('user_group_division'))
+                                {
+                                    $data['is_approved_by_zi'] = 1;
+                                    $data['is_approved_by_di'] = 1;
+                                }
+                                elseif($user->budget_group == $this->config->item('user_group_marketing'))
+                                {
+                                    $data['is_approved_by_zi'] = 1;
+                                    $data['is_approved_by_di'] = 1;
+                                    $data['is_approved_by_hom'] = 1;
+                                }
+
                                 Query_helper::add('budget_sales_target',$data);
                             }
                         }
