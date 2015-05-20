@@ -71,4 +71,32 @@ class User_helper
             return true;
         }
     }
+
+    public static function check_edit_permission_after_approval($zi_approval, $di_approval, $hom_approval)
+    {
+        $CI = & get_instance();
+        $user = User_helper::get_user();
+        $logged_user_level = $user->budget_group;
+
+        if($zi_approval==1 && $logged_user_level < $CI->config->item('user_group_zone'))
+        {
+            return true;
+        }
+        elseif($di_approval==1 && $logged_user_level < $CI->config->item('user_group_division'))
+        {
+            return true;
+        }
+        elseif($hom_approval==1 && $logged_user_level < $CI->config->item('user_group_marketing'))
+        {
+            return true;
+        }
+        elseif($zi_approval==0 && $di_approval==0 && $hom_approval==0)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
 }
