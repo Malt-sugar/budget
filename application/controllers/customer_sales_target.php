@@ -209,6 +209,56 @@ class Customer_sales_target extends ROOT_Controller
     {
         $valid=true;
 
+        $crop_type_Post = $this->input->post('target');
+        $quantity_post = $this->input->post('quantity');
+        $year = $this->input->post('year');
+        $division = $this->input->post('division');
+        $zone = $this->input->post('zone');
+        $territory = $this->input->post('territory');
+        $customer = $this->input->post('customer');
+
+        if(!$year)
+        {
+            $valid=false;
+            $this->message .= $this->lang->line("SET_YEAR").'<br>';
+        }
+
+        if(!$division)
+        {
+            $valid=false;
+            $this->message = $this->lang->line("SET_DIVISION").'<br>';
+        }
+
+        if(!$territory)
+        {
+            $valid=false;
+            $this->message .= $this->lang->line("SET_TERRITORY").'<br>';
+        }
+
+        if(!$customer)
+        {
+            $valid=false;
+            $this->message .= $this->lang->line("SET_CUSTOMER").'<br>';
+        }
+
+        if(!$zone)
+        {
+            $valid=false;
+            $this->message .= $this->lang->line("SET_ZONE").'<br>';
+        }
+
+        if(!$crop_type_Post || !$quantity_post)
+        {
+            $valid=false;
+            $this->message .= $this->lang->line("SET_TARGET").'<br>';
+        }
+
+        if($this->customer_sales_target_model->check_customer_existence($this->input->post('customer'), $this->input->post('year')))
+        {
+            $valid=false;
+            $this->message .= $this->lang->line("CUSTOMER_EXIST_THIS_YEAR").'<br>';
+        }
+
         return $valid;
     }
 
@@ -234,6 +284,28 @@ class Customer_sales_target extends ROOT_Controller
         {
             $ajax['status'] = true;
             $ajax['content'][]=array("id"=>'#variety'.$current_id,"html"=>"<label class='label label-danger'>".$this->lang->line('NO_VARIETY_EXIST')."</label>","",true);
+            $this->jsonReturn($ajax);
+        }
+    }
+
+    public function check_customer_existence_this_year()
+    {
+        $customer_id = $this->input->post('customer_id');
+        $year_id = $this->input->post('year_id');
+
+        $existence = $this->customer_sales_target_model->check_customer_existence($customer_id, $year_id);
+
+        if($existence)
+        {
+            $ajax['status'] = false;
+            $ajax['message'] = $this->lang->line('CUSTOMER_EXIST_THIS_YEAR');
+//            $ajax['content'][]=array("id"=>'#budget_add_more_container',"html"=>'',true);
+//            $ajax['content'][]=array("id"=>'#add_more',"html"=>'',true);
+            $this->jsonReturn($ajax);
+        }
+        else
+        {
+            $ajax['status'] = true;
             $this->jsonReturn($ajax);
         }
     }

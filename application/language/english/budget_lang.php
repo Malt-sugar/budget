@@ -49,6 +49,13 @@ $lang['ACTION_SAVE'] = 'Save';
 // Customer Sales target
 
 $lang['SALES_TARGET']='Sales Target';
+$lang['CUSTOMER_EXIST_THIS_YEAR']='Target Already Set For This Customer This Year!';
+$lang['SET_TARGET']='Please Set Sales Target!';
+$lang['SET_YEAR']='Please Set Year!';
+$lang['SET_DIVISION']='Please Set Division!';
+$lang['SET_TERRITORY']='Please Set Territory!';
+$lang['SET_CUSTOMER']='Please Set Customer!';
+$lang['SET_ZONE']='Please Set Zone!';
 
 // Minimum Stock Quantity
 

@@ -71,7 +71,7 @@ if(is_array($targets) && sizeof($targets)>0)
                 <label class="control-label pull-right"><?php echo $this->lang->line('LABEL_DIVISION');?><span style="color:#FF0000">*</span></label>
             </div>
             <div class="col-sm-4 col-xs-8">
-                <select name="division" class="form-control" id="division" <?php if(isset($arranged_targets['division_id']) && strlen($arranged_targets['division_id'])>1){echo 'disabled';}?>>
+                <select name="division" class="form-control validate[required]" id="division" <?php if(isset($arranged_targets['division_id']) && strlen($arranged_targets['division_id'])>1){echo 'disabled';}?>>
                     <?php
                         $this->load->view('dropdown',array('drop_down_options'=>$divisions,'drop_down_selected'=>isset($arranged_targets['division_id'])?$arranged_targets['division_id']:''));
                     ?>
@@ -93,7 +93,7 @@ if(is_array($targets) && sizeof($targets)>0)
             </div>
 
             <div class="col-sm-4 col-xs-8">
-                <select name="zone" class="form-control" id="zone" <?php if(isset($arranged_targets['zone_id']) && strlen($arranged_targets['zone_id'])>1){echo 'disabled';}?>>
+                <select name="zone" class="form-control validate[required]" id="zone" <?php if(isset($arranged_targets['zone_id']) && strlen($arranged_targets['zone_id'])>1){echo 'disabled';}?>>
                     <?php
                         $this->load->view('dropdown',array('drop_down_options'=>$zones,'drop_down_selected'=>isset($arranged_targets['zone_id'])?$arranged_targets['zone_id']:''));
                     ?>
@@ -114,7 +114,7 @@ if(is_array($targets) && sizeof($targets)>0)
                 <label class="control-label pull-right"><?php echo $this->lang->line('LABEL_TERRITORY');?><span style="color:#FF0000">*</span></label>
             </div>
             <div class="col-sm-4 col-xs-8">
-                <select name="territory" class="form-control" id="territory" <?php if(isset($arranged_targets['territory_id']) && strlen($arranged_targets['territory_id'])>1){echo 'disabled';}?>>
+                <select name="territory" class="form-control validate[required]" id="territory" <?php if(isset($arranged_targets['territory_id']) && strlen($arranged_targets['territory_id'])>1){echo 'disabled';}?>>
                     <?php
                         $this->load->view('dropdown',array('drop_down_options'=>$territories,'drop_down_selected'=>isset($arranged_targets['territory_id'])?$arranged_targets['territory_id']:''));
                     ?>
@@ -135,7 +135,7 @@ if(is_array($targets) && sizeof($targets)>0)
                 <label class="control-label pull-right"><?php echo $this->lang->line('LABEL_CUSTOMER');?><span style="color:#FF0000">*</span></label>
             </div>
             <div class="col-sm-4 col-xs-8">
-                <select name="customer" class="form-control" id="customer" <?php if(isset($arranged_targets['customer_id']) && strlen($arranged_targets['customer_id'])>1){echo 'disabled';}?>>
+                <select name="customer" class="form-control validate[required]" id="customer" <?php if(isset($arranged_targets['customer_id']) && strlen($arranged_targets['customer_id'])>1){echo 'disabled';}?>>
                     <?php
                         $this->load->view('dropdown',array('drop_down_options'=>$customers,'drop_down_selected'=>isset($arranged_targets['customer_id'])?$arranged_targets['customer_id']:''));
                     ?>
@@ -504,6 +504,21 @@ if(is_array($targets) && sizeof($targets)>0)
                 $("#add_more").show();
                 $(".crop").show();
                 $("#crop").val('');
+
+                $.ajax({
+                    url: base_url+"customer_sales_target/check_customer_existence_this_year/",
+                    type: 'POST',
+                    dataType: "JSON",
+                    data:{customer_id: $(this).val(), year_id: $("#year").val()},
+                    success: function (data, status)
+                    {
+
+                    },
+                    error: function (xhr, desc, err)
+                    {
+                        console.log("error");
+                    }
+                });
             }
             else
             {

@@ -142,4 +142,22 @@ class Customer_sales_target_model extends CI_Model
 
         return $varieties;
     }
+
+    public function check_customer_existence($customer_id, $year_id)
+    {
+        $this->db->from('budget_sales_target bst');
+        $this->db->select('bst.*');
+        $this->db->where('bst.year',$year_id);
+        $this->db->where('bst.customer_id',$customer_id);
+        $result = $this->db->get()->row_array();
+
+        if($result)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
 }
