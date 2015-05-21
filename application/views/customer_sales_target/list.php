@@ -1,6 +1,7 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
     $data["link_new"]=base_url()."customer_sales_target/index/add";
+    $data["hide_approve"]="1";
     $this->load->view("action_buttons",$data);
 
 //echo '<pre>';

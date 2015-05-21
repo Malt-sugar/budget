@@ -45,6 +45,7 @@ $lang['ACTION_NEW'] = 'New';
 $lang['ACTION_LOGOUT'] = 'Logout';
 $lang['ACTION_BACK'] = 'Back';
 $lang['ACTION_SAVE'] = 'Save';
+$lang['ACTION_APPROVE'] = 'Approve';
 
 // Customer Sales target
 

@@ -1,8 +1,7 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
-    $data["link_new"]=base_url()."customer_sales_target/index/add";
-    $data["link_back"]=base_url()."customer_sales_target";
-    $data["hide_approve"]="1";
-    //$data["hide_back"]="1";
+    $data["link_new"]="#";
+    $data["link_back"]=base_url()."approval_sales_target_zi";
+    $data["hide_save"]="1";
     $this->load->view("action_buttons_edit",$data);
 
 
@@ -28,12 +27,8 @@ if(is_array($targets) && sizeof($targets)>0)
     }
 }
 
-//echo '<pre>';
-//print_r($arranged_targets);
-//echo '</pre>';
-
 ?>
-<form class="form_valid" id="save_form" action="<?php echo base_url();?>customer_sales_target/index/save" method="post">
+<form class="form_valid" id="save_form" action="<?php echo base_url();?>approval_sales_target_zi/index/save" method="post">
     <input type="hidden" name="customer_id" value="<?php if(isset($arranged_targets['customer_id'])){echo $arranged_targets['customer_id'];}else{echo 0;}?>" />
     <input type="hidden" name="year_id" value="<?php if(isset($arranged_targets['year'])){echo $arranged_targets['year'];}else{echo 0;}?>" />
     <div class="row widget">
@@ -151,7 +146,7 @@ if(is_array($targets) && sizeof($targets)>0)
         </div>
     </div>
 
-    <!--    /////////////////////////////////////////////////// SALES TARGET //////////////////////////////////////////////   -->
+    <!--    /////////////////////////////////////////////////// SALES TARGETS //////////////////////////////////////////////   -->
 
     <div id="budget_add_more_container">
     <?php
@@ -409,128 +404,6 @@ if(is_array($targets) && sizeof($targets)>0)
             $(this).closest('.budget_add_more_container').remove();
         });
 
-        $(document).on("change", "#division", function()
-        {
-            if($(this).val().length>0)
-            {
-                $(".zone").show();
-
-                $.ajax({
-                    url: base_url+"budget_common/get_zone_by_access/",
-                    type: 'POST',
-                    dataType: "JSON",
-                    data:{division_id:$(this).val()},
-                    success: function (data, status)
-                    {
-
-                    },
-                    error: function (xhr, desc, err)
-                    {
-                        console.log("error");
-                    }
-                });
-            }
-            else
-            {
-                $(".zone").hide();
-                $("#zone").val('');
-                $(".territory").hide();
-                $("#territory").val('');
-                $(".customer").hide();
-                $("#customer").val('');
-            }
-        });
-
-        $(document).on("change","#zone",function()
-        {
-            // alert($(this).val());
-            if($(this).val().length>0)
-            {
-                $(".territory").show();
-                $.ajax({
-                    url: base_url+"budget_common/get_territory_by_access/",
-                    type: 'POST',
-                    dataType: "JSON",
-                    data:{zone_id:$(this).val()},
-                    success: function (data, status)
-                    {
-
-                    },
-                    error: function (xhr, desc, err)
-                    {
-                        console.log("error");
-                    }
-                });
-            }
-            else
-            {
-                $(".territory").hide();
-                $("#territory").val('');
-                $(".customer").hide();
-                $("#customer").val('');
-            }
-        });
-
-        $(document).on("change","#territory",function()
-        {
-            if($(this).val().length>0)
-            {
-                $(".customer").show();
-                $.ajax({
-                    url: base_url+"budget_common/get_dropDown_customer_by_territory/",
-                    type: 'POST',
-                    dataType: "JSON",
-                    data:{zone_id:$("#zone").val(), territory_id:$(this).val()},
-                    success: function (data, status)
-                    {
-
-                    },
-                    error: function (xhr, desc, err)
-                    {
-                        console.log("error");
-                    }
-                });
-            }
-            else
-            {
-                $(".customer").hide();
-                $("#customer").val('');
-            }
-        });
-
-        $(document).on("change","#customer",function()
-        {
-            if($(this).val().length>0)
-            {
-                $(".budget_add_more_container").show();
-                $("#add_more").show();
-                $(".crop").show();
-                $("#crop").val('');
-
-                $.ajax({
-                    url: base_url+"customer_sales_target/check_customer_existence_this_year/",
-                    type: 'POST',
-                    dataType: "JSON",
-                    data:{customer_id: $(this).val(), year_id: $("#year").val()},
-                    success: function (data, status)
-                    {
-
-                    },
-                    error: function (xhr, desc, err)
-                    {
-                        console.log("error");
-                    }
-                });
-            }
-            else
-            {
-                $(".budget_add_more_container").hide();
-                $("#add_more").hide();
-                $(".crop").hide();
-            }
-
-            $("#crop").val('');
-        });
 
         $(document).on("change",".crop_id",function()
         {
