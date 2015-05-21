@@ -98,9 +98,9 @@ class Approval_sales_target_zi_model extends CI_Model
         $this->db->where('bst.year', $year_id);
         $this->db->where('bst.status',$this->config->item('status_active'));
 
-        $this->db->where('bst.is_approved_by_zi', 0);
-        $this->db->where('bst.is_approved_by_di', 0);
-        $this->db->where('bst.is_approved_by_hom', 0);
+//        $this->db->where('bst.is_approved_by_zi', 0);
+//        $this->db->where('bst.is_approved_by_di', 0);
+//        $this->db->where('bst.is_approved_by_hom', 0);
 
         $this->db->join('ait_varriety_info avi', 'avi.varriety_id = bst.variety_id', 'left');
         $results = $this->db->get()->result_array();

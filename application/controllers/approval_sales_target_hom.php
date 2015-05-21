@@ -15,23 +15,23 @@ class Approval_sales_target_hom extends ROOT_Controller
     {
         if($task=="list")
         {
-            $this->rnd_list($id);
+            $this->budget_list($id);
         }
         elseif($task=="add" || $task=="edit")
         {
-            $this->rnd_add_edit($customer_id, $year_id);
+            $this->budget_add_edit($customer_id, $year_id);
         }
         elseif($task=="save")
         {
-            $this->rnd_save();
+            $this->budget_save();
         }
         else
         {
-            $this->rnd_add_edit($customer_id, $year_id);
+            $this->budget_add_edit($customer_id, $year_id);
         }
     }
 
-    public function rnd_list($page=0)
+    public function budget_list($page=0)
     {
         $config = System_helper::pagination_config(base_url() . "approval_sales_target_hom/index/list/",$this->approval_sales_target_hom_model->get_total_customers(),4);
         $this->pagination->initialize($config);
@@ -56,7 +56,7 @@ class Approval_sales_target_hom extends ROOT_Controller
         $this->jsonReturn($ajax);
     }
 
-    public function rnd_add_edit($customer_id, $year_id)
+    public function budget_add_edit($customer_id, $year_id)
     {
         $user = User_helper::get_user();
 
@@ -87,7 +87,7 @@ class Approval_sales_target_hom extends ROOT_Controller
         $this->jsonReturn($ajax);
     }
 
-    public function rnd_save()
+    public function budget_save()
     {
         $user = User_helper::get_user();
         $data = Array();
@@ -177,7 +177,7 @@ class Approval_sales_target_hom extends ROOT_Controller
                 $this->message=$this->lang->line("MSG_NOT_SAVED_SUCCESS");
             }
 
-            $this->rnd_list();//this is similar like redirect
+            $this->budget_list();//this is similar like redirect
         }
     }
 

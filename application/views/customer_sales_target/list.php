@@ -51,7 +51,7 @@
                                     }
                                     else
                                     {
-                                        echo "<label class='label label-danger'>".$this->lang->line('LABEL_NOT_YET')."</label>";
+                                        echo "<label class='label label-warning'>".$this->lang->line('LABEL_NOT_YET')."</label>";
                                     }
                                 ?>
                             </td>
@@ -63,7 +63,7 @@
                                     }
                                     else
                                     {
-                                        echo "<label class='label label-danger'>".$this->lang->line('LABEL_NOT_YET')."</label>";
+                                        echo "<label class='label label-warning'>".$this->lang->line('LABEL_NOT_YET')."</label>";
                                     }
                                 ?>
                             </td>
@@ -75,27 +75,27 @@
                                     }
                                     else
                                     {
-                                        echo "<label class='label label-danger'>".$this->lang->line('LABEL_NOT_YET')."</label>";
+                                        echo "<label class='label label-warning'>".$this->lang->line('LABEL_NOT_YET')."</label>";
                                     }
                                 ?>
                             </td>
                             <td>
-                                <?php
-                                if(User_helper::check_edit_permission($sales_target['created_by']) && User_helper::check_edit_permission_after_approval($sales_target['is_approved_by_zi'], $sales_target['is_approved_by_di'], $sales_target['is_approved_by_hom']))
-                                {
-                                ?>
+<!--                                --><?php
+//                                if(User_helper::check_edit_permission($sales_target['created_by']) && User_helper::check_edit_permission_after_approval($sales_target['is_approved_by_zi'], $sales_target['is_approved_by_di'], $sales_target['is_approved_by_hom']))
+//                                {
+//                                ?>
                                     <a href="<?php echo base_url();?>customer_sales_target/index/edit/<?php echo $sales_target['id'];?>/<?php echo $sales_target['customer_id'];?>/<?php echo $sales_target['year'];?>">
                                         <img src="<?php echo base_url();?>images/edit_record.png">
                                     </a>
-                                    <?php
-                                }
-                                else
-                                {
-                                ?>
-                                    <label class="label label-warning"><?php echo $this->lang->line('NO_EDIT_PERMISSION');?></label>
-                                    <?php
-                                }
-                                ?>
+<!--                                    --><?php
+//                                }
+//                                else
+//                                {
+//                                ?>
+<!--                                    <label class="label label-warning">--><?php //echo $this->lang->line('NO_EDIT_PERMISSION');?><!--</label>-->
+<!--                                    --><?php
+//                                }
+//                                ?>
                             </td>
                         </tr>
                         <?php

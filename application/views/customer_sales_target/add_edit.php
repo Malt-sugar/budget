@@ -2,7 +2,6 @@
     $data["link_new"]=base_url()."customer_sales_target/index/add";
     $data["link_back"]=base_url()."customer_sales_target";
     $data["hide_approve"]="1";
-    //$data["hide_back"]="1";
     $this->load->view("action_buttons_edit",$data);
 
 
@@ -173,9 +172,12 @@ if(is_array($targets) && sizeof($targets)>0)
                         foreach($typeVal['variety'] as $perm)
                         {
                             $created_by = $perm['created_by'];
+                            $zi_approve = $perm['is_approved_by_zi'];
+                            $di_approve = $perm['is_approved_by_di'];
+                            $hom_approve = $perm['is_approved_by_hom'];
                         }
 
-                        if(User_helper::check_edit_permission($created_by))
+                        if(User_helper::check_edit_permission($created_by) && User_helper::check_edit_permission_after_approval($zi_approve, $di_approve, $hom_approve))
                         {
                         ?>
                             <button type="button" class="btn btn-danger pull-right budget_add_more_delete"><?php echo $this->lang->line('DELETE'); ?></button>
@@ -248,7 +250,7 @@ if(is_array($targets) && sizeof($targets)>0)
                                                     <tr>
                                                         <td><?php echo $detail['variety_name']?></td>
                                                         <td>
-                                                            <input type="text" class="form-control variety_quantity" <?php if(!User_helper::check_edit_permission($detail['created_by'])){echo 'readonly';}?> name="quantity[<?php echo $sl;?>][<?php echo $varKey;?>]" value="<?php if(isset($detail['quantity'])){echo $detail['quantity'];}?>" />                                                        <input type="hidden" name="" />
+                                                            <input type="text" class="form-control variety_quantity" <?php if((!User_helper::check_edit_permission($detail['created_by']) && $detail['quantity']>0) || ($detail['is_approved_by_zi'] && $detail['quantity']>0) || ($detail['is_approved_by_di'] && $detail['quantity']>0) || ($detail['is_approved_by_hom'] && $detail['quantity']>0)){echo 'readonly';}?> name="quantity[<?php echo $sl;?>][<?php echo $varKey;?>]" value="<?php if(isset($detail['quantity'])){echo $detail['quantity'];}?>" />                                                        <input type="hidden" name="" />
                                                         </td>
                                                     </tr>
                                                 <?php
