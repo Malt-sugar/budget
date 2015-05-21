@@ -78,15 +78,15 @@ class User_helper
         $user = User_helper::get_user();
         $logged_user_level = $user->budget_group;
 
-        if($zi_approval==1 && $logged_user_level < $CI->config->item('user_group_zone'))
+        if($zi_approval==1 && $di_approval==0 && $hom_approval==0 && $logged_user_level < $CI->config->item('user_group_zone'))
         {
             return true;
         }
-        elseif($di_approval==1 && $logged_user_level < $CI->config->item('user_group_division'))
+        elseif($zi_approval==1 && $di_approval==1 && $hom_approval==0 &&  $logged_user_level < $CI->config->item('user_group_division'))
         {
             return true;
         }
-        elseif($hom_approval==1 && $logged_user_level <= $CI->config->item('user_group_marketing'))
+        elseif($zi_approval==1 && $di_approval==1 && $hom_approval==1 && $logged_user_level <= $CI->config->item('user_group_marketing'))
         {
             return true;
         }

@@ -168,11 +168,14 @@ if(is_array($targets) && sizeof($targets)>0)
                         foreach($typeVal['variety'] as $perm)
                         {
                             $created_by = $perm['created_by'];
+                            $zi_approve = $perm['is_approved_by_zi'];
+                            $di_approve = $perm['is_approved_by_di'];
+                            $hom_approve = $perm['is_approved_by_hom'];
                         }
 
-                        if(User_helper::check_edit_permission($created_by))
+                        if(User_helper::check_edit_permission($created_by) && User_helper::check_edit_permission_after_approval($zi_approve, $di_approve, $hom_approve))
                         {
-                        ?>
+                            ?>
                             <button type="button" class="btn btn-danger pull-right budget_add_more_delete"><?php echo $this->lang->line('DELETE'); ?></button>
                         <?php
                         }
