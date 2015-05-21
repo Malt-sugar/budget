@@ -71,7 +71,7 @@ class Approval_sales_target_zi extends ROOT_Controller
         if(strlen($customer_id)>1 && strlen($year_id)>1)
         {
             $data['targets'] = $this->approval_sales_target_zi_model->get_sales_target_detail($customer_id, $year_id);
-            $data['title'] = "ZI: Sales target Approval";
+            $data['title'] = "ZI Sales target Approval";
             $ajax['page_url']=base_url()."approval_sales_target_zi/index/edit/".$customer_id.'/'.$year_id;
         }
         else
@@ -119,7 +119,7 @@ class Approval_sales_target_zi extends ROOT_Controller
                 // Initial update
                 $update_status = array('status'=>0);
                 Query_helper::update('budget_sales_target',$update_status,array("customer_id ='$customer_id'", "year ='$year_id'"));
-                $existing_varieties = $this->customer_sales_target_model->get_existing_sales_targets($this->input->post('customer_id'), $this->input->post('year_id'));
+                $existing_varieties = $this->approval_sales_target_zi_model->get_existing_sales_targets($this->input->post('customer_id'), $this->input->post('year_id'));
 
                 foreach($crop_type_Post as $cropTypeKey=>$crop_type)
                 {
@@ -179,7 +179,6 @@ class Approval_sales_target_zi extends ROOT_Controller
 
             $this->rnd_list();//this is similar like redirect
         }
-
     }
 
     private function check_validation()
