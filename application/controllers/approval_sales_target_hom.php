@@ -1,14 +1,14 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 require APPPATH.'/libraries/root_controller.php';
 
-class Approval_sales_target_zi extends ROOT_Controller
+class Approval_sales_target_hom extends ROOT_Controller
 {
     private  $message;
     public function __construct()
     {
         parent::__construct();
         $this->message="";
-        $this->load->model("approval_sales_target_zi_model");
+        $this->load->model("approval_sales_target_hom_model");
     }
 
     public function index($task="list", $id=0, $customer_id=0, $year_id=0)
@@ -33,7 +33,7 @@ class Approval_sales_target_zi extends ROOT_Controller
 
     public function rnd_list($page=0)
     {
-        $config = System_helper::pagination_config(base_url() . "approval_sales_target_zi/index/list/",$this->approval_sales_target_zi_model->get_total_customers(),4);
+        $config = System_helper::pagination_config(base_url() . "approval_sales_target_hom/index/list/",$this->approval_sales_target_hom_model->get_total_customers(),4);
         $this->pagination->initialize($config);
         $data["links"] = $this->pagination->create_links();
 
@@ -42,16 +42,16 @@ class Approval_sales_target_zi extends ROOT_Controller
             $page=$page-1;
         }
 
-        $data['sales_targets'] = $this->approval_sales_target_zi_model->get_sales_target_info($page);
-        $data['title']="ZI Sales Target Approval";
+        $data['sales_targets'] = $this->approval_sales_target_hom_model->get_sales_target_info($page);
+        $data['title']="HOM Sales Target Approval";
 
         $ajax['status']=true;
-        $ajax['content'][]=array("id"=>"#content","html"=>$this->load->view("approval_sales_target_zi/list",$data,true));
+        $ajax['content'][]=array("id"=>"#content","html"=>$this->load->view("approval_sales_target_hom/list",$data,true));
         if($this->message)
         {
             $ajax['message']=$this->message;
         }
-        $ajax['page_url']=base_url()."approval_sales_target_zi/index/list/".($page+1);
+        $ajax['page_url']=base_url()."approval_sales_target_hom/index/list/".($page+1);
 
         $this->jsonReturn($ajax);
     }
@@ -70,19 +70,19 @@ class Approval_sales_target_zi extends ROOT_Controller
 
         if(strlen($customer_id)>1 && strlen($year_id)>1)
         {
-            $data['targets'] = $this->approval_sales_target_zi_model->get_sales_target_detail($customer_id, $year_id);
-            $data['title'] = "ZI Sales Target Approval";
-            $ajax['page_url']=base_url()."approval_sales_target_zi/index/edit/".$customer_id.'/'.$year_id;
+            $data['targets'] = $this->approval_sales_target_hom_model->get_sales_target_detail($customer_id, $year_id);
+            $data['title'] = "HOM Sales Target Approval";
+            $ajax['page_url']=base_url()."approval_sales_target_hom/index/edit/".$customer_id.'/'.$year_id;
         }
         else
         {
             $data['targets'] = array();
             $data['title'] = "Sales Target Approval";
-            $ajax['page_url'] = base_url()."approval_sales_target_zi/index/add";
+            $ajax['page_url'] = base_url()."approval_sales_target_hom/index/add";
         }
 
         $ajax['status'] = true;
-        $ajax['content'][] = array("id"=>"#content","html"=>$this->load->view("approval_sales_target_zi/add_edit",$data,true));
+        $ajax['content'][] = array("id"=>"#content","html"=>$this->load->view("approval_sales_target_hom/add_edit",$data,true));
 
         $this->jsonReturn($ajax);
     }
@@ -119,7 +119,7 @@ class Approval_sales_target_zi extends ROOT_Controller
                 // Initial update
                 $update_status = array('status'=>0);
                 Query_helper::update('budget_sales_target',$update_status,array("customer_id ='$customer_id'", "year ='$year_id'"));
-                $existing_varieties = $this->approval_sales_target_zi_model->get_existing_sales_targets($this->input->post('customer_id'), $this->input->post('year_id'));
+                $existing_varieties = $this->approval_sales_target_hom_model->get_existing_sales_targets($this->input->post('customer_id'), $this->input->post('year_id'));
 
                 foreach($crop_type_Post as $cropTypeKey=>$crop_type)
                 {
@@ -145,7 +145,7 @@ class Approval_sales_target_zi extends ROOT_Controller
                                     $data['modified_by'] = $user->user_id;
                                     $data['modification_date'] = time();
                                     $data['status'] = 1;
-                                    $data['is_approved_by_zi'] = 1; // ZI Approval
+                                    $data['is_approved_by_hom'] = 1; // ZI Approval
 
                                     $crop_id = $data['crop_id'];
                                     $type_id = $data['type_id'];
@@ -154,7 +154,7 @@ class Approval_sales_target_zi extends ROOT_Controller
                                 else
                                 {
                                     $data['status'] = 1;
-                                    $data['is_approved_by_zi'] = 1; // ZI Approval
+                                    $data['is_approved_by_hom'] = 1; // ZI Approval
 
                                     $data['created_by'] = $user->user_id;
                                     $data['creation_date'] = time();
@@ -217,14 +217,14 @@ class Approval_sales_target_zi extends ROOT_Controller
         $type_id = $this->input->post('type_id');
         $current_id = $this->input->post('current_id');
 
-        $data['varieties'] = $this->approval_sales_target_zi_model->get_variety_by_crop_type($crop_id, $type_id);
+        $data['varieties'] = $this->approval_sales_target_hom_model->get_variety_by_crop_type($crop_id, $type_id);
 
         if(sizeof($data['varieties'])>0)
         {
             $data['serial'] = $current_id;
             $data['title'] = 'Variety List';
             $ajax['status'] = true;
-            $ajax['content'][]=array("id"=>'#variety'.$current_id,"html"=>$this->load->view("approval_sales_target/variety_list",$data,true));
+            $ajax['content'][]=array("id"=>'#variety'.$current_id,"html"=>$this->load->view("approval_sales_target_hom/variety_list",$data,true));
             $this->jsonReturn($ajax);
         }
         else
