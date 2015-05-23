@@ -45,7 +45,7 @@
                             <td><?php echo $sales_target['distributor_name'];?></td>
                             <td>
                                 <?php
-                                    if($sales_target['is_approved_by_zi']==1)
+                                    if(System_helper::get_zi_approval($sales_target['customer_id'], $sales_target['year']))
                                     {
                                         echo "<label class='label label-success'>".$this->lang->line('LABEL_APPROVED')."</label>";
                                     }
@@ -57,7 +57,7 @@
                             </td>
                             <td>
                                 <?php
-                                    if($sales_target['is_approved_by_di']==1)
+                                    if(System_helper::get_di_approval($sales_target['customer_id'], $sales_target['year']))
                                     {
                                         echo "<label class='label label-success'>".$this->lang->line('LABEL_APPROVED')."</label>";
                                     }
@@ -69,7 +69,7 @@
                             </td>
                             <td>
                                 <?php
-                                    if($sales_target['is_approved_by_hom']==1)
+                                    if(System_helper::get_hom_approval($sales_target['customer_id'], $sales_target['year']))
                                     {
                                         echo "<label class='label label-success'>".$this->lang->line('LABEL_APPROVED')."</label>";
                                     }

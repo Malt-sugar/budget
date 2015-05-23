@@ -92,4 +92,97 @@ class System_helper
         exit;
     }
 
+    public static function get_zi_approval($customer_id, $year)
+    {
+        $CI = & get_instance();
+
+        $CI->db->from('budget_sales_target bst');
+        $CI->db->select('bst.is_approved_by_zi');
+        $CI->db->where('bst.customer_id', $customer_id);
+        $CI->db->where('bst.year', $year);
+        $CI->db->group_by('bst.is_approved_by_zi');
+        $results = $CI->db->get()->result_array();
+
+        if(sizeof($results)>1)
+        {
+            return false;
+        }
+        else
+        {
+            foreach($results as $result)
+            {
+                if($result['is_approved_by_zi']==1)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+        }
+    }
+
+    public static function get_di_approval($customer_id, $year)
+    {
+        $CI = & get_instance();
+
+        $CI->db->from('budget_sales_target bst');
+        $CI->db->select('bst.is_approved_by_di');
+        $CI->db->where('bst.customer_id', $customer_id);
+        $CI->db->where('bst.year', $year);
+        $CI->db->group_by('bst.is_approved_by_di');
+        $results = $CI->db->get()->result_array();
+
+        if(sizeof($results)>1)
+        {
+            return false;
+        }
+        else
+        {
+            foreach($results as $result)
+            {
+                if($result['is_approved_by_di']==1)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+        }
+    }
+
+    public static function get_hom_approval($customer_id, $year)
+    {
+        $CI = & get_instance();
+
+        $CI->db->from('budget_sales_target bst');
+        $CI->db->select('bst.is_approved_by_hom');
+        $CI->db->where('bst.customer_id', $customer_id);
+        $CI->db->where('bst.year', $year);
+        $CI->db->group_by('bst.is_approved_by_hom');
+        $results = $CI->db->get()->result_array();
+
+        if(sizeof($results)>1)
+        {
+            return false;
+        }
+        else
+        {
+            foreach($results as $result)
+            {
+                if($result['is_approved_by_hom']==1)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+        }
+    }
+
 }
