@@ -90,6 +90,22 @@ class User_helper
         {
             return true;
         }
+        elseif($zi_approval==0 && $di_approval==0 && $hom_approval==1 && $logged_user_level <= $CI->config->item('user_group_marketing'))
+        {
+            return true;
+        }
+        elseif($zi_approval==0 && $di_approval==1 && $hom_approval==1 && $logged_user_level <= $CI->config->item('user_group_marketing'))
+        {
+            return true;
+        }
+        elseif($zi_approval==1 && $di_approval==0 && $hom_approval==1 && $logged_user_level <= $CI->config->item('user_group_marketing'))
+        {
+            return true;
+        }
+        elseif($zi_approval==0 && $di_approval==1 && $hom_approval==0 && $logged_user_level < $CI->config->item('user_group_division'))
+        {
+            return true;
+        }
         elseif($zi_approval==0 && $di_approval==0 && $hom_approval==0)
         {
             return true;
