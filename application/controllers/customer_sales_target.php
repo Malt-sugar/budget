@@ -246,17 +246,20 @@ class Customer_sales_target extends ROOT_Controller
 
         $crop_type_Post = $this->input->post('target');
 
-        foreach($crop_type_Post as $crop_type)
+        if(is_array($crop_type_Post) && sizeof($crop_type_Post)>0)
         {
-             $crop_type_array[] = array('crop'=>$crop_type['crop'], 'type'=>$crop_type['type']);
-        }
+            foreach($crop_type_Post as $crop_type)
+            {
+                $crop_type_array[] = array('crop'=>$crop_type['crop'], 'type'=>$crop_type['type']);
+            }
 
-        $new_arr = array_unique($crop_type_array, SORT_REGULAR);
+            $new_arr = array_unique($crop_type_array, SORT_REGULAR);
 
-        if($crop_type_array != $new_arr)
-        {
-            $valid=false;
-            $this->message .= $this->lang->line("DUPLICATE_CROP_TYPE").'<br>';
+            if($crop_type_array != $new_arr)
+            {
+                $valid=false;
+                $this->message .= $this->lang->line("DUPLICATE_CROP_TYPE").'<br>';
+            }
         }
 
         $customer_id = $this->input->post('customer_id');

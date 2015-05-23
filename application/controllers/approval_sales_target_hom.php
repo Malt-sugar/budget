@@ -186,26 +186,28 @@ class Approval_sales_target_hom extends ROOT_Controller
         $valid=true;
 
         $crop_type_Post = $this->input->post('target');
-
-        foreach($crop_type_Post as $crop_type)
-        {
-             $crop_type_array[] = array('crop'=>$crop_type['crop'], 'type'=>$crop_type['type']);
-        }
-
-        $new_arr = array_unique($crop_type_array, SORT_REGULAR);
-
-        if($crop_type_array != $new_arr)
-        {
-            $valid=false;
-            $this->message .= $this->lang->line("DUPLICATE_CROP_TYPE").'<br>';
-        }
-
         $quantity_post = $this->input->post('quantity');
 
         if(!$crop_type_Post || !$quantity_post)
         {
             $valid=false;
             $this->message .= $this->lang->line("SET_TARGET").'<br>';
+        }
+
+        if(is_array($crop_type_Post) && sizeof($crop_type_Post)>0)
+        {
+            foreach($crop_type_Post as $crop_type)
+            {
+                $crop_type_array[] = array('crop'=>$crop_type['crop'], 'type'=>$crop_type['type']);
+            }
+
+            $new_arr = array_unique($crop_type_array, SORT_REGULAR);
+
+            if($crop_type_array != $new_arr)
+            {
+                $valid=false;
+                $this->message .= $this->lang->line("DUPLICATE_CROP_TYPE").'<br>';
+            }
         }
 
         return $valid;
