@@ -13,27 +13,14 @@ if(is_array($stocks) && sizeof($stocks)>0)
 {
     foreach($stocks as $stock)
     {
-        $arranged_stocks['division_id'] = $stock['division_id'];
-        $arranged_stocks['zone_id'] = $stock['zone_id'];
-        $arranged_stocks['territory_id'] = $stock['territory_id'];
-        $arranged_stocks['customer_id'] = $stock['customer_id'];
-        $arranged_stocks['year'] = $stock['year'];
-
         $arranged_stocks['crop'][$stock['crop_id']][$stock['type_id']]['variety'][$stock['variety_id']]['variety_name'] = $stock['variety_name'];
-        $arranged_stocks['crop'][$stock['crop_id']][$stock['type_id']]['variety'][$stock['variety_id']]['quantity'] = $stock['quantity'];
-        $arranged_stocks['crop'][$stock['crop_id']][$stock['type_id']]['variety'][$stock['variety_id']]['is_approved_by_zi'] = $stock['is_approved_by_zi'];
-        $arranged_stocks['crop'][$stock['crop_id']][$stock['type_id']]['variety'][$stock['variety_id']]['is_approved_by_di'] = $stock['is_approved_by_di'];
-        $arranged_stocks['crop'][$stock['crop_id']][$stock['type_id']]['variety'][$stock['variety_id']]['is_approved_by_hom'] = $stock['is_approved_by_hom'];
+        $arranged_stocks['crop'][$stock['crop_id']][$stock['type_id']]['variety'][$stock['variety_id']]['min_stock_quantity'] = $stock['min_stock_quantity'];
         $arranged_stocks['crop'][$stock['crop_id']][$stock['type_id']]['variety'][$stock['variety_id']]['created_by'] = $stock['created_by'];
-
     }
 }
 
 ?>
-<form class="form_valid" id="save_form" action="<?php echo base_url();?>customer_MINIMUM_STOCK_ALERT/index/save" method="post">
-    <input type="hidden" name="customer_id" value="<?php if(isset($arranged_stocks['customer_id'])){echo $arranged_stocks['customer_id'];}else{echo 0;}?>" />
-    <input type="hidden" name="year_id" value="<?php if(isset($arranged_stocks['year'])){echo $arranged_stocks['year'];}else{echo 0;}?>" />
-
+<form class="form_valid" id="save_form" action="<?php echo base_url();?>minimum_stock_alert/index/save" method="post">
     <div id="budget_add_more_container">
     <?php
     if(isset($arranged_stocks['crop']))
@@ -54,12 +41,9 @@ if(is_array($stocks) && sizeof($stocks)>0)
                         foreach($typeVal['variety'] as $perm)
                         {
                             $created_by = $perm['created_by'];
-                            $zi_approve = $perm['is_approved_by_zi'];
-                            $di_approve = $perm['is_approved_by_di'];
-                            $hom_approve = $perm['is_approved_by_hom'];
                         }
 
-                        if(User_helper::check_edit_permission($created_by) && User_helper::check_edit_permission_after_approval($zi_approve, $di_approve, $hom_approve))
+                        if(User_helper::check_edit_permission($created_by))
                         {
                         ?>
                             <button type="button" class="btn btn-danger pull-right budget_add_more_delete"><?php echo $this->lang->line('DELETE'); ?></button>
@@ -132,7 +116,7 @@ if(is_array($stocks) && sizeof($stocks)>0)
                                                     <tr>
                                                         <td><?php echo $detail['variety_name']?></td>
                                                         <td>
-                                                            <input type="text" class="form-control variety_quantity" <?php if((!User_helper::check_edit_permission($detail['created_by']) && $detail['quantity']>0) || ($detail['is_approved_by_zi'] && $detail['quantity']>0) || ($detail['is_approved_by_di'] && $detail['quantity']>0) || ($detail['is_approved_by_hom'] && $detail['quantity']>0)){echo 'readonly';}?> name="quantity[<?php echo $sl;?>][<?php echo $varKey;?>]" value="<?php if(isset($detail['quantity'])){echo $detail['quantity'];}?>" />                                                        <input type="hidden" name="" />
+                                                            <input type="text" class="form-control variety_quantity"  name="quantity[<?php echo $sl;?>][<?php echo $varKey;?>]" value="<?php if(isset($detail['min_stock_quantity'])){echo $detail['min_stock_quantity'];}?>" />
                                                         </td>
                                                     </tr>
                                                 <?php

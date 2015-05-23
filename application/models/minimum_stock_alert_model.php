@@ -25,17 +25,15 @@ class Minimum_stock_alert_model extends CI_Model
         }
     }
 
-    public function get_sales_target_detail($customer_id, $year_id)
+    public function get_minimum_stock_detail()
     {
-        $this->db->from('budget_sales_target bst');
-        $this->db->select('bst.*');
+        $this->db->from('budget_min_stock_quantity bms');
+        $this->db->select('bms.*');
         $this->db->select('avi.varriety_name variety_name');
 
-        $this->db->where('bst.customer_id', $customer_id);
-        $this->db->where('bst.year', $year_id);
-        $this->db->where('bst.status',$this->config->item('status_active'));
+        $this->db->where('bms.status',$this->config->item('status_active'));
 
-        $this->db->join('ait_varriety_info avi', 'avi.varriety_id = bst.variety_id', 'left');
+        $this->db->join('ait_varriety_info avi', 'avi.varriety_id = bms.variety_id', 'left');
         $results = $this->db->get()->result_array();
         return $results;
     }
@@ -51,12 +49,10 @@ class Minimum_stock_alert_model extends CI_Model
         return $results;
     }
 
-    public function get_existing_sales_targets($customer, $year)
+    public function get_existing_minimum_stocks()
     {
-        $this->db->from('budget_sales_target bst');
-        $this->db->select('bst.*');
-        $this->db->where('bst.year',$year);
-        $this->db->where('bst.customer_id',$customer);
+        $this->db->from('budget_min_stock_quantity bms');
+        $this->db->select('bms.*');
         $results = $this->db->get()->result_array();
         foreach($results as $result)
         {

@@ -246,7 +246,7 @@ if(is_array($targets) && sizeof($targets)>0)
                                                     <tr>
                                                         <td><?php echo $detail['variety_name']?></td>
                                                         <td>
-                                                            <input type="text" class="form-control variety_quantity" <?php if(!User_helper::check_edit_permission($detail['created_by'])){echo 'readonly';}?> name="quantity[<?php echo $sl;?>][<?php echo $varKey;?>]" value="<?php if(isset($detail['quantity'])){echo $detail['quantity'];}?>" />                                                        <input type="hidden" name="" />
+                                                            <input type="text" class="form-control variety_quantity" <?php if(!User_helper::check_edit_permission($detail['created_by'])){echo 'readonly';}?> name="quantity[<?php echo $sl;?>][<?php echo $varKey;?>]" value="<?php if(isset($detail['quantity'])){echo $detail['quantity'];}?>" />
                                                         </td>
                                                     </tr>
                                                 <?php

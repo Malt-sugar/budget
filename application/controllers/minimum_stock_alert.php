@@ -36,7 +36,7 @@ class Minimum_stock_alert extends ROOT_Controller
 
         if($stock_existence)
         {
-            $data['stocks'] = $this->minimum_stock_alert_model->get_sales_target_detail();
+            $data['stocks'] = $this->minimum_stock_alert_model->get_minimum_stock_detail();
             $data['title'] = "Edit Minimum Stock Alert";
             $ajax['page_url']=base_url()."minimum_stock_alert/index/edit/";
         }
@@ -68,24 +68,17 @@ class Minimum_stock_alert extends ROOT_Controller
         {
             $this->db->trans_start();  //DB Transaction Handle START
 
-            $year = $this->input->post('year');
-            $division = $this->input->post('division');
-            $zone = $this->input->post('zone');
-            $territory = $this->input->post('territory');
-            $customer = $this->input->post('customer');
-
-            $crop_type_Post = $this->input->post('target');
+            $crop_type_Post = $this->input->post('stock');
             $quantity_post = $this->input->post('quantity');
 
-            if(strlen($this->input->post('customer_id'))>1 && strlen($this->input->post('year_id'))>1)
-            {
-                $customer_id = $this->input->post('customer_id');
-                $year_id = $this->input->post('year_id');
+            $stock_existence = $this->minimum_stock_alert_model->check_min_stock_existence();
 
+            if($stock_existence)
+            {
                 // Initial update
                 $update_status = array('status'=>0);
-                Query_helper::update('budget_sales_target',$update_status,array("customer_id ='$customer_id'", "year ='$year_id'"));
-                $existing_varieties = $this->customer_sales_target_model->get_existing_sales_targets($this->input->post('customer_id'), $this->input->post('year_id'));
+                Query_helper::update('budget_min_stock_quantity',$update_status,array());
+                $existing_varieties = $this->minimum_stock_alert_model->get_existing_minimum_stocks();
 
                 foreach($crop_type_Post as $cropTypeKey=>$crop_type)
                 {
@@ -93,18 +86,13 @@ class Minimum_stock_alert extends ROOT_Controller
                     {
                         if($quantityKey==$cropTypeKey)
                         {
-                            $data['year'] = $year;
-                            $data['division_id'] = $division;
-                            $data['zone_id'] = $zone;
-                            $data['territory_id'] = $territory;
-                            $data['customer_id'] = $customer;
                             $data['crop_id'] = $crop_type['crop'];
                             $data['type_id'] = $crop_type['type'];
 
                             foreach($quantity as $variety_id=>$amount)
                             {
                                 $data['variety_id'] = $variety_id;
-                                $data['quantity'] = $amount;
+                                $data['min_stock_quantity'] = $amount;
 
                                 if(in_array($variety_id, $existing_varieties))
                                 {
@@ -113,13 +101,13 @@ class Minimum_stock_alert extends ROOT_Controller
                                     $data['status'] = 1;
                                     $crop_id = $data['crop_id'];
                                     $type_id = $data['type_id'];
-                                    Query_helper::update('budget_sales_target',$data,array("customer_id ='$customer_id'", "year ='$year'", "crop_id ='$crop_id'", "type_id ='$type_id'", "variety_id ='$variety_id'"));
+                                    Query_helper::update('budget_min_stock_quantity',$data,array("crop_id ='$crop_id'", "type_id ='$type_id'", "variety_id ='$variety_id'"));
                                 }
                                 else
                                 {
                                     $data['created_by'] = $user->user_id;
                                     $data['creation_date'] = time();
-                                    Query_helper::add('budget_sales_target',$data);
+                                    Query_helper::add('budget_min_stock_quantity',$data);
                                 }
                             }
                         }
@@ -134,21 +122,16 @@ class Minimum_stock_alert extends ROOT_Controller
                     {
                         if($quantityKey==$cropTypeKey)
                         {
-                            $data['year'] = $year;
-                            $data['division_id'] = $division;
-                            $data['zone_id'] = $zone;
-                            $data['territory_id'] = $territory;
-                            $data['customer_id'] = $customer;
                             $data['crop_id'] = $crop_type['crop'];
                             $data['type_id'] = $crop_type['type'];
 
                             foreach($quantity as $variety_id=>$amount)
                             {
                                 $data['variety_id'] = $variety_id;
-                                $data['quantity'] = $amount;
+                                $data['min_stock_quantity'] = $amount;
                                 $data['created_by'] = $user->user_id;
                                 $data['creation_date'] = time();
-                                Query_helper::add('budget_sales_target',$data);
+                                Query_helper::add('budget_min_stock_quantity',$data);
                             }
                         }
                     }
@@ -175,7 +158,7 @@ class Minimum_stock_alert extends ROOT_Controller
     {
         $valid=true;
 
-        $crop_type_Post = $this->input->post('target');
+        $crop_type_Post = $this->input->post('stock');
 
         foreach($crop_type_Post as $crop_type)
         {
