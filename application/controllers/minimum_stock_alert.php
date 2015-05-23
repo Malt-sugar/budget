@@ -175,7 +175,6 @@ class Minimum_stock_alert extends ROOT_Controller
 
         $quantity_post = $this->input->post('quantity');
 
-
         if(!$crop_type_Post || !$quantity_post)
         {
             $valid=false;
