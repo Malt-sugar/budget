@@ -68,6 +68,8 @@ $lang['DUPLICATE_CROP_TYPE']='Duplicate Crop Type!';
 // Minimum Stock Quantity
 
 $lang['LABEL_MINIMUM_STOCK_QUANTITY']='Minimum Stock Quantity';
+$lang['MINIMUM_STOCK_ALERT']='Minimum Stock Alert';
+$lang['SET_MIN_STOCK']='Set Minimum Stock Quantity';
 
 
 // Budgeted Purchase Setup
