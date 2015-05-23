@@ -108,7 +108,7 @@ if(is_array($stocks) && sizeof($stocks)>0)
                                             {
                                                 ?>
                                                 <th><?php echo $this->lang->line('LABEL_VARIETY')?></th>
-                                                <th><?php echo $this->lang->line('LABEL_QUANTITY_KG')?></th>
+                                                <th><?php echo $this->lang->line('LABEL_MINIMUM_STOCK_QUANTITY')?></th>
                                                 <?php
                                                 foreach($typeVal['variety'] as $varKey=>$detail)
                                                 {
