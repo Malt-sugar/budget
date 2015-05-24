@@ -341,6 +341,11 @@ if(is_array($stocks) && sizeof($stocks)>0)
             this.value = this.value.replace(/[^0-9\.]/g,'');
         });
 
+        $(document).on("keyup", ".variety_price_per_kg", function()
+        {
+            this.value = this.value.replace(/[^0-9\.]/g,'');
+        });
+
         $(document).on("blur", ".variety_price_per_kg", function()
         {
             var quantity = parseInt($(this).parent().parent().find('.variety_quantity').val());
