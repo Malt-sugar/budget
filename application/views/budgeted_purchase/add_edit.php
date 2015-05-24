@@ -14,7 +14,8 @@ if(is_array($stocks) && sizeof($stocks)>0)
     foreach($stocks as $stock)
     {
         $arranged_stocks['crop'][$stock['crop_id']][$stock['type_id']]['variety'][$stock['variety_id']]['variety_name'] = $stock['variety_name'];
-        $arranged_stocks['crop'][$stock['crop_id']][$stock['type_id']]['variety'][$stock['variety_id']]['min_stock_quantity'] = $stock['min_stock_quantity'];
+        $arranged_stocks['crop'][$stock['crop_id']][$stock['type_id']]['variety'][$stock['variety_id']]['purchase_quantity'] = $stock['purchase_quantity'];
+        $arranged_stocks['crop'][$stock['crop_id']][$stock['type_id']]['variety'][$stock['variety_id']]['price_per_kg'] = $stock['price_per_kg'];
         $arranged_stocks['crop'][$stock['crop_id']][$stock['type_id']]['variety'][$stock['variety_id']]['created_by'] = $stock['created_by'];
     }
 }
@@ -108,7 +109,9 @@ if(is_array($stocks) && sizeof($stocks)>0)
                                             {
                                                 ?>
                                                 <th><?php echo $this->lang->line('LABEL_VARIETY')?></th>
-                                                <th><?php echo $this->lang->line('LABEL_MINIMUM_STOCK_QUANTITY')?></th>
+                                                <th><?php echo $this->lang->line('LABEL_QUANTITY')?></th>
+                                                <th><?php echo $this->lang->line('LABEL_PRICE_PER_KG_USD')?></th>
+                                                <th><?php echo $this->lang->line('LABEL_TOTAL_PRICE_USD')?></th>
                                                 <?php
                                                 foreach($typeVal['variety'] as $varKey=>$detail)
                                                 {
@@ -116,7 +119,9 @@ if(is_array($stocks) && sizeof($stocks)>0)
                                                     <tr>
                                                         <td><?php echo $detail['variety_name']?></td>
                                                         <td>
-                                                            <input type="text" class="form-control variety_quantity"  name="quantity[<?php echo $sl;?>][<?php echo $varKey;?>]" value="<?php if(isset($detail['min_stock_quantity'])){echo $detail['min_stock_quantity'];}?>" />
+                                                            <input type="text" class="form-control variety_quantity"  name="detail[<?php echo $sl;?>][<?php echo $varKey;?>][quantity]" value="<?php if(isset($detail['purchase_quantity'])){echo $detail['purchase_quantity'];}?>" />
+                                                            <input type="text" class="form-control variety_price_per_kg"  name="detail[<?php echo $sl;?>][<?php echo $varKey;?>][price_per_kg]" value="<?php if(isset($detail['price_per_kg'])){echo $detail['price_per_kg'];}?>" />
+                                                            <input type="text" class="form-control variety_total_quantity"  name="" value="" />
                                                         </td>
                                                     </tr>
                                                 <?php

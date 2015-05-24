@@ -32,11 +32,11 @@ class Budgeted_purchase extends ROOT_Controller
         $data['crops'] = $this->budget_common_model->get_ordered_crops();
         $data['types'] = $this->budget_common_model->get_ordered_crop_types();
 
-        $stock_existence = $this->budgeted_purchase_model->check_min_stock_existence();
+        $stock_existence = $this->budgeted_purchase_model->check_budget_purchase_existence();
 
         if($stock_existence)
         {
-            $data['stocks'] = $this->budgeted_purchase_model->get_minimum_stock_detail();
+            $data['stocks'] = $this->budgeted_purchase_model->get_purchase_detail();
             $data['title'] = "Edit Minimum Stock Alert";
             $ajax['page_url']=base_url()."budgeted_purchase/index/edit/";
         }
@@ -55,7 +55,6 @@ class Budgeted_purchase extends ROOT_Controller
 
     public function budget_save()
     {
-        print_r($this->input->post());exit;
         $user = User_helper::get_user();
         $data = Array();
 
@@ -72,7 +71,7 @@ class Budgeted_purchase extends ROOT_Controller
             $crop_type_Post = $this->input->post('stock');
             $quantity_post = $this->input->post('quantity');
 
-            $stock_existence = $this->budgeted_purchase_model->check_min_stock_existence();
+            $stock_existence = $this->budgeted_purchase_model->check_budget_purchase_existence();
 
             if($stock_existence)
             {

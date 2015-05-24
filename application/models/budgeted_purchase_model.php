@@ -10,7 +10,7 @@ class Budgeted_purchase_model extends CI_Model
         parent::__construct();
     }
 
-    public function check_min_stock_existence()
+    public function check_budget_purchase_existence()
     {
         $this->db->select('bp.*');
         $this->db->from('budget_purchase bp');
@@ -26,15 +26,15 @@ class Budgeted_purchase_model extends CI_Model
         }
     }
 
-    public function get_minimum_stock_detail()
+    public function get_purchase_detail()
     {
-        $this->db->from('budget_min_stock_quantity bms');
-        $this->db->select('bms.*');
+        $this->db->from('budget_purchase bp');
+        $this->db->select('bp.*');
         $this->db->select('avi.varriety_name variety_name');
 
-        $this->db->where('bms.status',$this->config->item('status_active'));
+        $this->db->where('bp.status',$this->config->item('status_active'));
 
-        $this->db->join('ait_varriety_info avi', 'avi.varriety_id = bms.variety_id', 'left');
+        $this->db->join('ait_varriety_info avi', 'avi.varriety_id = bp.variety_id', 'left');
         $results = $this->db->get()->result_array();
         return $results;
     }
