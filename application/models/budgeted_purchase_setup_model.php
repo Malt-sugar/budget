@@ -10,77 +10,22 @@ class Budgeted_purchase_setup_model extends CI_Model
         parent::__construct();
     }
 
-    public function get_typeInfo($page=null)
+    public function get_budget_purchase_data()
     {
-        $limit=$this->config->item('view_per_page');
-        $start=$page*$limit;
-        $this->db->from('rnd_crop_type rct');
-        $this->db->select('rct.*');
-        $this->db->select('rc.crop_name crop_name');
-
-        $this->db->join('rnd_crop rc', 'rc.id = rct.crop_id', 'left');
-
-        $this->db->where('rct.status',$this->config->item('status_active'));
-        $this->db->limit($limit,$start);
-        $this->db->order_by("rct.id","DESC");
-
-        $query = $this->db->get();
-        return $query->result_array();
-    }
-
-    public function get_total_types()
-    {
-        $this->db->select('rnd_crop_type.*');
-        $this->db->from('rnd_crop_type');
-
-        $this->db->where('status',$this->config->item('status_active'));
-        return $this->db->count_all_results();
-    }
-
-    public function get_type_row($id)
-    {
-        $this->db->select('rct.*');
-        $this->db->from('rnd_crop_type rct');
-        $this->db->select('rc.crop_name crop_name');
-
-        $this->db->join('rnd_crop rc', 'rc.id = rct.crop_id', 'left');
-        $this->db->where('rct.id',$id);
-
+        $this->db->select('bps.*');
+        $this->db->from('budget_purchase_setup bps');
+        $this->db->where('bps.purchase_type',$this->config->item('purchase_type_budget'));
         $query = $this->db->get();
         return $query->row_array();
     }
 
-    public function check_type_name_existence($type, $crop_id, $id)
+    public function check_budget_purchase_setup()
     {
-        $this->db->select('rnd_crop_type.*');
-        $this->db->from('rnd_crop_type');
-        $this->db->where('crop_id',$crop_id);
-        $this->db->where('type_name',$type);
-        $this->db->where('id !=',$id);
-
-        $result = $this->db->count_all_results();
-
-        if($result>0)
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
-    }
-
-    public function check_type_code_existence($type_code, $crop_id, $id)
-    {
-        $this->db->select('rnd_crop_type.*');
-        $this->db->from('rnd_crop_type');
-        $this->db->where('crop_id',$crop_id);
-        $this->db->where('type_code',$type_code);
-        $this->db->where('id !=',$id);
-
-        $result = $this->db->count_all_results();
-
-        if($result>0)
+        $this->db->select('budget_purchase_setup.*');
+        $this->db->from('budget_purchase_setup');
+        $this->db->where('purchase_type',$this->config->item('purchase_type_budget'));
+        $result = $this->db->get()->row_array();
+        if(is_array($result) && sizeof($result)>0)
         {
             return true;
         }

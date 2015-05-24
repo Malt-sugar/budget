@@ -10,16 +10,33 @@ class Budgeted_purchase_model extends CI_Model
         parent::__construct();
     }
 
-    public function get_existing_sales_targets($year, $crop, $type, $customer)
+    public function check_min_stock_existence()
     {
-        $user = User_helper::get_user();
-        $this->db->select('bst.variety_id');
-        $this->db->from('budget_sales_target bst');
-        $this->db->where('bst.year',$year);
-        $this->db->where('bst.crop_id',$crop);
+        $this->db->select('bp.*');
+        $this->db->from('budget_purchase bp');
+        $this->db->where('bp.purchase_type',$this->config->item('purchase_type_budget'));
+        $results = $this->db->get()->result_array();
+        if($results)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
 
-        $query = $this->db->get();
-        return $query->row_array();
+    public function get_minimum_stock_detail()
+    {
+        $this->db->from('budget_min_stock_quantity bms');
+        $this->db->select('bms.*');
+        $this->db->select('avi.varriety_name variety_name');
+
+        $this->db->where('bms.status',$this->config->item('status_active'));
+
+        $this->db->join('ait_varriety_info avi', 'avi.varriety_id = bms.variety_id', 'left');
+        $results = $this->db->get()->result_array();
+        return $results;
     }
 
     public function get_variety_by_crop_type($crop_id, $type_id)
@@ -31,5 +48,18 @@ class Budgeted_purchase_model extends CI_Model
         $this->db->where('avi.product_type_id',$type_id);
         $results = $this->db->get()->result_array();
         return $results;
+    }
+
+    public function get_existing_minimum_stocks()
+    {
+        $this->db->from('budget_min_stock_quantity bms');
+        $this->db->select('bms.*');
+        $results = $this->db->get()->result_array();
+        foreach($results as $result)
+        {
+            $varieties[] = $result['variety_id'];
+        }
+
+        return $varieties;
     }
 }

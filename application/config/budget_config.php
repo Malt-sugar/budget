@@ -13,6 +13,12 @@ $config['links_per_page']=5;
 $config['start_year']=2014;
 $config['next_year_range']=2;
 
+// Purchase Type
+$config['purchase_type_budget'] = 1;
+$config['purchase_type_actual'] = 2;
+
+
+
 
 
 

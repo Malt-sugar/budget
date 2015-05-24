@@ -23,17 +23,30 @@ class Budgeted_purchase_setup extends ROOT_Controller
         }
         else
         {
-            $this->rnd_list($id);
+            $this->rnd_add_edit();
         }
     }
 
     public function rnd_add_edit()
     {
         $data['years'] = Query_helper::get_info('ait_year',array('year_id value','year_name text'),array('del_status = 0'));
-        $data['title']="Budgeted Purchase Setup";
-        $data["typeInfo"] = Array();
 
-        $ajax['page_url']=base_url()."budgeted_purchase_setup/index/add";
+        $existence = $this->budgeted_purchase_setup_model->check_budget_purchase_setup();
+
+        if($existence)
+        {
+            $data['title']="Edit Budgeted Purchase Setup";
+            $data["purchase"] = $this->budgeted_purchase_setup_model->get_budget_purchase_data();
+
+            $ajax['page_url']=base_url()."budgeted_purchase_setup/index/edit";
+        }
+        else
+        {
+            $data['title']="Budgeted Purchase Setup";
+            $data["purchase"] = Array();
+
+            $ajax['page_url']=base_url()."budgeted_purchase_setup/index/add";
+        }
 
         $ajax['status']=true;
         $ajax['content'][]=array("id"=>"#content","html"=>$this->load->view("budgeted_purchase_setup/add_edit",$data,true));
@@ -43,14 +56,16 @@ class Budgeted_purchase_setup extends ROOT_Controller
 
     public function rnd_save()
     {
-        $id = $this->input->post("type_id");
         $user = User_helper::get_user();
 
         $data = Array(
-            'terget_length'=>$this->input->post('target_length'),
-            'terget_weight'=>$this->input->post('target_weight'),
-            'terget_yeild'=>$this->input->post('target_yield'),
-            'expected_seed_per_gram'=>$this->input->post('expected_seed_per_gram')
+            'purchase_type'=>$this->config->item('purchase_type_budget'),
+            'usd_conversion_rate'=>$this->input->post('usd_conversion_rate'),
+            'lc_exp'=>$this->input->post('lc_exp'),
+            'insurance_exp'=>$this->input->post('insurance_exp'),
+            'packing_material'=>$this->input->post('packing_material'),
+            'carriage_inwards'=>$this->input->post('carriage_inwards'),
+            'air_freight_and_docs'=>$this->input->post('air_freight_and_docs')
         );
 
         if(!$this->check_validation())
@@ -61,14 +76,15 @@ class Budgeted_purchase_setup extends ROOT_Controller
         }
         else
         {
-            if($id>0)
+            $existence = $this->budgeted_purchase_setup_model->check_budget_purchase_setup();
+            if($existence)
             {
                 $this->db->trans_start();  //DB Transaction Handle START
 
                 $data['modified_by'] = $user->user_id;
                 $data['modification_date'] = time();
 
-                Query_helper::update('rnd_crop_type',$data,array("id = ".$id));
+                Query_helper::update('budget_purchase_setup',$data,array("purchase_type = ".$this->config->item('purchase_type_budget')));
 
                 $this->db->trans_complete();   //DB Transaction Handle END
 
@@ -85,13 +101,10 @@ class Budgeted_purchase_setup extends ROOT_Controller
             {
                 $this->db->trans_start();  //DB Transaction Handle START
 
-                $data['crop_id'] = $this->input->post('crop_id');
-                $data['type_name'] = $this->input->post('type_name');
-                $data['type_code'] = $this->input->post('type_code');
                 $data['created_by'] = $user->user_id;
                 $data['creation_date'] = time();
 
-                Query_helper::add('rnd_crop_type',$data);
+                Query_helper::add('budget_purchase_setup',$data);
 
                 $this->db->trans_complete();   //DB Transaction Handle END
 
@@ -106,45 +119,27 @@ class Budgeted_purchase_setup extends ROOT_Controller
 
             }
 
-            $this->rnd_list();//this is similar like redirect
+            $this->rnd_add_edit();//this is similar like redirect
         }
 
     }
 
     private function check_validation()
     {
-        $valid=true;
-        if(Validation_helper::validate_empty($this->input->post('crop_id')))
-        {
-            $valid=false;
-            $this->message.="Crop Name Cann't Be Empty<br>";
-        }
+        $this->load->library('form_validation');
+        $this->form_validation->set_rules('usd_conversion_rate',$this->lang->line('LABEL_USD_CONVERSION_RATE'),'required');
+        $this->form_validation->set_rules('lc_exp',$this->lang->line('LABEL_LC_EXP'),'required');
+        $this->form_validation->set_rules('insurance_exp',$this->lang->line('LABEL_INSURANCE_EXP'),'required');
+        $this->form_validation->set_rules('packing_material',$this->lang->line('LABEL_PACKING_MATERIAL'),'required');
+        $this->form_validation->set_rules('carriage_inwards',$this->lang->line('LABEL_CARRIAGE_INWARDS'),'required');
+        $this->form_validation->set_rules('air_freight_and_docs',$this->lang->line('LABEL_AIR_FREIGHT_AND_DOCS'),'required');
 
-        if(Validation_helper::validate_empty($this->input->post('type_name')))
+        if($this->form_validation->run() == FALSE)
         {
-            $valid=false;
-            $this->message.="Type Name Cann't Be Empty<br>";
+            $this->message=validation_errors();
+            return false;
         }
-        elseif($this->create_type_model->check_type_name_existence($this->input->post('type_name'),$this->input->post('crop_id'),$this->input->post('type_id')))
-        {
-            $valid=false;
-            $this->message.="Type Name Exists<br>";
-        }
-
-        if(Validation_helper::validate_empty($this->input->post('type_code')))
-        {
-            $valid=false;
-            $this->message.="Type Code Cann't Be Empty<br>";
-        }
-        elseif($this->create_type_model->check_type_code_existence($this->input->post('type_code'),$this->input->post('crop_id'),$this->input->post('type_id')))
-        {
-            $valid=false;
-            $this->message.="Type Code Exists<br>";
-        }
-
-
-
-        return $valid;
+        return true;
     }
 
 

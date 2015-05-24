@@ -11,40 +11,51 @@ class Budgeted_purchase extends ROOT_Controller
         $this->load->model("budgeted_purchase_model");
     }
 
-    public function index($task="add",$id=0)
+    public function index($task="add", $id=0)
     {
         if($task=="add" || $task=="edit")
         {
-            $this->rnd_add_edit($id);
+            $this->budget_add_edit();
         }
         elseif($task=="save")
         {
-            $this->rnd_save();
+            $this->budget_save();
         }
         else
         {
-            $this->rnd_add_edit($id);
+            $this->budget_add_edit();
         }
     }
 
-    public function rnd_add_edit()
+    public function budget_add_edit()
     {
-        $user = User_helper::get_user();
-        $data['years'] = Query_helper::get_info('ait_year',array('year_id value','year_name text'),array('del_status = 0'));
         $data['crops'] = $this->budget_common_model->get_ordered_crops();
         $data['types'] = $this->budget_common_model->get_ordered_crop_types();
 
-        $data['title']="Budgeted Purchase";
-        $ajax['page_url']=base_url()."budgeted_purchase/index/add";
+        $stock_existence = $this->budgeted_purchase_model->check_min_stock_existence();
 
-        $ajax['status']=true;
-        $ajax['content'][]=array("id"=>"#content","html"=>$this->load->view("budgeted_purchase/add_edit",$data,true));
+        if($stock_existence)
+        {
+            $data['stocks'] = $this->budgeted_purchase_model->get_minimum_stock_detail();
+            $data['title'] = "Edit Minimum Stock Alert";
+            $ajax['page_url']=base_url()."budgeted_purchase/index/edit/";
+        }
+        else
+        {
+            $data['stocks'] = array();
+            $data['title'] = "Minimum Stock Alert";
+            $ajax['page_url'] = base_url()."budgeted_purchase/index/add";
+        }
+
+        $ajax['status'] = true;
+        $ajax['content'][] = array("id"=>"#content","html"=>$this->load->view("budgeted_purchase/add_edit",$data,true));
 
         $this->jsonReturn($ajax);
     }
 
-    public function rnd_save()
+    public function budget_save()
     {
+        print_r($this->input->post());exit;
         $user = User_helper::get_user();
         $data = Array();
 
@@ -58,25 +69,74 @@ class Budgeted_purchase extends ROOT_Controller
         {
             $this->db->trans_start();  //DB Transaction Handle START
 
-            $data['division_id'] = $user->division_id;
-            $data['zone_id'] = $user->zone_id;
-            $data['territory_id'] = $user->territory_id;
-            $data['customer_id'] = $this->input->post('customer');
-            $data['year'] = $this->input->post('year');
-            $data['crop_id'] = $this->input->post('crop');
-            $data['type_id'] = $this->input->post('type');
+            $crop_type_Post = $this->input->post('stock');
+            $quantity_post = $this->input->post('quantity');
 
-            $data['create_by'] = $user->user_id;
-            $data['create_date'] = time();
+            $stock_existence = $this->budgeted_purchase_model->check_min_stock_existence();
 
-            $quantityPost = $this->input->post('quantity');
-            $existings = $this->customer_sales_target_model->get_existing_sales_targets($data['year'], $data['crop_id'], $data['type_id'], $data['customer_id']);
-
-            foreach($quantityPost as $variety_id=>$quantity)
+            if($stock_existence)
             {
-                $data['variety'] = $variety_id;
-                $data['quantity'] = $quantity;
-                Query_helper::add('budget_sales_target',$data);
+                // Initial update
+                $update_status = array('status'=>0);
+                Query_helper::update('budget_min_stock_quantity',$update_status,array());
+                $existing_varieties = $this->budgeted_purchase_model->get_existing_minimum_stocks();
+
+                foreach($crop_type_Post as $cropTypeKey=>$crop_type)
+                {
+                    foreach($quantity_post as $quantityKey=>$quantity)
+                    {
+                        if($quantityKey==$cropTypeKey)
+                        {
+                            $data['crop_id'] = $crop_type['crop'];
+                            $data['type_id'] = $crop_type['type'];
+
+                            foreach($quantity as $variety_id=>$amount)
+                            {
+                                $data['variety_id'] = $variety_id;
+                                $data['min_stock_quantity'] = $amount;
+
+                                if(in_array($variety_id, $existing_varieties))
+                                {
+                                    $data['modified_by'] = $user->user_id;
+                                    $data['modification_date'] = time();
+                                    $data['status'] = 1;
+                                    $crop_id = $data['crop_id'];
+                                    $type_id = $data['type_id'];
+                                    Query_helper::update('budget_min_stock_quantity',$data,array("crop_id ='$crop_id'", "type_id ='$type_id'", "variety_id ='$variety_id'"));
+                                }
+                                else
+                                {
+                                    $data['created_by'] = $user->user_id;
+                                    $data['creation_date'] = time();
+                                    Query_helper::add('budget_min_stock_quantity',$data);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            else
+            {
+                foreach($crop_type_Post as $cropTypeKey=>$crop_type)
+                {
+                    foreach($quantity_post as $quantityKey=>$quantity)
+                    {
+                        if($quantityKey==$cropTypeKey)
+                        {
+                            $data['crop_id'] = $crop_type['crop'];
+                            $data['type_id'] = $crop_type['type'];
+
+                            foreach($quantity as $variety_id=>$amount)
+                            {
+                                $data['variety_id'] = $variety_id;
+                                $data['min_stock_quantity'] = $amount;
+                                $data['created_by'] = $user->user_id;
+                                $data['creation_date'] = time();
+                                Query_helper::add('budget_min_stock_quantity',$data);
+                            }
+                        }
+                    }
+                }
             }
 
             $this->db->trans_complete();   //DB Transaction Handle END
@@ -90,42 +150,44 @@ class Budgeted_purchase extends ROOT_Controller
                 $this->message=$this->lang->line("MSG_NOT_SAVED_SUCCESS");
             }
 
-            $this->rnd_add_edit();//this is similar like redirect
+            $this->budget_add_edit();//this is similar like redirect
         }
-
     }
 
     private function check_validation()
     {
         $valid=true;
-        if(Validation_helper::validate_empty($this->input->post('year')))
+
+        $crop_type_Post = $this->input->post('stock');
+
+        if(is_array($crop_type_Post) && sizeof($crop_type_Post)>0)
         {
-            $valid=false;
-            $this->message.="Year Cann't Be Empty<br>";
+            foreach($crop_type_Post as $crop_type)
+            {
+                $crop_type_array[] = array('crop'=>$crop_type['crop'], 'type'=>$crop_type['type']);
+            }
+
+            $new_arr = array_unique($crop_type_array, SORT_REGULAR);
+
+            if($crop_type_array != $new_arr)
+            {
+                $valid=false;
+                $this->message .= $this->lang->line("DUPLICATE_CROP_TYPE").'<br>';
+            }
         }
 
-        if(Validation_helper::validate_empty($this->input->post('customer')))
-        {
-            $valid=false;
-            $this->message.="Customer Name Cann't Be Empty<br>";
-        }
+        $quantity_post = $this->input->post('quantity');
 
-        if(Validation_helper::validate_empty($this->input->post('crop')))
+        if(!$crop_type_Post || !$quantity_post)
         {
             $valid=false;
-            $this->message.="Crop Cann't Be Empty<br>";
-        }
-
-        if(Validation_helper::validate_empty($this->input->post('type')))
-        {
-            $valid=false;
-            $this->message.="Type Cann't Be Empty<br>";
+            $this->message .= $this->lang->line("SET_MIN_STOCK").'<br>';
         }
 
         return $valid;
     }
 
-    public function get_dropDown_variety_by_crop_type()
+    public function get_varieties_by_crop_type()
     {
         $crop_id = $this->input->post('crop_id');
         $type_id = $this->input->post('type_id');
@@ -135,7 +197,7 @@ class Budgeted_purchase extends ROOT_Controller
 
         if(sizeof($data['varieties'])>0)
         {
-            $data['serial']=$current_id;
+            $data['serial'] = $current_id;
             $data['title'] = 'Variety List';
             $ajax['status'] = true;
             $ajax['content'][]=array("id"=>'#variety'.$current_id,"html"=>$this->load->view("budgeted_purchase/variety_list",$data,true));
@@ -144,8 +206,9 @@ class Budgeted_purchase extends ROOT_Controller
         else
         {
             $ajax['status'] = true;
-            $ajax['content'][]=array("id"=>'#variety'.$current_id,"html"=>"","",true);
+            $ajax['content'][]=array("id"=>'#variety'.$current_id,"html"=>"<label class='label label-danger'>".$this->lang->line('NO_VARIETY_EXIST')."</label>","",true);
             $this->jsonReturn($ajax);
         }
     }
+
 }
