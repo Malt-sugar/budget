@@ -104,6 +104,7 @@ $lang['LABEL_TOTAL_COGS']='Total COGS';
 $lang['SET_PURCHASE_QUANTITY']='Set Purchase Quantity';
 $lang['LABEL_PURCHASE']='Purchase';
 $lang['SELECT_YEAR']='Select a Year';
+$lang['LABEL_PURCHASE_NO']='Purchase No';
 
 // Achievement Bonus Setup
 

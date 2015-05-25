@@ -3,7 +3,7 @@
 if (!defined('BASEPATH'))
     exit('No direct script access allowed');
 
-class Budgeted_purchase_model extends CI_Model
+class Actual_purchase_model extends CI_Model
 {
     public function __construct()
     {
@@ -14,9 +14,11 @@ class Budgeted_purchase_model extends CI_Model
     {
         $this->db->select('bp.*');
         $this->db->from('budget_purchase bp');
-        $this->db->group_by('bp.year');
-        $this->db->where('bp.purchase_type',$this->config->item('purchase_type_budget'));
+
+        $this->db->group_by('bp.setup_id');
+        $this->db->where('bp.purchase_type',$this->config->item('purchase_type_actual'));
         $this->db->where('bp.status',$this->config->item('status_active'));
+
         $result = $this->db->get()->result_array();
         return sizeof($result);
     }
@@ -31,8 +33,8 @@ class Budgeted_purchase_model extends CI_Model
         $this->db->select('ay.year_name');
         $this->db->join('ait_year ay', 'ay.year_id = bp.year', 'left');
 
-        $this->db->group_by('bp.year');
-        $this->db->where('bp.purchase_type',$this->config->item('purchase_type_budget'));
+        $this->db->group_by('bp.setup_id');
+        $this->db->where('bp.purchase_type',$this->config->item('purchase_type_actual'));
         $this->db->where('bp.status',$this->config->item('status_active'));
         $this->db->limit($limit,$start);
         $this->db->order_by("bp.id","DESC");
@@ -41,29 +43,14 @@ class Budgeted_purchase_model extends CI_Model
         return $query->result_array();
     }
 
-    public function check_budget_purchase_existence()
-    {
-        $this->db->select('bp.*');
-        $this->db->from('budget_purchase bp');
-        $this->db->where('bp.purchase_type',$this->config->item('purchase_type_budget'));
-        $results = $this->db->get()->result_array();
-        if($results)
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
-    }
-
-    public function get_purchase_detail($year)
+    public function get_purchase_detail($year, $setup_id)
     {
         $this->db->from('budget_purchase bp');
         $this->db->select('bp.*');
         $this->db->select('avi.varriety_name variety_name');
         $this->db->where('bp.year', $year);
-        $this->db->where('bp.purchase_type',$this->config->item('purchase_type_budget'));
+        $this->db->where('bp.setup_id', $setup_id);
+        $this->db->where('bp.purchase_type',$this->config->item('purchase_type_actual'));
         $this->db->where('bp.status',$this->config->item('status_active'));
 
         $this->db->join('ait_varriety_info avi', 'avi.varriety_id = bp.variety_id', 'left');
@@ -81,12 +68,13 @@ class Budgeted_purchase_model extends CI_Model
         return $results;
     }
 
-    public function get_existing_varieties($year)
+    public function get_existing_varieties($year, $setup_id)
     {
         $this->db->from('budget_purchase bp');
         $this->db->select('bp.*');
         $this->db->where('bp.year', $year);
-        $this->db->where('bp.purchase_type',$this->config->item('purchase_type_budget'));
+        $this->db->where('bp.setup_id', $setup_id);
+        $this->db->where('bp.purchase_type',$this->config->item('purchase_type_actual'));
         $results = $this->db->get()->result_array();
         foreach($results as $result)
         {
@@ -100,7 +88,7 @@ class Budgeted_purchase_model extends CI_Model
     {
         $this->db->select('bps.id');
         $this->db->from('budget_purchase_setup bps');
-        $this->db->where('bps.purchase_type',$this->config->item('purchase_type_budget'));
+        $this->db->where('bps.purchase_type',$this->config->item('purchase_type_actual'));
         $result = $this->db->get()->row_array();
         return $result['id'];
     }

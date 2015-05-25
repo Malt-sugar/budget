@@ -126,7 +126,6 @@ class Budgeted_purchase extends ROOT_Controller
                             {
                                 $data['variety_id'] = $variety_id;
 
-
                                 foreach($detail_type as $type=>$amount)
                                 {
                                     $data[$type] = $amount;
