@@ -24,7 +24,7 @@
                 ?>
                 <tr>
                     <td><?php echo $variety['varriety_name']?></td>
-                    <td><input type="text" class="form-control variety_quantity" name="detail[<?php echo $serial;?>][<?php echo $variety['varriety_id']?>][quantity]" value="" /></td>
+                    <td><input type="text" class="form-control variety_quantity" name="detail[<?php echo $serial;?>][<?php echo $variety['varriety_id']?>][purchase_quantity]" value="" /></td>
                     <td><input type="text" class="form-control variety_price_per_kg" name="detail[<?php echo $serial;?>][<?php echo $variety['varriety_id']?>][price_per_kg]" value="" /></td>
                     <td><input type="text" class="form-control variety_total_quantity" name="" value="" /></td>
                 </tr>

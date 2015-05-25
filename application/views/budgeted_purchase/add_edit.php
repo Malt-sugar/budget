@@ -1,33 +1,64 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
     $data["link_new"]="#";
     $data["hide_new"]="1";
-    $data["link_back"]="#";
-    $data["hide_back"]="1";
+    $data["link_back"]=base_url()."budgeted_purchase";
     $data["hide_approve"]="1";
     $this->load->view("action_buttons_edit",$data);
 
 
-$arranged_stocks = array();
+$arranged_purchase = array();
 
-if(is_array($stocks) && sizeof($stocks)>0)
+if(is_array($purchases) && sizeof($purchases)>0)
 {
-    foreach($stocks as $stock)
+    foreach($purchases as $purchase)
     {
-        $arranged_stocks['crop'][$stock['crop_id']][$stock['type_id']]['variety'][$stock['variety_id']]['variety_name'] = $stock['variety_name'];
-        $arranged_stocks['crop'][$stock['crop_id']][$stock['type_id']]['variety'][$stock['variety_id']]['purchase_quantity'] = $stock['purchase_quantity'];
-        $arranged_stocks['crop'][$stock['crop_id']][$stock['type_id']]['variety'][$stock['variety_id']]['price_per_kg'] = $stock['price_per_kg'];
-        $arranged_stocks['crop'][$stock['crop_id']][$stock['type_id']]['variety'][$stock['variety_id']]['created_by'] = $stock['created_by'];
+        $arranged_purchase['year'] = $purchase['year'];
+        $arranged_purchase['crop'][$purchase['crop_id']][$purchase['type_id']]['variety'][$purchase['variety_id']]['variety_name'] = $purchase['variety_name'];
+        $arranged_purchase['crop'][$purchase['crop_id']][$purchase['type_id']]['variety'][$purchase['variety_id']]['purchase_quantity'] = $purchase['purchase_quantity'];
+        $arranged_purchase['crop'][$purchase['crop_id']][$purchase['type_id']]['variety'][$purchase['variety_id']]['price_per_kg'] = $purchase['price_per_kg'];
+        $arranged_purchase['crop'][$purchase['crop_id']][$purchase['type_id']]['variety'][$purchase['variety_id']]['created_by'] = $purchase['created_by'];
     }
 }
 
 ?>
 <form class="form_valid" id="save_form" action="<?php echo base_url();?>budgeted_purchase/index/save" method="post">
+    <input type="hidden" name="year_id" value="<?php if(isset($arranged_purchase['year'])){echo $arranged_purchase['year'];}else{echo 0;}?>" />
+    <div class="row widget">
+        <div class="widget-header">
+            <div class="title">
+                <?php echo $title; ?>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+
+        <div class="row show-grid">
+            <div class="col-xs-4">
+                <label class="control-label pull-right"><?php echo $this->lang->line('LABEL_YEAR');?><span style="color:#FF0000">*</span></label>
+            </div>
+            <div class="col-sm-4 col-xs-8">
+                <select name="year" id="year" class="form-control validate[required]" <?php if(isset($arranged_purchase['year']) && strlen($arranged_purchase['year'])>1){echo 'disabled';}?>>
+                    <?php
+                    $this->load->view('dropdown',array('drop_down_options'=>$years,'drop_down_selected'=>isset($arranged_purchase['year'])?$arranged_purchase['year']:''));
+                    ?>
+                </select>
+                <?php
+                if(isset($arranged_purchase['year']) && strlen($arranged_purchase['year'])>1)
+                {
+                    ?>
+                    <input type="hidden" name="year" value="<?php echo $arranged_purchase['year'];?>" />
+                <?php
+                }
+                ?>
+            </div>
+        </div>
+    </div>
+
     <div id="budget_add_more_container">
     <?php
-    if(isset($arranged_stocks['crop']))
+    if(isset($arranged_purchase['crop']))
     {
         $sl = 0;
-        foreach($arranged_stocks['crop'] as $key=>$crop)
+        foreach($arranged_purchase['crop'] as $key=>$crop)
         {
             foreach($crop as $typeKey=>$typeVal)
             {
@@ -36,7 +67,7 @@ if(is_array($stocks) && sizeof($stocks)>0)
                 <div class="row widget">
                     <div class="widget-header">
                         <div class="title">
-                            <?php echo $this->lang->line('LABEL_BUDGETED_PURCHASE'); ?>
+                            <?php echo $this->lang->line('LABEL_PURCHASE'); ?>
                         </div>
                         <?php
                         foreach($typeVal['variety'] as $perm)
@@ -59,7 +90,7 @@ if(is_array($stocks) && sizeof($stocks)>0)
                             <label class="control-label pull-right"><?php echo $this->lang->line('LABEL_CROP');?></label>
                         </div>
                         <div class="col-xs-2">
-                            <select name="stock[<?php echo $sl;?>][crop]" class="form-control crop_id" id="crop<?php echo $sl;?>" <?php if(isset($key) && strlen($key)>1){echo 'disabled';}?>>
+                            <select name="purchase[<?php echo $sl;?>][crop]" class="form-control crop_id" id="crop<?php echo $sl;?>" <?php if(isset($key) && strlen($key)>1){echo 'disabled';}?>>
                                 <?php
                                 $this->load->view('dropdown',array('drop_down_options'=>$crops,'drop_down_selected'=>isset($key)?$key:''));
                                 ?>
@@ -68,7 +99,7 @@ if(is_array($stocks) && sizeof($stocks)>0)
                             if(isset($key) && strlen($key)>1)
                             {
                                 ?>
-                                <input type="hidden" name="stock[<?php echo $sl;?>][crop]" value="<?php echo $key;?>" />
+                                <input type="hidden" name="purchase[<?php echo $sl;?>][crop]" value="<?php echo $key;?>" />
                             <?php
                             }
                             ?>
@@ -80,7 +111,7 @@ if(is_array($stocks) && sizeof($stocks)>0)
                             <label class="control-label pull-right"><?php echo $this->lang->line('LABEL_TYPE');?></label>
                         </div>
                         <div class="col-xs-2">
-                            <select name="stock[<?php echo $sl;?>][type]" class="form-control type_id" id="type<?php echo $sl;?>" <?php if(strlen($typeKey)>1){echo 'disabled';}?> data-type-current-id="<?php echo $sl;?>">
+                            <select name="purchase[<?php echo $sl;?>][type]" class="form-control type_id" id="type<?php echo $sl;?>" <?php if(strlen($typeKey)>1){echo 'disabled';}?> data-type-current-id="<?php echo $sl;?>">
                                 <?php
                                 $this->load->view('dropdown',array('drop_down_options'=>$types,'drop_down_selected'=>isset($typeKey)?$typeKey:''));
                                 ?>
@@ -89,7 +120,7 @@ if(is_array($stocks) && sizeof($stocks)>0)
                             if(isset($typeKey) && strlen($typeKey)>1)
                             {
                                 ?>
-                                <input type="hidden" name="stock[<?php echo $sl;?>][type]" value="<?php echo $typeKey;?>" />
+                                <input type="hidden" name="purchase[<?php echo $sl;?>][type]" value="<?php echo $typeKey;?>" />
                             <?php
                             }
                             ?>
@@ -119,9 +150,13 @@ if(is_array($stocks) && sizeof($stocks)>0)
                                                     <tr>
                                                         <td><?php echo $detail['variety_name']?></td>
                                                         <td>
-                                                            <input type="text" class="form-control variety_quantity"  name="detail[<?php echo $sl;?>][<?php echo $varKey;?>][quantity]" value="<?php if(isset($detail['purchase_quantity'])){echo $detail['purchase_quantity'];}?>" />
+                                                            <input type="text" class="form-control variety_quantity"  name="detail[<?php echo $sl;?>][<?php echo $varKey;?>][purchase_quantity]" value="<?php if(isset($detail['purchase_quantity'])){echo $detail['purchase_quantity'];}?>" />
+                                                        </td>
+                                                        <td>
                                                             <input type="text" class="form-control variety_price_per_kg"  name="detail[<?php echo $sl;?>][<?php echo $varKey;?>][price_per_kg]" value="<?php if(isset($detail['price_per_kg'])){echo $detail['price_per_kg'];}?>" />
-                                                            <input type="text" class="form-control variety_total_quantity"  name="" value="" />
+                                                            </td>
+                                                        <td>
+                                                            <input type="text" class="form-control variety_total_quantity"  name="" value="<?php if(isset($detail['purchase_quantity']) && isset($detail['price_per_kg'])){echo $detail['purchase_quantity']*$detail['price_per_kg'];}?>" />
                                                         </td>
                                                     </tr>
                                                 <?php
@@ -155,7 +190,7 @@ if(is_array($stocks) && sizeof($stocks)>0)
             <div class="row widget">
                 <div class="widget-header">
                     <div class="title">
-                        <?php echo $this->lang->line('LABEL_BUDGETED_PURCHASE'); ?>
+                        <?php echo $this->lang->line('LABEL_PURCHASE'); ?>
                     </div>
                     <div class="clearfix"></div>
                 </div>
@@ -165,7 +200,7 @@ if(is_array($stocks) && sizeof($stocks)>0)
                         <label class="control-label pull-right"><?php echo $this->lang->line('LABEL_CROP');?></label>
                     </div>
                     <div class="col-xs-2">
-                        <select name="stock[0][crop]" class="form-control crop_id" id="crop0">
+                        <select name="purchase[0][crop]" class="form-control crop_id" id="crop0">
                             <?php
                             $this->load->view('dropdown',array('drop_down_options'=>$crops,'drop_down_selected'=>''));
                             ?>
@@ -178,7 +213,7 @@ if(is_array($stocks) && sizeof($stocks)>0)
                         <label class="control-label pull-right"><?php echo $this->lang->line('LABEL_TYPE');?></label>
                     </div>
                     <div class="col-xs-2">
-                        <select name="stock[0][type]" class="form-control type_id" id="type0" data-type-current-id="0">
+                        <select name="purchase[0][type]" class="form-control type_id" id="type0" data-type-current-id="0">
                             <?php
                             $this->load->view('dropdown',array('drop_down_options'=>$types,'drop_down_selected'=>''));
                             ?>
@@ -260,8 +295,8 @@ if(is_array($stocks) && sizeof($stocks)>0)
 
             $('.budget_add_more_content .budget_add_more_holder').attr('data-current-id',current_id);
 
-            $('.budget_add_more_content .budget_add_more_holder .crop_id').attr('name','stock['+current_id+'][crop]');
-            $('.budget_add_more_content .budget_add_more_holder .type_id').attr('name','stock['+current_id+'][type]');
+            $('.budget_add_more_content .budget_add_more_holder .crop_id').attr('name','purchase['+current_id+'][crop]');
+            $('.budget_add_more_content .budget_add_more_holder .type_id').attr('name','purchase['+current_id+'][type]');
 
             $('.budget_add_more_content .budget_add_more_holder .crop_id').attr('data-crop-current-id',current_id);
             $('.budget_add_more_content .budget_add_more_holder .type_id').attr('data-type-current-id',current_id);

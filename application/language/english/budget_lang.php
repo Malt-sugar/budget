@@ -101,6 +101,9 @@ $lang['LABEL_PRICE_PER_KG_USD']='Price/ KG USD';
 $lang['LABEL_TOTAL_PRICE_USD']='Total Price USD';
 $lang['LABEL_COGS']='COGS';
 $lang['LABEL_TOTAL_COGS']='Total COGS';
+$lang['SET_PURCHASE_QUANTITY']='Set Purchase Quantity';
+$lang['LABEL_PURCHASE']='Purchase';
+$lang['SELECT_YEAR']='Select a Year';
 
 // Achievement Bonus Setup
 

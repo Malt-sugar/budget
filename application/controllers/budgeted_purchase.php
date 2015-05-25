@@ -11,11 +11,15 @@ class Budgeted_purchase extends ROOT_Controller
         $this->load->model("budgeted_purchase_model");
     }
 
-    public function index($task="add", $id=0)
+    public function index($task="list", $year_id=0)
     {
-        if($task=="add" || $task=="edit")
+        if($task=="list")
         {
-            $this->budget_add_edit();
+            $this->budget_list();
+        }
+        elseif($task=="add" || $task=="edit")
+        {
+            $this->budget_add_edit($year_id);
         }
         elseif($task=="save")
         {
@@ -23,27 +27,52 @@ class Budgeted_purchase extends ROOT_Controller
         }
         else
         {
-            $this->budget_add_edit();
+            $this->budget_list();
         }
     }
 
-    public function budget_add_edit()
+    public function budget_list($page=0)
     {
+        $config = System_helper::pagination_config(base_url() . "budgeted_purchase/index/list/",$this->budgeted_purchase_model->get_total_purchase_years(),4);
+        $this->pagination->initialize($config);
+        $data["links"] = $this->pagination->create_links();
+
+        if($page>0)
+        {
+            $page=$page-1;
+        }
+
+        $data['purchases'] = $this->budgeted_purchase_model->get_purchase_year_info($page);
+        $data['title']="Budget Purchase List";
+
+        $ajax['status']=true;
+        $ajax['content'][]=array("id"=>"#content","html"=>$this->load->view("budgeted_purchase/list",$data,true));
+
+        if($this->message)
+        {
+            $ajax['message']=$this->message;
+        }
+
+        $ajax['page_url']=base_url()."budgeted_purchase/index/list/".($page+1);
+        $this->jsonReturn($ajax);
+    }
+
+    public function budget_add_edit($year)
+    {
+        $data['years'] = Query_helper::get_info('ait_year',array('year_id value','year_name text'),array('del_status = 0'));
         $data['crops'] = $this->budget_common_model->get_ordered_crops();
         $data['types'] = $this->budget_common_model->get_ordered_crop_types();
 
-        $stock_existence = $this->budgeted_purchase_model->check_budget_purchase_existence();
-
-        if($stock_existence)
+        if(strlen($year)>1)
         {
-            $data['stocks'] = $this->budgeted_purchase_model->get_purchase_detail();
-            $data['title'] = "Edit Minimum Stock Alert";
+            $data['purchases'] = $this->budgeted_purchase_model->get_purchase_detail($year);
+            $data['title'] = "Edit Budget Purchase";
             $ajax['page_url']=base_url()."budgeted_purchase/index/edit/";
         }
         else
         {
-            $data['stocks'] = array();
-            $data['title'] = "Minimum Stock Alert";
+            $data['purchases'] = array();
+            $data['title'] = "Budget Purchase";
             $ajax['page_url'] = base_url()."budgeted_purchase/index/add";
         }
 
@@ -57,6 +86,7 @@ class Budgeted_purchase extends ROOT_Controller
     {
         $user = User_helper::get_user();
         $data = Array();
+        $year_id = $this->input->post('year_id');
 
         if(!$this->check_validation())
         {
@@ -68,46 +98,55 @@ class Budgeted_purchase extends ROOT_Controller
         {
             $this->db->trans_start();  //DB Transaction Handle START
 
-            $crop_type_Post = $this->input->post('stock');
-            $quantity_post = $this->input->post('quantity');
+            $crop_type_Post = $this->input->post('purchase');
+            $detail_post = $this->input->post('detail');
+            $year = $this->input->post('year');
+            $setup_id = $this->budgeted_purchase_model->get_budget_setup_id();
 
-            $stock_existence = $this->budgeted_purchase_model->check_budget_purchase_existence();
-
-            if($stock_existence)
+            if(strlen($year_id)>1)
             {
                 // Initial update
                 $update_status = array('status'=>0);
-                Query_helper::update('budget_min_stock_quantity',$update_status,array());
-                $existing_varieties = $this->budgeted_purchase_model->get_existing_minimum_stocks();
+                Query_helper::update('budget_purchase',$update_status,array("year ='$year'"));
+                $existing_varieties = $this->budgeted_purchase_model->get_existing_varieties($year);
 
                 foreach($crop_type_Post as $cropTypeKey=>$crop_type)
                 {
-                    foreach($quantity_post as $quantityKey=>$quantity)
+                    foreach($detail_post as $detailKey=>$details)
                     {
-                        if($quantityKey==$cropTypeKey)
+                        if($detailKey==$cropTypeKey)
                         {
+                            $data['year'] = $year;
+                            $data['purchase_type'] = $this->config->item('purchase_type_budget');
+                            $data['setup_id'] = $setup_id;
                             $data['crop_id'] = $crop_type['crop'];
                             $data['type_id'] = $crop_type['type'];
 
-                            foreach($quantity as $variety_id=>$amount)
+                            foreach($details as $variety_id=>$detail_type)
                             {
                                 $data['variety_id'] = $variety_id;
-                                $data['min_stock_quantity'] = $amount;
+
+
+                                foreach($detail_type as $type=>$amount)
+                                {
+                                    $data[$type] = $amount;
+                                }
 
                                 if(in_array($variety_id, $existing_varieties))
                                 {
+                                    $crop_id = $data['crop_id'];
+                                    $type_id = $data['type_id'];
+
                                     $data['modified_by'] = $user->user_id;
                                     $data['modification_date'] = time();
                                     $data['status'] = 1;
-                                    $crop_id = $data['crop_id'];
-                                    $type_id = $data['type_id'];
-                                    Query_helper::update('budget_min_stock_quantity',$data,array("crop_id ='$crop_id'", "type_id ='$type_id'", "variety_id ='$variety_id'"));
+                                    Query_helper::update('budget_purchase', $data, array("year ='$year'", "crop_id ='$crop_id'", "type_id ='$type_id'", "variety_id ='$variety_id'"));
                                 }
                                 else
                                 {
                                     $data['created_by'] = $user->user_id;
                                     $data['creation_date'] = time();
-                                    Query_helper::add('budget_min_stock_quantity',$data);
+                                    Query_helper::add('budget_purchase', $data);
                                 }
                             }
                         }
@@ -118,20 +157,28 @@ class Budgeted_purchase extends ROOT_Controller
             {
                 foreach($crop_type_Post as $cropTypeKey=>$crop_type)
                 {
-                    foreach($quantity_post as $quantityKey=>$quantity)
+                    foreach($detail_post as $detailKey=>$details)
                     {
-                        if($quantityKey==$cropTypeKey)
+                        if($detailKey==$cropTypeKey)
                         {
+                            $data['year'] = $year;
+                            $data['purchase_type'] = $this->config->item('purchase_type_budget');
+                            $data['setup_id'] = $setup_id;
                             $data['crop_id'] = $crop_type['crop'];
                             $data['type_id'] = $crop_type['type'];
 
-                            foreach($quantity as $variety_id=>$amount)
+                            foreach($details as $variety_id=>$detail_type)
                             {
                                 $data['variety_id'] = $variety_id;
-                                $data['min_stock_quantity'] = $amount;
                                 $data['created_by'] = $user->user_id;
                                 $data['creation_date'] = time();
-                                Query_helper::add('budget_min_stock_quantity',$data);
+
+                                foreach($detail_type as $type=>$amount)
+                                {
+                                    $data[$type] = $amount;
+                                }
+
+                                Query_helper::add('budget_purchase', $data);
                             }
                         }
                     }
@@ -149,15 +196,16 @@ class Budgeted_purchase extends ROOT_Controller
                 $this->message=$this->lang->line("MSG_NOT_SAVED_SUCCESS");
             }
 
-            $this->budget_add_edit();//this is similar like redirect
+            $this->budget_list();//this is similar like redirect
         }
     }
 
     private function check_validation()
     {
         $valid=true;
-
-        $crop_type_Post = $this->input->post('stock');
+        $crop_type_Post = $this->input->post('purchase');
+        $detail_post = $this->input->post('detail');
+        $year = $this->input->post('year');
 
         if(is_array($crop_type_Post) && sizeof($crop_type_Post)>0)
         {
@@ -175,12 +223,16 @@ class Budgeted_purchase extends ROOT_Controller
             }
         }
 
-        $quantity_post = $this->input->post('quantity');
-
-        if(!$crop_type_Post || !$quantity_post)
+        if(!$crop_type_Post || !$detail_post)
         {
             $valid=false;
-            $this->message .= $this->lang->line("SET_MIN_STOCK").'<br>';
+            $this->message .= $this->lang->line("SET_PURCHASE_QUANTITY").'<br>';
+        }
+
+        if(!$year)
+        {
+            $valid=false;
+            $this->message .= $this->lang->line("SELECT_YEAR").'<br>';
         }
 
         return $valid;
