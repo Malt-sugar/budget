@@ -142,6 +142,48 @@ class Customer_sales_target extends ROOT_Controller
 
                                 if(in_array($variety_id, $existing_varieties))
                                 {
+                                    $existing_quantity = $this->customer_sales_target_model->get_existing_quantity($year, $customer, $data['crop_id'], $data['type_id'], $variety_id);
+                                    if($amount>0)
+                                    {
+                                        if($user->budget_group==$this->config->item('user_group_territory'))
+                                        {
+                                            $data['is_approved_by_zi'] = 0;
+                                            $data['is_approved_by_di'] = 0;
+                                            $data['is_approved_by_hom'] = 0;
+                                        }
+                                        elseif($user->budget_group==$this->config->item('user_group_zone'))
+                                        {
+                                            $data['is_approved_by_zi'] = 1;
+                                            $data['is_approved_by_di'] = 0;
+                                            $data['is_approved_by_hom'] = 0;
+                                        }
+                                        elseif($user->budget_group==$this->config->item('user_group_division'))
+                                        {
+                                            $data['is_approved_by_zi'] = 1;
+                                            $data['is_approved_by_di'] = 1;
+                                            $data['is_approved_by_hom'] = 0;
+                                        }
+                                        elseif($user->budget_group==$this->config->item('user_group_marketing'))
+                                        {
+                                            $data['is_approved_by_zi'] = 1;
+                                            $data['is_approved_by_di'] = 1;
+                                            $data['is_approved_by_hom'] = 1;
+                                        }
+                                    }
+                                    else
+                                    {
+                                        if($existing_quantity>0)
+                                        {
+                                            $data['discard'] = 1;
+                                            $data['discarded_by'] = $user->user_id;
+                                        }
+                                        else
+                                        {
+                                            unset($data['discard']);
+                                            unset($data['discarded_by']);
+                                        }
+                                    }
+
                                     $data['modified_by'] = $user->user_id;
                                     $data['modification_date'] = time();
                                     $data['status'] = 1;
@@ -151,21 +193,24 @@ class Customer_sales_target extends ROOT_Controller
                                 }
                                 else
                                 {
-                                    // Auto Approvals; based on logged user level.
-                                    if($user->budget_group == $this->config->item('user_group_zone'))
+                                    if($amount>0)
                                     {
-                                        $data['is_approved_by_zi'] = 1;
-                                    }
-                                    elseif($user->budget_group == $this->config->item('user_group_division'))
-                                    {
-                                        $data['is_approved_by_zi'] = 1;
-                                        $data['is_approved_by_di'] = 1;
-                                    }
-                                    elseif($user->budget_group == $this->config->item('user_group_marketing'))
-                                    {
-                                        $data['is_approved_by_zi'] = 1;
-                                        $data['is_approved_by_di'] = 1;
-                                        $data['is_approved_by_hom'] = 1;
+                                        // Auto Approvals; based on logged user level.
+                                        if($user->budget_group == $this->config->item('user_group_zone'))
+                                        {
+                                            $data['is_approved_by_zi'] = 1;
+                                        }
+                                        elseif($user->budget_group == $this->config->item('user_group_division'))
+                                        {
+                                            $data['is_approved_by_zi'] = 1;
+                                            $data['is_approved_by_di'] = 1;
+                                        }
+                                        elseif($user->budget_group == $this->config->item('user_group_marketing'))
+                                        {
+                                            $data['is_approved_by_zi'] = 1;
+                                            $data['is_approved_by_di'] = 1;
+                                            $data['is_approved_by_hom'] = 1;
+                                        }
                                     }
 
                                     $data['created_by'] = $user->user_id;
@@ -200,21 +245,24 @@ class Customer_sales_target extends ROOT_Controller
                                 $data['created_by'] = $user->user_id;
                                 $data['creation_date'] = time();
 
-                                // Auto Approvals; based on logged user level.
-                                if($user->budget_group == $this->config->item('user_group_zone'))
+                                if($amount>0)
                                 {
-                                    $data['is_approved_by_zi'] = 1;
-                                }
-                                elseif($user->budget_group == $this->config->item('user_group_division'))
-                                {
-                                    $data['is_approved_by_zi'] = 1;
-                                    $data['is_approved_by_di'] = 1;
-                                }
-                                elseif($user->budget_group == $this->config->item('user_group_marketing'))
-                                {
-                                    $data['is_approved_by_zi'] = 1;
-                                    $data['is_approved_by_di'] = 1;
-                                    $data['is_approved_by_hom'] = 1;
+                                    // Auto Approvals; based on logged user level.
+                                    if($user->budget_group == $this->config->item('user_group_zone'))
+                                    {
+                                        $data['is_approved_by_zi'] = 1;
+                                    }
+                                    elseif($user->budget_group == $this->config->item('user_group_division'))
+                                    {
+                                        $data['is_approved_by_zi'] = 1;
+                                        $data['is_approved_by_di'] = 1;
+                                    }
+                                    elseif($user->budget_group == $this->config->item('user_group_marketing'))
+                                    {
+                                        $data['is_approved_by_zi'] = 1;
+                                        $data['is_approved_by_di'] = 1;
+                                        $data['is_approved_by_hom'] = 1;
+                                    }
                                 }
 
                                 Query_helper::add('budget_sales_target',$data);

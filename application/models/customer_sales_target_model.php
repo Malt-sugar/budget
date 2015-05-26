@@ -137,4 +137,18 @@ class Customer_sales_target_model extends CI_Model
             return false;
         }
     }
+
+    public function get_existing_quantity($year, $customer, $crop_id, $type_id, $variety_id)
+    {
+        $this->db->from('budget_sales_target bst');
+        $this->db->select('bst.*');
+        $this->db->where('bst.year',$year);
+        $this->db->where('bst.customer_id',$customer);
+        $this->db->where('bst.crop_id',$crop_id);
+        $this->db->where('bst.type_id',$type_id);
+        $this->db->where('bst.variety_id',$variety_id);
+        $result = $this->db->get()->row_array();
+
+        return $result['quantity'];
+    }
 }

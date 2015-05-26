@@ -23,6 +23,8 @@ if(is_array($targets) && sizeof($targets)>0)
         $arranged_targets['crop'][$target['crop_id']][$target['type_id']]['variety'][$target['variety_id']]['is_approved_by_di'] = $target['is_approved_by_di'];
         $arranged_targets['crop'][$target['crop_id']][$target['type_id']]['variety'][$target['variety_id']]['is_approved_by_hom'] = $target['is_approved_by_hom'];
         $arranged_targets['crop'][$target['crop_id']][$target['type_id']]['variety'][$target['variety_id']]['created_by'] = $target['created_by'];
+        $arranged_targets['crop'][$target['crop_id']][$target['type_id']]['variety'][$target['variety_id']]['discarded_by'] = $target['discarded_by'];
+        $arranged_targets['crop'][$target['crop_id']][$target['type_id']]['variety'][$target['variety_id']]['discard'] = $target['discard'];
 
     }
 }
@@ -250,7 +252,7 @@ if(is_array($targets) && sizeof($targets)>0)
                                                     <tr>
                                                         <td><?php echo $detail['variety_name']?></td>
                                                         <td>
-                                                            <input type="text" class="form-control variety_quantity" <?php if((!User_helper::check_edit_permission($detail['created_by']) && $detail['quantity']>0) || ($detail['is_approved_by_zi'] && $detail['quantity']>0) || ($detail['is_approved_by_di'] && $detail['quantity']>0) || ($detail['is_approved_by_hom'] && $detail['quantity']>0)){echo 'readonly';}?> name="quantity[<?php echo $sl;?>][<?php echo $varKey;?>]" value="<?php if(isset($detail['quantity'])){echo $detail['quantity'];}?>" />
+                                                            <input type="text" class="form-control variety_quantity" <?php if((!User_helper::check_edit_permission($detail['created_by']) && $detail['quantity']>0) || (!User_helper::check_edit_permission_after_approval($detail['is_approved_by_zi'], $detail['is_approved_by_di'], $detail['is_approved_by_hom']) && $detail['quantity']>0) || !User_helper::check_edit_permission_after_discard($detail['discard'], $detail['discarded_by'])){echo 'readonly';}?> name="quantity[<?php echo $sl;?>][<?php echo $varKey;?>]" value="<?php if(isset($detail['quantity'])){echo $detail['quantity'];}?>" />
                                                         </td>
                                                     </tr>
                                                 <?php

@@ -100,6 +100,7 @@ class System_helper
         $CI->db->select('bst.is_approved_by_zi');
         $CI->db->where('bst.customer_id', $customer_id);
         $CI->db->where('bst.year', $year);
+        $CI->db->where('bst.status', $CI->config->item('status_active'));
         $CI->db->group_by('bst.is_approved_by_zi');
         $results = $CI->db->get()->result_array();
 
@@ -131,6 +132,7 @@ class System_helper
         $CI->db->select('bst.is_approved_by_di');
         $CI->db->where('bst.customer_id', $customer_id);
         $CI->db->where('bst.year', $year);
+        $CI->db->where('bst.status', $CI->config->item('status_active'));
         $CI->db->group_by('bst.is_approved_by_di');
         $results = $CI->db->get()->result_array();
 
@@ -162,6 +164,7 @@ class System_helper
         $CI->db->select('bst.is_approved_by_hom');
         $CI->db->where('bst.customer_id', $customer_id);
         $CI->db->where('bst.year', $year);
+        $CI->db->where('bst.status', $CI->config->item('status_active'));
         $CI->db->group_by('bst.is_approved_by_hom');
         $results = $CI->db->get()->result_array();
 
