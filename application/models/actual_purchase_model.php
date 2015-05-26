@@ -92,4 +92,15 @@ class Actual_purchase_model extends CI_Model
         $result = $this->db->get()->row_array();
         return $result['id'];
     }
+
+    public function get_purchase_setup($year, $setup_id)
+    {
+        $this->db->select('bps.*');
+        $this->db->from('budget_purchase_setup bps');
+        $this->db->where('bps.purchase_type',$this->config->item('purchase_type_actual'));
+        $this->db->where('bps.year',$year);
+        $this->db->where('bps.id',$setup_id);
+        $result = $this->db->get()->row_array();
+        return $result;
+    }
 }

@@ -37,7 +37,7 @@
                         <tr>
                             <td><?php echo $key+1;?></td>
                             <td><?php echo $purchase['year_name'];?></td>
-                            <td><?php echo $purchase['setup_id']+1;?></td>
+                            <td><?php echo $purchase['setup_id']-1;?></td>
                             <td>
                                 <a href="<?php echo base_url();?>actual_purchase/index/edit/<?php echo $purchase['year'].'/'.$purchase['setup_id'];?>">
                                     <img src="<?php echo base_url();?>images/edit_record.png">

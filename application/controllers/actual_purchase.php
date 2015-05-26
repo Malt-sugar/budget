@@ -66,12 +66,14 @@ class Actual_purchase extends ROOT_Controller
         if(strlen($year)>1 && $setup_id>0)
         {
             $data['purchases'] = $this->actual_purchase_model->get_purchase_detail($year, $setup_id);
+            $data['setups'] = $this->actual_purchase_model->get_purchase_setup($year, $setup_id);
             $data['title'] = "Edit Actual Purchase";
             $ajax['page_url']=base_url()."actual_purchase/index/edit/";
         }
         else
         {
             $data['purchases'] = array();
+            $data['setups'] = array();
             $data['title'] = "Actual Purchase";
             $ajax['page_url'] = base_url()."actual_purchase/index/add";
         }
@@ -115,56 +117,61 @@ class Actual_purchase extends ROOT_Controller
 
             if(strlen($year_id)>1 && $setup_id>0)
             {
-                // Initial update
-//                $update_status = array('status'=>0);
-//                Query_helper::update('budget_purchase',$update_status,array("year ='$year'", "setup_id ='$setup_id'"));
-//                $existing_varieties = $this->actual_purchase_model->get_existing_varieties($year, $setup_id);
-//
-//                foreach($crop_type_Post as $cropTypeKey=>$crop_type)
-//                {
-//                    foreach($detail_post as $detailKey=>$details)
-//                    {
-//                        if($detailKey==$cropTypeKey)
-//                        {
-//                            $data['year'] = $year;
-//                            $data['purchase_type'] = $this->config->item('purchase_type_budget');
-//                            $data['setup_id'] = $setup_id;
-//                            $data['crop_id'] = $crop_type['crop'];
-//                            $data['type_id'] = $crop_type['type'];
-//
-//                            foreach($details as $variety_id=>$detail_type)
-//                            {
-//                                $data['variety_id'] = $variety_id;
-//
-//                                foreach($detail_type as $type=>$amount)
-//                                {
-//                                    $data[$type] = $amount;
-//                                }
-//
-//                                if(in_array($variety_id, $existing_varieties))
-//                                {
-//                                    $crop_id = $data['crop_id'];
-//                                    $type_id = $data['type_id'];
-//
-//                                    $data['modified_by'] = $user->user_id;
-//                                    $data['modification_date'] = time();
-//                                    $data['status'] = 1;
-//                                    Query_helper::update('budget_purchase', $data, array("year ='$year'", "setup_id ='$setup_id'", "crop_id ='$crop_id'", "type_id ='$type_id'", "variety_id ='$variety_id'"));
-//                                }
-//                                else
-//                                {
-//                                    $data['created_by'] = $user->user_id;
-//                                    $data['creation_date'] = time();
-//                                    Query_helper::add('budget_purchase', $data);
-//                                }
-//                            }
-//                        }
-//                    }
-//                }
+                // Update setup table
+                $setup_data['modified_by'] = $user->user_id;
+                $setup_data['modification_date'] = time();
+                Query_helper::update('budget_purchase_setup', $setup_data, array("id ='$setup_id'"));
+
+                // Initial update purchase table
+                $update_status = array('status'=>0);
+                Query_helper::update('budget_purchase',$update_status,array("year ='$year'", "setup_id ='$setup_id'"));
+                $existing_varieties = $this->actual_purchase_model->get_existing_varieties($year, $setup_id);
+
+                foreach($crop_type_Post as $cropTypeKey=>$crop_type)
+                {
+                    foreach($detail_post as $detailKey=>$details)
+                    {
+                        if($detailKey==$cropTypeKey)
+                        {
+                            $data['year'] = $year;
+                            $data['purchase_type'] = $this->config->item('purchase_type_actual');
+                            $data['setup_id'] = $setup_id;
+                            $data['crop_id'] = $crop_type['crop'];
+                            $data['type_id'] = $crop_type['type'];
+
+                            foreach($details as $variety_id=>$detail_type)
+                            {
+                                $data['variety_id'] = $variety_id;
+
+                                foreach($detail_type as $type=>$amount)
+                                {
+                                    $data[$type] = $amount;
+                                }
+
+                                if(in_array($variety_id, $existing_varieties))
+                                {
+                                    $crop_id = $data['crop_id'];
+                                    $type_id = $data['type_id'];
+
+                                    $data['modified_by'] = $user->user_id;
+                                    $data['modification_date'] = time();
+                                    $data['status'] = 1;
+                                    Query_helper::update('budget_purchase', $data, array("year ='$year'", "setup_id ='$setup_id'", "crop_id ='$crop_id'", "type_id ='$type_id'", "variety_id ='$variety_id'"));
+                                }
+                                else
+                                {
+                                    $data['created_by'] = $user->user_id;
+                                    $data['creation_date'] = time();
+                                    Query_helper::add('budget_purchase', $data);
+                                }
+                            }
+                        }
+                    }
+                }
             }
             else
             {
-                // Setup table insert.
+                // Setup table new insert.
                 $setup_data['created_by'] = $user->user_id;
                 $setup_data['creation_date'] = time();
                 $setup_row_id = Query_helper::add('budget_purchase_setup', $setup_data); // getting setup table id.
