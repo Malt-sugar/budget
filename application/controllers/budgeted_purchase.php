@@ -206,6 +206,14 @@ class Budgeted_purchase extends ROOT_Controller
         $detail_post = $this->input->post('detail');
         $year = $this->input->post('year');
 
+        $budget_setup = $this->budgeted_purchase_model->check_budget_setup();
+
+        if(!$budget_setup)
+        {
+            $valid=false;
+            $this->message .= $this->lang->line("LABEL_SETUP_BUDGET").'<br>';
+        }
+
         if(is_array($crop_type_Post) && sizeof($crop_type_Post)>0)
         {
             foreach($crop_type_Post as $crop_type)

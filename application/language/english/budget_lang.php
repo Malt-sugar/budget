@@ -92,7 +92,7 @@ $lang['LABEL_SALES_COMMISSION_PERCENT']='Sales Commission (%)';
 $lang['LABEL_SALES_BONUS_PERCENT']='Sales Bonus';
 $lang['LABEL_OTHER_INCENTIVE_PERCENT']='Other Incentive';
 
-// Budgeted Purchase
+// Purchase
 
 $lang['LABEL_BUDGETED_PURCHASE']='Budgeted Purchase';
 $lang['LABEL_PI_VALUE']='PI Value';
@@ -105,6 +105,14 @@ $lang['SET_PURCHASE_QUANTITY']='Set Purchase Quantity';
 $lang['LABEL_PURCHASE']='Purchase';
 $lang['SELECT_YEAR']='Select a Year';
 $lang['LABEL_PURCHASE_NO']='Purchase No';
+$lang['LABEL_INPUT_USD_CONVERSION_RATE']='Please Input USD Conversion Rate!';
+$lang['LABEL_INPUT_LC_EXP']='Please Input LC Exp!';
+$lang['LABEL_INPUT_INSURANCE_EXP']='Please Input Insurance Exp!';
+$lang['LABEL_INPUT_PACKING_MATERIAL']='Please Input Packing Material!';
+$lang['LABEL_INPUT_CARRIAGE_INWARDS']='Please Input Carriage Inwards!';
+$lang['LABEL_INPUT_AIR_FREIGHT_AND_DOCS']='Please Input Air Freight and Docs!';
+$lang['LABEL_SET_ACTUAL_PURCHASE_QUANTITY']='Please Set Actual Purchase Quantity';
+$lang['LABEL_SETUP_BUDGET']='Please Setup Budget First!';
 
 // Achievement Bonus Setup
 

@@ -59,16 +59,7 @@ if(is_array($purchases) && sizeof($purchases)>0)
                 <label class="control-label pull-right"><?php echo $this->lang->line('LABEL_USD_CONVERSION_RATE');?><span style="color:#FF0000">*</span></label>
             </div>
             <div class="col-sm-4 col-xs-8">
-                <input type="text" name="usd_conversion_rate" class="form-control validate[required]" value="<?php if(isset($setups['usd_conversion_rate'])){echo $setups['usd_conversion_rate'];}?>" <?php if(isset($setups['usd_conversion_rate']) && strlen($setups['usd_conversion_rate'])>1){echo 'disabled';}?> />
-
-                <?php
-                if(isset($setups['usd_conversion_rate']) && strlen($setups['usd_conversion_rate'])>1)
-                {
-                    ?>
-                    <input type="hidden" name="usd_conversion_rate" value="<?php echo $setups['usd_conversion_rate'];?>" />
-                <?php
-                }
-                ?>
+                <input type="text" name="usd_conversion_rate" class="form-control validate[required] setup_quantity" value="<?php if(isset($setups['usd_conversion_rate'])){echo $setups['usd_conversion_rate'];}?>" />
             </div>
         </div>
 
@@ -77,16 +68,7 @@ if(is_array($purchases) && sizeof($purchases)>0)
                 <label class="control-label pull-right"><?php echo $this->lang->line('LABEL_LC_EXP');?><span style="color:#FF0000">*</span></label>
             </div>
             <div class="col-sm-4 col-xs-8">
-                <input type="text" name="lc_exp" class="form-control validate[required]" value="<?php if(isset($setups['lc_exp'])){echo $setups['lc_exp'];}?>" <?php if(isset($setups['lc_exp']) && strlen($setups['lc_exp'])>1){echo 'disabled';}?> />
-
-                <?php
-                if(isset($setups['lc_exp']) && strlen($setups['lc_exp'])>1)
-                {
-                    ?>
-                    <input type="hidden" name="lc_exp" value="<?php echo $setups['lc_exp'];?>" />
-                <?php
-                }
-                ?>
+                <input type="text" name="lc_exp" class="form-control validate[required] setup_quantity" value="<?php if(isset($setups['lc_exp'])){echo $setups['lc_exp'];}?>" />
             </div>
         </div>
 
@@ -95,16 +77,7 @@ if(is_array($purchases) && sizeof($purchases)>0)
                 <label class="control-label pull-right"><?php echo $this->lang->line('LABEL_INSURANCE_EXP');?><span style="color:#FF0000">*</span></label>
             </div>
             <div class="col-sm-4 col-xs-8">
-                <input type="text" name="insurance_exp" class="form-control validate[required]" value="<?php if(isset($setups['insurance_exp'])){echo $setups['insurance_exp'];}?>" <?php if(isset($setups['insurance_exp']) && strlen($setups['insurance_exp'])>1){echo 'disabled';}?> />
-
-                <?php
-                if(isset($setups['insurance_exp']) && strlen($setups['insurance_exp'])>1)
-                {
-                    ?>
-                    <input type="hidden" name="insurance_exp" value="<?php echo $setups['insurance_exp'];?>" />
-                <?php
-                }
-                ?>
+                <input type="text" name="insurance_exp" class="form-control validate[required] setup_quantity" value="<?php if(isset($setups['insurance_exp'])){echo $setups['insurance_exp'];}?>" />
             </div>
         </div>
 
@@ -113,16 +86,7 @@ if(is_array($purchases) && sizeof($purchases)>0)
                 <label class="control-label pull-right"><?php echo $this->lang->line('LABEL_PACKING_MATERIAL');?><span style="color:#FF0000">*</span></label>
             </div>
             <div class="col-sm-4 col-xs-8">
-                <input type="text" name="packing_material" class="form-control validate[required]" value="<?php if(isset($setups['packing_material'])){echo $setups['packing_material'];}?>" <?php if(isset($setups['packing_material']) && strlen($setups['packing_material'])>1){echo 'disabled';}?> />
-
-                <?php
-                if(isset($setups['packing_material']) && strlen($setups['packing_material'])>1)
-                {
-                    ?>
-                    <input type="hidden" name="packing_material" value="<?php echo $setups['packing_material'];?>" />
-                <?php
-                }
-                ?>
+                <input type="text" name="packing_material" class="form-control validate[required] setup_quantity" value="<?php if(isset($setups['packing_material'])){echo $setups['packing_material'];}?>" />
             </div>
         </div>
 
@@ -131,16 +95,7 @@ if(is_array($purchases) && sizeof($purchases)>0)
                 <label class="control-label pull-right"><?php echo $this->lang->line('LABEL_CARRIAGE_INWARDS');?><span style="color:#FF0000">*</span></label>
             </div>
             <div class="col-sm-4 col-xs-8">
-                <input type="text" name="carriage_inwards" class="form-control validate[required]" value="<?php if(isset($setups['carriage_inwards'])){echo $setups['carriage_inwards'];}?>" <?php if(isset($setups['carriage_inwards']) && strlen($setups['carriage_inwards'])>1){echo 'disabled';}?> />
-
-                <?php
-                if(isset($setups['carriage_inwards']) && strlen($setups['carriage_inwards'])>1)
-                {
-                    ?>
-                    <input type="hidden" name="carriage_inwards" value="<?php echo $setups['carriage_inwards'];?>" />
-                <?php
-                }
-                ?>
+                <input type="text" name="carriage_inwards" class="form-control validate[required] setup_quantity" value="<?php if(isset($setups['carriage_inwards'])){echo $setups['carriage_inwards'];}?>" />
             </div>
         </div>
 
@@ -149,16 +104,7 @@ if(is_array($purchases) && sizeof($purchases)>0)
                 <label class="control-label pull-right"><?php echo $this->lang->line('LABEL_AIR_FREIGHT_AND_DOCS');?><span style="color:#FF0000">*</span></label>
             </div>
             <div class="col-sm-4 col-xs-8">
-                <input type="text" name="air_freight_and_docs" class="form-control validate[required]" value="<?php if(isset($setups['air_freight_and_docs'])){echo $setups['air_freight_and_docs'];}?>" <?php if(isset($setups['air_freight_and_docs']) && strlen($setups['air_freight_and_docs'])>1){echo 'disabled';}?> />
-
-                <?php
-                if(isset($setups['air_freight_and_docs']) && strlen($setups['air_freight_and_docs'])>1)
-                {
-                    ?>
-                    <input type="hidden" name="air_freight_and_docs" value="<?php echo $setups['air_freight_and_docs'];?>" />
-                <?php
-                }
-                ?>
+                <input type="text" name="air_freight_and_docs" class="form-control validate[required] setup_quantity" value="<?php if(isset($setups['air_freight_and_docs'])){echo $setups['air_freight_and_docs'];}?>" />
             </div>
         </div>
     </div>
@@ -487,6 +433,11 @@ if(is_array($purchases) && sizeof($purchases)>0)
         });
 
         $(document).on("keyup", ".variety_quantity", function()
+        {
+            this.value = this.value.replace(/[^0-9\.]/g,'');
+        });
+
+        $(document).on("keyup", ".setup_quantity", function()
         {
             this.value = this.value.replace(/[^0-9\.]/g,'');
         });

@@ -88,6 +88,7 @@ class Actual_purchase extends ROOT_Controller
         $user = User_helper::get_user();
         $data = Array();
         $setup_data = Array();
+        $time = time();
 
         $year_id = $this->input->post('year_id');
         $setup_id = $this->input->post('setup_id');
@@ -119,7 +120,7 @@ class Actual_purchase extends ROOT_Controller
             {
                 // Update setup table
                 $setup_data['modified_by'] = $user->user_id;
-                $setup_data['modification_date'] = time();
+                $setup_data['modification_date'] = $time;
                 Query_helper::update('budget_purchase_setup', $setup_data, array("id ='$setup_id'"));
 
                 // Initial update purchase table
@@ -154,14 +155,14 @@ class Actual_purchase extends ROOT_Controller
                                     $type_id = $data['type_id'];
 
                                     $data['modified_by'] = $user->user_id;
-                                    $data['modification_date'] = time();
+                                    $data['modification_date'] = $time;
                                     $data['status'] = 1;
                                     Query_helper::update('budget_purchase', $data, array("year ='$year'", "setup_id ='$setup_id'", "crop_id ='$crop_id'", "type_id ='$type_id'", "variety_id ='$variety_id'"));
                                 }
                                 else
                                 {
                                     $data['created_by'] = $user->user_id;
-                                    $data['creation_date'] = time();
+                                    $data['creation_date'] = $time;
                                     Query_helper::add('budget_purchase', $data);
                                 }
                             }
@@ -173,7 +174,7 @@ class Actual_purchase extends ROOT_Controller
             {
                 // Setup table new insert.
                 $setup_data['created_by'] = $user->user_id;
-                $setup_data['creation_date'] = time();
+                $setup_data['creation_date'] = $time;
                 $setup_row_id = Query_helper::add('budget_purchase_setup', $setup_data); // getting setup table id.
 
                 foreach($crop_type_Post as $cropTypeKey=>$crop_type)
@@ -192,7 +193,7 @@ class Actual_purchase extends ROOT_Controller
                             {
                                 $data['variety_id'] = $variety_id;
                                 $data['created_by'] = $user->user_id;
-                                $data['creation_date'] = time();
+                                $data['creation_date'] = $time;
 
                                 foreach($detail_type as $type=>$amount)
                                 {
@@ -235,6 +236,14 @@ class Actual_purchase extends ROOT_Controller
         $carriage_inwards = $this->input->post('carriage_inwards');
         $air_freight_and_docs = $this->input->post('air_freight_and_docs');
 
+        $budget_setup = $this->actual_purchase_model->check_budget_setup();
+
+        if(!$budget_setup)
+        {
+            $valid=false;
+            $this->message .= $this->lang->line("LABEL_SETUP_BUDGET").'<br>';
+        }
+
         if(!$year)
         {
             $valid=false;
@@ -244,37 +253,37 @@ class Actual_purchase extends ROOT_Controller
         if(!$usd_conversion_rate)
         {
             $valid=false;
-            $this->message .= $this->lang->line("INPUT_USD_CONVERSION_RATE").'<br>';
+            $this->message .= $this->lang->line("LABEL_INPUT_USD_CONVERSION_RATE").'<br>';
         }
 
         if(!$lc_exp)
         {
             $valid=false;
-            $this->message .= $this->lang->line("INPUT_LC_EXP").'<br>';
+            $this->message .= $this->lang->line("LABEL_INPUT_LC_EXP").'<br>';
         }
 
         if(!$insurance_exp)
         {
             $valid=false;
-            $this->message .= $this->lang->line("INPUT_INSURANCE_EXP").'<br>';
+            $this->message .= $this->lang->line("LABEL_INPUT_INSURANCE_EXP").'<br>';
         }
 
         if(!$packing_material)
         {
             $valid=false;
-            $this->message .= $this->lang->line("INPUT_PACKING_MATERIAL").'<br>';
+            $this->message .= $this->lang->line("LABEL_INPUT_PACKING_MATERIAL").'<br>';
         }
 
         if(!$carriage_inwards)
         {
             $valid=false;
-            $this->message .= $this->lang->line("INPUT_CARRIAGE_INWARDS").'<br>';
+            $this->message .= $this->lang->line("LABEL_INPUT_CARRIAGE_INWARDS").'<br>';
         }
 
         if(!$air_freight_and_docs)
         {
             $valid=false;
-            $this->message .= $this->lang->line("INPUT_AIR_FREIGHT_AND_DOCS").'<br>';
+            $this->message .= $this->lang->line("LABEL_INPUT_AIR_FREIGHT_AND_DOCS").'<br>';
         }
 
         if(is_array($crop_type_Post) && sizeof($crop_type_Post)>0)
@@ -296,7 +305,7 @@ class Actual_purchase extends ROOT_Controller
         if(!$crop_type_Post || !$detail_post)
         {
             $valid=false;
-            $this->message .= $this->lang->line("SET_PURCHASE_QUANTITY").'<br>';
+            $this->message .= $this->lang->line("LABEL_SET_ACTUAL_PURCHASE_QUANTITY").'<br>';
         }
 
         return $valid;

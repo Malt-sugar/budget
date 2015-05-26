@@ -103,4 +103,26 @@ class Actual_purchase_model extends CI_Model
         $result = $this->db->get()->row_array();
         return $result;
     }
+
+    public function check_budget_setup()
+    {
+        $this->db->select('bps.id');
+        $this->db->from('budget_purchase_setup bps');
+        $this->db->where('bps.purchase_type',$this->config->item('purchase_type_budget'));
+        $result1 = $this->db->get()->row_array();
+
+        $this->db->select('bp.id');
+        $this->db->from('budget_purchase bp');
+        $this->db->where('bp.purchase_type',$this->config->item('purchase_type_budget'));
+        $result2 = $this->db->get()->result_array();
+
+        if($result1 && $result2)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
 }

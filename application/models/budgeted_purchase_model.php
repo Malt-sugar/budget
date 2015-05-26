@@ -104,4 +104,21 @@ class Budgeted_purchase_model extends CI_Model
         $result = $this->db->get()->row_array();
         return $result['id'];
     }
+
+    public function check_budget_setup()
+    {
+        $this->db->select('bps.id');
+        $this->db->from('budget_purchase_setup bps');
+        $this->db->where('bps.purchase_type',$this->config->item('purchase_type_budget'));
+        $result = $this->db->get()->row_array();
+
+        if($result)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
 }
