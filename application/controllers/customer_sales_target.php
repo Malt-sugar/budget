@@ -189,7 +189,6 @@ class Customer_sales_target extends ROOT_Controller
                                         unset($data['discarded_by']);
                                     }
 
-
                                     $data['modified_by'] = $user->user_id;
                                     $data['modification_date'] = time();
                                     $data['status'] = 1;
@@ -205,11 +204,14 @@ class Customer_sales_target extends ROOT_Controller
                                         if($user->budget_group == $this->config->item('user_group_zone'))
                                         {
                                             $data['is_approved_by_zi'] = 1;
+                                            $data['is_approved_by_di'] = 0;
+                                            $data['is_approved_by_hom'] = 0;
                                         }
                                         elseif($user->budget_group == $this->config->item('user_group_division'))
                                         {
                                             $data['is_approved_by_zi'] = 1;
                                             $data['is_approved_by_di'] = 1;
+                                            $data['is_approved_by_hom'] = 0;
                                         }
                                         elseif($user->budget_group == $this->config->item('user_group_marketing'))
                                         {
@@ -217,6 +219,12 @@ class Customer_sales_target extends ROOT_Controller
                                             $data['is_approved_by_di'] = 1;
                                             $data['is_approved_by_hom'] = 1;
                                         }
+                                    }
+                                    else
+                                    {
+                                        unset($data['is_approved_by_zi']);
+                                        unset($data['is_approved_by_di']);
+                                        unset($data['is_approved_by_hom']);
                                     }
 
                                     $data['created_by'] = $user->user_id;

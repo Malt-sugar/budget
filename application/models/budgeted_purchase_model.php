@@ -121,4 +121,21 @@ class Budgeted_purchase_model extends CI_Model
             return false;
         }
     }
+
+    public function check_budget_purchase_year_existence($year)
+    {
+        $this->db->from('budget_purchase bp');
+        $this->db->select('bp.*');
+        $this->db->where('bp.year', $year);
+        $results = $this->db->get()->result_array();
+
+        if($results)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
 }

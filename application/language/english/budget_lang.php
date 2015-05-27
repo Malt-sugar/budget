@@ -113,6 +113,7 @@ $lang['LABEL_INPUT_CARRIAGE_INWARDS']='Please Input Carriage Inwards!';
 $lang['LABEL_INPUT_AIR_FREIGHT_AND_DOCS']='Please Input Air Freight and Docs!';
 $lang['LABEL_SET_ACTUAL_PURCHASE_QUANTITY']='Please Set Actual Purchase Quantity';
 $lang['LABEL_SETUP_BUDGET']='Please Setup Budget First!';
+$lang['BUDGET_PURCHASE_SET_ALREADY']='Budget Purchase Set Already!';
 
 // Achievement Bonus Setup
 

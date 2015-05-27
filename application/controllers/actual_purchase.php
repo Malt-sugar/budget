@@ -250,41 +250,41 @@ class Actual_purchase extends ROOT_Controller
             $this->message .= $this->lang->line("SELECT_YEAR").'<br>';
         }
 
-        if(!$usd_conversion_rate)
-        {
-            $valid=false;
-            $this->message .= $this->lang->line("LABEL_INPUT_USD_CONVERSION_RATE").'<br>';
-        }
-
-        if(!$lc_exp)
-        {
-            $valid=false;
-            $this->message .= $this->lang->line("LABEL_INPUT_LC_EXP").'<br>';
-        }
-
-        if(!$insurance_exp)
-        {
-            $valid=false;
-            $this->message .= $this->lang->line("LABEL_INPUT_INSURANCE_EXP").'<br>';
-        }
-
-        if(!$packing_material)
-        {
-            $valid=false;
-            $this->message .= $this->lang->line("LABEL_INPUT_PACKING_MATERIAL").'<br>';
-        }
-
-        if(!$carriage_inwards)
-        {
-            $valid=false;
-            $this->message .= $this->lang->line("LABEL_INPUT_CARRIAGE_INWARDS").'<br>';
-        }
-
-        if(!$air_freight_and_docs)
-        {
-            $valid=false;
-            $this->message .= $this->lang->line("LABEL_INPUT_AIR_FREIGHT_AND_DOCS").'<br>';
-        }
+//        if(!$usd_conversion_rate)
+//        {
+//            $valid=false;
+//            $this->message .= $this->lang->line("LABEL_INPUT_USD_CONVERSION_RATE").'<br>';
+//        }
+//
+//        if(!$lc_exp)
+//        {
+//            $valid=false;
+//            $this->message .= $this->lang->line("LABEL_INPUT_LC_EXP").'<br>';
+//        }
+//
+//        if(!$insurance_exp)
+//        {
+//            $valid=false;
+//            $this->message .= $this->lang->line("LABEL_INPUT_INSURANCE_EXP").'<br>';
+//        }
+//
+//        if(!$packing_material)
+//        {
+//            $valid=false;
+//            $this->message .= $this->lang->line("LABEL_INPUT_PACKING_MATERIAL").'<br>';
+//        }
+//
+//        if(!$carriage_inwards)
+//        {
+//            $valid=false;
+//            $this->message .= $this->lang->line("LABEL_INPUT_CARRIAGE_INWARDS").'<br>';
+//        }
+//
+//        if(!$air_freight_and_docs)
+//        {
+//            $valid=false;
+//            $this->message .= $this->lang->line("LABEL_INPUT_AIR_FREIGHT_AND_DOCS").'<br>';
+//        }
 
         if(is_array($crop_type_Post) && sizeof($crop_type_Post)>0)
         {

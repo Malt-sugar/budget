@@ -242,6 +242,16 @@ class Budgeted_purchase extends ROOT_Controller
             $this->message .= $this->lang->line("SELECT_YEAR").'<br>';
         }
 
+        if(strlen($this->input->post('year_id'))==1)
+        {
+            $existence = $this->budgeted_purchase_model->check_budget_purchase_existence($year);
+            if($existence)
+            {
+                $valid=false;
+                $this->message .= $this->lang->line("BUDGET_PURCHASE_SET_ALREADY").'<br>';
+            }
+        }
+
         return $valid;
     }
 
@@ -265,6 +275,25 @@ class Budgeted_purchase extends ROOT_Controller
         {
             $ajax['status'] = true;
             $ajax['content'][]=array("id"=>'#variety'.$current_id,"html"=>"<label class='label label-danger'>".$this->lang->line('NO_VARIETY_EXIST')."</label>","",true);
+            $this->jsonReturn($ajax);
+        }
+    }
+
+    public function check_budget_purchase_this_year()
+    {
+        $year = $this->input->post('year');
+
+        $existence = $this->budgeted_purchase_model->check_budget_purchase_existence($year);
+
+        if($existence)
+        {
+            $ajax['status'] = false;
+            $ajax['message'] = $this->lang->line("BUDGET_PURCHASE_SET_ALREADY");
+            $this->jsonReturn($ajax);
+        }
+        else
+        {
+            $ajax['status'] = true;
             $this->jsonReturn($ajax);
         }
     }

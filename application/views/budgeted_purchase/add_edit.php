@@ -376,6 +376,28 @@ if(is_array($purchases) && sizeof($purchases)>0)
             }
         });
 
+
+        $(document).on("change","#year",function()
+        {
+            if($(this).val().length>0)
+            {
+                $.ajax({
+                    url: base_url+"budgeted_purchase/check_budget_purchase_this_year/",
+                    type: 'POST',
+                    dataType: "JSON",
+                    data:{year:$(this).val()},
+                    success: function (data, status)
+                    {
+
+                    },
+                    error: function (xhr, desc, err)
+                    {
+                        console.log("error");
+                    }
+                });
+            }
+        });
+
         $(document).on("keyup", ".variety_quantity", function()
         {
             this.value = this.value.replace(/[^0-9\.]/g,'');
