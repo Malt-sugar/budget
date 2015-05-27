@@ -139,7 +139,7 @@ class Approval_sales_target_hom extends ROOT_Controller
                             {
                                 $existing_quantity = $this->budget_common_model->get_existing_quantity($year, $customer, $data['crop_id'], $data['type_id'], $variety_id);
 
-                                if($existing_quantity==0 && $amount>0)
+                                if($existing_quantity != $amount)
                                 {
                                     if($user->budget_group==$this->config->item('user_group_territory'))
                                     {
@@ -165,12 +165,12 @@ class Approval_sales_target_hom extends ROOT_Controller
                                         $data['is_approved_by_di'] = 1;
                                         $data['is_approved_by_hom'] = 1;
                                     }
-                                    else
-                                    {
-                                        unset($data['is_approved_by_zi']);
-                                        unset($data['is_approved_by_di']);
-                                        unset($data['is_approved_by_hom']);
-                                    }
+                                }
+                                else
+                                {
+                                    unset($data['is_approved_by_zi']);
+                                    unset($data['is_approved_by_di']);
+                                    unset($data['is_approved_by_hom']);
                                 }
 
                                 if($amount==0 && $existing_quantity>0)

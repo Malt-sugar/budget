@@ -25,11 +25,11 @@ if(is_array($targets) && sizeof($targets)>0)
         $arranged_targets['crop'][$target['crop_id']][$target['type_id']]['variety'][$target['variety_id']]['created_by'] = $target['created_by'];
         $arranged_targets['crop'][$target['crop_id']][$target['type_id']]['variety'][$target['variety_id']]['discarded_by'] = $target['discarded_by'];
         $arranged_targets['crop'][$target['crop_id']][$target['type_id']]['variety'][$target['variety_id']]['discard'] = $target['discard'];
-
     }
 }
 
 ?>
+
 <form class="form_valid" id="save_form" action="<?php echo base_url();?>approval_sales_target_zi/index/save" method="post">
     <input type="hidden" name="customer_id" value="<?php if(isset($arranged_targets['customer_id'])){echo $arranged_targets['customer_id'];}else{echo 0;}?>" />
     <input type="hidden" name="year_id" value="<?php if(isset($arranged_targets['year'])){echo $arranged_targets['year'];}else{echo 0;}?>" />
