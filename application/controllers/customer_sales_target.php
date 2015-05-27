@@ -142,7 +142,7 @@ class Customer_sales_target extends ROOT_Controller
 
                                 if(in_array($variety_id, $existing_varieties))
                                 {
-                                    $existing_quantity = $this->customer_sales_target_model->get_existing_quantity($year, $customer, $data['crop_id'], $data['type_id'], $variety_id);
+                                    $existing_quantity = $this->budget_common_model->get_existing_quantity($year, $customer, $data['crop_id'], $data['type_id'], $variety_id);
 
                                     if($existing_quantity==0 && $amount>0)
                                     {
@@ -178,19 +178,17 @@ class Customer_sales_target extends ROOT_Controller
                                         }
                                     }
 
-                                    if($amount==0)
+                                    if($amount==0 && $existing_quantity>0)
                                     {
-                                        if($existing_quantity>0)
-                                        {
-                                            $data['discard'] = 1;
-                                            $data['discarded_by'] = $user->user_id;
-                                        }
-                                        else
-                                        {
-                                            unset($data['discard']);
-                                            unset($data['discarded_by']);
-                                        }
+                                        $data['discard'] = 1;
+                                        $data['discarded_by'] = $user->user_id;
                                     }
+                                    else
+                                    {
+                                        unset($data['discard']);
+                                        unset($data['discarded_by']);
+                                    }
+
 
                                     $data['modified_by'] = $user->user_id;
                                     $data['modification_date'] = time();

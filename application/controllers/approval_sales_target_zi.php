@@ -142,6 +142,53 @@ class Approval_sales_target_zi extends ROOT_Controller
 
                                 if(in_array($variety_id, $existing_varieties))
                                 {
+                                    $existing_quantity = $this->budget_common_model->get_existing_quantity($year, $customer, $data['crop_id'], $data['type_id'], $variety_id);
+
+                                    if($existing_quantity==0 && $amount>0)
+                                    {
+                                        if($user->budget_group==$this->config->item('user_group_territory'))
+                                        {
+                                            $data['is_approved_by_zi'] = 0;
+                                            $data['is_approved_by_di'] = 0;
+                                            $data['is_approved_by_hom'] = 0;
+                                        }
+                                        elseif($user->budget_group==$this->config->item('user_group_zone'))
+                                        {
+                                            $data['is_approved_by_zi'] = 1;
+                                            $data['is_approved_by_di'] = 0;
+                                            $data['is_approved_by_hom'] = 0;
+                                        }
+                                        elseif($user->budget_group==$this->config->item('user_group_division'))
+                                        {
+                                            $data['is_approved_by_zi'] = 1;
+                                            $data['is_approved_by_di'] = 1;
+                                            $data['is_approved_by_hom'] = 0;
+                                        }
+                                        elseif($user->budget_group==$this->config->item('user_group_marketing'))
+                                        {
+                                            $data['is_approved_by_zi'] = 1;
+                                            $data['is_approved_by_di'] = 1;
+                                            $data['is_approved_by_hom'] = 1;
+                                        }
+                                        else
+                                        {
+                                            unset($data['is_approved_by_zi']);
+                                            unset($data['is_approved_by_di']);
+                                            unset($data['is_approved_by_hom']);
+                                        }
+                                    }
+
+                                    if($amount==0 && $existing_quantity>0)
+                                    {
+                                        $data['discard'] = 1;
+                                        $data['discarded_by'] = $user->user_id;
+                                    }
+                                    else
+                                    {
+                                        unset($data['discard']);
+                                        unset($data['discarded_by']);
+                                    }
+
                                     $data['modified_by'] = $user->user_id;
                                     $data['modification_date'] = time();
                                     $data['status'] = 1;
