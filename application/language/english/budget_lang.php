@@ -84,6 +84,7 @@ $lang['LABEL_AIR_FREIGHT_AND_DOCS']='Air Freight & Docs (%)';
 // Sales Prediction Setup
 
 $lang['LABEL_SALES_PREDICTION_SETUP']='Sales Prediction Setup';
+$lang['LABEL_SALES_PREDICTION']='Sales Prediction';
 $lang['LABEL_HO_AND_GENERAL_EXP_PERCENT']='H.O & General Exp (%)';
 $lang['LABEL_MARKETING_PERCENT']='Marketing (%)';
 $lang['LABEL_FINANCE_COST_PERCENT']='Finance Cost (%)';

@@ -229,12 +229,12 @@ class Actual_purchase extends ROOT_Controller
         $detail_post = $this->input->post('detail');
 
         $year = $this->input->post('year');
-        $usd_conversion_rate = $this->input->post('usd_conversion_rate');
-        $lc_exp = $this->input->post('lc_exp');
-        $insurance_exp = $this->input->post('insurance_exp');
-        $packing_material = $this->input->post('packing_material');
-        $carriage_inwards = $this->input->post('carriage_inwards');
-        $air_freight_and_docs = $this->input->post('air_freight_and_docs');
+//        $usd_conversion_rate = $this->input->post('usd_conversion_rate');
+//        $lc_exp = $this->input->post('lc_exp');
+//        $insurance_exp = $this->input->post('insurance_exp');
+//        $packing_material = $this->input->post('packing_material');
+//        $carriage_inwards = $this->input->post('carriage_inwards');
+//        $air_freight_and_docs = $this->input->post('air_freight_and_docs');
 
         $budget_setup = $this->actual_purchase_model->check_budget_setup();
 
