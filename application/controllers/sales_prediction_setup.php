@@ -65,13 +65,13 @@ class Sales_prediction_setup extends ROOT_Controller
 
         if(strlen($year)>1)
         {
-            $data['purchases'] = $this->sales_prediction_setup_model->get_purchase_detail($year);
+            $data['predictions'] = $this->sales_prediction_setup_model->get_prediction_detail($year);
             $data['title'] = "Edit Sales Prediction Setup";
             $ajax['page_url']=base_url()."sales_prediction_setup/index/edit/";
         }
         else
         {
-            $data['purchases'] = array();
+            $data['predictions'] = array();
             $data['title'] = "Sales Prediction Setup";
             $ajax['page_url'] = base_url()."sales_prediction_setup/index/add";
         }
@@ -101,7 +101,7 @@ class Sales_prediction_setup extends ROOT_Controller
             $crop_type_Post = $this->input->post('purchase');
             $detail_post = $this->input->post('detail');
             $year = $this->input->post('year');
-            $setup_id = $this->sales_prediction_setup_model->get_budget_setup_id();
+            $setup_id = $this->sales_prediction_setup_model->get_budget_setup_id($year);
 
             if(strlen($year_id)>1)
             {
@@ -279,15 +279,15 @@ class Sales_prediction_setup extends ROOT_Controller
         }
     }
 
-    public function check_budget_purchase_this_year()
+    public function check_sales_prediction_this_year()
     {
         $year = $this->input->post('year');
-        $existence = $this->sales_prediction_setup_model->check_budget_purchase_existence($year);
+        $existence = $this->sales_prediction_setup_model->check_sales_prediction_existence($year);
 
         if($existence)
         {
             $ajax['status'] = false;
-            $ajax['message'] = $this->lang->line("BUDGET_PURCHASE_SET_ALREADY");
+            $ajax['message'] = $this->lang->line("PREDICTION_SETUP_ALREADY_DONE");
             $this->jsonReturn($ajax);
         }
         else

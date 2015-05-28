@@ -5,24 +5,30 @@
     $data["hide_approve"]="1";
     $this->load->view("action_buttons_edit",$data);
 
+//print_r($predictions);
 
-$arranged_purchase = array();
+$arranged_prediction = array();
 
-if(is_array($purchases) && sizeof($purchases)>0)
+if(is_array($predictions) && sizeof($predictions)>0)
 {
-    foreach($purchases as $purchase)
+    foreach($predictions as $prediction)
     {
-        $arranged_purchase['year'] = $purchase['year'];
-        $arranged_purchase['crop'][$purchase['crop_id']][$purchase['type_id']]['variety'][$purchase['variety_id']]['variety_name'] = $purchase['variety_name'];
-        $arranged_purchase['crop'][$purchase['crop_id']][$purchase['type_id']]['variety'][$purchase['variety_id']]['purchase_quantity'] = $purchase['purchase_quantity'];
-        $arranged_purchase['crop'][$purchase['crop_id']][$purchase['type_id']]['variety'][$purchase['variety_id']]['price_per_kg'] = $purchase['price_per_kg'];
-        $arranged_purchase['crop'][$purchase['crop_id']][$purchase['type_id']]['variety'][$purchase['variety_id']]['created_by'] = $purchase['created_by'];
+        $arranged_prediction['year'] = $prediction['year'];
+        $arranged_prediction['ho_and_general_exp'] = $prediction['ho_and_general_exp'];
+        $arranged_prediction['marketing'] = $prediction['marketing'];
+        $arranged_prediction['finance_cost'] = $prediction['finance_cost'];
+        $arranged_prediction['crop'][$prediction['crop_id']][$prediction['type_id']]['variety'][$prediction['variety_id']]['variety_name'] = $prediction['variety_name'];
+        $arranged_prediction['crop'][$prediction['crop_id']][$prediction['type_id']]['variety'][$prediction['variety_id']]['targeted_profit'] = $prediction['targeted_profit'];
+        $arranged_prediction['crop'][$prediction['crop_id']][$prediction['type_id']]['variety'][$prediction['variety_id']]['sales_commission'] = $prediction['sales_commission'];
+        $arranged_prediction['crop'][$prediction['crop_id']][$prediction['type_id']]['variety'][$prediction['variety_id']]['sales_bonus'] = $prediction['sales_bonus'];
+        $arranged_prediction['crop'][$prediction['crop_id']][$prediction['type_id']]['variety'][$prediction['variety_id']]['other_incentive'] = $prediction['other_incentive'];
+        $arranged_prediction['crop'][$prediction['crop_id']][$prediction['type_id']]['variety'][$prediction['variety_id']]['created_by'] = $prediction['created_by'];
     }
 }
 
 ?>
 <form class="form_valid" id="save_form" action="<?php echo base_url();?>sales_prediction_setup/index/save" method="post">
-    <input type="hidden" name="year_id" value="<?php if(isset($arranged_purchase['year'])){echo $arranged_purchase['year'];}else{echo 0;}?>" />
+    <input type="hidden" name="year_id" value="<?php if(isset($arranged_prediction['year'])){echo $arranged_prediction['year'];}else{echo 0;}?>" />
     <div class="row widget">
         <div class="widget-header">
             <div class="title">
@@ -36,16 +42,67 @@ if(is_array($purchases) && sizeof($purchases)>0)
                 <label class="control-label pull-right"><?php echo $this->lang->line('LABEL_YEAR');?><span style="color:#FF0000">*</span></label>
             </div>
             <div class="col-sm-4 col-xs-8">
-                <select name="year" id="year" class="form-control validate[required]" <?php if(isset($arranged_purchase['year']) && strlen($arranged_purchase['year'])>1){echo 'disabled';}?>>
+                <select name="year" id="year" class="form-control validate[required]" <?php if(isset($arranged_prediction['year']) && strlen($arranged_prediction['year'])>1){echo 'disabled';}?>>
                     <?php
-                    $this->load->view('dropdown',array('drop_down_options'=>$years,'drop_down_selected'=>isset($arranged_purchase['year'])?$arranged_purchase['year']:''));
+                    $this->load->view('dropdown',array('drop_down_options'=>$years,'drop_down_selected'=>isset($arranged_prediction['year'])?$arranged_prediction['year']:''));
                     ?>
                 </select>
                 <?php
-                if(isset($arranged_purchase['year']) && strlen($arranged_purchase['year'])>1)
+                if(isset($arranged_prediction['year']) && strlen($arranged_prediction['year'])>1)
                 {
                     ?>
-                    <input type="hidden" name="year" value="<?php echo $arranged_purchase['year'];?>" />
+                    <input type="hidden" name="year" value="<?php echo $arranged_prediction['year'];?>" />
+                <?php
+                }
+                ?>
+            </div>
+        </div>
+
+        <div class="row show-grid">
+            <div class="col-xs-4">
+                <label class="control-label pull-right"><?php echo $this->lang->line('LABEL_HO_AND_GENERAL_EXP_PERCENT');?><span style="color:#FF0000">*</span></label>
+            </div>
+            <div class="col-sm-4 col-xs-8">
+                <input type="text" name="ho_and_general_exp" class="form-control quantity_number validate[required]" value="<?php if(isset($arranged_prediction['ho_and_general_exp'])){echo $arranged_prediction['ho_and_general_exp'];}?>" <?php if(isset($arranged_prediction['ho_and_general_exp'])){echo 'disabled';}?> />
+                <?php
+                if(isset($arranged_prediction['ho_and_general_exp']))
+                {
+                    ?>
+                    <input type="hidden" name="ho_and_general_exp" value="<?php echo $arranged_prediction['ho_and_general_exp'];?>" />
+                <?php
+                }
+                ?>
+            </div>
+        </div>
+
+        <div class="row show-grid">
+            <div class="col-xs-4">
+                <label class="control-label pull-right"><?php echo $this->lang->line('LABEL_MARKETING_PERCENT');?><span style="color:#FF0000">*</span></label>
+            </div>
+            <div class="col-sm-4 col-xs-8">
+                <input type="text" name="marketing" class="form-control quantity_number validate[required]" value="<?php if(isset($arranged_prediction['marketing'])){echo $arranged_prediction['marketing'];}?>" <?php if(isset($arranged_prediction['marketing'])){echo 'disabled';}?> />
+                <?php
+                if(isset($arranged_prediction['marketing']))
+                {
+                    ?>
+                    <input type="hidden" name="marketing" value="<?php echo $arranged_prediction['marketing'];?>" />
+                <?php
+                }
+                ?>
+            </div>
+        </div>
+
+        <div class="row show-grid">
+            <div class="col-xs-4">
+                <label class="control-label pull-right"><?php echo $this->lang->line('LABEL_FINANCE_COST_PERCENT');?><span style="color:#FF0000">*</span></label>
+            </div>
+            <div class="col-sm-4 col-xs-8">
+                <input type="text" name="finance_cost" class="form-control quantity_number validate[required]" value="<?php if(isset($arranged_prediction['finance_cost'])){echo $arranged_prediction['finance_cost'];}?>" <?php if(isset($arranged_prediction['finance_cost'])){echo 'disabled';}?> />
+                <?php
+                if(isset($arranged_prediction['finance_cost']))
+                {
+                    ?>
+                    <input type="hidden" name="finance_cost" value="<?php echo $arranged_prediction['finance_cost'];?>" />
                 <?php
                 }
                 ?>
@@ -55,10 +112,10 @@ if(is_array($purchases) && sizeof($purchases)>0)
 
     <div id="budget_add_more_container">
     <?php
-    if(isset($arranged_purchase['crop']))
+    if(isset($arranged_prediction['crop']))
     {
         $sl = 0;
-        foreach($arranged_purchase['crop'] as $key=>$crop)
+        foreach($arranged_prediction['crop'] as $key=>$crop)
         {
             foreach($crop as $typeKey=>$typeVal)
             {
@@ -151,16 +208,16 @@ if(is_array($purchases) && sizeof($purchases)>0)
                                                     <tr>
                                                         <td><?php echo $detail['variety_name']?></td>
                                                         <td>
-                                                            <input type="text" class="form-control variety_quantity" name="detail[<?php echo $sl;?>][<?php echo $varKey;?>][purchase_quantity]" value="<?php if(isset($detail['purchase_quantity'])){echo $detail['purchase_quantity'];}?>" />
+                                                            <input type="text" class="form-control quantity_number" name="detail[<?php echo $sl;?>][<?php echo $varKey;?>][targeted_profit]" value="<?php if(isset($detail['targeted_profit'])){echo $detail['targeted_profit'];}?>" />
                                                         </td>
                                                         <td>
-                                                            <input type="text" class="form-control variety_quantity" name="detail[<?php echo $sl;?>][<?php echo $varKey;?>][price_per_kg]" value="<?php if(isset($detail['price_per_kg'])){echo $detail['price_per_kg'];}?>" />
+                                                            <input type="text" class="form-control quantity_number" name="detail[<?php echo $sl;?>][<?php echo $varKey;?>][sales_commission]" value="<?php if(isset($detail['sales_commission'])){echo $detail['sales_commission'];}?>" />
                                                         </td>
                                                         <td>
-                                                            <input type="text" class="form-control variety_quantity" name="detail[<?php echo $sl;?>][<?php echo $varKey;?>][price_per_kg]" value="<?php if(isset($detail['price_per_kg'])){echo $detail['price_per_kg'];}?>" />
+                                                            <input type="text" class="form-control quantity_number" name="detail[<?php echo $sl;?>][<?php echo $varKey;?>][sales_bonus]" value="<?php if(isset($detail['sales_bonus'])){echo $detail['sales_bonus'];}?>" />
                                                         </td>
                                                         <td>
-                                                            <input type="text" class="form-control variety_quantity" name="detail[<?php echo $sl;?>][<?php echo $varKey;?>][price_per_kg]" value="<?php if(isset($detail['price_per_kg'])){echo $detail['price_per_kg'];}?>" />
+                                                            <input type="text" class="form-control quantity_number" name="detail[<?php echo $sl;?>][<?php echo $varKey;?>][other_incentive]" value="<?php if(isset($detail['other_incentive'])){echo $detail['other_incentive'];}?>" />
                                                         </td>
                                                     </tr>
                                                 <?php
@@ -385,7 +442,7 @@ if(is_array($purchases) && sizeof($purchases)>0)
             if($(this).val().length>0)
             {
                 $.ajax({
-                    url: base_url+"sales_prediction_setup/check_budget_purchase_this_year/",
+                    url: base_url+"sales_prediction_setup/check_sales_prediction_this_year/",
                     type: 'POST',
                     dataType: "JSON",
                     data:{year:$(this).val()},
@@ -401,23 +458,9 @@ if(is_array($purchases) && sizeof($purchases)>0)
             }
         });
 
-        $(document).on("keyup", ".variety_quantity", function()
+        $(document).on("keyup", ".quantity_number", function()
         {
             this.value = this.value.replace(/[^0-9\.]/g,'');
-        });
-
-        $(document).on("keyup", ".variety_price_per_kg", function()
-        {
-            this.value = this.value.replace(/[^0-9\.]/g,'');
-        });
-
-        $(document).on("blur", ".variety_price_per_kg", function()
-        {
-            var quantity = parseInt($(this).parent().parent().find('.variety_quantity').val());
-            var price_per_kg = parseFloat($(this).val());
-            var total = Math.round(quantity*price_per_kg*100)/100;
-
-            $(this).parent().parent().find('.variety_total_quantity').val(total);
         });
     });
 </script>

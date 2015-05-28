@@ -43,9 +43,9 @@ class Sales_prediction_setup_model extends CI_Model
 
     public function check_budget_purchase_existence()
     {
-        $this->db->select('bp.*');
-        $this->db->from('budget_purchase bp');
-        $this->db->where('bp.purchase_type',$this->config->item('purchase_type_budget'));
+        $this->db->select('bsp.*');
+        $this->db->from('budget_sales_prediction bsp');
+        $this->db->where('bsp.prediction_phase',$this->config->item('prediction_phase_initial'));
         $results = $this->db->get()->result_array();
         if($results)
         {
@@ -57,16 +57,18 @@ class Sales_prediction_setup_model extends CI_Model
         }
     }
 
-    public function get_purchase_detail($year)
+    public function get_prediction_detail($year)
     {
-        $this->db->from('budget_purchase bp');
-        $this->db->select('bp.*');
+        $this->db->from('budget_sales_prediction bsp');
+        $this->db->select('bsp.*');
+        $this->db->select('bsps.ho_and_general_exp, bsps.marketing, bsps.finance_cost');
         $this->db->select('avi.varriety_name variety_name');
-        $this->db->where('bp.year', $year);
-        $this->db->where('bp.purchase_type',$this->config->item('purchase_type_budget'));
-        $this->db->where('bp.status',$this->config->item('status_active'));
+        $this->db->where('bsp.year', $year);
+        $this->db->where('bsp.prediction_phase',$this->config->item('prediction_phase_initial'));
+        $this->db->where('bsp.status',$this->config->item('status_active'));
 
-        $this->db->join('ait_varriety_info avi', 'avi.varriety_id = bp.variety_id', 'left');
+        $this->db->join('ait_varriety_info avi', 'avi.varriety_id = bsp.variety_id', 'left');
+        $this->db->join('budget_sales_prediction_setup bsps', 'bsps.year = bsp.year', 'left');
         $results = $this->db->get()->result_array();
         return $results;
     }
@@ -83,10 +85,10 @@ class Sales_prediction_setup_model extends CI_Model
 
     public function get_existing_varieties($year)
     {
-        $this->db->from('budget_purchase bp');
-        $this->db->select('bp.*');
-        $this->db->where('bp.year', $year);
-        $this->db->where('bp.purchase_type',$this->config->item('purchase_type_budget'));
+        $this->db->from('budget_sales_prediction bsp');
+        $this->db->select('bsp.*');
+        $this->db->where('bsp.year', $year);
+        $this->db->where('bsp.prediction_phase',$this->config->item('prediction_phase_initial'));
         $results = $this->db->get()->result_array();
         foreach($results as $result)
         {
@@ -96,11 +98,11 @@ class Sales_prediction_setup_model extends CI_Model
         return $varieties;
     }
 
-    public function get_budget_setup_id()
+    public function get_prediction_setup_id($year)
     {
-        $this->db->select('bps.id');
-        $this->db->from('budget_purchase_setup bps');
-        $this->db->where('bps.purchase_type',$this->config->item('purchase_type_budget'));
+        $this->db->select('bsps.id');
+        $this->db->from('budget_sales_prediction_setup bsps');
+        $this->db->where('bsps.year',$year);
         $result = $this->db->get()->row_array();
         return $result['id'];
     }
@@ -122,14 +124,14 @@ class Sales_prediction_setup_model extends CI_Model
         }
     }
 
-    public function check_budget_purchase_year_existence($year)
+    public function check_sales_prediction_existence($year)
     {
-        $this->db->from('budget_purchase bp');
-        $this->db->select('bp.*');
-        $this->db->where('bp.year', $year);
-        $results = $this->db->get()->result_array();
+        $this->db->from('budget_sales_prediction_setup bsps');
+        $this->db->select('bsps.*');
+        $this->db->where('bsps.year', $year);
+        $result = $this->db->get()->row_array();
 
-        if($results)
+        if($result)
         {
             return true;
         }

@@ -92,6 +92,7 @@ $lang['LABEL_TARGETED_PROFIT_PERCENT']='Targeted Profit (%)';
 $lang['LABEL_SALES_COMMISSION_PERCENT']='Sales Commission (%)';
 $lang['LABEL_SALES_BONUS_PERCENT']='Sales Bonus';
 $lang['LABEL_OTHER_INCENTIVE_PERCENT']='Other Incentive';
+$lang['PREDICTION_SETUP_ALREADY_DONE']='Sales Prediction Setup Already Done This Year!';
 
 // Purchase
 
