@@ -42,7 +42,7 @@ class Sales_prediction_setup extends ROOT_Controller
             $page=$page-1;
         }
 
-        $data['purchases'] = $this->sales_prediction_setup_model->get_prediction_year_info($page);
+        $data['predictions'] = $this->sales_prediction_setup_model->get_prediction_year_info($page);
         $data['title']="Sales Prediction Setup List";
 
         $ajax['status']=true;
@@ -85,8 +85,10 @@ class Sales_prediction_setup extends ROOT_Controller
     public function budget_save()
     {
         $user = User_helper::get_user();
-        $data = Array();
+        $data = array();
+        $setup_data = array();
         $year_id = $this->input->post('year_id');
+        $time = time();
 
         if(!$this->check_validation())
         {
@@ -98,16 +100,24 @@ class Sales_prediction_setup extends ROOT_Controller
         {
             $this->db->trans_start();  //DB Transaction Handle START
 
-            $crop_type_Post = $this->input->post('purchase');
+            $crop_type_Post = $this->input->post('prediction');
             $detail_post = $this->input->post('detail');
             $year = $this->input->post('year');
-            $setup_id = $this->sales_prediction_setup_model->get_budget_setup_id($year);
+
+            $setup_data['year'] = $year;
+            $setup_data['ho_and_general_exp'] = $this->input->post('ho_and_general_exp');
+            $setup_data['marketing'] = $this->input->post('marketing');
+            $setup_data['finance_cost'] = $this->input->post('finance_cost');
 
             if(strlen($year_id)>1)
             {
+                $setup_data['modified_by'] = $user->user_id;
+                $setup_data['modification_date'] = $time;
+                Query_helper::update('budget_sales_prediction_setup', $setup_data, array("year ='$year_id'"));
+
                 // Initial update
                 $update_status = array('status'=>0);
-                Query_helper::update('budget_purchase',$update_status,array("year ='$year'"));
+                Query_helper::update('budget_sales_prediction',$update_status,array("year ='$year'"));
                 $existing_varieties = $this->sales_prediction_setup_model->get_existing_varieties($year);
 
                 foreach($crop_type_Post as $cropTypeKey=>$crop_type)
@@ -117,8 +127,11 @@ class Sales_prediction_setup extends ROOT_Controller
                         if($detailKey==$cropTypeKey)
                         {
                             $data['year'] = $year;
-                            $data['purchase_type'] = $this->config->item('purchase_type_budget');
-                            $data['setup_id'] = $setup_id;
+                            $data['prediction_phase'] = $this->config->item('prediction_phase_initial');
+                            $data['targeted_profit'] = $this->input->post('targeted_profit');
+                            $data['sales_commission'] = $this->input->post('sales_commission');
+                            $data['sales_bonus'] = $this->input->post('sales_bonus');
+                            $data['other_incentive'] = $this->input->post('other_incentive');
                             $data['crop_id'] = $crop_type['crop'];
                             $data['type_id'] = $crop_type['type'];
 
@@ -139,13 +152,13 @@ class Sales_prediction_setup extends ROOT_Controller
                                     $data['modified_by'] = $user->user_id;
                                     $data['modification_date'] = time();
                                     $data['status'] = 1;
-                                    Query_helper::update('budget_purchase', $data, array("year ='$year'", "crop_id ='$crop_id'", "type_id ='$type_id'", "variety_id ='$variety_id'"));
+                                    Query_helper::update('budget_sales_prediction', $data, array("year ='$year'", "crop_id ='$crop_id'", "type_id ='$type_id'", "variety_id ='$variety_id'"));
                                 }
                                 else
                                 {
                                     $data['created_by'] = $user->user_id;
                                     $data['creation_date'] = time();
-                                    Query_helper::add('budget_purchase', $data);
+                                    Query_helper::add('budget_sales_prediction', $data);
                                 }
                             }
                         }
@@ -154,6 +167,10 @@ class Sales_prediction_setup extends ROOT_Controller
             }
             else
             {
+                $setup_data['created_by'] = $user->user_id;
+                $setup_data['creation_date'] = $time;
+                Query_helper::add('budget_sales_prediction_setup', $setup_data);
+
                 foreach($crop_type_Post as $cropTypeKey=>$crop_type)
                 {
                     foreach($detail_post as $detailKey=>$details)
@@ -161,8 +178,11 @@ class Sales_prediction_setup extends ROOT_Controller
                         if($detailKey==$cropTypeKey)
                         {
                             $data['year'] = $year;
-                            $data['purchase_type'] = $this->config->item('purchase_type_budget');
-                            $data['setup_id'] = $setup_id;
+                            $data['prediction_phase'] = $this->config->item('prediction_phase_initial');
+                            $data['targeted_profit'] = $this->input->post('targeted_profit');
+                            $data['sales_commission'] = $this->input->post('sales_commission');
+                            $data['sales_bonus'] = $this->input->post('sales_bonus');
+                            $data['other_incentive'] = $this->input->post('other_incentive');
                             $data['crop_id'] = $crop_type['crop'];
                             $data['type_id'] = $crop_type['type'];
 
@@ -177,7 +197,7 @@ class Sales_prediction_setup extends ROOT_Controller
                                     $data[$type] = $amount;
                                 }
 
-                                Query_helper::add('budget_purchase', $data);
+                                Query_helper::add('budget_sales_prediction', $data);
                             }
                         }
                     }
@@ -202,17 +222,9 @@ class Sales_prediction_setup extends ROOT_Controller
     private function check_validation()
     {
         $valid=true;
-        $crop_type_Post = $this->input->post('purchase');
+        $crop_type_Post = $this->input->post('prediction');
         $detail_post = $this->input->post('detail');
         $year = $this->input->post('year');
-
-        $budget_setup = $this->sales_prediction_setup_model->check_budget_setup();
-
-        if(!$budget_setup)
-        {
-            $valid=false;
-            $this->message .= $this->lang->line("LABEL_SETUP_BUDGET").'<br>';
-        }
 
         if(is_array($crop_type_Post) && sizeof($crop_type_Post)>0)
         {
@@ -233,7 +245,7 @@ class Sales_prediction_setup extends ROOT_Controller
         if(!$crop_type_Post || !$detail_post)
         {
             $valid=false;
-            $this->message .= $this->lang->line("SET_PURCHASE_QUANTITY").'<br>';
+            $this->message .= $this->lang->line("SET_PREDICTION").'<br>';
         }
 
         if(!$year)
@@ -244,11 +256,11 @@ class Sales_prediction_setup extends ROOT_Controller
 
         if(strlen($this->input->post('year_id'))==1)
         {
-            $existence = $this->sales_prediction_setup_model->check_budget_purchase_existence($year);
+            $existence = $this->sales_prediction_setup_model->check_sales_prediction_existence($year);
             if($existence)
             {
                 $valid=false;
-                $this->message .= $this->lang->line("BUDGET_PURCHASE_SET_ALREADY").'<br>';
+                $this->message .= $this->lang->line("PREDICTION_SETUP_ALREADY_DONE").'<br>';
             }
         }
 

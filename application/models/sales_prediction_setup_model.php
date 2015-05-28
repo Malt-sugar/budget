@@ -98,32 +98,6 @@ class Sales_prediction_setup_model extends CI_Model
         return $varieties;
     }
 
-    public function get_prediction_setup_id($year)
-    {
-        $this->db->select('bsps.id');
-        $this->db->from('budget_sales_prediction_setup bsps');
-        $this->db->where('bsps.year',$year);
-        $result = $this->db->get()->row_array();
-        return $result['id'];
-    }
-
-    public function check_budget_setup()
-    {
-        $this->db->select('bps.id');
-        $this->db->from('budget_purchase_setup bps');
-        $this->db->where('bps.purchase_type',$this->config->item('purchase_type_budget'));
-        $result = $this->db->get()->row_array();
-
-        if($result)
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
-    }
-
     public function check_sales_prediction_existence($year)
     {
         $this->db->from('budget_sales_prediction_setup bsps');

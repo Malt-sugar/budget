@@ -63,15 +63,7 @@ if(is_array($predictions) && sizeof($predictions)>0)
                 <label class="control-label pull-right"><?php echo $this->lang->line('LABEL_HO_AND_GENERAL_EXP_PERCENT');?><span style="color:#FF0000">*</span></label>
             </div>
             <div class="col-sm-4 col-xs-8">
-                <input type="text" name="ho_and_general_exp" class="form-control quantity_number validate[required]" value="<?php if(isset($arranged_prediction['ho_and_general_exp'])){echo $arranged_prediction['ho_and_general_exp'];}?>" <?php if(isset($arranged_prediction['ho_and_general_exp'])){echo 'disabled';}?> />
-                <?php
-                if(isset($arranged_prediction['ho_and_general_exp']))
-                {
-                    ?>
-                    <input type="hidden" name="ho_and_general_exp" value="<?php echo $arranged_prediction['ho_and_general_exp'];?>" />
-                <?php
-                }
-                ?>
+                <input type="text" name="ho_and_general_exp" class="form-control quantity_number validate[required]" value="<?php if(isset($arranged_prediction['ho_and_general_exp'])){echo $arranged_prediction['ho_and_general_exp'];}?>" />
             </div>
         </div>
 
@@ -80,15 +72,7 @@ if(is_array($predictions) && sizeof($predictions)>0)
                 <label class="control-label pull-right"><?php echo $this->lang->line('LABEL_MARKETING_PERCENT');?><span style="color:#FF0000">*</span></label>
             </div>
             <div class="col-sm-4 col-xs-8">
-                <input type="text" name="marketing" class="form-control quantity_number validate[required]" value="<?php if(isset($arranged_prediction['marketing'])){echo $arranged_prediction['marketing'];}?>" <?php if(isset($arranged_prediction['marketing'])){echo 'disabled';}?> />
-                <?php
-                if(isset($arranged_prediction['marketing']))
-                {
-                    ?>
-                    <input type="hidden" name="marketing" value="<?php echo $arranged_prediction['marketing'];?>" />
-                <?php
-                }
-                ?>
+                <input type="text" name="marketing" class="form-control quantity_number validate[required]" value="<?php if(isset($arranged_prediction['marketing'])){echo $arranged_prediction['marketing'];}?>" />
             </div>
         </div>
 
@@ -97,15 +81,7 @@ if(is_array($predictions) && sizeof($predictions)>0)
                 <label class="control-label pull-right"><?php echo $this->lang->line('LABEL_FINANCE_COST_PERCENT');?><span style="color:#FF0000">*</span></label>
             </div>
             <div class="col-sm-4 col-xs-8">
-                <input type="text" name="finance_cost" class="form-control quantity_number validate[required]" value="<?php if(isset($arranged_prediction['finance_cost'])){echo $arranged_prediction['finance_cost'];}?>" <?php if(isset($arranged_prediction['finance_cost'])){echo 'disabled';}?> />
-                <?php
-                if(isset($arranged_prediction['finance_cost']))
-                {
-                    ?>
-                    <input type="hidden" name="finance_cost" value="<?php echo $arranged_prediction['finance_cost'];?>" />
-                <?php
-                }
-                ?>
+                <input type="text" name="finance_cost" class="form-control quantity_number validate[required]" value="<?php if(isset($arranged_prediction['finance_cost'])){echo $arranged_prediction['finance_cost'];}?>" />
             </div>
         </div>
     </div>
@@ -147,7 +123,7 @@ if(is_array($predictions) && sizeof($predictions)>0)
                             <label class="control-label pull-right"><?php echo $this->lang->line('LABEL_CROP');?></label>
                         </div>
                         <div class="col-xs-2">
-                            <select name="purchase[<?php echo $sl;?>][crop]" class="form-control crop_id" id="crop<?php echo $sl;?>" <?php if(isset($key) && strlen($key)>1){echo 'disabled';}?>>
+                            <select name="prediction[<?php echo $sl;?>][crop]" class="form-control crop_id" id="crop<?php echo $sl;?>" <?php if(isset($key) && strlen($key)>1){echo 'disabled';}?>>
                                 <?php
                                 $this->load->view('dropdown',array('drop_down_options'=>$crops,'drop_down_selected'=>isset($key)?$key:''));
                                 ?>
@@ -156,7 +132,7 @@ if(is_array($predictions) && sizeof($predictions)>0)
                             if(isset($key) && strlen($key)>1)
                             {
                                 ?>
-                                <input type="hidden" name="purchase[<?php echo $sl;?>][crop]" value="<?php echo $key;?>" />
+                                <input type="hidden" name="prediction[<?php echo $sl;?>][crop]" value="<?php echo $key;?>" />
                             <?php
                             }
                             ?>
@@ -168,7 +144,7 @@ if(is_array($predictions) && sizeof($predictions)>0)
                             <label class="control-label pull-right"><?php echo $this->lang->line('LABEL_TYPE');?></label>
                         </div>
                         <div class="col-xs-2">
-                            <select name="purchase[<?php echo $sl;?>][type]" class="form-control type_id" id="type<?php echo $sl;?>" <?php if(strlen($typeKey)>1){echo 'disabled';}?> data-type-current-id="<?php echo $sl;?>">
+                            <select name="prediction[<?php echo $sl;?>][type]" class="form-control type_id" id="type<?php echo $sl;?>" <?php if(strlen($typeKey)>1){echo 'disabled';}?> data-type-current-id="<?php echo $sl;?>">
                                 <?php
                                 $this->load->view('dropdown',array('drop_down_options'=>$types,'drop_down_selected'=>isset($typeKey)?$typeKey:''));
                                 ?>
@@ -177,7 +153,7 @@ if(is_array($predictions) && sizeof($predictions)>0)
                             if(isset($typeKey) && strlen($typeKey)>1)
                             {
                                 ?>
-                                <input type="hidden" name="purchase[<?php echo $sl;?>][type]" value="<?php echo $typeKey;?>" />
+                                <input type="hidden" name="prediction[<?php echo $sl;?>][type]" value="<?php echo $typeKey;?>" />
                             <?php
                             }
                             ?>
@@ -261,7 +237,7 @@ if(is_array($predictions) && sizeof($predictions)>0)
                         <label class="control-label pull-right"><?php echo $this->lang->line('LABEL_CROP');?></label>
                     </div>
                     <div class="col-xs-2">
-                        <select name="purchase[0][crop]" class="form-control crop_id" id="crop0">
+                        <select name="prediction[0][crop]" class="form-control crop_id" id="crop0">
                             <?php
                             $this->load->view('dropdown',array('drop_down_options'=>$crops,'drop_down_selected'=>''));
                             ?>
@@ -274,7 +250,7 @@ if(is_array($predictions) && sizeof($predictions)>0)
                         <label class="control-label pull-right"><?php echo $this->lang->line('LABEL_TYPE');?></label>
                     </div>
                     <div class="col-xs-2">
-                        <select name="purchase[0][type]" class="form-control type_id" id="type0" data-type-current-id="0">
+                        <select name="prediction[0][type]" class="form-control type_id" id="type0" data-type-current-id="0">
                             <?php
                             $this->load->view('dropdown',array('drop_down_options'=>$types,'drop_down_selected'=>''));
                             ?>
@@ -356,8 +332,8 @@ if(is_array($predictions) && sizeof($predictions)>0)
 
             $('.budget_add_more_content .budget_add_more_holder').attr('data-current-id',current_id);
 
-            $('.budget_add_more_content .budget_add_more_holder .crop_id').attr('name','purchase['+current_id+'][crop]');
-            $('.budget_add_more_content .budget_add_more_holder .type_id').attr('name','purchase['+current_id+'][type]');
+            $('.budget_add_more_content .budget_add_more_holder .crop_id').attr('name','prediction['+current_id+'][crop]');
+            $('.budget_add_more_content .budget_add_more_holder .type_id').attr('name','prediction['+current_id+'][type]');
 
             $('.budget_add_more_content .budget_add_more_holder .crop_id').attr('data-crop-current-id',current_id);
             $('.budget_add_more_content .budget_add_more_holder .type_id').attr('data-type-current-id',current_id);
