@@ -81,20 +81,6 @@ $lang['LABEL_PACKING_MATERIAL']='Packing Material (%)';
 $lang['LABEL_CARRIAGE_INWARDS']='Carriage Inwards (%)';
 $lang['LABEL_AIR_FREIGHT_AND_DOCS']='Air Freight & Docs (%)';
 
-// Sales Prediction Setup
-
-$lang['LABEL_SALES_PREDICTION_SETUP']='Sales Prediction Setup';
-$lang['LABEL_SALES_PREDICTION']='Sales Prediction';
-$lang['LABEL_HO_AND_GENERAL_EXP_PERCENT']='H.O & General Exp (%)';
-$lang['LABEL_MARKETING_PERCENT']='Marketing (%)';
-$lang['LABEL_FINANCE_COST_PERCENT']='Finance Cost (%)';
-$lang['LABEL_TARGETED_PROFIT_PERCENT']='Targeted Profit (%)';
-$lang['LABEL_SALES_COMMISSION_PERCENT']='Sales Commission (%)';
-$lang['LABEL_SALES_BONUS_PERCENT']='Sales Bonus';
-$lang['LABEL_OTHER_INCENTIVE_PERCENT']='Other Incentive';
-$lang['PREDICTION_SETUP_ALREADY_DONE']='Sales Prediction Setup Already Done This Year!';
-$lang['SET_PREDICTION']='Set Sales Prediction';
-
 // Purchase
 
 $lang['LABEL_BUDGETED_PURCHASE']='Budgeted Purchase';
@@ -115,14 +101,28 @@ $lang['LABEL_INPUT_PACKING_MATERIAL']='Please Input Packing Material!';
 $lang['LABEL_INPUT_CARRIAGE_INWARDS']='Please Input Carriage Inwards!';
 $lang['LABEL_INPUT_AIR_FREIGHT_AND_DOCS']='Please Input Air Freight and Docs!';
 $lang['LABEL_SET_ACTUAL_PURCHASE_QUANTITY']='Please Set Actual Purchase Quantity';
-$lang['LABEL_SETUP_BUDGET']='Please Setup Budget First!';
-$lang['BUDGET_PURCHASE_SET_ALREADY']='Budget Purchase Set Already!';
 
 // Achievement Bonus Setup
-
 $lang['LABEL_FROM']='From';
 $lang['LABEL_TO']='To';
 $lang['LABEL_BONUS']='Bonus';
 $lang['LABEL_OTHER_INCENTIVE']='Other Incentive';
 
-
+// Sales Prediction
+$lang['LABEL_SALES_PREDICTION_SETUP']='Sales Prediction Setup';
+$lang['LABEL_SALES_PREDICTION']='Sales Prediction';
+$lang['LABEL_HO_AND_GENERAL_EXP_PERCENT']='H.O & General Exp (%)';
+$lang['LABEL_MARKETING_PERCENT']='Marketing (%)';
+$lang['LABEL_FINANCE_COST_PERCENT']='Finance Cost (%)';
+$lang['LABEL_TARGETED_PROFIT_PERCENT']='Targeted Profit (%)';
+$lang['LABEL_SALES_COMMISSION_PERCENT']='Sales Comm. (%)';
+$lang['LABEL_SALES_BONUS_PERCENT']='Sales Bonus (%)';
+$lang['LABEL_OTHER_INCENTIVE_PERCENT']='Other Incentive';
+$lang['PREDICTION_SETUP_ALREADY_DONE']='Sales Prediction Setup Already Done This Year!';
+$lang['SET_PREDICTION']='Set Sales Prediction';
+$lang['PREDICTION_SETUP_REQUIRED']='Set Sales Prediction Setup First!';
+$lang['LABEL_SETUP_BUDGET']='Please Setup Budget First!';
+$lang['BUDGET_PURCHASE_SET_ALREADY']='Budget Purchase Set Already!';
+$lang['LABEL_NET_PROFIT_KG']='Budgeted Net Profit (Kg)';
+$lang['LABEL_BUDGETED_MRP']='Budgeted MRP';
+$lang['NOT_PREDICTED_YET']='Type Not Predicted Yet';

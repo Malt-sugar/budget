@@ -1,14 +1,14 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 require APPPATH.'/libraries/root_controller.php';
 
-class Sales_prediction_setup extends ROOT_Controller
+class Sales_prediction_mgt extends ROOT_Controller
 {
     private  $message;
     public function __construct()
     {
         parent::__construct();
         $this->message="";
-        $this->load->model("sales_prediction_setup_model");
+        $this->load->model("sales_prediction_mgt_model");
     }
 
     public function index($task="list", $year_id=0)
@@ -33,7 +33,7 @@ class Sales_prediction_setup extends ROOT_Controller
 
     public function budget_list($page=0)
     {
-        $config = System_helper::pagination_config(base_url() . "sales_prediction_setup/index/list/",$this->sales_prediction_setup_model->get_total_prediction_years(),4);
+        $config = System_helper::pagination_config(base_url() . "sales_prediction_mgt/index/list/",$this->sales_prediction_mgt_model->get_total_prediction_years(),4);
         $this->pagination->initialize($config);
         $data["links"] = $this->pagination->create_links();
 
@@ -42,18 +42,18 @@ class Sales_prediction_setup extends ROOT_Controller
             $page=$page-1;
         }
 
-        $data['predictions'] = $this->sales_prediction_setup_model->get_prediction_year_info($page);
-        $data['title']="Sales Prediction Setup List";
+        $data['predictions'] = $this->sales_prediction_mgt_model->get_prediction_year_info($page);
+        $data['title']="Sales Prediction Pricing By MGT List";
 
         $ajax['status']=true;
-        $ajax['content'][]=array("id"=>"#content","html"=>$this->load->view("sales_prediction_setup/list",$data,true));
+        $ajax['content'][]=array("id"=>"#content","html"=>$this->load->view("sales_prediction_mgt/list",$data,true));
 
         if($this->message)
         {
             $ajax['message']=$this->message;
         }
 
-        $ajax['page_url']=base_url()."sales_prediction_setup/index/list/".($page+1);
+        $ajax['page_url']=base_url()."sales_prediction_mgt/index/list/".($page+1);
         $this->jsonReturn($ajax);
     }
 
@@ -65,19 +65,19 @@ class Sales_prediction_setup extends ROOT_Controller
 
         if(strlen($year)>1)
         {
-            $data['predictions'] = $this->sales_prediction_setup_model->get_prediction_detail($year);
-            $data['title'] = "Edit Sales Prediction Setup";
-            $ajax['page_url']=base_url()."sales_prediction_setup/index/edit/";
+            $data['predictions'] = $this->sales_prediction_mgt_model->get_prediction_detail($year);
+            $data['title'] = "Edit Sales Prediction Pricing By MGT";
+            $ajax['page_url']=base_url()."sales_prediction_mgt/index/edit/";
         }
         else
         {
             $data['predictions'] = array();
-            $data['title'] = "Sales Prediction Setup";
-            $ajax['page_url'] = base_url()."sales_prediction_setup/index/add";
+            $data['title'] = "Sales Prediction Pricing By MGT";
+            $ajax['page_url'] = base_url()."sales_prediction_mgt/index/add";
         }
 
         $ajax['status'] = true;
-        $ajax['content'][] = array("id"=>"#content","html"=>$this->load->view("sales_prediction_setup/add_edit",$data,true));
+        $ajax['content'][] = array("id"=>"#content","html"=>$this->load->view("sales_prediction_mgt/add_edit",$data,true));
 
         $this->jsonReturn($ajax);
     }
@@ -86,7 +86,7 @@ class Sales_prediction_setup extends ROOT_Controller
     {
         $user = User_helper::get_user();
         $data = array();
-        $setup_data = array();
+
         $year_id = $this->input->post('year_id');
         $time = time();
 
@@ -104,21 +104,12 @@ class Sales_prediction_setup extends ROOT_Controller
             $detail_post = $this->input->post('detail');
             $year = $this->input->post('year');
 
-            $setup_data['year'] = $year;
-            $setup_data['ho_and_general_exp'] = $this->input->post('ho_and_general_exp');
-            $setup_data['marketing'] = $this->input->post('marketing');
-            $setup_data['finance_cost'] = $this->input->post('finance_cost');
-
             if(strlen($year_id)>1)
             {
-                $setup_data['modified_by'] = $user->user_id;
-                $setup_data['modification_date'] = $time;
-                Query_helper::update('budget_sales_prediction_setup', $setup_data, array("year ='$year_id'"));
-
                 // Initial update
                 $update_status = array('status'=>0);
                 Query_helper::update('budget_sales_prediction',$update_status,array("year ='$year'"));
-                $existing_varieties = $this->sales_prediction_setup_model->get_existing_varieties($year);
+                $existing_varieties = $this->sales_prediction_mgt_model->get_existing_varieties($year);
 
                 foreach($crop_type_Post as $cropTypeKey=>$crop_type)
                 {
@@ -127,11 +118,8 @@ class Sales_prediction_setup extends ROOT_Controller
                         if($detailKey==$cropTypeKey)
                         {
                             $data['year'] = $year;
-                            $data['prediction_phase'] = $this->config->item('prediction_phase_initial');
-                            $data['targeted_profit'] = $this->input->post('targeted_profit');
-                            $data['sales_commission'] = $this->input->post('sales_commission');
-                            $data['sales_bonus'] = $this->input->post('sales_bonus');
-                            $data['other_incentive'] = $this->input->post('other_incentive');
+                            $data['prediction_phase'] = $this->config->item('prediction_phase_management');
+
                             $data['crop_id'] = $crop_type['crop'];
                             $data['type_id'] = $crop_type['type'];
 
@@ -167,10 +155,6 @@ class Sales_prediction_setup extends ROOT_Controller
             }
             else
             {
-                $setup_data['created_by'] = $user->user_id;
-                $setup_data['creation_date'] = $time;
-                Query_helper::add('budget_sales_prediction_setup', $setup_data);
-
                 foreach($crop_type_Post as $cropTypeKey=>$crop_type)
                 {
                     foreach($detail_post as $detailKey=>$details)
@@ -178,11 +162,8 @@ class Sales_prediction_setup extends ROOT_Controller
                         if($detailKey==$cropTypeKey)
                         {
                             $data['year'] = $year;
-                            $data['prediction_phase'] = $this->config->item('prediction_phase_initial');
-                            $data['targeted_profit'] = $this->input->post('targeted_profit');
-                            $data['sales_commission'] = $this->input->post('sales_commission');
-                            $data['sales_bonus'] = $this->input->post('sales_bonus');
-                            $data['other_incentive'] = $this->input->post('other_incentive');
+                            $data['prediction_phase'] = $this->config->item('prediction_phase_management');
+
                             $data['crop_id'] = $crop_type['crop'];
                             $data['type_id'] = $crop_type['type'];
 
@@ -256,11 +237,18 @@ class Sales_prediction_setup extends ROOT_Controller
 
         if(strlen($this->input->post('year_id'))==1)
         {
-            $existence = $this->sales_prediction_setup_model->check_sales_prediction_existence($year);
+            $existence = $this->sales_prediction_mgt_model->check_sales_prediction_existence($year);
+            $setup_existence = $this->sales_prediction_mgt_model->check_sales_prediction_setup_existence($year);
+
             if($existence)
             {
                 $valid=false;
                 $this->message .= $this->lang->line("PREDICTION_SETUP_ALREADY_DONE").'<br>';
+            }
+            elseif(!$setup_existence)
+            {
+                $valid=false;
+                $this->message .= $this->lang->line("PREDICTION_SETUP_REQUIRED").'<br>';
             }
         }
 
@@ -273,33 +261,40 @@ class Sales_prediction_setup extends ROOT_Controller
         $type_id = $this->input->post('type_id');
         $current_id = $this->input->post('current_id');
 
-        $data['varieties'] = $this->sales_prediction_setup_model->get_variety_by_crop_type($crop_id, $type_id);
+        $data['varieties'] = $this->sales_prediction_mgt_model->get_variety_by_crop_type($crop_id, $type_id);
 
         if(sizeof($data['varieties'])>0)
         {
             $data['serial'] = $current_id;
             $data['title'] = 'Variety List';
             $ajax['status'] = true;
-            $ajax['content'][]=array("id"=>'#variety'.$current_id,"html"=>$this->load->view("sales_prediction_setup/variety_list",$data,true));
+            $ajax['content'][]=array("id"=>'#variety'.$current_id,"html"=>$this->load->view("sales_prediction_mgt/variety_list",$data,true));
             $this->jsonReturn($ajax);
         }
         else
         {
             $ajax['status'] = true;
-            $ajax['content'][]=array("id"=>'#variety'.$current_id,"html"=>"<label class='label label-danger'>".$this->lang->line('NO_VARIETY_EXIST')."</label>","",true);
+            $ajax['content'][]=array("id"=>'#variety'.$current_id,"html"=>"<label class='label label-danger'>".$this->lang->line('NOT_PREDICTED_YET')."</label>","",true);
             $this->jsonReturn($ajax);
         }
     }
 
-    public function check_sales_prediction_this_year()
+    public function check_sales_prediction()
     {
         $year = $this->input->post('year');
-        $existence = $this->sales_prediction_setup_model->check_sales_prediction_existence($year);
+        $existence = $this->sales_prediction_mgt_model->check_sales_prediction_mgt_existence($year);
+        $setup_existence = $this->sales_prediction_mgt_model->check_sales_prediction_setup_existence($year);
 
         if($existence)
         {
             $ajax['status'] = false;
             $ajax['message'] = $this->lang->line("PREDICTION_SETUP_ALREADY_DONE");
+            $this->jsonReturn($ajax);
+        }
+        elseif(!$setup_existence)
+        {
+            $ajax['status'] = false;
+            $ajax['message'] = $this->lang->line("PREDICTION_SETUP_REQUIRED");
             $this->jsonReturn($ajax);
         }
         else
