@@ -117,7 +117,7 @@ class Sales_prediction_setup extends ROOT_Controller
 
                 // Initial update
                 $update_status = array('status'=>0);
-                Query_helper::update('budget_sales_prediction',$update_status,array("year ='$year'"));
+                Query_helper::update('budget_sales_prediction',$update_status,array("year ='$year'", "prediction_phase =".$this->config->item('prediction_phase_initial')));
                 $existing_varieties = $this->sales_prediction_setup_model->get_existing_varieties($year);
 
                 foreach($crop_type_Post as $cropTypeKey=>$crop_type)
@@ -152,7 +152,7 @@ class Sales_prediction_setup extends ROOT_Controller
                                     $data['modified_by'] = $user->user_id;
                                     $data['modification_date'] = $time;
                                     $data['status'] = 1;
-                                    Query_helper::update('budget_sales_prediction', $data, array("year ='$year'", "crop_id ='$crop_id'", "type_id ='$type_id'", "variety_id ='$variety_id'"));
+                                    Query_helper::update('budget_sales_prediction', $data, array("year ='$year'", "crop_id ='$crop_id'", "type_id ='$type_id'", "variety_id ='$variety_id'", "prediction_phase =".$this->config->item('prediction_phase_initial')));
                                 }
                                 else
                                 {

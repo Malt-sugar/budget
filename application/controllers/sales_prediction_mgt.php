@@ -108,7 +108,7 @@ class Sales_prediction_mgt extends ROOT_Controller
             {
                 // Initial update
                 $update_status = array('status'=>0);
-                Query_helper::update('budget_sales_prediction',$update_status,array("year ='$year'"));
+                Query_helper::update('budget_sales_prediction',$update_status,array("year ='$year'", "prediction_phase =".$this->config->item('prediction_phase_management')));
                 $existing_varieties = $this->sales_prediction_mgt_model->get_existing_varieties($year);
 
                 foreach($crop_type_Post as $cropTypeKey=>$crop_type)
@@ -140,7 +140,7 @@ class Sales_prediction_mgt extends ROOT_Controller
                                     $data['modified_by'] = $user->user_id;
                                     $data['modification_date'] = $time;
                                     $data['status'] = 1;
-                                    Query_helper::update('budget_sales_prediction', $data, array("year ='$year'", "crop_id ='$crop_id'", "type_id ='$type_id'", "variety_id ='$variety_id'"));
+                                    Query_helper::update('budget_sales_prediction', $data, array("year ='$year'", "crop_id ='$crop_id'", "type_id ='$type_id'", "variety_id ='$variety_id'", "prediction_phase =".$this->config->item('prediction_phase_management')));
                                 }
                                 else
                                 {
@@ -237,7 +237,7 @@ class Sales_prediction_mgt extends ROOT_Controller
 
         if(strlen($this->input->post('year_id'))==1)
         {
-            $existence = $this->sales_prediction_mgt_model->check_sales_prediction_existence($year);
+            $existence = $this->sales_prediction_mgt_model->check_sales_prediction_mgt_existence($year);
             $setup_existence = $this->sales_prediction_mgt_model->check_sales_prediction_setup_existence($year);
 
             if($existence)

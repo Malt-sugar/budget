@@ -61,14 +61,17 @@ class Sales_prediction_mgt_model extends CI_Model
     {
         $this->db->from('budget_sales_prediction bsp');
         $this->db->select('bsp.*');
-        $this->db->select('bsps.ho_and_general_exp, bsps.marketing, bsps.finance_cost');
+        $this->db->select('bspp.targeted_profit');
+
         $this->db->select('avi.varriety_name variety_name');
         $this->db->where('bsp.year', $year);
+        $this->db->where('bspp.year', $year);
         $this->db->where('bsp.prediction_phase',$this->config->item('prediction_phase_management'));
         $this->db->where('bsp.status',$this->config->item('status_active'));
+        $this->db->where('bspp.prediction_phase',$this->config->item('prediction_phase_initial'));
 
+        $this->db->join('budget_sales_prediction bspp','bsp.crop_id = bspp.crop_id AND bsp.type_id = bspp.type_id AND bsp.variety_id = bspp.variety_id','LEFT');
         $this->db->join('ait_varriety_info avi', 'avi.varriety_id = bsp.variety_id', 'left');
-        $this->db->join('budget_sales_prediction_setup bsps', 'bsps.year = bsp.year', 'left');
         $results = $this->db->get()->result_array();
         return $results;
     }

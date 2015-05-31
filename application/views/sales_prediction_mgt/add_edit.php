@@ -5,7 +5,9 @@
     $data["hide_approve"]="1";
     $this->load->view("action_buttons_edit",$data);
 
+//echo '<pre>';
 //print_r($predictions);
+//echo '</pre>';
 
 $arranged_prediction = array();
 
@@ -156,7 +158,7 @@ if(is_array($predictions) && sizeof($predictions)>0)
                                                     <tr>
                                                         <td><?php echo $detail['variety_name'];?></td>
                                                         <td>
-                                                            <input type="text" class="form-control quantity_number" name="" value="<?php if(isset($detail['targeted_profit'])){echo $detail['targeted_profit'];}?>" />
+                                                            <input type="text" class="form-control quantity_number" disabled name="" value="<?php if(isset($detail['targeted_profit'])){echo $detail['targeted_profit'];}?>" />
                                                         </td>
                                                         <td>
                                                             <input type="text" class="form-control quantity_number" name="detail[<?php echo $sl;?>][<?php echo $varKey;?>][budgeted_mrp]" value="<?php if(isset($detail['budgeted_mrp'])){echo $detail['budgeted_mrp'];}?>" />
