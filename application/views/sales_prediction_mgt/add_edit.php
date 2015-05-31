@@ -72,23 +72,9 @@ if(is_array($predictions) && sizeof($predictions)>0)
             <div class="budget_add_more_container" style="display: <?php if(isset($crop) && sizeof($crop)>0){echo 'show';}else{echo 'none';}?>;">
                 <div class="row widget">
                     <div class="widget-header">
-                        <div class="title">
-                            <?php echo $this->lang->line('LABEL_SALES_PREDICTION'); ?>
-                        </div>
-                        <?php
-                        foreach($typeVal['variety'] as $perm)
-                        {
-                            $created_by = $perm['created_by'];
-                        }
-
-                        if(User_helper::check_edit_permission($created_by))
-                        {
-                        ?>
-                            <button type="button" class="btn btn-danger pull-right budget_add_more_delete"><?php echo $this->lang->line('DELETE'); ?></button>
-                        <?php
-                        }
-                        ?>
-                        <div class="clearfix"></div>
+<!--                        <div class="title">-->
+<!--                            --><?php //echo $this->lang->line('LABEL_SALES_PREDICTION'); ?>
+<!--                        </div>-->
                     </div>
 
                     <div class="crop">
@@ -249,9 +235,9 @@ if(is_array($predictions) && sizeof($predictions)>0)
     ?>
     </div>
 
-    <div class="row text-center" id="add_more">
-        <button type="button" class="btn btn-warning budget_add_more_button"><?php echo $this->lang->line('ADD_MORE');?></button>
-    </div>
+<!--    <div class="row text-center" id="add_more">-->
+<!--        <button type="button" class="btn btn-warning budget_add_more_button">--><?php //echo $this->lang->line('ADD_MORE');?><!--</button>-->
+<!--    </div>-->
 
     <h1>&nbsp;</h1>
 
