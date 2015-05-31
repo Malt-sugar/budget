@@ -2,6 +2,7 @@
 
     $data["link_new"]=base_url()."sales_prediction_mgt/index/add";
     $data["hide_approve"]="1";
+    $data["hide_new"]="1";
     $this->load->view("action_buttons",$data);
 
 //echo '<pre>';
@@ -67,7 +68,5 @@
             ?>
         </div>
     </div>
-
-
 </div>
 <div class="clearfix"></div>

@@ -188,4 +188,24 @@ class System_helper
         }
     }
 
+    public static function get_prediction_detail($variety_id, $con, $year)
+    {
+        $CI = & get_instance();
+
+        $CI->db->from('budget_sales_prediction bsp');
+        $CI->db->where('bsp.variety_id', $variety_id);
+        $CI->db->where('bsp.prediction_phase', $con);
+        $CI->db->where('bsp.year', $year);
+        $CI->db->where('bsp.status', $CI->config->item('status_active'));
+        $result = $CI->db->get()->row_array();
+        if($result)
+        {
+            return $result;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
 }

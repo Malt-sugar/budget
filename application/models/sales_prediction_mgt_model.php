@@ -15,7 +15,7 @@ class Sales_prediction_mgt_model extends CI_Model
         $this->db->select('bsp.*');
         $this->db->from('budget_sales_prediction bsp');
         $this->db->group_by('bsp.year');
-        $this->db->where('bsp.prediction_phase',$this->config->item('prediction_phase_management'));
+        $this->db->where('bsp.prediction_phase',$this->config->item('prediction_phase_initial'));
         $this->db->where('bsp.status',$this->config->item('status_active'));
         $result = $this->db->get()->result_array();
         return sizeof($result);
@@ -32,7 +32,7 @@ class Sales_prediction_mgt_model extends CI_Model
         $this->db->join('ait_year ay', 'ay.year_id = bsp.year', 'left');
 
         $this->db->group_by('bsp.year');
-        $this->db->where('bsp.prediction_phase',$this->config->item('prediction_phase_management'));
+        $this->db->where('bsp.prediction_phase',$this->config->item('prediction_phase_initial'));
         $this->db->where('bsp.status',$this->config->item('status_active'));
         $this->db->limit($limit,$start);
         $this->db->order_by("bsp.id","DESC");
@@ -61,16 +61,19 @@ class Sales_prediction_mgt_model extends CI_Model
     {
         $this->db->from('budget_sales_prediction bsp');
         $this->db->select('bsp.*');
-        $this->db->select('bspp.targeted_profit');
+        //$this->db->select('bspp.targeted_profit');
 
         $this->db->select('avi.varriety_name variety_name');
         $this->db->where('bsp.year', $year);
-        $this->db->where('bspp.year', $year);
-        $this->db->where('bsp.prediction_phase',$this->config->item('prediction_phase_management'));
+        //$this->db->where('bspp.year', $year);
+        $this->db->where('bsp.prediction_phase',$this->config->item('prediction_phase_initial'));
         $this->db->where('bsp.status',$this->config->item('status_active'));
-        $this->db->where('bspp.prediction_phase',$this->config->item('prediction_phase_initial'));
 
-        $this->db->join('budget_sales_prediction bspp','bsp.crop_id = bspp.crop_id AND bsp.type_id = bspp.type_id AND bsp.variety_id = bspp.variety_id','LEFT');
+        $where = '(bsp.targeted_profit > 0 or bsp.sales_commission > 0 or bsp.sales_bonus > 0 or bsp.other_incentive > 0)';
+        $this->db->where($where);
+
+        //$this->db->where('bspp.prediction_phase',$this->config->item('prediction_phase_initial'));
+        //$this->db->join('budget_sales_prediction bspp','bsp.crop_id = bspp.crop_id AND bsp.type_id = bspp.type_id AND bsp.variety_id = bspp.variety_id','LEFT');
         $this->db->join('ait_varriety_info avi', 'avi.varriety_id = bsp.variety_id', 'left');
         $results = $this->db->get()->result_array();
         return $results;
@@ -97,9 +100,17 @@ class Sales_prediction_mgt_model extends CI_Model
         $this->db->where('bsp.year', $year);
         $this->db->where('bsp.prediction_phase',$this->config->item('prediction_phase_management'));
         $results = $this->db->get()->result_array();
-        foreach($results as $result)
+
+        if(is_array($results) && sizeof($results)>0)
         {
-            $varieties[] = $result['variety_id'];
+            foreach($results as $result)
+            {
+                $varieties[] = $result['variety_id'];
+            }
+        }
+        else
+        {
+            $varieties = array();
         }
 
         return $varieties;
