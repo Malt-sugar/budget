@@ -131,7 +131,7 @@ if(!isset($arranged_prediction['year']))
                                 ?>
                                 <div class="row show-grid">
                                     <div class="col-lg-12">
-                                        <table class="table table-hover table-bordered" style="max-width: 500px;">
+                                        <table class="table table-hover table-bordered">
                                             <?php
                                             if(is_array($typeVal['variety']) && sizeof($typeVal['variety'])>0)
                                             {

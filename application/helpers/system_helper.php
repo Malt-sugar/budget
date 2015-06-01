@@ -227,4 +227,25 @@ class System_helper
         }
     }
 
+    public static function check_prediction_delete_permission($crop, $type, $year)
+    {
+        $CI = & get_instance();
+
+        $CI->db->from('budget_sales_prediction bsp');
+        $CI->db->where('bsp.prediction_phase', $CI->config->item('prediction_phase_management'));
+        $CI->db->where('bsp.crop_id', $crop);
+        $CI->db->where('bsp.type_id', $type);
+        $CI->db->where('bsp.year', $year);
+        $CI->db->where('bsp.status', $CI->config->item('status_active'));
+        $result = $CI->db->get()->result_array();
+        if(sizeof($result)>0)
+        {
+            return false;
+        }
+        else
+        {
+            return true;
+        }
+    }
+
 }

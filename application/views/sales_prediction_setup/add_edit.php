@@ -108,7 +108,7 @@ if(is_array($predictions) && sizeof($predictions)>0)
                             $created_by = $perm['created_by'];
                         }
 
-                        if(User_helper::check_edit_permission($created_by))
+                        if(System_helper::check_prediction_delete_permission($key, $typeKey, $arranged_prediction['year']))
                         {
                         ?>
                             <button type="button" class="btn btn-danger pull-right budget_add_more_delete"><?php echo $this->lang->line('DELETE'); ?></button>
