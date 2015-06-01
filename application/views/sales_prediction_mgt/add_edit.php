@@ -147,6 +147,7 @@ if(!isset($arranged_prediction['year']))
                                                 foreach($typeVal['variety'] as $varKey=>$detail)
                                                 {
                                                     $mgt_detail = System_helper::get_prediction_detail($varKey, $this->config->item('prediction_phase_management'), $arranged_prediction['year']);
+                                                    $mkt_detail = System_helper::get_prediction_detail($varKey, $this->config->item('prediction_phase_marketing'), $arranged_prediction['year']);
                                                     ?>
                                                     <tr>
                                                         <td><?php echo $detail['variety_name'];?></td>
@@ -157,13 +158,13 @@ if(!isset($arranged_prediction['year']))
                                                             <input type="text" class="form-control quantity_number" name="detail[<?php echo $sl;?>][<?php echo $varKey;?>][budgeted_mrp]" value="<?php if(isset($detail['budgeted_mrp'])){echo $detail['budgeted_mrp'];}?>" />
                                                         </td>
                                                         <td>
-                                                            <input type="text" class="form-control quantity_number" name="detail[<?php echo $sl;?>][<?php echo $varKey;?>][sales_commission]" value="<?php if(isset($mgt_detail['sales_commission'])){echo $mgt_detail['sales_commission'];}else{ if(isset($detail['sales_commission'])){echo $detail['sales_commission'];}}?>" />
+                                                            <input type="text" class="form-control quantity_number" name="detail[<?php echo $sl;?>][<?php echo $varKey;?>][sales_commission]" <?php if(isset($mkt_detail['sales_commission'])){echo 'readonly';}?> value="<?php if(isset($mgt_detail['sales_commission'])){echo $mgt_detail['sales_commission'];}else{ if(isset($detail['sales_commission'])){echo $detail['sales_commission'];}}?>" />
                                                         </td>
                                                         <td>
-                                                            <input type="text" class="form-control quantity_number" name="detail[<?php echo $sl;?>][<?php echo $varKey;?>][sales_bonus]" value="<?php if(isset($mgt_detail['sales_bonus'])){echo $mgt_detail['sales_bonus'];}else{ if(isset($detail['sales_bonus'])){echo $detail['sales_bonus'];}}?>" />
+                                                            <input type="text" class="form-control quantity_number" name="detail[<?php echo $sl;?>][<?php echo $varKey;?>][sales_bonus]" <?php if(isset($mkt_detail['sales_bonus'])){echo 'readonly';}?> value="<?php if(isset($mgt_detail['sales_bonus'])){echo $mgt_detail['sales_bonus'];}else{ if(isset($detail['sales_bonus'])){echo $detail['sales_bonus'];}}?>" />
                                                         </td>
                                                         <td>
-                                                            <input type="text" class="form-control quantity_number" name="detail[<?php echo $sl;?>][<?php echo $varKey;?>][other_incentive]" value="<?php if(isset($mgt_detail['other_incentive'])){echo $mgt_detail['other_incentive'];}else{ if(isset($detail['other_incentive'])){echo $detail['other_incentive'];}}?>" />
+                                                            <input type="text" class="form-control quantity_number" name="detail[<?php echo $sl;?>][<?php echo $varKey;?>][other_incentive]" <?php if(isset($mkt_detail['other_incentive'])){echo 'readonly';}?> value="<?php if(isset($mgt_detail['other_incentive'])){echo $mgt_detail['other_incentive'];}else{ if(isset($detail['other_incentive'])){echo $detail['other_incentive'];}}?>" />
                                                         </td>
                                                         <td>
                                                             <input type="text" class="form-control quantity_number" name="" value="" />

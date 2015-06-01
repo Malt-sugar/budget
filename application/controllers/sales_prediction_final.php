@@ -312,7 +312,7 @@ class Sales_prediction_final extends ROOT_Controller
         $data['created_by'] = $user->user_id;
         $data['creation_date'] = time();
 
-        $existence = $this->sales_prediction_final_model->check_prediction_Final_existence($data['year']);
+        $existence = $this->sales_prediction_final_model->check_prediction_final_existence($data['year']);
 
         if($existence)
         {

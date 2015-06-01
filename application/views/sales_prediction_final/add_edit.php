@@ -140,6 +140,7 @@ if(!isset($arranged_prediction['year']))
                                                 <th><?php echo $this->lang->line('LABEL_SALES_COMMISSION_PERCENT')?></th>
                                                 <th><?php echo $this->lang->line('LABEL_SALES_BONUS_PERCENT')?></th>
                                                 <th><?php echo $this->lang->line('LABEL_OTHER_INCENTIVE_PERCENT')?></th>
+                                                <th><?php echo $this->lang->line('LABEL_NET_PROFIT_KG')?></th>
                                                 <?php
                                                 foreach($typeVal['variety'] as $varKey=>$detail)
                                                 {
@@ -159,7 +160,9 @@ if(!isset($arranged_prediction['year']))
                                                         <td>
                                                             <input type="text" class="form-control quantity_number" name="detail[<?php echo $sl;?>][<?php echo $varKey;?>][other_incentive]" value="<?php if(isset($mkt_detail['other_incentive'])){echo $mkt_detail['other_incentive'];}else{ if(isset($detail['other_incentive'])){echo $detail['other_incentive'];}}?>" />
                                                         </td>
-
+                                                        <td>
+                                                            <input type="text" class="form-control quantity_number" name="" value="" />
+                                                        </td>
                                                     </tr>
                                                 <?php
                                                 }
