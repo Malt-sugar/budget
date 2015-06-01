@@ -208,4 +208,23 @@ class System_helper
         }
     }
 
+    public static function get_finalisation_info($year, $con)
+    {
+        $CI = & get_instance();
+
+        $CI->db->from('budget_sales_prediction_finalise bsp');
+        $CI->db->where('bsp.prediction_phase', $con);
+        $CI->db->where('bsp.year', $year);
+        $CI->db->where('bsp.status', $CI->config->item('status_active'));
+        $result = $CI->db->get()->row_array();
+        if($result)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
 }

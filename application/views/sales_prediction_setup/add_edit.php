@@ -180,6 +180,7 @@ if(is_array($predictions) && sizeof($predictions)>0)
                                                 <?php
                                                 foreach($typeVal['variety'] as $varKey=>$detail)
                                                 {
+                                                    $mgt_data = System_helper::get_prediction_detail($varKey, $this->config->item('prediction_phase_management'), $arranged_prediction['year']);
                                                     ?>
                                                     <tr>
                                                         <td><?php echo $detail['variety_name']?></td>
@@ -187,13 +188,13 @@ if(is_array($predictions) && sizeof($predictions)>0)
                                                             <input type="text" class="form-control quantity_number" name="detail[<?php echo $sl;?>][<?php echo $varKey;?>][targeted_profit]" value="<?php if(isset($detail['targeted_profit'])){echo $detail['targeted_profit'];}?>" />
                                                         </td>
                                                         <td>
-                                                            <input type="text" class="form-control quantity_number" name="detail[<?php echo $sl;?>][<?php echo $varKey;?>][sales_commission]" value="<?php if(isset($detail['sales_commission'])){echo $detail['sales_commission'];}?>" />
+                                                            <input type="text" class="form-control quantity_number" <?php if(isset($mgt_data['sales_commission'])){echo 'readonly';}?> name="detail[<?php echo $sl;?>][<?php echo $varKey;?>][sales_commission]" value="<?php if(isset($detail['sales_commission'])){echo $detail['sales_commission'];}?>" />
                                                         </td>
                                                         <td>
-                                                            <input type="text" class="form-control quantity_number" name="detail[<?php echo $sl;?>][<?php echo $varKey;?>][sales_bonus]" value="<?php if(isset($detail['sales_bonus'])){echo $detail['sales_bonus'];}?>" />
+                                                            <input type="text" class="form-control quantity_number" <?php if(isset($mgt_data['sales_bonus'])){echo 'readonly';}?> name="detail[<?php echo $sl;?>][<?php echo $varKey;?>][sales_bonus]" value="<?php if(isset($detail['sales_bonus'])){echo $detail['sales_bonus'];}?>" />
                                                         </td>
                                                         <td>
-                                                            <input type="text" class="form-control quantity_number" name="detail[<?php echo $sl;?>][<?php echo $varKey;?>][other_incentive]" value="<?php if(isset($detail['other_incentive'])){echo $detail['other_incentive'];}?>" />
+                                                            <input type="text" class="form-control quantity_number" <?php if(isset($mgt_data['other_incentive'])){echo 'readonly';}?> name="detail[<?php echo $sl;?>][<?php echo $varKey;?>][other_incentive]" value="<?php if(isset($detail['other_incentive'])){echo $detail['other_incentive'];}?>" />
                                                         </td>
                                                     </tr>
                                                 <?php

@@ -26,6 +26,11 @@ if(is_array($predictions) && sizeof($predictions)>0)
     }
 }
 
+if(!isset($arranged_prediction['year']))
+{
+    redirect(base_url()."sales_prediction_mgt");
+}
+
 ?>
 <form class="form_valid" id="save_form" action="<?php echo base_url();?>sales_prediction_mgt/index/save" method="post">
     <input type="hidden" name="year_id" value="<?php if(isset($arranged_prediction['year'])){echo $arranged_prediction['year'];}else{echo 0;}?>" />
@@ -126,7 +131,7 @@ if(is_array($predictions) && sizeof($predictions)>0)
                                 ?>
                                 <div class="row show-grid">
                                     <div class="col-lg-12">
-                                        <table class="table table-hover table-bordered">
+                                        <table class="table table-hover table-bordered" style="max-width: 500px;">
                                             <?php
                                             if(is_array($typeVal['variety']) && sizeof($typeVal['variety'])>0)
                                             {
@@ -239,7 +244,7 @@ if(is_array($predictions) && sizeof($predictions)>0)
 <!--        <button type="button" class="btn btn-warning budget_add_more_button">--><?php //echo $this->lang->line('ADD_MORE');?><!--</button>-->
 <!--    </div>-->
 
-    <h1>&nbsp;</h1>
+<!--    <h1>&nbsp;</h1>-->
 
     <div class="clearfix"></div>
 </form>
@@ -285,6 +290,10 @@ if(is_array($predictions) && sizeof($predictions)>0)
     </div>
 </div>
 
+<div class="text-center">
+    <button type="button" id="finalise" class="btn btn-success"><?php echo $this->lang->line('FINALISE');?></button>
+</div>
+<h1>&nbsp;</h1>
 <script type="text/javascript">
 
     jQuery(document).ready(function()
@@ -405,6 +414,24 @@ if(is_array($predictions) && sizeof($predictions)>0)
         $(document).on("keyup", ".quantity_number", function()
         {
             this.value = this.value.replace(/[^0-9\.]/g,'');
+        });
+
+        $(document).on("click","#finalise",function()
+        {
+            $.ajax({
+                url: base_url+"sales_prediction_mgt/sales_prediction_mgt_finalise/",
+                type: 'POST',
+                dataType: "JSON",
+                data:{year:$("#year").val()},
+                success: function (data, status)
+                {
+
+                },
+                error: function (xhr, desc, err)
+                {
+                    console.log("error");
+                }
+            });
         });
     });
 </script>

@@ -6,7 +6,7 @@
     $this->load->view("action_buttons",$data);
 
 //echo '<pre>';
-//print_r($purchases);
+//print_r($predictions);
 //echo '</pre>';
 ?>
 
@@ -38,9 +38,22 @@
                             <td><?php echo $key+1;?></td>
                             <td><?php echo $prediction['year_name'];?></td>
                             <td>
-                                <a href="<?php echo base_url();?>sales_prediction_mgt/index/edit/<?php echo $prediction['year'];?>">
-                                    <img src="<?php echo base_url();?>images/edit_record.png">
-                                </a>
+                                <?php
+                                if(System_helper::get_finalisation_info($prediction['year'], $this->config->item('prediction_phase_management')))
+                                {
+                                ?>
+                                    <label class="label label-warning"><?php echo $this->lang->line('FORWARDED');?></label>
+                                    <?php
+                                }
+                                else
+                                {
+                                ?>
+                                    <a href="<?php echo base_url();?>sales_prediction_mgt/index/edit/<?php echo $prediction['year'];?>">
+                                        <img src="<?php echo base_url();?>images/edit_record.png">
+                                    </a>
+                                    <?php
+                                }
+                                ?>
                             </td>
                         </tr>
                         <?php

@@ -304,4 +304,39 @@ class Sales_prediction_mgt extends ROOT_Controller
         }
     }
 
+    public function sales_prediction_mgt_finalise()
+    {
+        $user = User_helper::get_user();
+        $data['year'] = $this->input->post('year');
+        $data['prediction_phase'] = $this->config->item('prediction_phase_management');
+        $data['created_by'] = $user->user_id;
+        $data['creation_date'] = time();
+
+        $existence = $this->sales_prediction_mgt_model->check_prediction_mgt_existence($data['year']);
+
+        if($existence)
+        {
+            $this->db->trans_start();  //DB Transaction Handle START
+            Query_helper::add('budget_sales_prediction_finalise', $data);
+            $this->db->trans_complete();   //DB Transaction Handle END
+
+            if ($this->db->trans_status() === TRUE)
+            {
+                $this->message=$this->lang->line("MSG_CREATE_SUCCESS");
+            }
+            else
+            {
+                $this->message=$this->lang->line("MSG_NOT_SAVED_SUCCESS");
+            }
+
+            $this->budget_list();//this is similar like redirect
+        }
+        else
+        {
+            $ajax['status'] = false;
+            $ajax['message'] = $this->lang->line("YOU_HAVE_NOT_PREDICTED_ANY_VARIETY_YET");
+            $this->jsonReturn($ajax);
+        }
+    }
+
 }

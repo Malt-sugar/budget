@@ -126,3 +126,5 @@ $lang['BUDGET_PURCHASE_SET_ALREADY']='Budget Purchase Set Already!';
 $lang['LABEL_NET_PROFIT_KG']='Budgeted Net Profit (Kg)';
 $lang['LABEL_BUDGETED_MRP']='Budgeted MRP';
 $lang['NOT_PREDICTED_YET']='Type Not Predicted Yet';
+$lang['YOU_HAVE_NOT_PREDICTED_ANY_VARIETY_YET']='Sorry You Have Not Predicted Any Variety Yet!';
+$lang['FORWARDED']='Forwarded';
