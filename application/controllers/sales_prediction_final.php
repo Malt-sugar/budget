@@ -1,14 +1,14 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 require APPPATH.'/libraries/root_controller.php';
 
-class Sales_prediction_mkt extends ROOT_Controller
+class Sales_prediction_final extends ROOT_Controller
 {
     private  $message;
     public function __construct()
     {
         parent::__construct();
         $this->message="";
-        $this->load->model("sales_prediction_mkt_model");
+        $this->load->model("sales_prediction_final_model");
     }
 
     public function index($task="list", $year_id=0)
@@ -33,7 +33,7 @@ class Sales_prediction_mkt extends ROOT_Controller
 
     public function budget_list($page=0)
     {
-        $config = System_helper::pagination_config(base_url() . "sales_prediction_mkt/index/list/",$this->sales_prediction_mkt_model->get_total_prediction_years(),4);
+        $config = System_helper::pagination_config(base_url() . "sales_prediction_final/index/list/",$this->sales_prediction_final_model->get_total_prediction_years(),4);
         $this->pagination->initialize($config);
         $data["links"] = $this->pagination->create_links();
 
@@ -42,18 +42,18 @@ class Sales_prediction_mkt extends ROOT_Controller
             $page=$page-1;
         }
 
-        $data['predictions'] = $this->sales_prediction_mkt_model->get_prediction_year_info($page);
-        $data['title']="Sales Prediction Pricing By MKT List";
+        $data['predictions'] = $this->sales_prediction_final_model->get_prediction_year_info($page);
+        $data['title']="Sales Prediction Pricing By Final List";
 
         $ajax['status']=true;
-        $ajax['content'][]=array("id"=>"#content","html"=>$this->load->view("sales_prediction_mkt/list",$data,true));
+        $ajax['content'][]=array("id"=>"#content","html"=>$this->load->view("sales_prediction_final/list",$data,true));
 
         if($this->message)
         {
             $ajax['message']=$this->message;
         }
 
-        $ajax['page_url']=base_url()."sales_prediction_mkt/index/list/".($page+1);
+        $ajax['page_url']=base_url()."sales_prediction_final/index/list/".($page+1);
         $this->jsonReturn($ajax);
     }
 
@@ -65,19 +65,19 @@ class Sales_prediction_mkt extends ROOT_Controller
 
         if(strlen($year)>1)
         {
-            $data['predictions'] = $this->sales_prediction_mkt_model->get_prediction_detail($year);
-            $data['title'] = "Edit Sales Prediction Pricing By MKT";
-            $ajax['page_url']=base_url()."sales_prediction_mkt/index/edit/";
+            $data['predictions'] = $this->sales_prediction_final_model->get_prediction_detail($year);
+            $data['title'] = "Edit Sales Prediction Pricing By Final";
+            $ajax['page_url']=base_url()."sales_prediction_final/index/edit/";
         }
         else
         {
             $data['predictions'] = array();
-            $data['title'] = "Sales Prediction Pricing By MKT";
-            $ajax['page_url'] = base_url()."sales_prediction_mkt/index/add";
+            $data['title'] = "Sales Prediction Pricing By Final";
+            $ajax['page_url'] = base_url()."sales_prediction_final/index/add";
         }
 
         $ajax['status'] = true;
-        $ajax['content'][] = array("id"=>"#content","html"=>$this->load->view("sales_prediction_mkt/add_edit",$data,true));
+        $ajax['content'][] = array("id"=>"#content","html"=>$this->load->view("sales_prediction_final/add_edit",$data,true));
 
         $this->jsonReturn($ajax);
     }
@@ -109,7 +109,7 @@ class Sales_prediction_mkt extends ROOT_Controller
                 // Initial update
                 $update_status = array('status'=>0);
                 Query_helper::update('budget_sales_prediction',$update_status,array("year ='$year'", "prediction_phase =".$this->config->item('prediction_phase_marketing')));
-                $existing_varieties = $this->sales_prediction_mkt_model->get_existing_varieties($year);
+                $existing_varieties = $this->sales_prediction_final_model->get_existing_varieties($year);
 
                 foreach($crop_type_Post as $cropTypeKey=>$crop_type)
                 {
@@ -237,8 +237,8 @@ class Sales_prediction_mkt extends ROOT_Controller
 
         if(strlen($this->input->post('year_id'))==1)
         {
-            $existence = $this->sales_prediction_mkt_model->check_sales_prediction_mkt_existence($year);
-            $setup_existence = $this->sales_prediction_mkt_model->check_sales_prediction_setup_existence($year);
+            $existence = $this->sales_prediction_final_model->check_sales_prediction_final_existence($year);
+            $setup_existence = $this->sales_prediction_final_model->check_sales_prediction_setup_existence($year);
 
             if($existence)
             {
@@ -261,14 +261,14 @@ class Sales_prediction_mkt extends ROOT_Controller
         $type_id = $this->input->post('type_id');
         $current_id = $this->input->post('current_id');
 
-        $data['varieties'] = $this->sales_prediction_mkt_model->get_variety_by_crop_type($crop_id, $type_id);
+        $data['varieties'] = $this->sales_prediction_final_model->get_variety_by_crop_type($crop_id, $type_id);
 
         if(sizeof($data['varieties'])>0)
         {
             $data['serial'] = $current_id;
             $data['title'] = 'Variety List';
             $ajax['status'] = true;
-            $ajax['content'][]=array("id"=>'#variety'.$current_id,"html"=>$this->load->view("sales_prediction_mkt/variety_list",$data,true));
+            $ajax['content'][]=array("id"=>'#variety'.$current_id,"html"=>$this->load->view("sales_prediction_final/variety_list",$data,true));
             $this->jsonReturn($ajax);
         }
         else
@@ -282,8 +282,8 @@ class Sales_prediction_mkt extends ROOT_Controller
     public function check_sales_prediction()
     {
         $year = $this->input->post('year');
-        $existence = $this->sales_prediction_mkt_model->check_sales_prediction_mkt_existence($year);
-        $setup_existence = $this->sales_prediction_mkt_model->check_sales_prediction_setup_existence($year);
+        $existence = $this->sales_prediction_final_model->check_sales_prediction_final_existence($year);
+        $setup_existence = $this->sales_prediction_final_model->check_sales_prediction_setup_existence($year);
 
         if($existence)
         {
@@ -304,15 +304,15 @@ class Sales_prediction_mkt extends ROOT_Controller
         }
     }
 
-    public function sales_prediction_mkt_finalise()
+    public function sales_prediction_final_finalise()
     {
         $user = User_helper::get_user();
         $data['year'] = $this->input->post('year');
-        $data['prediction_phase'] = $this->config->item('prediction_phase_marketing');
+        $data['prediction_phase'] = $this->config->item('prediction_phase_final');
         $data['created_by'] = $user->user_id;
         $data['creation_date'] = time();
 
-        $existence = $this->sales_prediction_mkt_model->check_prediction_mkt_existence($data['year']);
+        $existence = $this->sales_prediction_final_model->check_prediction_Final_existence($data['year']);
 
         if($existence)
         {

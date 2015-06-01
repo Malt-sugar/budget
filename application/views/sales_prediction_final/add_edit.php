@@ -1,7 +1,7 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
     $data["link_new"]="#";
     $data["hide_new"]="1";
-    $data["link_back"]=base_url()."sales_prediction_mkt";
+    $data["link_back"]=base_url()."sales_prediction_final";
     $data["hide_approve"]="1";
     $this->load->view("action_buttons_edit",$data);
 
@@ -31,7 +31,7 @@ if(!isset($arranged_prediction['year']))
 }
 
 ?>
-<form class="form_valid" id="save_form" action="<?php echo base_url();?>sales_prediction_mkt/index/save" method="post">
+<form class="form_valid" id="save_form" action="<?php echo base_url();?>sales_prediction_final/index/save" method="post">
     <input type="hidden" name="year_id" value="<?php if(isset($arranged_prediction['year'])){echo $arranged_prediction['year'];}else{echo 0;}?>" />
     <div class="row widget">
         <div class="widget-header">
@@ -232,12 +232,6 @@ if(!isset($arranged_prediction['year']))
     ?>
     </div>
 
-<!--    <div class="row text-center" id="add_more">-->
-<!--        <button type="button" class="btn btn-warning budget_add_more_button">--><?php //echo $this->lang->line('ADD_MORE');?><!--</button>-->
-<!--    </div>-->
-
-<!--    <h1>&nbsp;</h1>-->
-
     <div class="clearfix"></div>
 </form>
 
@@ -362,7 +356,7 @@ if(!isset($arranged_prediction['year']))
             if($(this).val().length>0)
             {
                 $.ajax({
-                    url: base_url+"sales_prediction_mkt/get_varieties_by_crop_type/",
+                    url: base_url+"sales_prediction_final/get_varieties_by_crop_type/",
                     type: 'POST',
                     dataType: "JSON",
                     data:{crop_id:$("#crop"+current_id).val(), type_id:$(this).val(), current_id: current_id},
@@ -387,7 +381,7 @@ if(!isset($arranged_prediction['year']))
             if($(this).val().length>0)
             {
                 $.ajax({
-                    url: base_url+"sales_prediction_mkt/check_sales_prediction/",
+                    url: base_url+"sales_prediction_final/check_sales_prediction/",
                     type: 'POST',
                     dataType: "JSON",
                     data:{year:$(this).val()},
@@ -411,7 +405,7 @@ if(!isset($arranged_prediction['year']))
         $(document).on("click","#finalise",function()
         {
             $.ajax({
-                url: base_url+"sales_prediction_mkt/sales_prediction_mkt_finalise/",
+                url: base_url+"sales_prediction_final/sales_prediction_final_finalise/",
                 type: 'POST',
                 dataType: "JSON",
                 data:{year:$("#year").val()},

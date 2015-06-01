@@ -317,7 +317,9 @@ class Sales_prediction_mgt extends ROOT_Controller
         if($existence)
         {
             $this->db->trans_start();  //DB Transaction Handle START
+
             Query_helper::add('budget_sales_prediction_finalise', $data);
+
             $this->db->trans_complete();   //DB Transaction Handle END
 
             if ($this->db->trans_status() === TRUE)
