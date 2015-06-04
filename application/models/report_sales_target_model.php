@@ -41,6 +41,9 @@ class Report_sales_target_model extends CI_Model
         }
 
         $this->db->where('bst.quantity >', 0);
+//        $this->db->where('bst.is_approved_by_zi', 1);
+//        $this->db->where('bst.is_approved_by_di', 1);
+//        $this->db->where('bst.is_approved_by_hom', 1);
         $this->db->join('ait_distributor_info adi', 'adi.distributor_id = bst.customer_id', 'left');
         $this->db->join('ait_varriety_info avi', 'avi.varriety_id = bst.variety_id', 'left');
         $this->db->join('ait_crop_info aci', 'aci.crop_id = bst.crop_id', 'left');

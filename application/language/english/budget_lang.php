@@ -147,3 +147,7 @@ $lang['LABEL_UNIT_PRICE_PER_KG']='Unit Price/ Kg';
 $lang['LABEL_TOTAL_SALES_TK']='Total Sales (Tk)';
 $lang['LABEL_TOTAL_COLLECTION_TK']='Total Collection (Tk)';
 $lang['LABEL_TOTAL_COLLECTION_PERCENTAGE']='Total Collection (%)';
+$lang['YEAR_REQUIRED']='Year Required';
+$lang['DIVISION_REQUIRED']='Division Required';
+$lang['ZONE_REQUIRED']='Zone Required';
+$lang['TERRITORY_REQUIRED']='Territory Required';
