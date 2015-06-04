@@ -6,6 +6,7 @@
 
 ?>
 <div class="row show-grid">
+    <div>&nbsp;</div>
     <div class="col-xs-12" style="overflow-x: auto">
         <table class="table table-hover table-bordered" >
             <thead class="hidden-print">
@@ -46,17 +47,15 @@
                             <td><?php if($target['is_approved_by_zi']==0){echo '<label class="label label-warning">'.$this->lang->line('LABEL_NO').'</label>';}else{echo '<label class="label label-success">'.$this->lang->line('LABEL_YES').'</label>';}?></td>
                             <td><?php if($target['is_approved_by_di']==0){echo '<label class="label label-warning">'.$this->lang->line('LABEL_NO').'</label>';}else{echo '<label class="label label-success">'.$this->lang->line('LABEL_YES').'</label>';}?></td>
                             <td><?php echo $target['quantity'];?></td>
-                            <td><?php echo $target['type_name'];?></td>
-                            <td><?php echo $target['type_name'];?></td>
-                            <td><?php echo $target['type_name'];?></td>
-                            <td><?php echo $target['type_name'];?></td>
-                            <td><?php echo $target['type_name'];?></td>
-                            <td><?php echo $target['type_name'];?></td>
-
+                            <td><?php echo $target['quantity'];?></td>
+                            <td><?php echo $target['quantity'];?></td>
+                            <td><?php echo $target['quantity'];?></td>
+                            <td><?php echo $target['quantity'];?></td>
+                            <td><?php echo $target['quantity'];?></td>
+                            <td><?php echo $target['quantity'];?></td>
                         </tr>
                         <?php
                     }
-
                 }
                 else
                 {
@@ -69,10 +68,7 @@
                 <?php
                 }
                 ?>
-
-
             </tbody>
         </table>
-
     </div>
 </div>

@@ -30,7 +30,7 @@ $this->load->view("action_buttons_edit",$data);
 
     <div class="row show-grid">
         <div class="col-xs-4">
-            <label class="control-label pull-right"><?php echo $this->lang->line('LABEL_DIVISION');?><span style="color:#FF0000">*</span></label>
+            <label class="control-label pull-right"><?php echo $this->lang->line('LABEL_DIVISION');?></label>
         </div>
         <div class="col-sm-4 col-xs-8">
             <select name="division" class="form-control validate[required]" id="division">
@@ -43,7 +43,7 @@ $this->load->view("action_buttons_edit",$data);
 
     <div class="row show-grid zone" style="display: none;">
         <div class="col-xs-4">
-            <label class="control-label pull-right"><?php echo $this->lang->line('LABEL_ZONE');?><span style="color:#FF0000">*</span></label>
+            <label class="control-label pull-right"><?php echo $this->lang->line('LABEL_ZONE');?></label>
         </div>
 
         <div class="col-sm-4 col-xs-8">
@@ -55,7 +55,7 @@ $this->load->view("action_buttons_edit",$data);
 
     <div class="row show-grid territory" style="display: none;">
         <div class="col-xs-4">
-            <label class="control-label pull-right"><?php echo $this->lang->line('LABEL_TERRITORY');?><span style="color:#FF0000">*</span></label>
+            <label class="control-label pull-right"><?php echo $this->lang->line('LABEL_TERRITORY');?></label>
         </div>
         <div class="col-sm-4 col-xs-8">
             <select name="territory" class="form-control validate[required]" id="territory">
@@ -66,7 +66,7 @@ $this->load->view("action_buttons_edit",$data);
 
     <div class="row show-grid customer" style="display: none;">
         <div class="col-xs-4">
-            <label class="control-label pull-right"><?php echo $this->lang->line('LABEL_CUSTOMER');?><span style="color:#FF0000">*</span></label>
+            <label class="control-label pull-right"><?php echo $this->lang->line('LABEL_CUSTOMER');?></label>
         </div>
         <div class="col-sm-4 col-xs-8">
             <select name="customer" class="form-control validate[required]" id="customer">
@@ -89,7 +89,6 @@ $this->load->view("action_buttons_edit",$data);
 </div>
 
 <div class="row widget" id="report_list">
-
 </div>
 
 <script type="text/javascript">
