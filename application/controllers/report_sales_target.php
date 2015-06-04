@@ -37,11 +37,12 @@ class Report_sales_target extends ROOT_Controller
         $ajax['status'] = true;
         $ajax['content'][] = array("id" => "#content", "html" => $this->load->view("report_sales_target/search", $data, true));
 
-        if ($this->message) {
+        if($this->message)
+        {
             $ajax['message'] = $this->message;
         }
-        $ajax['page_url']=base_url()."report_sales_target/index/search/";
 
+        $ajax['page_url'] = base_url()."report_sales_target/index/search/";
         $this->jsonReturn($ajax);
     }
 
