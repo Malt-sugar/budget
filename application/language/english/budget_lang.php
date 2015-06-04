@@ -33,6 +33,8 @@ $lang['ADD_MORE'] = 'Add More';
 $lang['DELETE'] = 'Delete';
 $lang['NO_VARIETY_EXIST'] = 'No Variety Exists';
 $lang['LABEL_CUSTOMER_NAME'] = 'Customer Name';
+$lang['LABEL_YES'] = 'Yes';
+$lang['LABEL_NO'] = 'No';
 
 //login
 $lang['MSG_USERNAME_PASSWORD_INVALID'] = 'Username and Password did not match or Invalid';
@@ -128,3 +130,20 @@ $lang['LABEL_BUDGETED_MRP']='Budget MRP';
 $lang['NOT_PREDICTED_YET']='Type Not Predicted Yet';
 $lang['YOU_HAVE_NOT_PREDICTED_ANY_VARIETY_YET']='Sorry You Have Not Predicted Any Variety Yet!';
 $lang['FORWARDED']='Forwarded';
+
+// Sales target report
+$lang['VIEW_REPORT']='View Report';
+$lang['LABEL_CROP_NAME']='Crop Name';
+$lang['LABEL_PRODUCT_TYPE']='Product Type';
+$lang['LABEL_VARIETY']='Variety';
+$lang['LABEL_SELLING_MONTH']='Selling Month';
+$lang['LABEL_TARGET_FROM_CUSTOMER']='Target From Customer';
+$lang['LABEL_TARGET_CONFIRMED_BY_ZI']='Target Confirmed By Z.I';
+$lang['LABEL_TARGET_APPROVED_BY_DI']='Target Approved By D.I';
+$lang['LABEL_FINAL_TARGET_SALES_QTY_HOM']='Final Target Sales (Qty) By HOM';
+$lang['LABEL_ACTUAL_SALES_QTY']='Actual Sales (Qty)';
+$lang['LABEL_VARIANCE']='Variance';
+$lang['LABEL_UNIT_PRICE_PER_KG']='Unit Price/ Kg';
+$lang['LABEL_TOTAL_SALES_TK']='Total Sales (Tk)';
+$lang['LABEL_TOTAL_COLLECTION_TK']='Total Collection (Tk)';
+$lang['LABEL_TOTAL_COLLECTION_PERCENTAGE']='Total Collection (%)';
