@@ -68,46 +68,6 @@ class Report_budgeted_purchase extends ROOT_Controller
 
     private function check_validation()
     {
-//        $user = User_helper::get_user();
-//        $this->load->library('form_validation');
-//
-//        if($user->budget_group == $this->config->item('user_group_division'))
-//        {
-//            $this->form_validation->set_rules('year',$this->lang->line('YEAR'),'required');
-//            $this->form_validation->set_rules('division',$this->lang->line('DIVISION'),'required');
-//
-//            if($this->form_validation->run() == FALSE)
-//            {
-//                $this->message=validation_errors();
-//                return false;
-//            }
-//        }
-//        elseif($user->budget_group == $this->config->item('user_group_zone'))
-//        {
-//            $this->form_validation->set_rules('year',$this->lang->line('YEAR'),'required');
-//            $this->form_validation->set_rules('division',$this->lang->line('DIVISION'),'required');
-//            $this->form_validation->set_rules('zone',$this->lang->line('ZONE'),'required');
-//
-//            if($this->form_validation->run() == FALSE)
-//            {
-//                $this->message=validation_errors();
-//                return false;
-//            }
-//        }
-//        elseif($user->budget_group == $this->config->item('user_group_territory'))
-//        {
-//            $this->form_validation->set_rules('year',$this->lang->line('YEAR'),'required');
-//            $this->form_validation->set_rules('division',$this->lang->line('DIVISION'),'required');
-//            $this->form_validation->set_rules('zone',$this->lang->line('ZONE'),'required');
-//            $this->form_validation->set_rules('territory',$this->lang->line('TERRITORY'),'required');
-//
-//            if($this->form_validation->run() == FALSE)
-//            {
-//                $this->message=validation_errors();
-//                return false;
-//            }
-//        }
-
         return true;
     }
 }

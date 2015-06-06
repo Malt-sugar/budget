@@ -43,7 +43,7 @@
                             <td><?php echo $purchase['crop_name'];?></td>
                             <td><?php echo $purchase['type_name'];?></td>
                             <td><?php echo $purchase['variety_name'];?></td>
-                            <td><?php echo System_helper::get_finalised_sales_target_qty_by_hom($purchase['year'], $purchase['variety_id'])?></td>
+                            <td><?php echo $purchase['hom_target_quantity'];?></td>
                             <td><?php echo '';?></td>
                             <td><?php echo $purchase['purchase_quantity'];?></td>
                             <td><?php echo '';?></td>

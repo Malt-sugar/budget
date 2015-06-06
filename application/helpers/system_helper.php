@@ -248,19 +248,6 @@ class System_helper
         }
     }
 
-    public static function get_finalised_sales_target_qty_by_hom($year, $variety)
-    {
-        $CI = & get_instance();
-
-        $CI->db->from('budget_sales_target bst');
-        $CI->db->select('SUM(bst.quantity) total_quantity');
-        $CI->db->where('bst.variety_id', $variety);
-        $CI->db->where('bst.year', $year);
-        $CI->db->where('bst.status', $CI->config->item('status_active'));
-        $result = $CI->db->get()->row_array();
-        return $result['total_quantity'];
-    }
-
     public static function get_cogs_and_total_cogs($quantity, $price_per_kg, $conversion, $lc, $insurance, $packing, $carriage, $air_freight, $type)
     {
         if($type==1) // cogs
