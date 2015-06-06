@@ -275,32 +275,32 @@ class System_helper
         $cogs = $initial;
         if($conversion>0)
         {
-            $cogs = $cogs + $cogs*($conversion/100);
+            $cogs = $cogs + $initial*($conversion/100);
         }
 
         if($lc>0)
         {
-            $cogs = $cogs + $cogs*($lc/100);
+            $cogs = $cogs + $initial*($lc/100);
         }
 
         if($insurance>0)
         {
-            $cogs = $cogs + $cogs*($insurance/100);
+            $cogs = $cogs + $initial*($insurance/100);
         }
 
         if($packing>0)
         {
-            $cogs = $cogs + $cogs*($packing/100);
+            $cogs = $cogs + $initial*($packing/100);
         }
 
         if($carriage>0)
         {
-            $cogs = $cogs + $cogs*($carriage/100);
+            $cogs = $cogs + $initial*($carriage/100);
         }
 
         if($air_freight>0)
         {
-            $cogs = $cogs + $cogs*($air_freight/100);
+            $cogs = $cogs + $initial*($air_freight/100);
         }
 
         return round($cogs, 2);
