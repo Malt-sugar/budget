@@ -77,4 +77,21 @@ class Budget_common extends ROOT_Controller
         $this->jsonReturn($ajax);
     }
 
+    public function get_variety_by_crop_type()
+    {
+        $crop_id = $this->input->post('crop_id');
+        $type_id = $this->input->post('type_id');
+
+        $varieties = $this->budget_common_model->get_variety_by_crop_type($crop_id, $type_id);
+
+        foreach($varieties as $variety)
+        {
+            $data[] = array('value'=>$variety['varriety_id'], 'text'=>$variety['varriety_name']);
+        }
+
+        $ajax['status'] = true;
+        $ajax['content'][] = array("id"=>'#variety',"html"=>$this->load->view("dropdown",array('drop_down_options'=>$data),true));
+        $this->jsonReturn($ajax);
+    }
+
 }
