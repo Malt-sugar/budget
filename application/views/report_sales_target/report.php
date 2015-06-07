@@ -47,12 +47,12 @@
                             <td><?php if($target['is_approved_by_zi']==0){echo '<label class="label label-warning">'.$this->lang->line('LABEL_NO').'</label>';}else{echo '<label class="label label-success">'.$this->lang->line('LABEL_YES').'</label>';}?></td>
                             <td><?php if($target['is_approved_by_di']==0){echo '<label class="label label-warning">'.$this->lang->line('LABEL_NO').'</label>';}else{echo '<label class="label label-success">'.$this->lang->line('LABEL_YES').'</label>';}?></td>
                             <td><?php echo $target['quantity'];?></td>
-                            <td><?php echo $target['quantity'];?></td>
-                            <td><?php echo $target['quantity'];?></td>
-                            <td><?php echo $target['quantity'];?></td>
-                            <td><?php echo $target['quantity'];?></td>
-                            <td><?php echo $target['quantity'];?></td>
-                            <td><?php echo $target['quantity'];?></td>
+                            <td><?php echo $target['approved_quantity'];?></td>
+                            <td><?php echo '';?></td>
+                            <td><?php echo '';?></td>
+                            <td><?php echo '';?></td>
+                            <td><?php echo '';?></td>
+                            <td><?php echo '';?></td>
                         </tr>
                         <?php
                     }

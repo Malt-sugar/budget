@@ -31,6 +31,9 @@ if(!isset($arranged_prediction['year']))
     redirect(base_url()."sales_prediction_mgt");
 }
 
+//echo '<pre>';
+//print_r(System_helper::get_last_years(3));
+//echo '</pre>';
 ?>
 <form class="form_valid" id="save_form" action="<?php echo base_url();?>sales_prediction_mgt/index/save" method="post">
     <input type="hidden" name="year_id" value="<?php if(isset($arranged_prediction['year'])){echo $arranged_prediction['year'];}else{echo 0;}?>" />
@@ -148,6 +151,7 @@ if(!isset($arranged_prediction['year']))
                                                 {
                                                     $mgt_detail = System_helper::get_prediction_detail($varKey, $this->config->item('prediction_phase_management'), $arranged_prediction['year']);
                                                     $mkt_detail = System_helper::get_prediction_detail($varKey, $this->config->item('prediction_phase_marketing'), $arranged_prediction['year']);
+                                                    $mrp_cal = System_helper::get_mrp_of_last_years($varKey, $this->config->item('budgeted_mrp_cal_year'));
                                                     ?>
                                                     <tr>
                                                         <td><?php echo $detail['variety_name'];?></td>
@@ -155,7 +159,7 @@ if(!isset($arranged_prediction['year']))
                                                             <input type="text" class="form-control quantity_number" disabled name="" value="<?php if(isset($detail['targeted_profit'])){echo $detail['targeted_profit'];}?>" />
                                                         </td>
                                                         <td>
-                                                            <input type="text" class="form-control quantity_number" name="detail[<?php echo $sl;?>][<?php echo $varKey;?>][budgeted_mrp]" value="<?php if(isset($detail['budgeted_mrp'])){echo $detail['budgeted_mrp'];}?>" />
+                                                            <input type="text" class="form-control quantity_number" name="detail[<?php echo $sl;?>][<?php echo $varKey;?>][budgeted_mrp]" value="<?php echo $mrp_cal;?>" />
                                                         </td>
                                                         <td>
                                                             <input type="text" class="form-control quantity_number" name="detail[<?php echo $sl;?>][<?php echo $varKey;?>][sales_commission]" <?php if(isset($mkt_detail['sales_commission'])){echo 'readonly';}?> value="<?php if(isset($mgt_detail['sales_commission'])){echo $mgt_detail['sales_commission'];}else{ if(isset($detail['sales_commission'])){echo $detail['sales_commission'];}}?>" />

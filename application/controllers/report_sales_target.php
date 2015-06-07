@@ -15,19 +15,19 @@ class Report_sales_target extends ROOT_Controller
     {
         if($task=="search")
         {
-            $this->rnd_search();
+            $this->budget_search();
         }
         elseif($task=="report")
         {
-            $this->rnd_report();
+            $this->budget_report();
         }
         else
         {
-            $this->rnd_search();
+            $this->budget_search();
         }
     }
 
-    private function rnd_search()
+    private function budget_search()
     {
         $data['title'] = "Sales Target Quantity Report";
 
@@ -46,7 +46,7 @@ class Report_sales_target extends ROOT_Controller
         $this->jsonReturn($ajax);
     }
 
-    private function rnd_report()
+    private function budget_report()
     {
         if(!$this->check_validation())
         {

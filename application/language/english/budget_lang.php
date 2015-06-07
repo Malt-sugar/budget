@@ -155,3 +155,9 @@ $lang['TERRITORY_REQUIRED']='Territory Required';
 // Budget purchase report
 $lang['LABEL_BUDGETED_PURCHASE_QUANTITY'] = 'Budgeted Purchase (Qty)';
 $lang['LABEL_MONTH_OF_PURCHASE'] = 'Month Of Purchase';
+
+// Closing stock report
+$lang['LABEL_OPENING_BALANCE'] = 'Opening Balance';
+$lang['LABEL_BUDGETED_MIN_STOCK'] = 'Budgeted Min Stock';
+$lang['LABEL_CURRENT_STOCK'] = 'Current Stock';
+$lang['LABEL_VARIANCE_QTY'] = 'Variance (Qty)';

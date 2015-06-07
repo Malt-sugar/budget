@@ -23,6 +23,9 @@ $config['prediction_phase_management'] = 2;
 $config['prediction_phase_marketing'] = 3;
 $config['prediction_phase_final'] = 4;
 
+// MRP
+$config['budgeted_mrp_cal_year'] = 3;
+
 
 
 

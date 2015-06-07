@@ -293,4 +293,138 @@ class System_helper
         return round($cogs, 2);
     }
 
+    public static function get_current_year()
+    {
+        $CI = & get_instance();
+
+        $CI->db->from('ait_year ay');
+        $CI->db->select('ay.*');
+        $CI->db->where("DATE_FORMAT(start_date,'%Y-%m-%d') <=",date('Y-m-d'));
+        $CI->db->where("DATE_FORMAT(end_date,'%Y-%m-%d') >=",date('Y-m-d'));
+        $result = $CI->db->get()->row_array();
+        return $result['year_id'];
+    }
+
+    public static function get_current_stock($crop_id, $type_id, $variety_id)
+    {
+        $CI = & get_instance();
+        $year = System_helper::get_current_year();
+
+        $sql="SELECT
+            (
+            SELECT SUM(ppi.quantity) FROM ait_product_purchase_info AS ppi
+            WHERE
+            ppi.year_id=pi.year_id AND
+            ppi.crop_id=pi.crop_id AND
+            ppi.product_type_id = pi.product_type_id AND
+            ppi.varriety_id = pi.varriety_id
+            ) AS Total_HQ_Purchase_Quantity,
+            (
+            SELECT SUM(ppoi.approved_quantity) FROM ait_product_purchase_order_invoice AS ppoi
+            WHERE
+            ppoi.year_id=pi.year_id AND
+            ppoi.crop_id=pi.crop_id AND
+            ppoi.product_type_id = pi.product_type_id AND
+            ppoi.varriety_id = pi.varriety_id
+            ) AS Total_Sales_Quantity,
+            (
+            SELECT SUM(ppob.quantity) FROM ait_product_purchase_order_bonus AS ppob
+            WHERE
+            ppob.year_id=pi.year_id AND
+            ppob.crop_id=pi.crop_id AND
+            ppob.product_type_id = pi.product_type_id AND
+            ppob.varriety_id = pi.varriety_id
+            ) AS Total_Bonus_Quantity,
+            (
+            SELECT SUM(pind.damage_quantity) FROM ait_product_inventory AS pind
+            WHERE
+            pind.year_id=pi.year_id AND
+            pind.crop_id=pi.crop_id AND
+            pind.product_type_id = pi.product_type_id AND
+            pind.varriety_id = pi.varriety_id
+            ) AS Total_Short_Quantity,
+            (
+            SELECT SUM(pina.access_quantity) FROM ait_product_inventory AS pina
+            WHERE
+            pina.year_id=pi.year_id AND
+            pina.crop_id=pi.crop_id AND
+            pina.product_type_id = pi.product_type_id AND
+            pina.varriety_id = pi.varriety_id
+            ) AS Total_Access_Quantity
+            FROM
+            ait_product_info AS pi
+            LEFT JOIN ait_crop_info ON ait_crop_info.crop_id = pi.crop_id
+            LEFT JOIN ait_product_type ON ait_product_type.product_type_id = pi.product_type_id
+            LEFT JOIN ait_varriety_info ON ait_varriety_info.varriety_id = pi.varriety_id
+            WHERE
+            pi.del_status=0
+            AND pi.crop_id='".$crop_id."'
+            AND pi.product_type_id='".$type_id."'
+            AND pi.varriety_id='".$variety_id."'
+            AND pi.year_id='".$year."'
+            GROUP BY
+            pi.year_id, pi.warehouse_id, pi.crop_id, pi.product_type_id, pi.varriety_id
+            ORDER BY
+            ait_crop_info.order_crop,
+            ait_product_type.order_type,
+            ait_varriety_info.order_variety";
+
+        $row_result = $CI->db->query($sql)->row_array();
+
+        $c_stock=($row_result['Total_HQ_Purchase_Quantity']-(($row_result['Total_Sales_Quantity']+$row_result['Total_Bonus_Quantity']+$row_result['Total_Access_Quantity'])-$row_result['Total_Short_Quantity']));
+        return $c_stock;
+    }
+
+    public static function get_mrp_of_last_years($variety,$number)
+    {
+        $CI = & get_instance();
+        $years = System_helper::get_last_years($number);
+
+        $CI->db->from('budget_sales_prediction bsp');
+        $CI->db->select('bsp.budgeted_mrp');
+        $CI->db->where('bsp.prediction_phase', $CI->config->item('prediction_phase_final'));
+        $CI->db->where('bsp.variety_id', $variety);
+        $CI->db->where_in("bsp.year", $years);
+        $results = $CI->db->get()->result_array();
+
+        $total = 0;
+        if($results && sizeof($years)>0)
+        {
+            foreach($results as $result)
+            {
+                $total = $total + $result['budgeted_mrp'];
+            }
+
+            $avg_mrp = $total/sizeof($years);
+            return $avg_mrp;
+        }
+        else
+        {
+            return 0;
+        }
+    }
+
+    public static function get_last_years($number)
+    {
+        $CI = & get_instance();
+        $CI->db->from('ait_year ay');
+        $CI->db->select('ay.year_id');
+        $CI->db->order_by('year_name', 'DESC');
+        $CI->db->limit($number);
+        $results = $CI->db->get()->result_array();
+        if($results)
+        {
+            foreach($results as $result)
+            {
+                $years[] = $result['year_id'];
+            }
+
+            return $years;
+        }
+        else
+        {
+            $years = array();
+            return $years;
+        }
+    }
 }
