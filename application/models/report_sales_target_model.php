@@ -57,6 +57,7 @@ class Report_sales_target_model extends CI_Model
         $this->db->join('ait_product_type ati', 'ati.product_type_id = bst.type_id', 'left');
         $this->db->join('ait_year ay', 'ay.year_id = bst.year', 'left');
 
+        $this->db->join('ait_distributor_add_payment dap', 'dap.year_id = bst.year', 'left');
         $this->db->join('ait_product_purchase_order_challan_return ppocr', 'ppocr.varriety_id = bst.variety_id', 'left');
         $this->db->join('ait_product_purchase_order_invoice ppoi', 'ppoi.varriety_id = bst.variety_id AND ppoi.year_id = bst.year', 'left');
         $this->db->where('bst.status',$this->config->item('status_active'));
