@@ -152,6 +152,13 @@ if(!isset($arranged_prediction['year']))
                                                     $mgt_detail = System_helper::get_prediction_detail($varKey, $this->config->item('prediction_phase_management'), $arranged_prediction['year']);
                                                     $mkt_detail = System_helper::get_prediction_detail($varKey, $this->config->item('prediction_phase_marketing'), $arranged_prediction['year']);
                                                     $mrp_cal = System_helper::get_mrp_of_last_years($varKey, $this->config->item('budgeted_mrp_cal_year'));
+
+                                                    if(isset($mgt_detail['budgeted_mrp'])){$budgeted_mrp = $mgt_detail['budgeted_mrp'];}else{$budgeted_mrp = $mrp_cal;}
+                                                    if(isset($mgt_detail['sales_commission'])){$sales_commission = $mgt_detail['sales_commission'];}else{$sales_commission = $detail['sales_commission'];}
+                                                    if(isset($mgt_detail['sales_bonus'])){$sales_bonus = $mgt_detail['sales_bonus'];}else{$sales_bonus = $detail['sales_bonus'];}
+                                                    if(isset($mgt_detail['other_incentive'])){$other_incentive = $mgt_detail['other_incentive'];}else{$other_incentive = $detail['other_incentive'];}
+
+                                                    $net_profit = System_helper::calculate_net_profit($arranged_prediction['year'], $varKey, $budgeted_mrp, $sales_commission, $sales_bonus, $other_incentive);
                                                     ?>
                                                     <tr>
                                                         <td><?php echo $detail['variety_name'];?></td>
@@ -159,7 +166,7 @@ if(!isset($arranged_prediction['year']))
                                                             <input type="text" class="form-control quantity_number" disabled name="" value="<?php if(isset($detail['targeted_profit'])){echo $detail['targeted_profit'];}?>" />
                                                         </td>
                                                         <td>
-                                                            <input type="text" class="form-control quantity_number" name="detail[<?php echo $sl;?>][<?php echo $varKey;?>][budgeted_mrp]" value="<?php echo $mrp_cal;?>" />
+                                                            <input type="text" class="form-control quantity_number" name="detail[<?php echo $sl;?>][<?php echo $varKey;?>][budgeted_mrp]" value="<?php if(isset($mgt_detail['budgeted_mrp'])){echo $mgt_detail['budgeted_mrp'];}else{ echo $mrp_cal;}?>" />
                                                         </td>
                                                         <td>
                                                             <input type="text" class="form-control quantity_number" name="detail[<?php echo $sl;?>][<?php echo $varKey;?>][sales_commission]" <?php if(isset($mkt_detail['sales_commission'])){echo 'readonly';}?> value="<?php if(isset($mgt_detail['sales_commission'])){echo $mgt_detail['sales_commission'];}else{ if(isset($detail['sales_commission'])){echo $detail['sales_commission'];}}?>" />
@@ -171,7 +178,7 @@ if(!isset($arranged_prediction['year']))
                                                             <input type="text" class="form-control quantity_number" name="detail[<?php echo $sl;?>][<?php echo $varKey;?>][other_incentive]" <?php if(isset($mkt_detail['other_incentive'])){echo 'readonly';}?> value="<?php if(isset($mgt_detail['other_incentive'])){echo $mgt_detail['other_incentive'];}else{ if(isset($detail['other_incentive'])){echo $detail['other_incentive'];}}?>" />
                                                         </td>
                                                         <td>
-                                                            <input type="text" class="form-control quantity_number" name="" value="" />
+                                                            <input type="text" class="form-control quantity_number" name="" value="<?php if(isset($net_profit)){echo $net_profit;}else{echo 0;}?>" />
                                                         </td>
                                                     </tr>
                                                 <?php
