@@ -371,8 +371,19 @@ class System_helper
 
         $row_result = $CI->db->query($sql)->row_array();
 
-        $c_stock=($row_result['Total_HQ_Purchase_Quantity']-(($row_result['Total_Sales_Quantity']+$row_result['Total_Bonus_Quantity']+$row_result['Total_Access_Quantity'])-$row_result['Total_Short_Quantity']));
-        return $c_stock;
+        if($row_result)
+        {
+            $c_stock=($row_result['Total_HQ_Purchase_Quantity']-(($row_result['Total_Sales_Quantity']+$row_result['Total_Bonus_Quantity']+$row_result['Total_Access_Quantity'])-$row_result['Total_Short_Quantity']));
+        }
+
+        if(isset($c_stock))
+        {
+            return $c_stock;
+        }
+        else
+        {
+            return 0;
+        }
     }
 
     public static function get_mrp_of_last_years($variety,$number)
@@ -467,42 +478,42 @@ class System_helper
         $carriage_inwards = $purchase_setup['carriage_inwards'];
         $air_freight_and_docs = $purchase_setup['air_freight_and_docs'];
 
-        $cogs = $price_per_kg;
+        $cogs = 0;
 
         if($lc_exp>0)
         {
-            $cogs = $cogs - $price_per_kg*($lc_exp/100);
+            $cogs = $cogs + $price_per_kg*($lc_exp/100);
         }
         if($insurance_exp>0)
         {
-            $cogs = $cogs - $price_per_kg*($insurance_exp/100);
+            $cogs = $cogs + $price_per_kg*($insurance_exp/100);
         }
         if($packing_material>0)
         {
-            $cogs = $cogs - $price_per_kg*($packing_material/100);
+            $cogs = $cogs + $price_per_kg*($packing_material/100);
         }
         if($carriage_inwards>0)
         {
-            $cogs = $cogs - $price_per_kg*($carriage_inwards/100);
+            $cogs = $cogs + $price_per_kg*($carriage_inwards/100);
         }
         if($air_freight_and_docs>0)
         {
-            $cogs = $cogs - $price_per_kg*($air_freight_and_docs/100);
+            $cogs = $cogs + $price_per_kg*($air_freight_and_docs/100);
         }
 
         $revised_cogs = $cogs;
 
         if($ho_and_general_exp>0)
         {
-            $revised_cogs = $revised_cogs - $cogs*($ho_and_general_exp/100);
+            $revised_cogs = $revised_cogs + $cogs*($ho_and_general_exp/100);
         }
         if($marketing>0)
         {
-            $revised_cogs = $revised_cogs - $cogs*($marketing/100);
+            $revised_cogs = $revised_cogs + $cogs*($marketing/100);
         }
         if($finance_cost>0)
         {
-            $revised_cogs = $revised_cogs - $cogs*($finance_cost/100);
+            $revised_cogs = $revised_cogs + $cogs*($finance_cost/100);
         }
 
         $revised_mrp = $mrp;
@@ -522,5 +533,88 @@ class System_helper
 
         $net_profit = $revised_mrp - $revised_cogs;
         return round($net_profit, 2);
+    }
+
+    public static function get_total_sales_target_of_variety($variety, $year)
+    {
+        $CI = & get_instance();
+
+        $CI->db->from('budget_sales_target bst');
+        $CI->db->select('SUM(bst.quantity) total_quantity');
+        $CI->db->where('bst.year', $year);
+        $CI->db->where('bst.variety_id', $variety);
+        $CI->db->where('bst.status', $CI->config->item('status_active'));
+        $result = $CI->db->get()->row_array();
+
+        if($result)
+        {
+            return $result['total_quantity'];
+        }
+        else
+        {
+            return 0;
+        }
+    }
+
+    public static function get_actual_total_sales($variety, $year)
+    {
+        $CI = & get_instance();
+
+        $CI->db->from('ait_product_purchase_order_invoice ppoi');
+        $CI->db->select('SUM(ppoi.approved_quantity) total_approved_quantity');
+        $CI->db->where('ppoi.year_id', $year);
+        $CI->db->where('ppoi.varriety_id', $variety);
+        $result = $CI->db->get()->row_array();
+
+        if($result)
+        {
+            return $result['total_approved_quantity'];
+        }
+        else
+        {
+            return 0;
+        }
+    }
+
+    public static function get_price_per_kg_for_hom($variety, $year)
+    {
+        $CI = & get_instance();
+
+        $CI->db->from('budget_sales_prediction bsp');
+        $CI->db->select('bsp.budgeted_mrp budgeted_mrp');
+        $CI->db->where('bsp.year', $year);
+        $CI->db->where('bsp.variety_id', $variety);
+        $CI->db->where('bsp.prediction_phase', $CI->config->item('prediction_phase_final'));
+        $result = $CI->db->get()->row_array();
+
+        if($result)
+        {
+            return $result['budgeted_mrp'];
+        }
+        else
+        {
+            return 0;
+        }
+    }
+
+    public static function get_finalised_sales_target($variety, $year)
+    {
+        $CI = & get_instance();
+
+        $CI->db->from('budget_sales_target bst');
+        $CI->db->select('SUM(bst.quantity) finalised_quantity');
+        $CI->db->where('bst.year', $year);
+        $CI->db->where('bst.variety_id', $variety);
+        $CI->db->where('bst.is_approved_by_hom', 1);
+        $result = $CI->db->get()->row_array();
+
+        if($result)
+        {
+            return $result['finalised_quantity'];
+        }
+        else
+        {
+            return 0;
+        }
     }
 }

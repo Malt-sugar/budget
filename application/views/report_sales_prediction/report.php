@@ -108,7 +108,6 @@
                         </tr>
                     </table>
                 </td>
-
             </tr>
             </thead>
             <tbody>
@@ -117,79 +116,106 @@
                 {
                     foreach($predictions as $key=>$prediction)
                     {
+                        $total_target = System_helper::get_total_sales_target_of_variety($prediction['variety_id'], $prediction['year']);
+                        $mrp_cal = System_helper::get_mrp_of_last_years($prediction['variety_id'], $this->config->item('budgeted_mrp_cal_year'));
+
+                        $net_profit_per_kg_initial = System_helper::calculate_net_profit($prediction['year'], $prediction['variety_id'], $mrp_cal, $prediction['sales_commission'], $prediction['sales_bonus'], $prediction['other_incentive']);
+                        $total_net_profit_initial = $net_profit_per_kg_initial*$total_target;
+                        $total_sales_initial = $mrp_cal*$total_target;
+
+                        if(isset($prediction['mgt_budgeted_mrp']) && isset($prediction['mgt_sales_commission']) && isset($prediction['mgt_sales_bonus']) && isset($prediction['mgt_other_incentive']))
+                        {
+                            $net_profit_per_kg_mgt = System_helper::calculate_net_profit($prediction['year'], $prediction['variety_id'], $prediction['mgt_budgeted_mrp'], $prediction['mgt_sales_commission'], $prediction['mgt_sales_bonus'], $prediction['mgt_other_incentive']);
+                            $total_net_profit_mgt = $net_profit_per_kg_mgt*$total_target;
+                            $total_sales_mgt = $prediction['mgt_budgeted_mrp']*$total_target;
+                        }
+
+                        if(isset($prediction['mkt_budgeted_mrp']) && isset($prediction['mkt_sales_commission']) && isset($prediction['mkt_sales_bonus']) && isset($prediction['mkt_other_incentive']))
+                        {
+                            $net_profit_per_kg_mkt = System_helper::calculate_net_profit($prediction['year'], $prediction['variety_id'], $prediction['mkt_budgeted_mrp'], $prediction['mkt_sales_commission'], $prediction['mkt_sales_bonus'], $prediction['mkt_other_incentive']);
+                            $total_net_profit_mkt = $net_profit_per_kg_mkt*$total_target;
+                            $total_sales_mkt = $prediction['mkt_budgeted_mrp']*$total_target;
+                        }
+
+                        if(isset($prediction['final_budgeted_mrp']) && isset($prediction['final_sales_commission']) && isset($prediction['final_sales_bonus']) && isset($prediction['final_other_incentive']))
+                        {
+                            $net_profit_per_kg_final = System_helper::calculate_net_profit($prediction['year'], $prediction['variety_id'], $prediction['final_budgeted_mrp'], $prediction['final_sales_commission'], $prediction['final_sales_bonus'], $prediction['final_other_incentive']);
+                            $total_net_profit_final = $net_profit_per_kg_final*$total_target;
+                            $total_sales_final = $prediction['final_budgeted_mrp']*$total_target;
+                        }
                         ?>
                         <tr>
                             <td><?php echo $prediction['crop_name'];?></td>
                             <td><?php echo $prediction['type_name'];?></td>
                             <td><?php echo $prediction['variety_name'];?></td>
                             <td><?php echo '';?></td>
-                            <td><?php echo '';?></td>
+                            <td><?php if(isset($total_target)){echo $total_target;}?></td>
                             <td>
                                 <table class="table table-hover table-bordered" style="background-color: lavender;">
                                     <tr>
-                                        <td><?php echo '';?></td>
-                                        <td><?php echo '';?></td>
-                                        <td><?php echo '';?></td>
+                                        <td><?php echo $prediction['ho_and_general_exp'];?></td>
+                                        <td><?php echo $prediction['marketing'];?></td>
+                                        <td><?php echo $prediction['finance_cost'];?></td>
                                     </tr>
                                 </table>
                             </td>
                             <td>
                                 <table class="table table-hover table-bordered" style="background-color: darkgray;">
                                     <tr>
-                                        <td><?php echo '';?></td>
-                                        <td><?php echo '';?></td>
-                                        <td><?php echo '';?></td>
-                                        <td><?php echo '';?></td>
-                                        <td><?php echo '';?></td>
-                                        <td><?php echo '';?></td>
-                                        <td><?php echo '';?></td>
-                                        <td><?php echo '';?></td>
+                                        <td><?php if(isset($prediction['targeted_profit'])){echo $prediction['targeted_profit'];}?></td>
+                                        <td><?php if(isset($mrp_cal)){echo $mrp_cal;}?></td>
+                                        <td><?php if(isset($prediction['sales_commission'])){echo $prediction['sales_commission'];}?></td>
+                                        <td><?php if(isset($prediction['sales_bonus'])){echo $prediction['sales_bonus'];}?></td>
+                                        <td><?php if(isset($prediction['other_incentive'])){echo $prediction['other_incentive'];}?></td>
+                                        <td><?php if(isset($net_profit_per_kg_initial)){echo $net_profit_per_kg_initial;}?></td>
+                                        <td><?php if(isset($total_net_profit_initial)){echo $total_net_profit_initial;}?></td>
+                                        <td><?php if(isset($total_sales_initial)){echo $total_sales_initial;}?></td>
                                     </tr>
                                 </table>
                             </td>
                             <td>
                                 <table class="table table-hover table-bordered" style="background-color: lightblue;">
                                     <tr>
-                                        <td><?php echo '';?></td>
-                                        <td><?php echo '';?></td>
-                                        <td><?php echo '';?></td>
-                                        <td><?php echo '';?></td>
-                                        <td><?php echo '';?></td>
-                                        <td><?php echo '';?></td>
-                                        <td><?php echo '';?></td>
+                                        <td><?php if(isset($prediction['mgt_budgeted_mrp'])){echo $prediction['mgt_budgeted_mrp'];}?></td>
+                                        <td><?php if(isset($prediction['mgt_sales_commission'])){echo $prediction['mgt_sales_commission'];}?></td>
+                                        <td><?php if(isset($prediction['mgt_sales_bonus'])){echo $prediction['mgt_sales_bonus'];}?></td>
+                                        <td><?php if(isset($prediction['mgt_other_incentive'])){echo $prediction['mgt_other_incentive'];}?></td>
+                                        <td><?php if(isset($net_profit_per_kg_mgt)){echo $net_profit_per_kg_mgt;}?></td>
+                                        <td><?php if(isset($total_net_profit_mgt)){echo $total_net_profit_mgt;}?></td>
+                                        <td><?php if(isset($total_sales_mgt)){echo $total_sales_mgt;}?></td>
                                     </tr>
                                 </table>
                             </td>
                             <td>
                                 <table class="table table-hover table-bordered" style="background-color: lightsteelblue;">
                                     <tr>
-                                        <td><?php echo '';?></td>
-                                        <td><?php echo '';?></td>
-                                        <td><?php echo '';?></td>
-                                        <td><?php echo '';?></td>
-                                        <td><?php echo '';?></td>
-                                        <td><?php echo '';?></td>
-                                        <td><?php echo '';?></td>
+                                        <td><?php if(isset($prediction['mkt_budgeted_mrp'])){echo $prediction['mkt_budgeted_mrp'];}?></td>
+                                        <td><?php if(isset($prediction['mkt_sales_commission'])){echo $prediction['mkt_sales_commission'];}?></td>
+                                        <td><?php if(isset($prediction['mkt_sales_bonus'])){echo $prediction['mkt_sales_bonus'];}?></td>
+                                        <td><?php if(isset($prediction['mkt_other_incentive'])){echo $prediction['mkt_other_incentive'];}?></td>
+                                        <td><?php if(isset($net_profit_per_kg_mkt)){echo $net_profit_per_kg_mkt;}?></td>
+                                        <td><?php if(isset($total_net_profit_mkt)){echo $total_net_profit_mkt;}?></td>
+                                        <td><?php if(isset($total_sales_mkt)){echo $total_sales_mkt;}?></td>
                                     </tr>
                                 </table>
                             </td>
                             <td>
                                 <table class="table table-hover table-bordered" style="background-color: burlywood;">
                                     <tr>
-                                        <td><?php echo '';?></td>
-                                        <td><?php echo '';?></td>
-                                        <td><?php echo '';?></td>
-                                        <td><?php echo '';?></td>
-                                        <td><?php echo '';?></td>
-                                        <td><?php echo '';?></td>
-                                        <td><?php echo '';?></td>
+                                        <td><?php if(isset($prediction['final_budgeted_mrp'])){echo $prediction['final_budgeted_mrp'];}?></td>
+                                        <td><?php if(isset($prediction['final_sales_commission'])){echo $prediction['final_sales_commission'];}?></td>
+                                        <td><?php if(isset($prediction['final_sales_bonus'])){echo $prediction['final_sales_bonus'];}?></td>
+                                        <td><?php if(isset($prediction['final_other_incentive'])){echo $prediction['final_other_incentive'];}?></td>
+                                        <td><?php if(isset($net_profit_per_kg_final)){echo $net_profit_per_kg_final;}?></td>
+                                        <td><?php if(isset($total_net_profit_final)){echo $total_net_profit_final;}?></td>
+                                        <td><?php if(isset($total_sales_final)){echo $total_sales_final;}?></td>
                                     </tr>
                                 </table>
                             </td>
                             <td>
                                 <table class="table table-hover table-bordered" style="background-color: lightseagreen;">
                                     <tr>
-                                        <td><?php echo '';?></td>
+                                        <td><?php echo System_helper::get_actual_total_sales($prediction['variety_id'], $prediction['year']);?></td>
                                         <td><?php echo '';?></td>
                                     </tr>
                                 </table>
@@ -197,7 +223,7 @@
                             <td>
                                 <table class="table table-hover table-bordered" style="background-color: lightsteelblue;">
                                     <tr>
-                                        <td><?php echo '';?></td>
+                                        <td><?php echo $total_target-System_helper::get_actual_total_sales($prediction['variety_id'], $prediction['year']);?></td>
                                         <td><?php echo '';?></td>
                                     </tr>
                                 </table>

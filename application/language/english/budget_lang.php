@@ -180,3 +180,6 @@ $lang['LABEL_MRP'] = 'MRP';
 $lang['LABEL_NP_PER_KG'] = 'NP/ Kg';
 $lang['LABEL_TOTAL_NP'] = 'Total NP';
 $lang['LABEL_TOTAL_SALES'] = 'Total Sales';
+
+$lang['LABEL_PRICE_PER_KG']='Price/ Kg';
+$lang['LABEL_TOTAL_PRICE']='Total Price';

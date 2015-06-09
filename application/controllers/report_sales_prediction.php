@@ -67,27 +67,48 @@ class Report_sales_prediction extends ROOT_Controller
             $finals = $this->report_sales_prediction_model->get_final_prediction_detail($year, $crop_id, $type_id, $variety_id);
 
             $results = array();
-            if(is_array($mgts) && sizeof($initials)==sizeof($mgts))
+            if(is_array($mgts) && sizeof($mgts)>0)
             {
                 foreach($initials as $key => $value)
                 {
-                    $results[] = array_merge($value, $mgts[$key]);
+                    if(array_key_exists($key, $mgts))
+                    {
+                        $results[] = array_merge($value, $mgts[$key]);
+                    }
+                    else
+                    {
+                        $results[] = $value;
+                    }
                 }
             }
 
-            if(is_array($mkts) && sizeof($initials)==sizeof($mkts))
+            if(is_array($mkts) && sizeof($mkts)>0)
             {
                 foreach($results as $key => $value)
                 {
-                    $results[] = array_merge($value, $mkts[$key]);
+                    if(array_key_exists($key, $mkts))
+                    {
+                        $results[] = array_merge($value, $mkts[$key]);
+                    }
+                    else
+                    {
+                        $results[] = $value;
+                    }
                 }
             }
 
-            if(is_array($finals) && sizeof($initials)==sizeof($finals))
+            if(is_array($finals) && sizeof($finals)>0)
             {
                 foreach($results as $key => $value)
                 {
-                    $results[] = array_merge($value, $finals[$key]);
+                    if(array_key_exists($key, $finals))
+                    {
+                        $results[] = array_merge($value, $finals[$key]);
+                    }
+                    else
+                    {
+                        $results[] = $value;
+                    }
                 }
             }
 

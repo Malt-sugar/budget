@@ -241,14 +241,23 @@ if(is_array($targets) && sizeof($targets)>0)
                                                 ?>
                                                 <th><?php echo $this->lang->line('LABEL_VARIETY')?></th>
                                                 <th><?php echo $this->lang->line('LABEL_QUANTITY_KG')?></th>
+                                                <th><?php echo $this->lang->line('LABEL_PRICE_PER_KG')?></th>
+                                                <th><?php echo $this->lang->line('LABEL_TOTAL_PRICE')?></th>
                                                 <?php
                                                 foreach($typeVal['variety'] as $varKey=>$detail)
                                                 {
+                                                    $price_per_kg_hom = System_helper::get_price_per_kg_for_hom($varKey, $arranged_targets['year']);
                                                     ?>
                                                     <tr>
                                                         <td><?php echo $detail['variety_name']?></td>
                                                         <td>
                                                             <input type="text" class="form-control variety_quantity" <?php if((!User_helper::check_edit_permission($detail['created_by']) && $detail['quantity']>0) || (!User_helper::check_edit_permission_after_approval($detail['is_approved_by_zi'], $detail['is_approved_by_di'], $detail['is_approved_by_hom']) && $detail['quantity']>0) || !User_helper::check_edit_permission_after_discard($detail['discard'], $detail['discarded_by'])){echo 'readonly';}?> name="quantity[<?php echo $sl;?>][<?php echo $varKey;?>]" value="<?php if(isset($detail['quantity'])){echo $detail['quantity'];}?>" />
+                                                        </td>
+                                                        <td>
+                                                            <input type="text" class="form-control" value="<?php if($price_per_kg_hom>0){echo $price_per_kg_hom;}else{echo 'N/A';}?>" disabled />
+                                                        </td>
+                                                        <td>
+                                                            <input type="text" class="form-control" value="<?php if($detail['quantity'] && $price_per_kg_hom>0){echo $detail['quantity']*$price_per_kg_hom;}else{echo 'N/A';}?>" disabled />
                                                         </td>
                                                     </tr>
                                                 <?php

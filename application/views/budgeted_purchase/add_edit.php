@@ -146,11 +146,32 @@ if(is_array($purchases) && sizeof($purchases)>0)
                                                 <?php
                                                 foreach($typeVal['variety'] as $varKey=>$detail)
                                                 {
+                                                    $current_stock = System_helper::get_current_stock($key, $typeKey, $varKey);
+
+                                                    if($current_stock>0)
+                                                    {
+                                                        $display_current_stock = 'Current Stock: '.$current_stock;
+                                                    }
+                                                    else
+                                                    {
+                                                        $display_current_stock = 'Current Stock: '.'Not Available';
+                                                    }
+
+                                                    $finalised_sales_target = System_helper::get_finalised_sales_target($varKey, $arranged_purchase['year']);
+
+                                                    if($finalised_sales_target>0)
+                                                    {
+                                                        $display_sales_target = 'Sales target: '.$finalised_sales_target;
+                                                    }
+                                                    else
+                                                    {
+                                                        $display_sales_target = 'Sales target: '.'Not Available';
+                                                    }
                                                     ?>
                                                     <tr>
                                                         <td><?php echo $detail['variety_name']?></td>
                                                         <td>
-                                                            <input type="text" class="form-control variety_quantity"  name="detail[<?php echo $sl;?>][<?php echo $varKey;?>][purchase_quantity]" value="<?php if(isset($detail['purchase_quantity'])){echo $detail['purchase_quantity'];}?>" />
+                                                            <input type="text" class="form-control variety_quantity" data-toggle="tooltip" data-placement="left" title="<?php echo $display_current_stock.', '.$display_sales_target;?>"  name="detail[<?php echo $sl;?>][<?php echo $varKey;?>][purchase_quantity]" value="<?php if(isset($detail['purchase_quantity'])){echo $detail['purchase_quantity'];}?>" />
                                                         </td>
                                                         <td>
                                                             <input type="text" class="form-control variety_price_per_kg"  name="detail[<?php echo $sl;?>][<?php echo $varKey;?>][price_per_kg]" value="<?php if(isset($detail['price_per_kg'])){echo $detail['price_per_kg'];}?>" />
@@ -416,5 +437,8 @@ if(is_array($purchases) && sizeof($purchases)>0)
 
             $(this).parent().parent().find('.variety_total_quantity').val(total);
         });
+
+        // tooltip trigger
+        $('[data-toggle="tooltip"]').tooltip();
     });
 </script>
