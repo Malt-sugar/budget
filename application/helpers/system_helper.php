@@ -250,47 +250,43 @@ class System_helper
 
     public static function get_cogs_and_total_cogs($quantity, $price_per_kg, $conversion, $lc, $insurance, $packing, $carriage, $air_freight, $type)
     {
-        if($type==1) // cogs
-        {
-            $initial = $price_per_kg;
-        }
-        elseif($type==2) // total cogs
-        {
-            $initial = $price_per_kg*$quantity;
-        }
-
-        $cogs = $initial;
-        if($conversion>0)
-        {
-            $cogs = $cogs + $initial*($conversion/100);
-        }
+        $cogs = 0;
 
         if($lc>0)
         {
-            $cogs = $cogs + $initial*($lc/100);
+            $cogs =  $price_per_kg*($lc/100);
         }
-
         if($insurance>0)
         {
-            $cogs = $cogs + $initial*($insurance/100);
+            $cogs = $cogs + $price_per_kg*($insurance/100);
         }
-
         if($packing>0)
         {
-            $cogs = $cogs + $initial*($packing/100);
+            $cogs = $cogs + $price_per_kg*($packing/100);
         }
-
         if($carriage>0)
         {
-            $cogs = $cogs + $initial*($carriage/100);
+            $cogs = $cogs + $price_per_kg*($carriage/100);
         }
+
 
         if($air_freight>0)
         {
-            $cogs = $cogs + $initial*($air_freight/100);
+            $cogs = $cogs + $price_per_kg*($air_freight/100);
         }
 
-        return round($cogs, 2);
+        $revised_cogs = $cogs + $price_per_kg;
+
+        if($type==1)
+        {
+            $final_cogs = $revised_cogs;
+        }
+        else
+        {
+            $final_cogs = $revised_cogs*$quantity;
+        }
+
+        return round($final_cogs, 2);
     }
 
     public static function get_current_year()
@@ -482,7 +478,7 @@ class System_helper
 
         if($lc_exp>0)
         {
-            $cogs = $cogs + $price_per_kg*($lc_exp/100);
+            $cogs =  $price_per_kg*($lc_exp/100);
         }
         if($insurance_exp>0)
         {
@@ -496,42 +492,45 @@ class System_helper
         {
             $cogs = $cogs + $price_per_kg*($carriage_inwards/100);
         }
+
+
         if($air_freight_and_docs>0)
         {
             $cogs = $cogs + $price_per_kg*($air_freight_and_docs/100);
         }
 
-        $revised_cogs = $cogs;
+        $revised_cogs = $cogs + $price_per_kg;
 
         if($ho_and_general_exp>0)
         {
-            $revised_cogs = $revised_cogs + $cogs*($ho_and_general_exp/100);
+            $pricing_expenses = $revised_cogs*($ho_and_general_exp/100);
         }
         if($marketing>0)
         {
-            $revised_cogs = $revised_cogs + $cogs*($marketing/100);
+            $pricing_expenses = $pricing_expenses + $revised_cogs*($marketing/100);
         }
         if($finance_cost>0)
         {
-            $revised_cogs = $revised_cogs + $cogs*($finance_cost/100);
+            $pricing_expenses = $pricing_expenses + $cogs*($finance_cost/100);
         }
 
-        $revised_mrp = $mrp;
+        $final_cogs = $pricing_expenses + $revised_cogs;
+
 
         if($sales_commission>0)
         {
-            $revised_mrp = $revised_mrp - $mrp*($sales_commission/100);
+            $bonus_exp = $mrp*($sales_commission/100);
         }
         if($sales_bonus>0)
         {
-            $revised_mrp = $revised_mrp - $mrp*($sales_bonus/100);
+            $bonus_exp = $bonus_exp + $mrp*($sales_bonus/100);
         }
         if($other_incentive>0)
         {
-            $revised_mrp = $revised_mrp - $mrp*($other_incentive/100);
+            $bonus_exp = $bonus_exp + $mrp*($other_incentive/100);
         }
 
-        $net_profit = $revised_mrp - $revised_cogs;
+        $net_profit = $mrp - $bonus_exp - $final_cogs;
         return round($net_profit, 2);
     }
 
@@ -611,6 +610,82 @@ class System_helper
         if($result)
         {
             return $result['finalised_quantity'];
+        }
+        else
+        {
+            return 0;
+        }
+    }
+
+    public static function get_actual_sales_quantity($year, $variety, $customer)
+    {
+        $CI = & get_instance();
+
+        $CI->db->from('ait_product_purchase_order_invoice ppoi');
+        $CI->db->select('SUM(ppoi.approved_quantity) approved_quantity');
+        $CI->db->where('ppoi.year_id', $year);
+        $CI->db->where('ppoi.varriety_id', $variety);
+        $CI->db->where('ppoi.distributor_id', $customer);
+        $result = $CI->db->get()->row_array();
+
+        if($result)
+        {
+            return $result['approved_quantity'];
+        }
+        else
+        {
+            return 0;
+        }
+    }
+
+    public static function get_opening_balance($variety)
+    {
+        $CI = & get_instance();
+        $year = System_helper::get_current_year();
+
+        $CI->db->from('ait_product_purchase_info ppi');
+        $CI->db->select('SUM(ppi.opening_balance) opening_balance');
+        $CI->db->where('ppi.year_id', $year);
+        $CI->db->where('ppi.varriety_id', $variety);
+        $result = $CI->db->get()->row_array();
+
+        if($result)
+        {
+            return $result['opening_balance'];
+        }
+        else
+        {
+            return 0;
+        }
+    }
+
+    public static function get_sales_target_record_data($year, $variety, $customer)
+    {
+        $CI = & get_instance();
+
+        $CI->db->from('budget_sales_target_record bstr');
+        $CI->db->select('bstr.quantity_ti, bstr.quantity_zi, bstr.quantity_di, bstr.quantity_hom');
+        $CI->db->where('bstr.year', $year);
+        $CI->db->where('bstr.variety_id', $variety);
+        $CI->db->where('bstr.customer_id', $customer);
+        $result = $CI->db->get()->row_array();
+
+        return $result;
+    }
+
+    public static function get_budget_purchase_quantity($year, $variety)
+    {
+        $CI = & get_instance();
+
+        $CI->db->from('budget_purchase bp');
+        $CI->db->select('bp.purchase_quantity');
+        $CI->db->where('bp.year', $year);
+        $CI->db->where('bp.variety_id', $variety);
+        $CI->db->where('bp.purchase_type', $CI->lang->line('purchase_type_budget'));
+        $result = $CI->db->get()->row_array();
+        if($result)
+        {
+            return $result['purchase_quantity'];
         }
         else
         {

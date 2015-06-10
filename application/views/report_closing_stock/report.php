@@ -27,16 +27,17 @@
                 {
                     foreach($stocks as $key=>$stock)
                     {
+                        $current_stock = System_helper::get_current_stock($stock['crop_id'], $stock['product_type_id'], $stock['varriety_id']);
                         ?>
                         <tr>
                             <td><?php echo $key+1;?></td>
                             <td><?php echo $stock['crop_name'];?></td>
                             <td><?php echo $stock['type_name'];?></td>
-                            <td><?php echo $stock['variety_name'];?></td>
-                            <td><?php echo $stock['opening_balance'];?></td>
-                            <td><?php echo $stock['min_stock_quantity'];?></td>
-                            <td><?php echo print_r(System_helper::get_current_stock($stock['crop_id'], $stock['type_id'], $stock['variety_id']));?></td>
-                            <td><?php echo '';?></td>
+                            <td><?php echo $stock['varriety_name'];?></td>
+                            <td><?php echo System_helper::get_opening_balance($stock['varriety_id'])?System_helper::get_opening_balance($stock['varriety_id']):'Not Available';?></td>
+                            <td><?php echo $stock['min_stock_quantity']?$stock['min_stock_quantity']:'Not Set';?></td>
+                            <td><?php echo $current_stock;?></td>
+                            <td><?php if(isset($stock['min_stock_quantity']) && isset($current_stock)){echo $current_stock-$stock['min_stock_quantity'];}?></td>
                         </tr>
                         <?php
                     }

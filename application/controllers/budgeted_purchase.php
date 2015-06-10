@@ -260,6 +260,7 @@ class Budgeted_purchase extends ROOT_Controller
         $crop_id = $this->input->post('crop_id');
         $type_id = $this->input->post('type_id');
         $current_id = $this->input->post('current_id');
+        $data['year'] = $this->input->post('year');
 
         $data['varieties'] = $this->budgeted_purchase_model->get_variety_by_crop_type($crop_id, $type_id);
 

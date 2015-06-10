@@ -116,32 +116,34 @@
                 {
                     foreach($predictions as $key=>$prediction)
                     {
-                        $total_target = System_helper::get_total_sales_target_of_variety($prediction['variety_id'], $prediction['year']);
+                        //$total_target = System_helper::get_total_sales_target_of_variety($prediction['variety_id'], $prediction['year']);
+                        $budget_purchase_quantity = System_helper::get_budget_purchase_quantity($prediction['year'], $prediction['variety_id']);
+
                         $mrp_cal = System_helper::get_mrp_of_last_years($prediction['variety_id'], $this->config->item('budgeted_mrp_cal_year'));
 
                         $net_profit_per_kg_initial = System_helper::calculate_net_profit($prediction['year'], $prediction['variety_id'], $mrp_cal, $prediction['sales_commission'], $prediction['sales_bonus'], $prediction['other_incentive']);
-                        $total_net_profit_initial = $net_profit_per_kg_initial*$total_target;
-                        $total_sales_initial = $mrp_cal*$total_target;
+                        $total_net_profit_initial = $net_profit_per_kg_initial*$budget_purchase_quantity;
+                        $total_sales_initial = $mrp_cal*$budget_purchase_quantity;
 
                         if(isset($prediction['mgt_budgeted_mrp']) && isset($prediction['mgt_sales_commission']) && isset($prediction['mgt_sales_bonus']) && isset($prediction['mgt_other_incentive']))
                         {
                             $net_profit_per_kg_mgt = System_helper::calculate_net_profit($prediction['year'], $prediction['variety_id'], $prediction['mgt_budgeted_mrp'], $prediction['mgt_sales_commission'], $prediction['mgt_sales_bonus'], $prediction['mgt_other_incentive']);
-                            $total_net_profit_mgt = $net_profit_per_kg_mgt*$total_target;
-                            $total_sales_mgt = $prediction['mgt_budgeted_mrp']*$total_target;
+                            $total_net_profit_mgt = $net_profit_per_kg_mgt*$budget_purchase_quantity;
+                            $total_sales_mgt = $prediction['mgt_budgeted_mrp']*$budget_purchase_quantity;
                         }
 
                         if(isset($prediction['mkt_budgeted_mrp']) && isset($prediction['mkt_sales_commission']) && isset($prediction['mkt_sales_bonus']) && isset($prediction['mkt_other_incentive']))
                         {
                             $net_profit_per_kg_mkt = System_helper::calculate_net_profit($prediction['year'], $prediction['variety_id'], $prediction['mkt_budgeted_mrp'], $prediction['mkt_sales_commission'], $prediction['mkt_sales_bonus'], $prediction['mkt_other_incentive']);
-                            $total_net_profit_mkt = $net_profit_per_kg_mkt*$total_target;
-                            $total_sales_mkt = $prediction['mkt_budgeted_mrp']*$total_target;
+                            $total_net_profit_mkt = $net_profit_per_kg_mkt*$budget_purchase_quantity;
+                            $total_sales_mkt = $prediction['mkt_budgeted_mrp']*$budget_purchase_quantity;
                         }
 
                         if(isset($prediction['final_budgeted_mrp']) && isset($prediction['final_sales_commission']) && isset($prediction['final_sales_bonus']) && isset($prediction['final_other_incentive']))
                         {
                             $net_profit_per_kg_final = System_helper::calculate_net_profit($prediction['year'], $prediction['variety_id'], $prediction['final_budgeted_mrp'], $prediction['final_sales_commission'], $prediction['final_sales_bonus'], $prediction['final_other_incentive']);
-                            $total_net_profit_final = $net_profit_per_kg_final*$total_target;
-                            $total_sales_final = $prediction['final_budgeted_mrp']*$total_target;
+                            $total_net_profit_final = $net_profit_per_kg_final*$budget_purchase_quantity;
+                            $total_sales_final = $prediction['final_budgeted_mrp']*$budget_purchase_quantity;
                         }
                         ?>
                         <tr>
@@ -149,7 +151,7 @@
                             <td><?php echo $prediction['type_name'];?></td>
                             <td><?php echo $prediction['variety_name'];?></td>
                             <td><?php echo '';?></td>
-                            <td><?php if(isset($total_target)){echo $total_target;}?></td>
+                            <td><?php if(isset($budget_purchase_quantity)){echo $budget_purchase_quantity;}?></td>
                             <td>
                                 <table class="table table-hover table-bordered" style="background-color: lavender;">
                                     <tr>
@@ -223,7 +225,7 @@
                             <td>
                                 <table class="table table-hover table-bordered" style="background-color: lightsteelblue;">
                                     <tr>
-                                        <td><?php echo $total_target-System_helper::get_actual_total_sales($prediction['variety_id'], $prediction['year']);?></td>
+                                        <td><?php echo $budget_purchase_quantity-System_helper::get_actual_total_sales($prediction['variety_id'], $prediction['year']);?></td>
                                         <td><?php echo '';?></td>
                                     </tr>
                                 </table>

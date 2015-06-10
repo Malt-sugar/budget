@@ -152,6 +152,7 @@ $lang['YEAR_REQUIRED']='Year Required';
 $lang['DIVISION_REQUIRED']='Division Required';
 $lang['ZONE_REQUIRED']='Zone Required';
 $lang['TERRITORY_REQUIRED']='Territory Required';
+$lang['LABEL_TARGET_SET_BY_TI']='Target Set By TI';
 
 // Budget purchase report
 $lang['LABEL_BUDGETED_PURCHASE_QUANTITY'] = 'Budgeted Purchase (Qty)';

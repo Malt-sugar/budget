@@ -380,7 +380,7 @@ if(is_array($purchases) && sizeof($purchases)>0)
                     url: base_url+"budgeted_purchase/get_varieties_by_crop_type/",
                     type: 'POST',
                     dataType: "JSON",
-                    data:{crop_id:$("#crop"+current_id).val(), type_id:$(this).val(), current_id: current_id},
+                    data:{crop_id:$("#crop"+current_id).val(), type_id:$(this).val(), current_id: current_id, year:$("#year").val()},
                     success: function (data, status)
                     {
 

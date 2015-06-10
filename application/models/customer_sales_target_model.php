@@ -120,6 +120,21 @@ class Customer_sales_target_model extends CI_Model
         return $varieties;
     }
 
+    public function get_existing_sales_targets_records($customer, $year)
+    {
+        $this->db->from('budget_sales_target_record bstr');
+        $this->db->select('bstr.*');
+        $this->db->where('bstr.year',$year);
+        $this->db->where('bstr.customer_id',$customer);
+        $results = $this->db->get()->result_array();
+        foreach($results as $result)
+        {
+            $varieties[] = $result['variety_id'];
+        }
+
+        return $varieties;
+    }
+
     public function check_customer_existence($customer_id, $year_id)
     {
         $this->db->from('budget_sales_target bst');

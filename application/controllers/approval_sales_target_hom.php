@@ -91,6 +91,7 @@ class Approval_sales_target_hom extends ROOT_Controller
     {
         $user = User_helper::get_user();
         $data = Array();
+        $record_data = array();
 
         if(!$this->check_validation())
         {
@@ -116,6 +117,11 @@ class Approval_sales_target_hom extends ROOT_Controller
                 $customer_id = $this->input->post('customer_id');
                 $year_id = $this->input->post('year_id');
 
+                // Initial record update Record Data
+                $record_status = array('status'=>0);
+                Query_helper::update('budget_sales_target_record',$record_status,array("customer_id ='$customer_id'", "year ='$year_id'"));
+                $existing_record_varieties = $this->approval_sales_target_hom_model->get_existing_sales_targets_records($this->input->post('customer_id'), $this->input->post('year_id'));
+
                 // Initial update
                 $update_status = array('status'=>0);
                 Query_helper::update('budget_sales_target',$update_status,array("customer_id ='$customer_id'", "year ='$year_id'"));
@@ -137,6 +143,71 @@ class Approval_sales_target_hom extends ROOT_Controller
 
                             foreach($quantity as $variety_id=>$amount)
                             {
+                                // Start Record data
+                                if($user->budget_group==$this->config->item('user_group_territory'))
+                                {
+                                    $record_data['quantity_ti'] = $amount;
+                                }
+                                else
+                                {
+                                    unset($record_data['quantity_ti']);
+                                }
+
+                                if($user->budget_group==$this->config->item('user_group_zone'))
+                                {
+                                    $record_data['quantity_zi'] = $amount;
+                                }
+                                else
+                                {
+                                    unset($record_data['quantity_zi']);
+                                }
+
+                                if($user->budget_group==$this->config->item('user_group_division'))
+                                {
+                                    $record_data['quantity_di'] = $amount;
+                                }
+                                else
+                                {
+                                    unset($record_data['quantity_di']);
+                                }
+
+                                if($user->budget_group==$this->config->item('user_group_marketing'))
+                                {
+                                    $record_data['quantity_hom'] = $amount;
+                                }
+                                else
+                                {
+                                    unset($record_data['quantity_hom']);
+                                }
+
+                                if(in_array($variety_id, $existing_record_varieties))
+                                {
+                                    $record_data['status'] = 1;
+                                    $record_data['modified_by'] = $user->user_id;
+                                    $record_data['modification_date'] = time();
+                                    $crop_id = $data['crop_id'];
+                                    $type_id = $data['type_id'];
+                                    Query_helper::update('budget_sales_target_record',$record_data,array("customer_id ='$customer_id'", "year ='$year'", "crop_id ='$crop_id'", "type_id ='$type_id'", "variety_id ='$variety_id'"));
+                                }
+                                else
+                                {
+                                    $record_data['division_id'] = $division;
+                                    $record_data['zone_id'] = $zone;
+                                    $record_data['territory_id'] = $territory;
+                                    $record_data['customer_id'] = $customer;
+                                    $record_data['year'] = $year;
+                                    $record_data['crop_id'] = $crop_type['crop'];
+                                    $record_data['type_id'] = $crop_type['type'];
+                                    $record_data['variety_id'] = $variety_id;
+
+                                    $record_data['created_by'] = $user->user_id;
+                                    $record_data['creation_date'] = time();
+
+                                    Query_helper::add('budget_sales_target_record',$record_data);
+                                }
+
+                                // End Record data
+
                                 $existing_quantity = $this->budget_common_model->get_existing_quantity($year, $customer, $data['crop_id'], $data['type_id'], $variety_id);
 
                                 if($existing_quantity != $amount)

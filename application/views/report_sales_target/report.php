@@ -17,7 +17,8 @@
                 <th><?php echo $this->lang->line("LABEL_PRODUCT_TYPE"); ?></th>
                 <th><?php echo $this->lang->line("LABEL_VARIETY"); ?></th>
                 <th><?php echo $this->lang->line("LABEL_SELLING_MONTH"); ?></th>
-                <th><?php echo $this->lang->line("LABEL_TARGET_FROM_CUSTOMER"); ?></th>
+                <th><?php echo $this->lang->line("LABEL_CUSTOMER"); ?></th>
+                <th><?php echo $this->lang->line("LABEL_TARGET_SET_BY_TI"); ?></th>
                 <th><?php echo $this->lang->line("LABEL_TARGET_CONFIRMED_BY_ZI"); ?></th>
                 <th><?php echo $this->lang->line("LABEL_TARGET_APPROVED_BY_DI"); ?></th>
                 <th><?php echo $this->lang->line("LABEL_FINAL_TARGET_SALES_QTY_HOM"); ?></th>
@@ -35,6 +36,9 @@
                 {
                     foreach($targets as $key=>$target)
                     {
+                        $actual_sales = System_helper::get_actual_sales_quantity($target['year'], $target['variety_id'], $target['customer_id']);
+                        $record_data = System_helper::get_sales_target_record_data($target['year'], $target['variety_id'], $target['customer_id']);
+                        $final_prediction = System_helper::get_prediction_detail($target['variety_id'], $this->config->item('prediction_phase_final'), $target['year']);
                         ?>
                         <tr>
                             <td><?php echo $key+1;?></td>
@@ -44,12 +48,13 @@
                             <td><?php echo $target['variety_name'];?></td>
                             <td><?php echo '';?></td>
                             <td><?php echo $target['distributor_name'];?></td>
-                            <td><?php if($target['is_approved_by_zi']==0){echo '<label class="label label-warning">'.$this->lang->line('LABEL_NO').'</label>';}else{echo '<label class="label label-success">'.$this->lang->line('LABEL_YES').'</label>';}?></td>
-                            <td><?php if($target['is_approved_by_di']==0){echo '<label class="label label-warning">'.$this->lang->line('LABEL_NO').'</label>';}else{echo '<label class="label label-success">'.$this->lang->line('LABEL_YES').'</label>';}?></td>
+                            <td><?php if(isset($record_data['quantity_ti'])){echo $record_data['quantity_ti'];}?></td>
+                            <td><?php if(isset($record_data['quantity_zi'])){echo $record_data['quantity_zi'];}?></td>
+                            <td><?php if(isset($record_data['quantity_di'])){echo $record_data['quantity_di'];}?></td>
                             <td><?php echo $target['quantity'];?></td>
-                            <td><?php echo $target['approved_quantity'];?></td>
-                            <td><?php echo '';?></td>
-                            <td><?php echo '';?></td>
+                            <td><?php echo $actual_sales?$actual_sales:0;?></td>
+                            <td><?php if($actual_sales>0 && $target['quantity']){echo $target['quantity']-$actual_sales;}?></td>
+                            <td><?php if(is_array($final_prediction) && isset($final_prediction['budgeted_mrp'])){echo $final_prediction['budgeted_mrp'];}?></td>
                             <td><?php echo '';?></td>
                             <td><?php echo '';?></td>
                             <td><?php echo '';?></td>

@@ -20,6 +20,7 @@
                 <th><?php echo $this->lang->line("LABEL_VARIANCE"); ?></th>
                 <th><?php echo $this->lang->line("LABEL_BUDGETED_PURCHASE_QUANTITY"); ?></th>
                 <th><?php echo $this->lang->line("LABEL_MONTH_OF_PURCHASE"); ?></th>
+                <th><?php echo $this->lang->line("LABEL_PI_VALUE"); ?></th>
                 <th><?php echo $this->lang->line("LABEL_USD_CONVERSION_RATE"); ?></th>
                 <th><?php echo $this->lang->line("LABEL_LC_EXP"); ?></th>
                 <th><?php echo $this->lang->line("LABEL_INSURANCE_EXP"); ?></th>
@@ -47,6 +48,7 @@
                             <td><?php echo '';?></td>
                             <td><?php echo $purchase['purchase_quantity'];?></td>
                             <td><?php echo '';?></td>
+                            <td><?php echo $purchase['purchase_quantity']*$purchase['price_per_kg'];?></td>
                             <td><?php echo $purchase['usd_conversion_rate'];?></td>
                             <td><?php echo $purchase['lc_exp'];?></td>
                             <td><?php echo $purchase['insurance_exp'];?></td>

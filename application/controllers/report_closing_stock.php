@@ -61,7 +61,7 @@ class Report_closing_stock extends ROOT_Controller
             $type_id = $this->input->post('type_id');
             $variety_id = $this->input->post('variety_id');
 
-            $data['stocks'] = $this->report_closing_stock_model->get_closing_stock_info($year, $crop_id, $type_id, $variety_id);
+            $data['stocks'] = $this->report_closing_stock_model->get_closing_stock_info($crop_id, $type_id, $variety_id);
             $ajax['status'] = true;
             $ajax['content'][] = array("id" => "#report_list", "html" => $this->load->view("report_closing_stock/report", $data, true));
             $this->jsonReturn($ajax);

@@ -146,11 +146,22 @@ if(!isset($arranged_prediction['year']))
                                                 {
                                                     $mkt_detail = System_helper::get_prediction_detail($varKey, $this->config->item('prediction_phase_marketing'), $arranged_prediction['year']);
                                                     $mgt_detail = System_helper::get_prediction_detail($varKey, $this->config->item('prediction_phase_management'), $arranged_prediction['year']);
+
+                                                    $final_detail = System_helper::get_prediction_detail($varKey, $this->config->item('prediction_phase_final'), $arranged_prediction['year']);
+                                                    $mrp_cal = System_helper::get_mrp_of_last_years($varKey, $this->config->item('budgeted_mrp_cal_year'));
+
+                                                    if(isset($final_detail['budgeted_mrp'])){$budgeted_mrp = $final_detail['budgeted_mrp'];}else{$budgeted_mrp = $detail['budgeted_mrp'];}
+                                                    if(isset($final_detail['sales_commission'])){$sales_commission = $final_detail['sales_commission'];}else{$sales_commission = $detail['sales_commission'];}
+                                                    if(isset($final_detail['sales_bonus'])){$sales_bonus = $final_detail['sales_bonus'];}else{$sales_bonus = $detail['sales_bonus'];}
+                                                    if(isset($final_detail['other_incentive'])){$other_incentive = $final_detail['other_incentive'];}else{$other_incentive = $detail['other_incentive'];}
+
+                                                    $net_profit = System_helper::calculate_net_profit($arranged_prediction['year'], $varKey, $budgeted_mrp, $sales_commission, $sales_bonus, $other_incentive);
+
                                                     ?>
                                                     <tr>
                                                         <td><?php echo $detail['variety_name'];?></td>
                                                         <td>
-                                                            <input type="text" class="form-control quantity_number" name="detail[<?php echo $sl;?>][<?php echo $varKey;?>][budgeted_mrp]" value="<?php if(isset($detail['budgeted_mrp'])){echo $detail['budgeted_mrp'];}?>" />
+                                                            <input type="text" class="form-control quantity_number" data-toggle="tooltip" data-placement="left"  title="<?php if(isset($mkt_detail['budgeted_mrp']) && isset($mgt_detail['budgeted_mrp'])){echo 'Marketing: '.$mkt_detail['budgeted_mrp'].', '.'Management: '.$mgt_detail['budgeted_mrp'];} ?>" name="detail[<?php echo $sl;?>][<?php echo $varKey;?>][budgeted_mrp]" value="<?php if(isset($detail['budgeted_mrp'])){echo $detail['budgeted_mrp'];}?>" />
                                                         </td>
                                                         <td>
                                                             <input type="text" class="form-control quantity_number" data-toggle="tooltip" data-placement="left"  title="<?php if(isset($mkt_detail['sales_commission']) && isset($mgt_detail['sales_commission'])){echo 'Marketing: '.$mkt_detail['sales_commission'].', '.'Management: '.$mgt_detail['sales_commission'];} ?>" name="detail[<?php echo $sl;?>][<?php echo $varKey;?>][sales_commission]" value="<?php if(isset($detail['sales_commission'])){echo $detail['sales_commission'];}?>" />
@@ -162,7 +173,7 @@ if(!isset($arranged_prediction['year']))
                                                             <input type="text" class="form-control quantity_number" data-toggle="tooltip" data-placement="left"  title="<?php if(isset($mkt_detail['other_incentive']) && isset($mgt_detail['other_incentive'])){echo 'Marketing: '.$mkt_detail['other_incentive'].', '.'Management: '.$mgt_detail['other_incentive'];} ?>" name="detail[<?php echo $sl;?>][<?php echo $varKey;?>][other_incentive]" value="<?php if(isset($mkt_detail['other_incentive'])){echo $mkt_detail['other_incentive'];}else{ if(isset($detail['other_incentive'])){echo $detail['other_incentive'];}}?>" />
                                                         </td>
                                                         <td>
-                                                            <input type="text" class="form-control quantity_number" name="" value="" />
+                                                            <input type="text" class="form-control quantity_number" name="" value="<?php if(isset($net_profit)){echo $net_profit;}else{echo 0;}?>" />
                                                         </td>
                                                     </tr>
                                                 <?php
