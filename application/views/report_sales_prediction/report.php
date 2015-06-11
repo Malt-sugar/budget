@@ -110,7 +110,7 @@
                 </td>
             </tr>
             </thead>
-            <tbody>
+            <tbody class="order">
                 <?php
                 if(sizeof($predictions)>0)
                 {
@@ -142,95 +142,97 @@
                         if(isset($prediction['final_budgeted_mrp']) && isset($prediction['final_sales_commission']) && isset($prediction['final_sales_bonus']) && isset($prediction['final_other_incentive']))
                         {
                             $net_profit_per_kg_final = System_helper::calculate_net_profit($prediction['year'], $prediction['variety_id'], $prediction['final_budgeted_mrp'], $prediction['final_sales_commission'], $prediction['final_sales_bonus'], $prediction['final_other_incentive']);
+                            $net_profit_percentage = System_helper::calculate_net_profit_percentage($prediction['year'], $prediction['variety_id'], $prediction['final_budgeted_mrp'], $prediction['final_sales_commission'], $prediction['final_sales_bonus'], $prediction['final_other_incentive']);
                             $total_net_profit_final = $net_profit_per_kg_final*$budget_purchase_quantity;
                             $total_sales_final = $prediction['final_budgeted_mrp']*$budget_purchase_quantity;
                         }
                         ?>
-                        <tr>
-                            <td><?php echo $prediction['crop_name'];?></td>
-                            <td><?php echo $prediction['type_name'];?></td>
-                            <td><?php echo $prediction['variety_name'];?></td>
-                            <td><?php echo '';?></td>
-                            <td><?php if(isset($budget_purchase_quantity)){echo $budget_purchase_quantity;}?></td>
-                            <td>
-                                <table class="table table-hover table-bordered" style="background-color: lavender;">
-                                    <tr>
-                                        <td><?php echo $prediction['ho_and_general_exp'];?></td>
-                                        <td><?php echo $prediction['marketing'];?></td>
-                                        <td><?php echo $prediction['finance_cost'];?></td>
-                                    </tr>
-                                </table>
-                            </td>
-                            <td>
-                                <table class="table table-hover table-bordered" style="background-color: darkgray;">
-                                    <tr>
-                                        <td><?php if(isset($prediction['targeted_profit'])){echo $prediction['targeted_profit'];}?></td>
-                                        <td><?php if(isset($mrp_cal)){echo $mrp_cal;}?></td>
-                                        <td><?php if(isset($prediction['sales_commission'])){echo $prediction['sales_commission'];}?></td>
-                                        <td><?php if(isset($prediction['sales_bonus'])){echo $prediction['sales_bonus'];}?></td>
-                                        <td><?php if(isset($prediction['other_incentive'])){echo $prediction['other_incentive'];}?></td>
-                                        <td><?php if(isset($net_profit_per_kg_initial)){echo $net_profit_per_kg_initial;}?></td>
-                                        <td><?php if(isset($total_net_profit_initial)){echo $total_net_profit_initial;}?></td>
-                                        <td><?php if(isset($total_sales_initial)){echo $total_sales_initial;}?></td>
-                                    </tr>
-                                </table>
-                            </td>
-                            <td>
-                                <table class="table table-hover table-bordered" style="background-color: lightblue;">
-                                    <tr>
-                                        <td><?php if(isset($prediction['mgt_budgeted_mrp'])){echo $prediction['mgt_budgeted_mrp'];}?></td>
-                                        <td><?php if(isset($prediction['mgt_sales_commission'])){echo $prediction['mgt_sales_commission'];}?></td>
-                                        <td><?php if(isset($prediction['mgt_sales_bonus'])){echo $prediction['mgt_sales_bonus'];}?></td>
-                                        <td><?php if(isset($prediction['mgt_other_incentive'])){echo $prediction['mgt_other_incentive'];}?></td>
-                                        <td><?php if(isset($net_profit_per_kg_mgt)){echo $net_profit_per_kg_mgt;}?></td>
-                                        <td><?php if(isset($total_net_profit_mgt)){echo $total_net_profit_mgt;}?></td>
-                                        <td><?php if(isset($total_sales_mgt)){echo $total_sales_mgt;}?></td>
-                                    </tr>
-                                </table>
-                            </td>
-                            <td>
-                                <table class="table table-hover table-bordered" style="background-color: lightsteelblue;">
-                                    <tr>
-                                        <td><?php if(isset($prediction['mkt_budgeted_mrp'])){echo $prediction['mkt_budgeted_mrp'];}?></td>
-                                        <td><?php if(isset($prediction['mkt_sales_commission'])){echo $prediction['mkt_sales_commission'];}?></td>
-                                        <td><?php if(isset($prediction['mkt_sales_bonus'])){echo $prediction['mkt_sales_bonus'];}?></td>
-                                        <td><?php if(isset($prediction['mkt_other_incentive'])){echo $prediction['mkt_other_incentive'];}?></td>
-                                        <td><?php if(isset($net_profit_per_kg_mkt)){echo $net_profit_per_kg_mkt;}?></td>
-                                        <td><?php if(isset($total_net_profit_mkt)){echo $total_net_profit_mkt;}?></td>
-                                        <td><?php if(isset($total_sales_mkt)){echo $total_sales_mkt;}?></td>
-                                    </tr>
-                                </table>
-                            </td>
-                            <td>
-                                <table class="table table-hover table-bordered" style="background-color: burlywood;">
-                                    <tr>
-                                        <td><?php if(isset($prediction['final_budgeted_mrp'])){echo $prediction['final_budgeted_mrp'];}?></td>
-                                        <td><?php if(isset($prediction['final_sales_commission'])){echo $prediction['final_sales_commission'];}?></td>
-                                        <td><?php if(isset($prediction['final_sales_bonus'])){echo $prediction['final_sales_bonus'];}?></td>
-                                        <td><?php if(isset($prediction['final_other_incentive'])){echo $prediction['final_other_incentive'];}?></td>
-                                        <td><?php if(isset($net_profit_per_kg_final)){echo $net_profit_per_kg_final;}?></td>
-                                        <td><?php if(isset($total_net_profit_final)){echo $total_net_profit_final;}?></td>
-                                        <td><?php if(isset($total_sales_final)){echo $total_sales_final;}?></td>
-                                    </tr>
-                                </table>
-                            </td>
-                            <td>
-                                <table class="table table-hover table-bordered" style="background-color: lightseagreen;">
-                                    <tr>
-                                        <td><?php echo System_helper::get_actual_total_sales($prediction['variety_id'], $prediction['year']);?></td>
-                                        <td><?php echo '';?></td>
-                                    </tr>
-                                </table>
-                            </td>
-                            <td>
-                                <table class="table table-hover table-bordered" style="background-color: lightsteelblue;">
-                                    <tr>
-                                        <td><?php echo $budget_purchase_quantity-System_helper::get_actual_total_sales($prediction['variety_id'], $prediction['year']);?></td>
-                                        <td><?php echo '';?></td>
-                                    </tr>
-                                </table>
-                            </td>
-                        </tr>
+
+                            <tr class="ordered" myAttribute="<?php if(isset($net_profit_percentage)){echo $net_profit_percentage;}else{echo 0;}?>" style="<?php if(isset($net_profit_percentage)){ if($net_profit_percentage>=$prediction_from && $net_profit_percentage<=$prediction_to){echo 'display:show';}else{echo 'display:none';}}?>">
+                                <td><?php echo $prediction['crop_name'];?></td>
+                                <td><?php echo $prediction['type_name'];?></td>
+                                <td><?php echo $prediction['variety_name'];?></td>
+                                <td><?php echo '';?></td>
+                                <td><?php if(isset($budget_purchase_quantity)){echo $budget_purchase_quantity;}?></td>
+                                <td>
+                                    <table class="table table-hover table-bordered" style="background-color: lavender;">
+                                        <tr>
+                                            <td><?php echo $prediction['ho_and_general_exp'];?></td>
+                                            <td><?php echo $prediction['marketing'];?></td>
+                                            <td><?php echo $prediction['finance_cost'];?></td>
+                                        </tr>
+                                    </table>
+                                </td>
+                                <td>
+                                    <table class="table table-hover table-bordered" style="background-color: darkgray;">
+                                        <tr>
+                                            <td><?php if(isset($prediction['targeted_profit'])){echo $prediction['targeted_profit'];}?></td>
+                                            <td><?php if(isset($mrp_cal)){echo $mrp_cal;}?></td>
+                                            <td><?php if(isset($prediction['sales_commission'])){echo $prediction['sales_commission'];}?></td>
+                                            <td><?php if(isset($prediction['sales_bonus'])){echo $prediction['sales_bonus'];}?></td>
+                                            <td><?php if(isset($prediction['other_incentive'])){echo $prediction['other_incentive'];}?></td>
+                                            <td><?php if(isset($net_profit_per_kg_initial)){echo $net_profit_per_kg_initial;}?></td>
+                                            <td><?php if(isset($total_net_profit_initial)){echo $total_net_profit_initial;}?></td>
+                                            <td><?php if(isset($total_sales_initial)){echo $total_sales_initial;}?></td>
+                                        </tr>
+                                    </table>
+                                </td>
+                                <td>
+                                    <table class="table table-hover table-bordered" style="background-color: lightblue;">
+                                        <tr>
+                                            <td><?php if(isset($prediction['mgt_budgeted_mrp'])){echo $prediction['mgt_budgeted_mrp'];}?></td>
+                                            <td><?php if(isset($prediction['mgt_sales_commission'])){echo $prediction['mgt_sales_commission'];}?></td>
+                                            <td><?php if(isset($prediction['mgt_sales_bonus'])){echo $prediction['mgt_sales_bonus'];}?></td>
+                                            <td><?php if(isset($prediction['mgt_other_incentive'])){echo $prediction['mgt_other_incentive'];}?></td>
+                                            <td><?php if(isset($net_profit_per_kg_mgt)){echo $net_profit_per_kg_mgt;}?></td>
+                                            <td><?php if(isset($total_net_profit_mgt)){echo $total_net_profit_mgt;}?></td>
+                                            <td><?php if(isset($total_sales_mgt)){echo $total_sales_mgt;}?></td>
+                                        </tr>
+                                    </table>
+                                </td>
+                                <td>
+                                    <table class="table table-hover table-bordered" style="background-color: lightsteelblue;">
+                                        <tr>
+                                            <td><?php if(isset($prediction['mkt_budgeted_mrp'])){echo $prediction['mkt_budgeted_mrp'];}?></td>
+                                            <td><?php if(isset($prediction['mkt_sales_commission'])){echo $prediction['mkt_sales_commission'];}?></td>
+                                            <td><?php if(isset($prediction['mkt_sales_bonus'])){echo $prediction['mkt_sales_bonus'];}?></td>
+                                            <td><?php if(isset($prediction['mkt_other_incentive'])){echo $prediction['mkt_other_incentive'];}?></td>
+                                            <td><?php if(isset($net_profit_per_kg_mkt)){echo $net_profit_per_kg_mkt;}?></td>
+                                            <td><?php if(isset($total_net_profit_mkt)){echo $total_net_profit_mkt;}?></td>
+                                            <td><?php if(isset($total_sales_mkt)){echo $total_sales_mkt;}?></td>
+                                        </tr>
+                                    </table>
+                                </td>
+                                <td>
+                                    <table class="table table-hover table-bordered" style="background-color: burlywood;">
+                                        <tr>
+                                            <td><?php if(isset($prediction['final_budgeted_mrp'])){echo $prediction['final_budgeted_mrp'];}?></td>
+                                            <td><?php if(isset($prediction['final_sales_commission'])){echo $prediction['final_sales_commission'];}?></td>
+                                            <td><?php if(isset($prediction['final_sales_bonus'])){echo $prediction['final_sales_bonus'];}?></td>
+                                            <td><?php if(isset($prediction['final_other_incentive'])){echo $prediction['final_other_incentive'];}?></td>
+                                            <td><?php if(isset($net_profit_per_kg_final)){echo $net_profit_per_kg_final;}?></td>
+                                            <td><?php if(isset($total_net_profit_final)){echo $total_net_profit_final;}?></td>
+                                            <td><?php if(isset($total_sales_final)){echo $total_sales_final;}?></td>
+                                        </tr>
+                                    </table>
+                                </td>
+                                <td>
+                                    <table class="table table-hover table-bordered" style="background-color: lightseagreen;">
+                                        <tr>
+                                            <td><?php echo System_helper::get_actual_total_sales($prediction['variety_id'], $prediction['year']);?></td>
+                                            <td><?php echo '';?></td>
+                                        </tr>
+                                    </table>
+                                </td>
+                                <td>
+                                    <table class="table table-hover table-bordered" style="background-color: lightsteelblue;">
+                                        <tr>
+                                            <td><?php echo $budget_purchase_quantity-System_helper::get_actual_total_sales($prediction['variety_id'], $prediction['year']);?></td>
+                                            <td><?php echo '';?></td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
                         <?php
                     }
                 }
@@ -249,3 +251,23 @@
         </table>
     </div>
 </div>
+
+<script>
+    jQuery(document).ready(function()
+    {
+        var rows = $(".order").find('.ordered').get();
+        rows.sort(function(a, b)
+        {
+            var keyA = $(a).attr('myAttribute');
+            var keyB = $(b).attr('myAttribute');
+            if (keyA > keyB) return 1;
+            if (keyA < keyB) return -1;
+            return 0;
+        });
+
+        $.each(rows, function(index, row)
+        {
+            $(".order").append(row);
+        });
+    });
+</script>

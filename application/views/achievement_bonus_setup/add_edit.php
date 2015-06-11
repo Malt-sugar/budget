@@ -3,6 +3,7 @@
     $data["link_back"]=base_url()."achievement_bonus_setup";
     $this->load->view("action_buttons_edit",$data);
 ?>
+
 <form class="form_valid" id="save_form" action="<?php echo base_url();?>achievement_bonus_setup/index/save" method="post">
     <input type="hidden" name="type_id" id="type_id" value=""/>
     <div class="row widget">

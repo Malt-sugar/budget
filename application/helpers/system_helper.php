@@ -534,6 +534,107 @@ class System_helper
         return round($net_profit, 2);
     }
 
+    public static function calculate_net_profit_percentage($year, $variety, $mrp, $sales_commission, $sales_bonus, $other_incentive)
+    {
+        $CI = & get_instance();
+
+        $CI->db->from('budget_sales_prediction_setup sps');
+        $CI->db->select('sps.*');
+        $CI->db->where('sps.year', $year);
+        $prediction_setup = $CI->db->get()->row_array();
+
+        $ho_and_general_exp = $prediction_setup['ho_and_general_exp'];
+        $marketing = $prediction_setup['marketing'];
+        $finance_cost = $prediction_setup['finance_cost'];
+
+        $CI->db->from('budget_purchase bp');
+        $CI->db->select('bp.*');
+        $CI->db->where('bp.year', $year);
+        $CI->db->where('bp.variety_id', $variety);
+        $purchase = $CI->db->get()->row_array();
+
+        if(isset($purchase['price_per_kg']))
+        {
+            $price_per_kg = $purchase['price_per_kg'];
+        }
+        else
+        {
+            $price_per_kg = 0;
+        }
+
+        $CI->db->from('budget_purchase_setup bps');
+        $CI->db->select('bps.*');
+        $CI->db->where('bps.purchase_type', $CI->config->item('purchase_type_budget'));
+        $purchase_setup = $CI->db->get()->row_array();
+
+        $lc_exp = $purchase_setup['lc_exp'];
+        $insurance_exp = $purchase_setup['insurance_exp'];
+        $packing_material = $purchase_setup['packing_material'];
+        $carriage_inwards = $purchase_setup['carriage_inwards'];
+        $air_freight_and_docs = $purchase_setup['air_freight_and_docs'];
+
+        $cogs = 0;
+
+        if($lc_exp>0)
+        {
+            $cogs =  $price_per_kg*($lc_exp/100);
+        }
+        if($insurance_exp>0)
+        {
+            $cogs = $cogs + $price_per_kg*($insurance_exp/100);
+        }
+        if($packing_material>0)
+        {
+            $cogs = $cogs + $price_per_kg*($packing_material/100);
+        }
+        if($carriage_inwards>0)
+        {
+            $cogs = $cogs + $price_per_kg*($carriage_inwards/100);
+        }
+
+
+        if($air_freight_and_docs>0)
+        {
+            $cogs = $cogs + $price_per_kg*($air_freight_and_docs/100);
+        }
+
+        $revised_cogs = $cogs + $price_per_kg;
+
+        if($ho_and_general_exp>0)
+        {
+            $pricing_expenses = $revised_cogs*($ho_and_general_exp/100);
+        }
+        if($marketing>0)
+        {
+            $pricing_expenses = $pricing_expenses + $revised_cogs*($marketing/100);
+        }
+        if($finance_cost>0)
+        {
+            $pricing_expenses = $pricing_expenses + $cogs*($finance_cost/100);
+        }
+
+        $final_cogs = $pricing_expenses + $revised_cogs;
+
+
+        if($sales_commission>0)
+        {
+            $bonus_exp = $mrp*($sales_commission/100);
+        }
+        if($sales_bonus>0)
+        {
+            $bonus_exp = $bonus_exp + $mrp*($sales_bonus/100);
+        }
+        if($other_incentive>0)
+        {
+            $bonus_exp = $bonus_exp + $mrp*($other_incentive/100);
+        }
+
+        $net_profit = $mrp - $bonus_exp - $final_cogs;
+
+        $percentage = $final_cogs/$net_profit*100;
+        return round($percentage, 2);
+    }
+
     public static function get_total_sales_target_of_variety($variety, $year)
     {
         $CI = & get_instance();
