@@ -269,5 +269,13 @@
         {
             $(".order").append(row);
         });
+
+        $('.order .ordered').each(function(index)
+        {
+            if( index < 5)
+            {
+                $(this).css("background-color", "lightcoral");
+            }
+        });
     });
 </script>
