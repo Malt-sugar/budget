@@ -17,7 +17,7 @@ $this->load->view("action_buttons_edit",$data);
 
     <div class="row show-grid">
         <div class="col-xs-4">
-            <label class="control-label pull-right"><?php echo $this->lang->line('LABEL_YEAR');?><span style="color:#FF0000">*</span></label>
+            <label class="control-label pull-right"><?php echo $this->lang->line('LABEL_YEAR');?></label>
         </div>
         <div class="col-sm-4 col-xs-8">
             <select name="year" id="year" class="form-control validate[required]">
@@ -30,7 +30,7 @@ $this->load->view("action_buttons_edit",$data);
 
     <div class="row show-grid">
         <div class="col-xs-4">
-            <label class="control-label pull-right"><?php echo $this->lang->line('LABEL_CROP');?><span style="color:#FF0000">*</span></label>
+            <label class="control-label pull-right"><?php echo $this->lang->line('LABEL_CROP');?></label>
         </div>
         <div class="col-sm-4 col-xs-8">
             <select name="crop" id="crop" class="form-control validate[required]">
@@ -43,7 +43,7 @@ $this->load->view("action_buttons_edit",$data);
 
     <div class="row show-grid type" style="display: none;">
         <div class="col-xs-4">
-            <label class="control-label pull-right"><?php echo $this->lang->line('LABEL_TYPE');?><span style="color:#FF0000">*</span></label>
+            <label class="control-label pull-right"><?php echo $this->lang->line('LABEL_TYPE');?></label>
         </div>
         <div class="col-sm-4 col-xs-8">
             <select name="type" id="type" class="form-control validate[required]">
@@ -54,7 +54,7 @@ $this->load->view("action_buttons_edit",$data);
 
     <div class="row show-grid variety" style="display: none;">
         <div class="col-xs-4">
-            <label class="control-label pull-right"><?php echo $this->lang->line('LABEL_VARIETY');?><span style="color:#FF0000">*</span></label>
+            <label class="control-label pull-right"><?php echo $this->lang->line('LABEL_VARIETY');?></label>
         </div>
         <div class="col-sm-4 col-xs-8">
             <select name="variety" id="variety" class="form-control validate[required]">
@@ -63,18 +63,18 @@ $this->load->view("action_buttons_edit",$data);
         </div>
     </div>
 
-    <div class="row show-grid variety" style="display: none;">
+    <div class="row show-grid">
         <div class="col-xs-4">
-            <label class="control-label pull-right"><?php echo $this->lang->line('LABEL_FROM_PERCENTAGE');?><span style="color:#FF0000">*</span></label>
+            <label class="control-label pull-right"><?php echo $this->lang->line('LABEL_FROM_PERCENTAGE');?></label>
         </div>
         <div class="col-sm-4 col-xs-8">
             <input type="text" name="prediction_from" id="prediction_from" class="form-control" />
         </div>
     </div>
 
-    <div class="row show-grid variety" style="display: none;">
+    <div class="row show-grid">
         <div class="col-xs-4">
-            <label class="control-label pull-right"><?php echo $this->lang->line('LABEL_TO_PERCENTAGE');?><span style="color:#FF0000">*</span></label>
+            <label class="control-label pull-right"><?php echo $this->lang->line('LABEL_TO_PERCENTAGE');?></label>
         </div>
         <div class="col-sm-4 col-xs-8">
             <input type="text" name="prediction_to" id="prediction_to" class="form-control" />

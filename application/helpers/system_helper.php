@@ -623,7 +623,6 @@ class System_helper
 
         $final_cogs = $pricing_expenses + $revised_cogs;
 
-
         if($sales_commission>0)
         {
             $bonus_exp = $mrp*($sales_commission/100);
@@ -637,9 +636,24 @@ class System_helper
             $bonus_exp = $bonus_exp + $mrp*($other_incentive/100);
         }
 
-        $net_profit = $mrp - $bonus_exp - $final_cogs;
+        if(isset($bonus_exp) && $bonus_exp>0)
+        {
+            $net_profit = $mrp - $bonus_exp - $final_cogs;
+        }
+        else
+        {
+            $net_profit = $mrp - $final_cogs;
+        }
 
-        $percentage = $final_cogs/$net_profit*100;
+        if($final_cogs>0)
+        {
+            $percentage = ($net_profit*100)/ $final_cogs;
+        }
+        else
+        {
+            $percentage = 0;
+        }
+
         return round($percentage, 2);
     }
 

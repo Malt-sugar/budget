@@ -58,8 +58,16 @@ class Report_sales_prediction extends ROOT_Controller
             $crop_id = $this->input->post('crop_id');
             $type_id = $this->input->post('type_id');
             $variety_id = $this->input->post('variety_id');
-            $data['prediction_from'] = $this->input->post('prediction_from');
-            $data['prediction_to'] = $this->input->post('prediction_to');
+
+            if($this->input->post('prediction_from'))
+            {
+                $data['prediction_from'] = $this->input->post('prediction_from');
+            }
+
+            if($this->input->post('prediction_to'))
+            {
+                $data['prediction_to'] = $this->input->post('prediction_to');
+            }
 
             $initials = $this->report_sales_prediction_model->get_initial_prediction_detail($year, $crop_id, $type_id, $variety_id);
             $mgts = $this->report_sales_prediction_model->get_mgt_prediction_detail($year, $crop_id, $type_id, $variety_id);
