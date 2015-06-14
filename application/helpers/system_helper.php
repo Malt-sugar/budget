@@ -530,7 +530,15 @@ class System_helper
             $bonus_exp = $bonus_exp + $mrp*($other_incentive/100);
         }
 
-        $net_profit = $mrp - $bonus_exp - $final_cogs;
+        if(isset($bonus_exp) && $bonus_exp>0)
+        {
+            $net_profit = $mrp - $bonus_exp - $final_cogs;
+        }
+        else
+        {
+            $net_profit = $mrp - $final_cogs;
+        }
+
         return round($net_profit, 2);
     }
 
@@ -666,7 +674,7 @@ class System_helper
         $CI->db->where('ppoi.varriety_id', $variety);
         $result = $CI->db->get()->row_array();
 
-        if($result)
+        if(isset($result['total_approved_quantity']) && $result['total_approved_quantity']>0)
         {
             return $result['total_approved_quantity'];
         }

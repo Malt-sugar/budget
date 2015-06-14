@@ -84,6 +84,12 @@ $lang['LABEL_PACKING_MATERIAL']='Packing Material (%)';
 $lang['LABEL_CARRIAGE_INWARDS']='Carriage Inwards (%)';
 $lang['LABEL_AIR_FREIGHT_AND_DOCS']='Air Freight & Docs (%)';
 
+$lang['LABEL_LC_EXP_ACTUAL']='LC Exp';
+$lang['LABEL_INSURANCE_EXP_ACTUAL']='Insurance Exp';
+$lang['LABEL_PACKING_MATERIAL_ACTUAL']='Packing Material';
+$lang['LABEL_CARRIAGE_INWARDS_ACTUAL']='Carriage Inwards';
+$lang['LABEL_AIR_FREIGHT_AND_DOCS_ACTUAL']='Air Freight & Docs';
+
 // Purchase
 
 $lang['LABEL_BUDGETED_PURCHASE']='Budgeted Purchase';

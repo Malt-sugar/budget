@@ -65,7 +65,7 @@ if(is_array($purchases) && sizeof($purchases)>0)
 
         <div class="row show-grid">
             <div class="col-xs-4">
-                <label class="control-label pull-right"><?php echo $this->lang->line('LABEL_LC_EXP');?><span style="color:#FF0000">*</span></label>
+                <label class="control-label pull-right"><?php echo $this->lang->line('LABEL_LC_EXP_ACTUAL');?><span style="color:#FF0000">*</span></label>
             </div>
             <div class="col-sm-4 col-xs-8">
                 <input type="text" name="lc_exp" class="form-control validate[required] setup_quantity" value="<?php if(isset($setups['lc_exp'])){echo $setups['lc_exp'];}?>" />
@@ -74,7 +74,7 @@ if(is_array($purchases) && sizeof($purchases)>0)
 
         <div class="row show-grid">
             <div class="col-xs-4">
-                <label class="control-label pull-right"><?php echo $this->lang->line('LABEL_INSURANCE_EXP');?><span style="color:#FF0000">*</span></label>
+                <label class="control-label pull-right"><?php echo $this->lang->line('LABEL_INSURANCE_EXP_ACTUAL');?><span style="color:#FF0000">*</span></label>
             </div>
             <div class="col-sm-4 col-xs-8">
                 <input type="text" name="insurance_exp" class="form-control validate[required] setup_quantity" value="<?php if(isset($setups['insurance_exp'])){echo $setups['insurance_exp'];}?>" />
@@ -83,7 +83,7 @@ if(is_array($purchases) && sizeof($purchases)>0)
 
         <div class="row show-grid">
             <div class="col-xs-4">
-                <label class="control-label pull-right"><?php echo $this->lang->line('LABEL_PACKING_MATERIAL');?><span style="color:#FF0000">*</span></label>
+                <label class="control-label pull-right"><?php echo $this->lang->line('LABEL_PACKING_MATERIAL_ACTUAL');?><span style="color:#FF0000">*</span></label>
             </div>
             <div class="col-sm-4 col-xs-8">
                 <input type="text" name="packing_material" class="form-control validate[required] setup_quantity" value="<?php if(isset($setups['packing_material'])){echo $setups['packing_material'];}?>" />
@@ -92,7 +92,7 @@ if(is_array($purchases) && sizeof($purchases)>0)
 
         <div class="row show-grid">
             <div class="col-xs-4">
-                <label class="control-label pull-right"><?php echo $this->lang->line('LABEL_CARRIAGE_INWARDS');?><span style="color:#FF0000">*</span></label>
+                <label class="control-label pull-right"><?php echo $this->lang->line('LABEL_CARRIAGE_INWARDS_ACTUAL');?><span style="color:#FF0000">*</span></label>
             </div>
             <div class="col-sm-4 col-xs-8">
                 <input type="text" name="carriage_inwards" class="form-control validate[required] setup_quantity" value="<?php if(isset($setups['carriage_inwards'])){echo $setups['carriage_inwards'];}?>" />
@@ -101,7 +101,7 @@ if(is_array($purchases) && sizeof($purchases)>0)
 
         <div class="row show-grid">
             <div class="col-xs-4">
-                <label class="control-label pull-right"><?php echo $this->lang->line('LABEL_AIR_FREIGHT_AND_DOCS');?><span style="color:#FF0000">*</span></label>
+                <label class="control-label pull-right"><?php echo $this->lang->line('LABEL_AIR_FREIGHT_AND_DOCS_ACTUAL');?><span style="color:#FF0000">*</span></label>
             </div>
             <div class="col-sm-4 col-xs-8">
                 <input type="text" name="air_freight_and_docs" class="form-control validate[required] setup_quantity" value="<?php if(isset($setups['air_freight_and_docs'])){echo $setups['air_freight_and_docs'];}?>" />
