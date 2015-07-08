@@ -8,17 +8,10 @@
 
 <div class="row show-grid">
     <div>&nbsp;</div>
-
-<!--    <div class="col-lg-6">-->
-<!--        <label id="left" class="label label-info pull-left">LEFT</label>-->
-<!--    </div>-->
-<!---->
-<!--    <div class="col-lg-6">-->
-<!--        <label id="right" class="label label-info pull-right">RIGHT</label>-->
-<!--    </div>-->
     <div class="wrapper1">
         <div class="div1"></div>
     </div>
+
     <div class="wrapper2">
     <div class="col-xs-12 div2" id="doublescroll" style="overflow-x: auto;">
         <table class="table table-hover table-bordered">
@@ -334,6 +327,7 @@
 </script>
 
 <style>
+
     .flag
     {
         background-image: url('<?php echo base_url()?>images/flag.png');
