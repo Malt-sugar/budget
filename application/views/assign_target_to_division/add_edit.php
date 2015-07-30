@@ -53,7 +53,6 @@
                 var val = $(this).val();
                 if(val)
                 {
-//                    alert(val);
                     val = parseFloat( val.replace( /^\$/, "" ));
                     sum += !isNaN( val ) ? val : 0;
                 }

@@ -85,6 +85,8 @@ class Sales_prediction_mgt_model extends CI_Model
         $this->db->where('avi.product_type_id',$type_id);
         $this->db->where('bsp.prediction_phase',$this->config->item('prediction_phase_initial'));
 
+        $this->db->order_by('avi.order_variety');
+        $this->db->where('avi.type', 0);
         $this->db->join('budget_sales_prediction bsp','bsp.crop_id = avi.crop_id AND bsp.type_id = avi.product_type_id AND bsp.variety_id = avi.varriety_id','LEFT');
         $results = $this->db->get()->result_array();
         return $results;

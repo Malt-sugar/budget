@@ -111,6 +111,8 @@ class Approval_sales_target_hom_model extends CI_Model
         $this->db->from('ait_varriety_info avi');
         $this->db->where('avi.crop_id',$crop_id);
         $this->db->where('avi.product_type_id',$type_id);
+        $this->db->order_by('avi.order_variety');
+        $this->db->where('avi.type', 0);
         $results = $this->db->get()->result_array();
         return $results;
     }

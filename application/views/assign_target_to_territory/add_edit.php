@@ -30,7 +30,7 @@
             </div>
         </div>
 
-        <div class="col-lg-12" id="load_variety">
+        <div class="col-lg-12" id="load_variety" style="overflow-x: auto; display: none;">
 
         </div>
     </div>
@@ -46,9 +46,7 @@
 
         $(document).on("keyup", ".quantity", function(event)
         {
-//            alert($(this).parents().parents().html())
-
-            var attr = $(this).parents().parents().find('.quantity');
+            var attr = $(this).closest('tr').find('.quantity');
             var sum = 0;
             attr.each(function()
             {
@@ -60,13 +58,14 @@
                 }
             });
 
-            $(this).parents().find('.total').html(sum);
+            $(this).closest('tr').find('.total').val(sum);
         });
 
         $(document).on("change","#year",function()
         {
             if($(this).val().length>0)
             {
+                $("#load_variety").show();
                 $.ajax({
                     url: base_url+"assign_target_to_territory/get_variety_detail/",
                     type: 'POST',
@@ -85,6 +84,7 @@
             else
             {
                 $("#load_variety").html('');
+                $("#load_variety").hide();
             }
         });
     });
