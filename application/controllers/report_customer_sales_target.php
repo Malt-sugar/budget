@@ -69,19 +69,19 @@ class Report_customer_sales_target extends ROOT_Controller
             if($user->budget_group==$this->config->item('user_group_division') && strlen($division)<2)
             {
                 $ajax['status']=false;
-                $ajax['message']=$this->lang->line('SELECT_DIVISION');
+                $ajax['message']=$this->lang->line('LABEL_SELECT_DIVISION');
                 $this->jsonReturn($ajax);
             }
             elseif($user->budget_group==$this->config->item('user_group_zone') && strlen($zone)<2)
             {
                 $ajax['status']=false;
-                $ajax['message']=$this->lang->line('SELECT_ZONE');
+                $ajax['message']=$this->lang->line('LABEL_SELECT_ZONE');
                 $this->jsonReturn($ajax);
             }
             elseif($user->budget_group==$this->config->item('user_group_territory') && strlen($territory)<2)
             {
                 $ajax['status']=false;
-                $ajax['message']=$this->lang->line('SELECT_TERRITORY');
+                $ajax['message']=$this->lang->line('LABEL_SELECT_TERRITORY');
                 $this->jsonReturn($ajax);
             }
             else

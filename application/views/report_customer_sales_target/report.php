@@ -20,14 +20,17 @@
                 <th><?php echo $this->lang->line("LABEL_PRODUCT_TYPE"); ?></th>
                 <th><?php echo $this->lang->line("LABEL_VARIETY"); ?></th>
                 <?php
-                foreach($customers as $customer)
+                if(is_array($customers) && sizeof($customers)>0)
                 {
-                    ?>
-                    <th><label class="label label-success"><?php echo $customer['distributor_name']; ?></label> </th>
-                <?php
+                    foreach($customers as $customer)
+                    {
+                        ?>
+                        <th class="text-center"><label class="label label-success"><?php echo $customer['distributor_name']; ?></label> </th>
+                    <?php
+                    }
                 }
                 ?>
-                <th><?php echo $this->lang->line("LABEL_TOTAL"); ?></th>
+                <th class="text-center"><label class="label label-info"><?php echo $this->lang->line("LABEL_TOTAL"); ?></label></th>
             </tr>
             </thead>
             <tbody>
@@ -44,16 +47,19 @@
                             <td><?php echo $target['variety_name'];?></td>
                             <?php
                             $total = 0;
-                            foreach($customers as $customer)
+                            if(is_array($customers) && sizeof($customers)>0)
                             {
-                                $quantity = System_helper::get_total_sales_target_of_customer($target['variety_id'], $customer['distributor_id']);
-                                $total += $quantity;
-                                ?>
-                                <td><?php if(isset($quantity)){echo $quantity;}else{echo '<lable class="label label-warning">'.'Not Set'.'</label>';} ?></td>
-                            <?php
+                                foreach($customers as $customer)
+                                {
+                                    $quantity = System_helper::get_total_sales_target_of_customer($target['variety_id'], $customer['distributor_id']);
+                                    $total += $quantity;
+                                    ?>
+                                    <td class="text-center"><?php if(isset($quantity)){echo $quantity;}else{echo '<label class="label label-warning">'.'Not Set'.'</label>';} ?></td>
+                                <?php
+                                }
                             }
                             ?>
-                            <td><?php echo $total; ?></td>
+                            <td class="text-center"><?php echo $total; ?></td>
                         </tr>
                         <?php
                     }
