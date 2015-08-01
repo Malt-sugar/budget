@@ -833,7 +833,7 @@ class System_helper
         }
         else
         {
-            return 0;
+            return false;
         }
     }
 }

@@ -23,7 +23,7 @@
                 foreach($customers as $customer)
                 {
                     ?>
-                    <th><?php echo $customer['distributor_name']; ?></th>
+                    <th><label class="label label-success"><?php echo $customer['distributor_name']; ?></label> </th>
                 <?php
                 }
                 ?>
@@ -49,7 +49,7 @@
                                 $quantity = System_helper::get_total_sales_target_of_customer($target['variety_id'], $customer['distributor_id']);
                                 $total += $quantity;
                                 ?>
-                                <td><?php if($quantity){echo $quantity;}else{echo 0;} ?></td>
+                                <td><?php if(isset($quantity)){echo $quantity;}else{echo '<lable class="label label-warning">'.'Not Set'.'</label>';} ?></td>
                             <?php
                             }
                             ?>

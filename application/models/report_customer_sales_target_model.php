@@ -20,7 +20,7 @@ class Report_customer_sales_target_model extends CI_Model
         $this->db->select('ay.year_name year_name');
         $this->db->where('bst.status',$this->config->item('status_active'));
 
-        $this->db->where('bst.quantity >', 0);
+        //$this->db->where('bst.quantity >', 0);
         $this->db->where('bst.is_approved_by_hom', 1);
 
         if(strlen($year)>1)
