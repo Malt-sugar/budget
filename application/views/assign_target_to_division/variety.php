@@ -67,7 +67,17 @@
             foreach($divisions as $division)
             {
                 ?>
-                <td><input type="text" name="quantity[<?php echo $variety['varriety_id'];?>]" class="form-control quantity" value="" /></td>
+                <td>
+                    <div class="col-lg-12">
+                        <div class="col-lg-6">
+                            <input type="text" name="quantity[<?php echo $variety['varriety_id'];?>]" class="form-control" readonly value="<?php echo $division['value'];?>" />
+                        </div>
+
+                        <div class="col-lg-6">
+                            <input type="text" name="quantity[<?php echo $variety['varriety_id'];?>]" class="form-control quantity" value="" />
+                        </div>
+                    </div>
+                </td>
             <?php
             }
             ?>

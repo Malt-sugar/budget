@@ -68,7 +68,7 @@
                 {
                     ?>
                     <tr>
-                        <td colspan="120" class="text-center alert-danger">
+                        <td colspan="150" class="text-center alert-danger">
                             <?php echo $this->lang->line("NO_DATA_FOUND"); ?>
                         </td>
                     </tr>

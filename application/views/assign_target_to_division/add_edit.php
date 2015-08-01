@@ -48,6 +48,7 @@
         {
             var attr = $(this).closest('tr').find('.quantity');
             var sum = 0;
+
             attr.each(function()
             {
                 var val = $(this).val();
