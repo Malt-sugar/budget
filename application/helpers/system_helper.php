@@ -815,4 +815,25 @@ class System_helper
             return 0;
         }
     }
+
+    public static function get_total_sales_target_of_customer($variety, $customer)
+    {
+        $CI = & get_instance();
+
+        $CI->db->from('budget_sales_target bst');
+        $CI->db->select('SUM(bst.quantity) total_quantity');
+        $CI->db->where('bst.customer_id', $customer);
+        $CI->db->where('bst.variety_id', $variety);
+        $CI->db->where('bst.status', $CI->config->item('status_active'));
+        $result = $CI->db->get()->row_array();
+
+        if($result)
+        {
+            return $result['total_quantity'];
+        }
+        else
+        {
+            return 0;
+        }
+    }
 }

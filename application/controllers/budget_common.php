@@ -17,9 +17,16 @@ class Budget_common extends ROOT_Controller
         $division_id = $this->input->post('division_id');
         $zones = $this->budget_common_model->get_zone_by_access($division_id);
 
-        foreach($zones as $zone)
+        if(is_array($zones) && sizeof($zones)>0)
         {
-            $data[] = array('value'=>$zone['zone_id'], 'text'=>$zone['zone_name']);
+            foreach($zones as $zone)
+            {
+                $data[] = array('value'=>$zone['zone_id'], 'text'=>$zone['zone_name']);
+            }
+        }
+        else
+        {
+            $data = array();
         }
 
         $ajax['status'] = true;
@@ -33,9 +40,16 @@ class Budget_common extends ROOT_Controller
 
         $territories = $this->budget_common_model->get_territory_by_access($zone_id);
 
-        foreach($territories as $territory)
+        if(is_array($territories) && sizeof($territories)>0)
         {
-            $data[] = array('value'=>$territory['territory_id'], 'text'=>$territory['territory_name']);
+            foreach($territories as $territory)
+            {
+                $data[] = array('value'=>$territory['territory_id'], 'text'=>$territory['territory_name']);
+            }
+        }
+        else
+        {
+            $data = array();
         }
 
         $ajax['status'] = true;
@@ -50,9 +64,16 @@ class Budget_common extends ROOT_Controller
 
         $customers = $this->budget_common_model->get_customer_by_territory($zone_id, $territory_id);
 
-        foreach($customers as $customer)
+        if(is_array($customers) && sizeof($customers)>0)
         {
-            $data[] = array('value'=>$customer['distributor_id'], 'text'=>$customer['distributor_name']);
+            foreach($customers as $customer)
+            {
+                $data[] = array('value'=>$customer['distributor_id'], 'text'=>$customer['distributor_name']);
+            }
+        }
+        else
+        {
+            $data = array();
         }
 
         $ajax['status'] = true;
@@ -67,9 +88,16 @@ class Budget_common extends ROOT_Controller
 
         $types = $this->budget_common_model->get_type_by_crop($crop_id);
 
-        foreach($types as $type)
+        if(is_array($types) && sizeof($types)>0)
         {
-            $data[] = array('value'=>$type['product_type_id'], 'text'=>$type['product_type']);
+            foreach($types as $type)
+            {
+                $data[] = array('value'=>$type['product_type_id'], 'text'=>$type['product_type']);
+            }
+        }
+        else
+        {
+            $data = array();
         }
 
         $ajax['status'] = true;
@@ -84,10 +112,18 @@ class Budget_common extends ROOT_Controller
 
         $varieties = $this->budget_common_model->get_variety_by_crop_type($crop_id, $type_id);
 
-        foreach($varieties as $variety)
+        if(is_array($varieties) && sizeof($varieties)>0)
         {
-            $data[] = array('value'=>$variety['varriety_id'], 'text'=>$variety['varriety_name']);
+            foreach($varieties as $variety)
+            {
+                $data[] = array('value'=>$variety['varriety_id'], 'text'=>$variety['varriety_name']);
+            }
         }
+        else
+        {
+            $data = array();
+        }
+
 
         $ajax['status'] = true;
         $ajax['content'][] = array("id"=>'#variety',"html"=>$this->load->view("dropdown",array('drop_down_options'=>$data),true));
