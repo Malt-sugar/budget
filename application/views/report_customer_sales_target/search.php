@@ -134,10 +134,17 @@ $this->load->view("action_buttons_edit",$data);
         $(document).on("change", "#division", function()
         {
             $("#report_list").html("");
+
+            $(".zone").show();
+
+            $("#zone").val('');
+            $(".territory").hide();
+            $("#territory").val('');
+            $(".customer").hide();
+            $("#customer").val('');
+
             if($(this).val().length>0)
             {
-                $(".zone").show();
-
                 $.ajax({
                     url: base_url+"budget_common/get_zone_by_access/",
                     type: 'POST',
@@ -167,6 +174,11 @@ $this->load->view("action_buttons_edit",$data);
         $(document).on("change","#zone",function()
         {
             $("#report_list").html("");
+
+            $(".territory").show();
+            $("#territory").val('');
+            $(".customer").hide();
+            $("#customer").val('');
 
             if($(this).val().length>0)
             {
@@ -199,6 +211,9 @@ $this->load->view("action_buttons_edit",$data);
         {
             $("#report_list").html("");
 
+            $(".customer").hide();
+            $("#customer").val('');
+
             if($(this).val().length>0)
             {
                 $(".customer").show();
@@ -230,6 +245,8 @@ $this->load->view("action_buttons_edit",$data);
             $(".variety").hide();
             $("#variety").html('');
 
+            $(".type").val('');
+
             if($(this).val().length>0)
             {
                 $(".type").show();
@@ -257,6 +274,7 @@ $this->load->view("action_buttons_edit",$data);
         $(document).on("change","#type",function()
         {
             $("#report_list").html("");
+            $(".variety").val('');
 
             if($(this).val().length>0)
             {

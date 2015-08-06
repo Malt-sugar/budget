@@ -87,7 +87,7 @@ class Report_customer_sales_target extends ROOT_Controller
             else
             {
                 $data['customers'] = $this->report_customer_sales_target_model->get_customers($division, $zone, $territory, $customer);
-                $data['targets'] = $this->report_customer_sales_target_model->get_sales_target_info($year, $crop_id, $type_id, $variety_id, $customer);
+                $data['targets'] = $this->report_customer_sales_target_model->get_sales_target_info($year, $division, $zone, $territory, $customer, $crop_id, $type_id, $variety_id);
                 $ajax['status'] = true;
                 $ajax['content'][] = array("id" => "#report_list", "html" => $this->load->view("report_customer_sales_target/report", $data, true));
                 $this->jsonReturn($ajax);

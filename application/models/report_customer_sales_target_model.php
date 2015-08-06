@@ -10,7 +10,7 @@ class Report_customer_sales_target_model extends CI_Model
         parent::__construct();
     }
 
-    public function get_sales_target_info($year, $crop_id, $type_id, $variety_id, $customer)
+    public function get_sales_target_info($year, $division, $zone, $territory, $customer, $crop_id, $type_id, $variety_id)
     {
         $this->db->from('budget_sales_target bst');
         $this->db->select('bst.*');
@@ -19,6 +19,11 @@ class Report_customer_sales_target_model extends CI_Model
         $this->db->select('ati.product_type type_name');
         $this->db->select('ay.year_name year_name');
         $this->db->where('bst.status',$this->config->item('status_active'));
+        $this->db->group_by('bst.variety_id');
+
+        $this->db->order_by('bst.crop_id');
+        $this->db->order_by('bst.type_id');
+        $this->db->order_by('bst.variety_id');
 
         //$this->db->where('bst.quantity >', 0);
         $this->db->where('bst.is_approved_by_hom', 1);
@@ -39,7 +44,18 @@ class Report_customer_sales_target_model extends CI_Model
         {
             $this->db->where('bst.variety_id', $variety_id);
         }
-
+        if(strlen($division)>1)
+        {
+            $this->db->where('bst.division_id', $division);
+        }
+        if(strlen($zone)>1)
+        {
+            $this->db->where('bst.zone_id', $zone);
+        }
+        if(strlen($territory)>1)
+        {
+            $this->db->where('bst.territory_id', $territory);
+        }
         if(strlen($customer)>1)
         {
             $this->db->where('bst.customer_id', $customer);
