@@ -11,7 +11,20 @@
         foreach($divisions as $division)
         {
         ?>
-            <td class="text-center"><label class="label label-success text-center"><?php echo $division['text'];?> Qty (kg)</label></td>
+            <td class="text-center">
+
+                <table class="table table-bordered">
+                    <tr>
+                        <td class="text-center"><label class="label label-success text-center"><?php echo $division['text'];?> Qty (kg)</label></td>
+                    </tr>
+                </table>
+                <table class="table table-bordered">
+                    <tr>
+                        <td>Assigned</td>
+                        <td>Required</td>
+                    </tr>
+                </table>
+            </td>
         <?php
         }
         ?>

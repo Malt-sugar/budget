@@ -311,6 +311,12 @@ if(is_array($targets) && sizeof($targets)>0)
 
         $(document).on("change", "#division", function()
         {
+            $("#zone").val('');
+            $(".territory").hide();
+            $("#territory").val('');
+            $(".customer").hide();
+            $("#customer").val('');
+
             if($(this).val().length>0)
             {
                 $(".zone").show();
@@ -343,6 +349,9 @@ if(is_array($targets) && sizeof($targets)>0)
 
         $(document).on("change","#zone",function()
         {
+            $("#territory").val('');
+            $(".customer").hide();
+            $("#customer").val('');
             // alert($(this).val());
             if($(this).val().length>0)
             {
@@ -373,6 +382,8 @@ if(is_array($targets) && sizeof($targets)>0)
 
         $(document).on("change","#territory",function()
         {
+            $("#customer").val('');
+
             if($(this).val().length>0)
             {
                 $(".customer").show();
