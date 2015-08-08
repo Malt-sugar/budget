@@ -103,6 +103,7 @@ class Assign_target_to_zone extends ROOT_Controller
         $year_id = $this->input->post('year_id');
         $user_div = $user->division_id;
 
+        $data['year'] = $year_id;
         $data['zones'] = Query_helper::get_info('ait_zone_info',array('zone_id value','zone_name text'),array("division_id ='$user_div'",'del_status =0'));
         $data['varieties'] = $this->assign_target_to_zone_model->get_variety_info();
 

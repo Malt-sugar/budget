@@ -30,7 +30,7 @@
             </div>
         </div>
 
-        <div class="col-lg-12" id="load_variety">
+        <div class="col-lg-12" id="load_variety" style="overflow-x: auto;">
 
         </div>
     </div>

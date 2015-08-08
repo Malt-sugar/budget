@@ -99,9 +99,10 @@ class Assign_target_to_customer extends ROOT_Controller
     {
         $user = User_helper::get_user();
         $year_id = $this->input->post('year_id');
-        $user_territory = $user->territory_id;
+        $user_zone = $user->zone_id;
 
-        $data['distributors'] = Query_helper::get_info('ait_distributor_info',array('distributor_id value','distributor_name text'),array("territory_id ='$user_territory'",'del_status =0'));
+        $data['year'] = $year_id;
+        $data['distributors'] = Query_helper::get_info('ait_distributor_info',array('distributor_id value','distributor_name text'),array("zone_id ='$user_zone'",'del_status =0'));
         $data['varieties'] = $this->assign_target_to_customer_model->get_variety_info();
 
         if(strlen($year_id)>0)

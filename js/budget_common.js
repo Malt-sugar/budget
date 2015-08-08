@@ -236,6 +236,8 @@ function turn_off_triggers()
     $(document).off("keyup", ".number_only_class");
     $(document).off("click", "#finalise");
     $(document).off("click", "#load_report");
+    $(document).off("click", "#myButtonRight");
+    $(document).off("click", "#myButtonLeft");
 }
 
 function isNumberKey(evt)

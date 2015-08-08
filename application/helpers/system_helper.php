@@ -836,4 +836,73 @@ class System_helper
             return false;
         }
     }
+
+    public static function get_total_target_division($div_id, $variety, $year)
+    {
+        $CI = & get_instance();
+
+        $CI->db->from('budget_sales_target bst');
+        $CI->db->select('SUM(bst.quantity) total_quantity');
+        $CI->db->where('bst.division_id', $div_id);
+        $CI->db->where('bst.variety_id', $variety);
+        $CI->db->where('bst.year', $year);
+        $CI->db->where('bst.status', $CI->config->item('status_active'));
+        $CI->db->where('bst.is_approved_by_hom', 1);
+        $result = $CI->db->get()->row_array();
+
+        if($result)
+        {
+            return $result['total_quantity'];
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    public static function get_total_target_zone($zone_id, $variety, $year)
+    {
+        $CI = & get_instance();
+
+        $CI->db->from('budget_sales_target bst');
+        $CI->db->select('SUM(bst.quantity) total_quantity');
+        $CI->db->where('bst.zone_id', $zone_id);
+        $CI->db->where('bst.variety_id', $variety);
+        $CI->db->where('bst.year', $year);
+        $CI->db->where('bst.status', $CI->config->item('status_active'));
+        $CI->db->where('bst.is_approved_by_hom', 1);
+        $result = $CI->db->get()->row_array();
+
+        if($result)
+        {
+            return $result['total_quantity'];
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    public static function get_total_target_customer($customer_id, $variety, $year)
+    {
+        $CI = & get_instance();
+
+        $CI->db->from('budget_sales_target bst');
+        $CI->db->select('SUM(bst.quantity) total_quantity');
+        $CI->db->where('bst.customer_id', $customer_id);
+        $CI->db->where('bst.variety_id', $variety);
+        $CI->db->where('bst.year', $year);
+        $CI->db->where('bst.status', $CI->config->item('status_active'));
+        $CI->db->where('bst.is_approved_by_hom', 1);
+        $result = $CI->db->get()->row_array();
+
+        if($result)
+        {
+            return $result['total_quantity'];
+        }
+        else
+        {
+            return false;
+        }
+    }
 }

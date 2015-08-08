@@ -33,9 +33,21 @@
         <div class="col-lg-12" id="load_variety" style="overflow-x: auto; display: none;">
 
         </div>
+
+        <div class="col-lg-12" id="scrollButtons" style="display: none;">
+            <div class="col-lg-6 pull-left">
+                <input type="button" id="myButtonRight" name="scroll" value="Right" class="btn btn-warning" />
+            </div>
+
+            <div class="col-lg-6 pull-right">
+                <input type="button" id="myButtonLeft" name="scroll" value="Left" class="btn btn-warning" />
+            </div>
+        </div>
     </div>
     <div class="clearfix"></div>
 </form>
+
+
 
 <script type="text/javascript">
 
@@ -43,6 +55,16 @@
     {
         $(".form_valid").validationEngine();
         turn_off_triggers();
+
+        $(document).on("click", "#myButtonRight", function(event)
+        {
+            $('#scrollTable').animate({'right':'+=100px'});
+        });
+
+        $(document).on("click", "#myButtonLeft", function(event)
+        {
+            $('#scrollTable').animate({'right':'-=100px'});
+        });
 
         $(document).on("keyup", ".quantity", function(event)
         {
@@ -65,6 +87,7 @@
         {
             if($(this).val().length>0)
             {
+                $("#scrollButtons").show();
                 $("#load_variety").show();
                 $.ajax({
                     url: base_url+"assign_target_to_zone/get_variety_detail/",
@@ -83,6 +106,7 @@
             }
             else
             {
+                $("#scrollButtons").hide();
                 $("#load_variety").hide();
                 $("#load_variety").html('');
             }

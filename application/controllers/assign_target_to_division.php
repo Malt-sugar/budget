@@ -99,6 +99,8 @@ class Assign_target_to_division extends ROOT_Controller
     public function get_variety_detail()
     {
         $year_id = $this->input->post('year_id');
+
+        $data['year'] = $year_id;
         $data['divisions'] = Query_helper::get_info('ait_division_info',array('division_id value','division_name text'),array('del_status = 0'));
         $data['varieties'] = $this->assign_target_to_division_model->get_variety_info();
 

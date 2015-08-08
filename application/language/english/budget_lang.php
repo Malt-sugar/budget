@@ -195,3 +195,5 @@ $lang['LABEL_TOTAL']='Total';
 $lang['LABEL_SELECT_DIVISION']='Please Select Division';
 $lang['LABEL_SELECT_ZONE']='Please Select Zone';
 $lang['LABEL_SELECT_TERRITORY']='Please Select Territory';
+$lang['ASSIGNED']='Assigned';
+$lang['REQUIRED']='Required';

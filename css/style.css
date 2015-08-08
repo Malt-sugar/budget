@@ -256,3 +256,21 @@ padding: 10px 20px;
     display: none;
 
 }
+
+#myButtonRight
+{
+    position: fixed;
+    top: 50%;
+    left: 92%;
+    z-index: 100000;
+    opacity: .5;
+}
+
+#myButtonLeft
+{
+    position: fixed;
+    top: 50%;
+    right: 92%;
+    z-index: 100000;
+    opacity: .5;
+}

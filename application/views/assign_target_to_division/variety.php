@@ -12,7 +12,6 @@
         {
         ?>
             <td class="text-center">
-
                 <table class="table table-bordered">
                     <tr>
                         <td class="text-center"><label class="label label-success text-center"><?php echo $division['text'];?> Qty (kg)</label></td>
@@ -20,8 +19,8 @@
                 </table>
                 <table class="table table-bordered">
                     <tr>
-                        <td>Assigned</td>
-                        <td>Required</td>
+                        <td><?php echo $this->lang->line('REQUIRED');?></td>
+                        <td><?php echo $this->lang->line('ASSIGNED');?></td>
                     </tr>
                 </table>
             </td>
@@ -79,11 +78,12 @@
             <?php
             foreach($divisions as $division)
             {
+                $required = System_helper::get_total_target_division($division['value'], $variety['varriety_id'], $year);
                 ?>
                 <td>
                     <div class="col-lg-12">
                         <div class="col-lg-6">
-                            <input type="text" name="quantity[<?php echo $variety['varriety_id'];?>]" class="form-control" readonly value="<?php echo $division['value'];?>" />
+                            <input type="text" name="quantity[<?php echo $variety['varriety_id'];?>]" class="form-control" readonly value="<?php if($required){echo $required;}else{echo 0;}?>" />
                         </div>
 
                         <div class="col-lg-6">
