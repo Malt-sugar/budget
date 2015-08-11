@@ -15,21 +15,22 @@ class Assign_target_to_division extends ROOT_Controller
     {
         if($task=="add" || $task=="edit")
         {
-            $this->rnd_add_edit($id);
+            $this->budget_add_edit($id);
         }
         elseif($task=="save")
         {
-            $this->rnd_save();
+            $this->budget_save();
         }
         else
         {
-            $this->rnd_add_edit($id);
+            $this->budget_add_edit($id);
         }
     }
 
-    public function rnd_add_edit()
+    public function budget_add_edit()
     {
         $user = User_helper::get_user();
+        $user_level = $user->user_level;
         $data['years'] = Query_helper::get_info('ait_year',array('year_id value','year_name text'),array('del_status = 0'));
         $data['divisions'] = Query_helper::get_info('ait_division_info',array('division_id value','division_name text'),array('del_status = 0'));
         $data['varieties'] = $this->assign_target_to_division_model->get_variety_info();
@@ -43,8 +44,7 @@ class Assign_target_to_division extends ROOT_Controller
         $this->jsonReturn($ajax);
     }
 
-    /*
-    public function rnd_save()
+    public function budget_save()
     {
         $user = User_helper::get_user();
         $data = Array();
@@ -59,34 +59,42 @@ class Assign_target_to_division extends ROOT_Controller
         {
             $this->db->trans_start();  //DB Transaction Handle START
 
-            $data['crop_id'] = $this->input->post('crop');
-            $data['type_id'] = $this->input->post('type');
-
-            $data['create_by'] = $user->user_id;
-            $data['create_date'] = time();
-
             $quantityPost = $this->input->post('quantity');
-            $existings = $this->customer_sales_target_model->get_existing_sales_targets($data['year'], $data['crop_id'], $data['type_id'], $data['customer_id']);
 
-            foreach($quantityPost as $variety_id=>$quantity)
+            foreach($quantityPost as $division=>$quantity)
             {
-                $data['variety'] = $variety_id;
-                $data['quantity'] = $quantity;
-                Query_helper::add('budget_sales_target',$data);
+                foreach($quantity as $variety=>$number)
+                {
+                    if($number>0)
+                    {
+                        $data['hierarchy_level'] = $user->budget_group;
+                        $data['hierarchy_id'] = $user->user_id;
+                        $data['year'] = $this->input->post('year');
+                        $data['division_id'] = $division;
+                        $data['variety_id'] = $variety;
+                        $data['assigned_qty'] = $number;
+                        $data['created_by'] = $user->id;
+                        $data['creation_date'] = time();
+
+                        Query_helper::add('budget_assign_sales_target',$data);
+                    }
+                }
             }
 
             $this->db->trans_complete();   //DB Transaction Handle END
 
             if ($this->db->trans_status() === TRUE)
             {
-                $this->message=$this->lang->line("MSG_CREATE_SUCCESS");
+                $ajax['status']=false;
+                $ajax['message']=$this->lang->line("MSG_CREATE_SUCCESS");
             }
             else
             {
-                $this->message=$this->lang->line("MSG_NOT_SAVED_SUCCESS");
+                $ajax['status']=false;
+                $ajax['message']=$this->lang->line("MSG_NOT_SAVED_SUCCESS");
             }
 
-            $this->rnd_add_edit();//this is similar like redirect
+            $this->budget_add_edit();//this is similar like redirect
         }
     }
 
@@ -95,7 +103,7 @@ class Assign_target_to_division extends ROOT_Controller
         $valid=true;
         return $valid;
     }
-*/
+
     public function get_variety_detail()
     {
         $year_id = $this->input->post('year_id');

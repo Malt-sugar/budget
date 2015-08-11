@@ -8,7 +8,6 @@
 ?>
 
 <form class="form_valid" id="save_form" action="<?php echo base_url();?>assign_target_to_division/index/save" method="post">
-    <input type="hidden" name="type_id" id="type_id" value=""/>
     <div class="row widget">
         <div class="widget-header">
             <div class="title">
