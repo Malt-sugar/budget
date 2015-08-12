@@ -30,7 +30,7 @@ class Assign_target_to_division extends ROOT_Controller
     public function budget_add_edit()
     {
         $user = User_helper::get_user();
-        $user_level = $user->user_level;
+
         $data['years'] = Query_helper::get_info('ait_year',array('year_id value','year_name text'),array('del_status = 0'));
         $data['divisions'] = Query_helper::get_info('ait_division_info',array('division_id value','division_name text'),array('del_status = 0'));
         $data['varieties'] = $this->assign_target_to_division_model->get_variety_info();

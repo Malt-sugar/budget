@@ -5,20 +5,19 @@
 //echo "</pre>";
 
 ?>
-<div class="row show-grid">
-    <div>&nbsp;</div>
-    <div class="col-xs-12" style="overflow-x: auto">
+<section class="">
+    <div class="show-grid container" style="width: 100%">
         <table class="table table-hover table-bordered" >
             <thead class="hidden-print">
-            <tr>
-                <th><?php echo $this->lang->line("SERIAL"); ?></th>
-                <th><?php echo $this->lang->line("LABEL_CROP_NAME"); ?></th>
-                <th><?php echo $this->lang->line("LABEL_PRODUCT_TYPE"); ?></th>
-                <th><?php echo $this->lang->line("LABEL_VARIETY"); ?></th>
-                <th><?php echo $this->lang->line("LABEL_OPENING_BALANCE"); ?></th>
-                <th><?php echo $this->lang->line("LABEL_BUDGETED_MIN_STOCK"); ?></th>
-                <th><?php echo $this->lang->line("LABEL_CURRENT_STOCK"); ?></th>
-                <th><?php echo $this->lang->line("LABEL_VARIANCE_QTY"); ?></th>
+            <tr class="header">
+                <th><?php echo $this->lang->line("SERIAL"); ?><div><?php echo $this->lang->line("SERIAL"); ?></div></th>
+                <th><?php echo $this->lang->line("LABEL_CROP_NAME"); ?><div><?php echo $this->lang->line("LABEL_CROP_NAME"); ?></div></th>
+                <th><?php echo $this->lang->line("LABEL_PRODUCT_TYPE"); ?><div><?php echo $this->lang->line("LABEL_PRODUCT_TYPE"); ?></div></th>
+                <th><?php echo $this->lang->line("LABEL_VARIETY"); ?><div><?php echo $this->lang->line("LABEL_VARIETY"); ?></div></th>
+                <th><?php echo $this->lang->line("LABEL_OPENING_BALANCE"); ?><div><?php echo $this->lang->line("LABEL_OPENING_BALANCE"); ?></div></th>
+                <th><?php echo $this->lang->line("LABEL_BUDGETED_MIN_STOCK"); ?><div><?php echo $this->lang->line("LABEL_BUDGETED_MIN_STOCK"); ?></div></th>
+                <th><?php echo $this->lang->line("LABEL_CURRENT_STOCK"); ?><div><?php echo $this->lang->line("LABEL_CURRENT_STOCK"); ?></div></th>
+                <th><?php echo $this->lang->line("LABEL_VARIANCE_QTY"); ?><div><?php echo $this->lang->line("LABEL_VARIANCE_QTY"); ?></div></th>
             </tr>
             </thead>
             <tbody>
@@ -56,4 +55,58 @@
             </tbody>
         </table>
     </div>
-</div>
+</section>
+
+<style>
+    html, body {
+        margin:0;
+        padding:0;
+        height:100%;
+    }
+    section {
+        position: relative;
+        padding-top: 37px;
+    }
+    section.positioned {
+        position: absolute;
+        top:100px;
+        left:100px;
+        box-shadow: 0 0 15px #fff;
+    }
+    .container {
+        overflow-y: auto;
+        height: 700px;
+    }
+    table {
+        margin-top: -41px;
+        border-spacing: 0;
+        width:100%;
+    }
+    td, th {
+        border-bottom:1px solid #eee;
+        background: #fff;
+        color: #000;
+        padding: 0px 25px;
+    }
+    th {
+        height: 0;
+        line-height: 0;
+        padding-top: 0;
+        padding-bottom: 0;
+        color: transparent;
+        border: none;
+        white-space: nowrap;
+    }
+    th div {
+        position: absolute;
+        background: transparent;
+        color: #000;
+        padding: 9px 25px;
+        top: 0;
+        margin-left: -25px;
+        line-height: normal;
+    }
+    th:first-child div{
+        border: none;
+    }
+</style>

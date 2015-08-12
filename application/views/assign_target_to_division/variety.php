@@ -83,7 +83,7 @@
                 <td>
                     <div class="col-lg-12">
                         <div class="col-lg-6">
-                            <input type="text" name="quantity[<?php echo $division['value'];?>][<?php echo $variety['varriety_id'];?>]" class="form-control" readonly value="<?php if($required){echo $required;}else{echo 0;}?>" />
+                            <input type="text" name="quantity[<?php echo $division['value'];?>][<?php echo $variety['varriety_id'];?>]" class="form-control" disabled value="<?php if($required){echo $required;}else{echo 0;}?>" />
                         </div>
 
                         <div class="col-lg-6">
