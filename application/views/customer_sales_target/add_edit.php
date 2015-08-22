@@ -19,13 +19,7 @@ if(is_array($targets) && sizeof($targets)>0)
 
         $arranged_targets['crop'][$target['crop_id']][$target['type_id']]['variety'][$target['variety_id']]['variety_name'] = $target['variety_name'];
         $arranged_targets['crop'][$target['crop_id']][$target['type_id']]['variety'][$target['variety_id']]['quantity'] = $target['quantity'];
-        $arranged_targets['crop'][$target['crop_id']][$target['type_id']]['variety'][$target['variety_id']]['is_approved_by_zi'] = $target['is_approved_by_zi'];
-        $arranged_targets['crop'][$target['crop_id']][$target['type_id']]['variety'][$target['variety_id']]['is_approved_by_di'] = $target['is_approved_by_di'];
-        $arranged_targets['crop'][$target['crop_id']][$target['type_id']]['variety'][$target['variety_id']]['is_approved_by_hom'] = $target['is_approved_by_hom'];
         $arranged_targets['crop'][$target['crop_id']][$target['type_id']]['variety'][$target['variety_id']]['created_by'] = $target['created_by'];
-        $arranged_targets['crop'][$target['crop_id']][$target['type_id']]['variety'][$target['variety_id']]['discarded_by'] = $target['discarded_by'];
-        $arranged_targets['crop'][$target['crop_id']][$target['type_id']]['variety'][$target['variety_id']]['discard'] = $target['discard'];
-
     }
 }
 
@@ -45,7 +39,111 @@ if(is_array($targets) && sizeof($targets)>0)
             <div class="clearfix"></div>
         </div>
 
-        <?php echo $this->load->view("selections", true);?>
+        <div class="row show-grid">
+            <div class="col-xs-4">
+                <label class="control-label pull-right"><?php echo $this->lang->line('LABEL_YEAR');?><span style="color:#FF0000">*</span></label>
+            </div>
+            <div class="col-sm-4 col-xs-8">
+                <select name="year" id="year" class="form-control validate[required]" <?php if(isset($arranged_targets['year']) && strlen($arranged_targets['year'])>1){echo 'disabled';}?>>
+                    <?php
+                    $this->load->view('dropdown',array('drop_down_options'=>$years,'drop_down_selected'=>isset($arranged_targets['year'])?$arranged_targets['year']:''));
+                    ?>
+                </select>
+                <?php
+                if(isset($arranged_targets['year']) && strlen($arranged_targets['year'])>1)
+                {
+                    ?>
+                    <input type="hidden" name="year" value="<?php echo $arranged_targets['year'];?>" />
+                <?php
+                }
+                ?>
+            </div>
+        </div>
+
+        <div class="row show-grid">
+            <div class="col-xs-4">
+                <label class="control-label pull-right"><?php echo $this->lang->line('LABEL_DIVISION');?><span style="color:#FF0000">*</span></label>
+            </div>
+            <div class="col-sm-4 col-xs-8">
+                <select name="division" class="form-control validate[required]" id="division" <?php if(isset($arranged_targets['division_id']) && strlen($arranged_targets['division_id'])>1){echo 'disabled';}?>>
+                    <?php
+                    $this->load->view('dropdown',array('drop_down_options'=>$divisions,'drop_down_selected'=>isset($arranged_targets['division_id'])?$arranged_targets['division_id']:''));
+                    ?>
+                </select>
+                <?php
+                if(isset($arranged_targets['division_id']) && strlen($arranged_targets['division_id'])>1)
+                {
+                    ?>
+                    <input type="hidden" name="division" value="<?php echo $arranged_targets['division_id'];?>" />
+                <?php
+                }
+                ?>
+            </div>
+        </div>
+
+        <div class="row show-grid zone" style="display: <?php if(isset($arranged_targets['zone_id']) && strlen($arranged_targets['zone_id'])>1){echo 'show';}else{echo 'none';}?>;">
+            <div class="col-xs-4">
+                <label class="control-label pull-right"><?php echo $this->lang->line('LABEL_ZONE');?><span style="color:#FF0000">*</span></label>
+            </div>
+
+            <div class="col-sm-4 col-xs-8">
+                <select name="zone" class="form-control validate[required]" id="zone" <?php if(isset($arranged_targets['zone_id']) && strlen($arranged_targets['zone_id'])>1){echo 'disabled';}?>>
+                    <?php
+                    $this->load->view('dropdown',array('drop_down_options'=>$zones,'drop_down_selected'=>isset($arranged_targets['zone_id'])?$arranged_targets['zone_id']:''));
+                    ?>
+                </select>
+                <?php
+                if(isset($arranged_targets['zone_id']) && strlen($arranged_targets['zone_id'])>1)
+                {
+                    ?>
+                    <input type="hidden" name="zone" value="<?php echo $arranged_targets['zone_id'];?>" />
+                <?php
+                }
+                ?>
+            </div>
+        </div>
+
+        <div class="row show-grid territory" style="display: <?php if(isset($arranged_targets['territory_id']) && strlen($arranged_targets['territory_id'])>1){echo 'show';}else{echo 'none';}?>;">
+            <div class="col-xs-4">
+                <label class="control-label pull-right"><?php echo $this->lang->line('LABEL_TERRITORY');?><span style="color:#FF0000">*</span></label>
+            </div>
+            <div class="col-sm-4 col-xs-8">
+                <select name="territory" class="form-control validate[required]" id="territory" <?php if(isset($arranged_targets['territory_id']) && strlen($arranged_targets['territory_id'])>1){echo 'disabled';}?>>
+                    <?php
+                    $this->load->view('dropdown',array('drop_down_options'=>$territories,'drop_down_selected'=>isset($arranged_targets['territory_id'])?$arranged_targets['territory_id']:''));
+                    ?>
+                </select>
+                <?php
+                if(isset($arranged_targets['territory_id']) && strlen($arranged_targets['territory_id'])>1)
+                {
+                    ?>
+                    <input type="hidden" name="territory" value="<?php echo $arranged_targets['territory_id'];?>" />
+                <?php
+                }
+                ?>
+            </div>
+        </div>
+
+        <div class="row show-grid customer" style="display: <?php if(isset($arranged_targets['customer_id']) && strlen($arranged_targets['customer_id'])>1){echo 'show';}else{echo 'none';}?>;">
+            <div class="col-xs-4">
+                <label class="control-label pull-right"><?php echo $this->lang->line('LABEL_CUSTOMER');?><span style="color:#FF0000">*</span></label>
+            </div>
+            <div class="col-sm-4 col-xs-8">
+                <select name="customer" class="form-control validate[required]" id="customer" <?php if(isset($arranged_targets['customer_id']) && strlen($arranged_targets['customer_id'])>1){echo 'disabled';}?>>
+                    <?php
+                    $this->load->view('dropdown',array('drop_down_options'=>$customers,'drop_down_selected'=>isset($arranged_targets['customer_id'])?$arranged_targets['customer_id']:''));
+                    ?>
+                </select>
+                <?php
+                if(isset($arranged_targets['customer_id']) && strlen($arranged_targets['customer_id'])>1)
+                {
+                    ?>
+                    <input type="hidden" name="customer" value="<?php echo $arranged_targets['customer_id'];?>" />
+                <?php
+                }
+                ?>
+            </div>
+        </div>
     </div>
 
     <!--    /////////////////////////////////////////////////// SALES TARGET //////////////////////////////////////////////   -->
@@ -70,12 +168,9 @@ if(is_array($targets) && sizeof($targets)>0)
                         foreach($typeVal['variety'] as $perm)
                         {
                             $created_by = $perm['created_by'];
-                            $zi_approve = $perm['is_approved_by_zi'];
-                            $di_approve = $perm['is_approved_by_di'];
-                            $hom_approve = $perm['is_approved_by_hom'];
                         }
 
-                        if(User_helper::check_edit_permission($created_by) && User_helper::check_edit_permission_after_approval($zi_approve, $di_approve, $hom_approve))
+                        if(User_helper::check_edit_permission($created_by))
                         {
                         ?>
                             <button type="button" class="btn btn-danger pull-right budget_add_more_delete"><?php echo $this->lang->line('DELETE'); ?></button>
@@ -148,7 +243,7 @@ if(is_array($targets) && sizeof($targets)>0)
                                                     <tr>
                                                         <td><?php echo $detail['variety_name']?></td>
                                                         <td>
-                                                            <input type="text" class="form-control variety_quantity" <?php if((!User_helper::check_edit_permission($detail['created_by']) && $detail['quantity']>0) || (!User_helper::check_edit_permission_after_approval($detail['is_approved_by_zi'], $detail['is_approved_by_di'], $detail['is_approved_by_hom']) && $detail['quantity']>0) || !User_helper::check_edit_permission_after_discard($detail['discard'], $detail['discarded_by'])){echo 'readonly';}?> name="quantity[<?php echo $sl;?>][<?php echo $varKey;?>]" value="<?php if(isset($detail['quantity'])){echo $detail['quantity'];}?>" />
+                                                            <input type="text" class="form-control variety_quantity" <?php if((!User_helper::check_edit_permission($detail['created_by']) && $detail['quantity']>0)){echo 'readonly';}?> name="quantity[<?php echo $sl;?>][<?php echo $varKey;?>]" value="<?php if(isset($detail['quantity'])){echo $detail['quantity'];}?>" />
                                                         </td>
                                                     </tr>
                                                 <?php

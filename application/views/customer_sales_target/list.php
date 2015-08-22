@@ -24,9 +24,6 @@
                     <th><?php echo $this->lang->line("LABEL_YEAR"); ?></th>
                     <th><?php echo $this->lang->line("LABEL_TERRITORY"); ?></th>
                     <th><?php echo $this->lang->line("LABEL_CUSTOMER_NAME"); ?></th>
-                    <th><?php echo $this->lang->line("LABEL_APPROVED_BY_ZI"); ?></th>
-                    <th><?php echo $this->lang->line("LABEL_APPROVED_BY_DI"); ?></th>
-                    <th><?php echo $this->lang->line("LABEL_APPROVED_BY_HOM"); ?></th>
                     <th><?php echo $this->lang->line("ACTION"); ?></th>
                 </tr>
             </thead>
@@ -43,42 +40,6 @@
                             <td><?php echo $sales_target['year_name'];?></td>
                             <td><?php echo $sales_target['territory_name'];?></td>
                             <td><?php echo $sales_target['distributor_name'];?></td>
-                            <td>
-                                <?php
-                                    if(System_helper::get_zi_approval($sales_target['customer_id'], $sales_target['year']))
-                                    {
-                                        echo "<label class='label label-success'>".$this->lang->line('LABEL_APPROVED')."</label>";
-                                    }
-                                    else
-                                    {
-                                        echo "<label class='label label-warning'>".$this->lang->line('LABEL_NOT_YET')."</label>";
-                                    }
-                                ?>
-                            </td>
-                            <td>
-                                <?php
-                                    if(System_helper::get_di_approval($sales_target['customer_id'], $sales_target['year']))
-                                    {
-                                        echo "<label class='label label-success'>".$this->lang->line('LABEL_APPROVED')."</label>";
-                                    }
-                                    else
-                                    {
-                                        echo "<label class='label label-warning'>".$this->lang->line('LABEL_NOT_YET')."</label>";
-                                    }
-                                ?>
-                            </td>
-                            <td>
-                                <?php
-                                    if(System_helper::get_hom_approval($sales_target['customer_id'], $sales_target['year']))
-                                    {
-                                        echo "<label class='label label-success'>".$this->lang->line('LABEL_APPROVED')."</label>";
-                                    }
-                                    else
-                                    {
-                                        echo "<label class='label label-warning'>".$this->lang->line('LABEL_NOT_YET')."</label>";
-                                    }
-                                ?>
-                            </td>
                             <td>
                                 <a href="<?php echo base_url();?>customer_sales_target/index/edit/<?php echo $sales_target['id'];?>/<?php echo $sales_target['customer_id'];?>/<?php echo $sales_target['year'];?>">
                                     <img src="<?php echo base_url();?>images/edit_record.png">

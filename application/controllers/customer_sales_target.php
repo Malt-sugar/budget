@@ -91,7 +91,6 @@ class Customer_sales_target extends ROOT_Controller
     {
         $user = User_helper::get_user();
         $data = Array();
-        $record_data = array();
 
         if(!$this->check_validation())
         {
@@ -101,7 +100,7 @@ class Customer_sales_target extends ROOT_Controller
         }
         else
         {
-            $this->db->trans_start();  //DB Transaction Handle START
+            $this->db->trans_start();  // DB Transaction Handle START
 
             $year = $this->input->post('year');
             $division = $this->input->post('division');
@@ -116,12 +115,6 @@ class Customer_sales_target extends ROOT_Controller
             {
                 $customer_id = $this->input->post('customer_id');
                 $year_id = $this->input->post('year_id');
-
-                // Initial record update Record Data
-                $record_status = array('status'=>0);
-                Query_helper::update('budget_sales_target_record',$record_status,array("customer_id ='$customer_id'", "year ='$year_id'"));
-                $existing_record_varieties = $this->customer_sales_target_model->get_existing_sales_targets_records($this->input->post('customer_id'), $this->input->post('year_id'));
-
 
                 // Initial update
                 $update_status = array('status'=>0);
@@ -147,118 +140,8 @@ class Customer_sales_target extends ROOT_Controller
                                 $data['variety_id'] = $variety_id;
                                 $data['quantity'] = $amount;
 
-                                // Record data
-                                if($user->budget_group==$this->config->item('user_group_territory'))
-                                {
-                                    $record_data['quantity_ti'] = $amount;
-                                }
-                                else
-                                {
-                                    unset($record_data['quantity_ti']);
-                                }
-
-                                if($user->budget_group==$this->config->item('user_group_zone'))
-                                {
-                                    $record_data['quantity_zi'] = $amount;
-                                }
-                                else
-                                {
-                                    unset($record_data['quantity_zi']);
-                                }
-
-                                if($user->budget_group==$this->config->item('user_group_division'))
-                                {
-                                    $record_data['quantity_di'] = $amount;
-                                }
-                                else
-                                {
-                                    unset($record_data['quantity_di']);
-                                }
-
-                                if($user->budget_group==$this->config->item('user_group_marketing'))
-                                {
-                                    $record_data['quantity_hom'] = $amount;
-                                }
-                                else
-                                {
-                                    unset($record_data['quantity_hom']);
-                                }
-
-                                if(in_array($variety_id, $existing_record_varieties))
-                                {
-                                    $record_data['status'] = 1;
-                                    $record_data['modified_by'] = $user->user_id;
-                                    $record_data['modification_date'] = time();
-                                    $crop_id = $data['crop_id'];
-                                    $type_id = $data['type_id'];
-                                    Query_helper::update('budget_sales_target_record',$record_data,array("customer_id ='$customer_id'", "year ='$year'", "crop_id ='$crop_id'", "type_id ='$type_id'", "variety_id ='$variety_id'"));
-                                }
-                                else
-                                {
-                                    $record_data['division_id'] = $division;
-                                    $record_data['zone_id'] = $zone;
-                                    $record_data['territory_id'] = $territory;
-                                    $record_data['customer_id'] = $customer;
-                                    $record_data['year'] = $year;
-                                    $record_data['crop_id'] = $crop_type['crop'];
-                                    $record_data['type_id'] = $crop_type['type'];
-                                    $record_data['variety_id'] = $variety_id;
-
-                                    $record_data['created_by'] = $user->user_id;
-                                    $record_data['creation_date'] = time();
-
-                                    Query_helper::add('budget_sales_target_record',$record_data);
-                                }
-
                                 if(in_array($variety_id, $existing_varieties))
                                 {
-                                    $existing_quantity = $this->budget_common_model->get_existing_quantity($year, $customer, $data['crop_id'], $data['type_id'], $variety_id);
-
-                                    if($existing_quantity != $amount)
-                                    {
-                                        if($user->budget_group==$this->config->item('user_group_territory'))
-                                        {
-                                            $data['is_approved_by_zi'] = 0;
-                                            $data['is_approved_by_di'] = 0;
-                                            $data['is_approved_by_hom'] = 0;
-                                        }
-                                        elseif($user->budget_group==$this->config->item('user_group_zone'))
-                                        {
-                                            $data['is_approved_by_zi'] = 1;
-                                            $data['is_approved_by_di'] = 0;
-                                            $data['is_approved_by_hom'] = 0;
-                                        }
-                                        elseif($user->budget_group==$this->config->item('user_group_division'))
-                                        {
-                                            $data['is_approved_by_zi'] = 1;
-                                            $data['is_approved_by_di'] = 1;
-                                            $data['is_approved_by_hom'] = 0;
-                                        }
-                                        elseif($user->budget_group==$this->config->item('user_group_marketing'))
-                                        {
-                                            $data['is_approved_by_zi'] = 1;
-                                            $data['is_approved_by_di'] = 1;
-                                            $data['is_approved_by_hom'] = 1;
-                                        }
-                                    }
-                                    else
-                                    {
-                                        unset($data['is_approved_by_zi']);
-                                        unset($data['is_approved_by_di']);
-                                        unset($data['is_approved_by_hom']);
-                                    }
-
-                                    if($amount==0 && $existing_quantity>0)
-                                    {
-                                        $data['discard'] = 1;
-                                        $data['discarded_by'] = $user->user_id;
-                                    }
-                                    else
-                                    {
-                                        unset($data['discard']);
-                                        unset($data['discarded_by']);
-                                    }
-
                                     $data['modified_by'] = $user->user_id;
                                     $data['modification_date'] = time();
                                     $data['status'] = 1;
@@ -268,35 +151,6 @@ class Customer_sales_target extends ROOT_Controller
                                 }
                                 else
                                 {
-                                    if($amount>0)
-                                    {
-                                        // Auto Approvals; based on logged user level.
-                                        if($user->budget_group == $this->config->item('user_group_zone'))
-                                        {
-                                            $data['is_approved_by_zi'] = 1;
-                                            $data['is_approved_by_di'] = 0;
-                                            $data['is_approved_by_hom'] = 0;
-                                        }
-                                        elseif($user->budget_group == $this->config->item('user_group_division'))
-                                        {
-                                            $data['is_approved_by_zi'] = 1;
-                                            $data['is_approved_by_di'] = 1;
-                                            $data['is_approved_by_hom'] = 0;
-                                        }
-                                        elseif($user->budget_group == $this->config->item('user_group_marketing'))
-                                        {
-                                            $data['is_approved_by_zi'] = 1;
-                                            $data['is_approved_by_di'] = 1;
-                                            $data['is_approved_by_hom'] = 1;
-                                        }
-                                    }
-                                    else
-                                    {
-                                        unset($data['is_approved_by_zi']);
-                                        unset($data['is_approved_by_di']);
-                                        unset($data['is_approved_by_hom']);
-                                    }
-
                                     $data['created_by'] = $user->user_id;
                                     $data['creation_date'] = time();
                                     Query_helper::add('budget_sales_target',$data);
@@ -328,77 +182,6 @@ class Customer_sales_target extends ROOT_Controller
                                 $data['quantity'] = $amount;
                                 $data['created_by'] = $user->user_id;
                                 $data['creation_date'] = time();
-
-                                if($amount>0)
-                                {
-                                    // Auto Approvals; based on logged user level.
-                                    if($user->budget_group == $this->config->item('user_group_zone'))
-                                    {
-                                        $data['is_approved_by_zi'] = 1;
-                                    }
-                                    elseif($user->budget_group == $this->config->item('user_group_division'))
-                                    {
-                                        $data['is_approved_by_zi'] = 1;
-                                        $data['is_approved_by_di'] = 1;
-                                    }
-                                    elseif($user->budget_group == $this->config->item('user_group_marketing'))
-                                    {
-                                        $data['is_approved_by_zi'] = 1;
-                                        $data['is_approved_by_di'] = 1;
-                                        $data['is_approved_by_hom'] = 1;
-                                    }
-                                }
-
-                                $record_data['division_id'] = $division;
-                                $record_data['zone_id'] = $zone;
-                                $record_data['territory_id'] = $territory;
-                                $record_data['customer_id'] = $customer;
-                                $record_data['year'] = $year;
-                                $record_data['crop_id'] = $crop_type['crop'];
-                                $record_data['type_id'] = $crop_type['type'];
-                                $record_data['variety_id'] = $variety_id;
-
-                                if($user->budget_group==$this->config->item('user_group_territory'))
-                                {
-                                    $record_data['quantity_ti'] = $amount;
-                                }
-                                else
-                                {
-                                    unset($record_data['quantity_ti']);
-                                }
-
-                                if($user->budget_group==$this->config->item('user_group_zone'))
-                                {
-                                    $record_data['quantity_zi'] = $amount;
-                                }
-                                else
-                                {
-                                    unset($record_data['quantity_zi']);
-                                }
-
-                                if($user->budget_group==$this->config->item('user_group_division'))
-                                {
-                                    $record_data['quantity_di'] = $amount;
-                                }
-                                else
-                                {
-                                    unset($record_data['quantity_di']);
-                                }
-
-                                if($user->budget_group==$this->config->item('user_group_marketing'))
-                                {
-                                    $record_data['quantity_hom'] = $amount;
-                                }
-                                else
-                                {
-                                    unset($record_data['quantity_hom']);
-                                }
-
-                                $record_data['created_by'] = $user->user_id;
-                                $record_data['creation_date'] = time();
-
-                                Query_helper::add('budget_sales_target_record',$record_data); // holds the record of quantity by user types
-
                                 Query_helper::add('budget_sales_target',$data);
                             }
                         }
@@ -419,7 +202,6 @@ class Customer_sales_target extends ROOT_Controller
 
             $this->budget_list();//this is similar like redirect
         }
-
     }
 
     private function check_validation()

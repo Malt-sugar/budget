@@ -87,11 +87,13 @@ class Assign_target_to_division extends ROOT_Controller
             {
                 $ajax['status']=false;
                 $ajax['message']=$this->lang->line("MSG_CREATE_SUCCESS");
+                $this->jsonReturn($ajax);
             }
             else
             {
                 $ajax['status']=false;
                 $ajax['message']=$this->lang->line("MSG_NOT_SAVED_SUCCESS");
+                $this->jsonReturn($ajax);
             }
 
             $this->budget_add_edit();//this is similar like redirect

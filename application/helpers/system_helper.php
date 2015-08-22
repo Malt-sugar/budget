@@ -847,7 +847,6 @@ class System_helper
         $CI->db->where('bst.variety_id', $variety);
         $CI->db->where('bst.year', $year);
         $CI->db->where('bst.status', $CI->config->item('status_active'));
-        $CI->db->where('bst.is_approved_by_hom', 1);
         $result = $CI->db->get()->row_array();
 
         if($result)
