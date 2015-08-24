@@ -18,7 +18,7 @@ if(is_array($targets) && sizeof($targets)>0)
         $arranged_targets['year'] = $target['year'];
 
         $arranged_targets['crop'][$target['crop_id']][$target['type_id']]['variety'][$target['variety_id']]['variety_name'] = $target['variety_name'];
-        $arranged_targets['crop'][$target['crop_id']][$target['type_id']]['variety'][$target['variety_id']]['quantity'] = $target['quantity'];
+        $arranged_targets['crop'][$target['crop_id']][$target['type_id']]['variety'][$target['variety_id']]['required_quantity'] = $target['required_quantity'];
         $arranged_targets['crop'][$target['crop_id']][$target['type_id']]['variety'][$target['variety_id']]['created_by'] = $target['created_by'];
     }
 }
@@ -243,7 +243,7 @@ if(is_array($targets) && sizeof($targets)>0)
                                                     <tr>
                                                         <td><?php echo $detail['variety_name']?></td>
                                                         <td>
-                                                            <input type="text" class="form-control variety_quantity" <?php if((!User_helper::check_edit_permission($detail['created_by']) && $detail['quantity']>0)){echo 'readonly';}?> name="quantity[<?php echo $sl;?>][<?php echo $varKey;?>]" value="<?php if(isset($detail['quantity'])){echo $detail['quantity'];}?>" />
+                                                            <input type="text" class="form-control variety_quantity" <?php if((!User_helper::check_edit_permission($detail['created_by']) && $detail['required_quantity']>0)){echo 'readonly';}?> name="quantity[<?php echo $sl;?>][<?php echo $varKey;?>]" value="<?php if(isset($detail['required_quantity'])){echo $detail['required_quantity'];}?>" />
                                                         </td>
                                                     </tr>
                                                 <?php

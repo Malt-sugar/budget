@@ -197,3 +197,5 @@ $lang['LABEL_SELECT_ZONE']='Please Select Zone';
 $lang['LABEL_SELECT_TERRITORY']='Please Select Territory';
 $lang['ASSIGNED']='Assigned';
 $lang['REQUIRED']='Required';
+$lang['LABEL_PROPOSED_TOTAL']='Propose';
+$lang['LABEL_REMARKS']='Remarks';
