@@ -41,11 +41,12 @@ class Ti_sales_target extends ROOT_Controller
         $this->jsonReturn($ajax);
     }
 
-    /*
+
     public function budget_save()
     {
         $user = User_helper::get_user();
         $data = Array();
+        $time = time();
 
         if(!$this->check_validation())
         {
@@ -57,31 +58,59 @@ class Ti_sales_target extends ROOT_Controller
         {
             $this->db->trans_start();  //DB Transaction Handle START
 
-            $data['crop_id'] = $this->input->post('crop');
-            $data['type_id'] = $this->input->post('type');
+            $year = $this->input->post('year');
+            $varietyPost = $this->input->post('variety');
+            $data['year'] = $year;
+            $data['division_id'] = $user->division_id;
+            $data['zone_id'] = $user->zone_id;
+            $data['territory_id'] = $user->territory_id;
 
-            $data['create_by'] = $user->user_id;
-            $data['create_date'] = time();
-
-            $quantityPost = $this->input->post('quantity');
-            $existings = $this->customer_sales_target_model->get_existing_sales_targets($data['year'], $data['crop_id'], $data['type_id'], $data['customer_id']);
-
-            foreach($quantityPost as $variety_id=>$quantity)
+            foreach($varietyPost as $crop_id=>$varietyDetail)
             {
-                $data['variety'] = $variety_id;
-                $data['quantity'] = $quantity;
-                Query_helper::add('budget_sales_target',$data);
+                $data['crop_id'] = $crop_id;
+                foreach($varietyDetail as $type_id=>$varietyInfo)
+                {
+                    $data['type_id'] = $type_id;
+                    foreach($varietyInfo as $variety_id=>$detail)
+                    {
+                        $data['variety_id'] = $variety_id;
+                        foreach($detail as $key=>$value)
+                        {
+                            $data[$key] = $value;
+                        }
+
+                        $data['created_by'] = $user->user_id;
+                        $data['creation_date'] = $time;
+
+                        if($data['required_quantity']>0)
+                        {
+                            if($this->ti_sales_target_model->check_territory_variety_existence($year, $variety_id))
+                            {
+                                $id = $this->ti_sales_target_model->get_territory_variety_id($year, $variety_id);
+                                Query_helper::update('budget_sales_target',$data,array("id ='$id'"));
+                            }
+                            else
+                            {
+                                Query_helper::add('budget_sales_target',$data);
+                            }
+                        }
+                    }
+                }
             }
 
             $this->db->trans_complete();   //DB Transaction Handle END
 
             if ($this->db->trans_status() === TRUE)
             {
-                $this->message=$this->lang->line("MSG_CREATE_SUCCESS");
+                $ajax['status'] = true;
+                $ajax['message']=$this->lang->line("MSG_CREATE_SUCCESS");
+                $this->jsonReturn($ajax);
             }
             else
             {
-                $this->message=$this->lang->line("MSG_NOT_SAVED_SUCCESS");
+                $ajax['status'] = true;
+                $ajax['message']=$this->lang->line("MSG_NOT_SAVED_SUCCESS");
+                $this->jsonReturn($ajax);
             }
 
             $this->budget_add_edit();//this is similar like redirect
@@ -93,7 +122,7 @@ class Ti_sales_target extends ROOT_Controller
         $valid=true;
         return $valid;
     }
-    */
+
 
     public function get_variety_detail()
     {
