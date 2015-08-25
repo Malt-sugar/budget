@@ -10,7 +10,7 @@
             <?php
             foreach($zones as $zone)
             {
-            ?>
+                ?>
                 <td class="text-center">
                     <table class="table table-bordered">
                         <tr>
@@ -35,7 +35,7 @@
 
         foreach($varieties as $variety)
         {
-        ?>
+            ?>
             <tr>
                 <td>
                     <?php
@@ -83,15 +83,17 @@
                     ?>
                     <td>
                         <div class="col-lg-12" style="width: 120px;">
-                            <input type="text" name="quantity[<?php echo $variety['varriety_id'];?>]" class="form-control" readonly value="<?php if($required){echo $required;}else{echo 0;}?>" />
+                            <label class="label label-warning"><?php if($required){echo $required;}else{echo 0;}?></label>
                         </div>
                     </td>
                 <?php
                 }
+
+                $detail = System_helper::get_required_division_variety_detail($year, $variety['varriety_id']);
                 ?>
-                <td><input type="text" name="total[<?php echo $variety['varriety_id'];?>]" readonly class="form-control total" value="<?php echo $total_required;?>" /></td>
-                <td><input type="text" name="total[<?php echo $variety['varriety_id'];?>]" class="form-control total" value="" /></td>
-                <td><textarea name="total[<?php echo $variety['varriety_id'];?>]" class="form-control total"></textarea></td>
+                <td><label class="label label-info"><?php echo $total_required;?></label> </td>
+                <td><input type="text" name="variety[<?php echo $variety['crop_id']?>][<?php echo $variety['product_type_id']?>][<?php echo $variety['varriety_id'];?>][required_quantity]" class="form-control total" value="<?php echo $detail['required_quantity'];?>" /></td>
+                <td><textarea name="variety[<?php echo $variety['crop_id']?>][<?php echo $variety['product_type_id']?>][<?php echo $variety['varriety_id'];?>][bottom_up_remarks]" class="form-control"><?php echo $detail['bottom_up_remarks'];?></textarea></td>
             </tr>
         <?php
         }
