@@ -821,7 +821,7 @@ class System_helper
         $CI = & get_instance();
 
         $CI->db->from('budget_sales_target bst');
-        $CI->db->select('SUM(bst.required_quantity) total_quantity');
+        $CI->db->select('SUM(bst.budgeted_quantity) total_quantity');
         $CI->db->where('bst.customer_id', $customer);
         $CI->db->where('bst.variety_id', $variety);
         $CI->db->where('bst.status', $CI->config->item('status_active'));
@@ -842,7 +842,7 @@ class System_helper
         $CI = & get_instance();
 
         $CI->db->from('budget_sales_target bst');
-        $CI->db->select('SUM(bst.required_quantity) total_quantity');
+        $CI->db->select('SUM(bst.budgeted_quantity) total_quantity');
         $CI->db->where('bst.division_id', $div_id);
         $CI->db->where('bst.variety_id', $variety);
         $CI->db->where('bst.year', $year);
@@ -865,7 +865,7 @@ class System_helper
         $CI = & get_instance();
 
         $CI->db->from('budget_sales_target bst');
-        $CI->db->select('SUM(bst.required_quantity) total_quantity');
+        $CI->db->select('SUM(bst.budgeted_quantity) total_quantity');
         $CI->db->where('bst.zone_id', $zone_id);
         $CI->db->where('bst.variety_id', $variety);
         $CI->db->where('bst.year', $year);
@@ -888,7 +888,7 @@ class System_helper
         $CI = & get_instance();
 
         $CI->db->from('budget_sales_target bst');
-        $CI->db->select('SUM(bst.required_quantity) total_quantity');
+        $CI->db->select('SUM(bst.budgeted_quantity) total_quantity');
         $CI->db->where('bst.customer_id', $customer_id);
         $CI->db->where('bst.variety_id', $variety);
         $CI->db->where('bst.year', $year);
@@ -910,7 +910,7 @@ class System_helper
         $CI = & get_instance();
 
         $CI->db->from('budget_sales_target bst');
-        $CI->db->select('SUM(bst.required_quantity) total_quantity');
+        $CI->db->select('SUM(bst.budgeted_quantity) total_quantity');
         $CI->db->where('bst.territory_id', $territory_id);
         $CI->db->where('bst.variety_id', $variety);
         $CI->db->where('bst.year', $year);
@@ -935,7 +935,7 @@ class System_helper
         $user_territory = $user->territory_id;
 
         $CI->db->from('budget_sales_target bst');
-        $CI->db->select('bst.required_quantity, bst.bottom_up_remarks');
+        $CI->db->select('bst.budgeted_quantity, bst.bottom_up_remarks');
         $CI->db->where('bst.territory_id', $user_territory);
         $CI->db->where('bst.variety_id', $variety);
         $CI->db->where('bst.year', $year);
@@ -960,7 +960,7 @@ class System_helper
         $user_zone = $user->zone_id;
 
         $CI->db->from('budget_sales_target bst');
-        $CI->db->select('bst.required_quantity, bst.bottom_up_remarks');
+        $CI->db->select('bst.budgeted_quantity, bst.bottom_up_remarks');
         $CI->db->where('bst.zone_id', $user_zone);
         $CI->db->where('bst.variety_id', $variety);
         $CI->db->where('bst.year', $year);
@@ -986,7 +986,7 @@ class System_helper
         $user_division = $user->division_id;
 
         $CI->db->from('budget_sales_target bst');
-        $CI->db->select('bst.required_quantity, bst.bottom_up_remarks');
+        $CI->db->select('bst.budgeted_quantity, bst.bottom_up_remarks');
         $CI->db->where('bst.division_id', $user_division);
         $CI->db->where('bst.variety_id', $variety);
         $CI->db->where('bst.year', $year);
@@ -1012,7 +1012,7 @@ class System_helper
         $user = User_helper::get_user();
 
         $CI->db->from('budget_sales_target bst');
-        $CI->db->select('bst.required_quantity, bst.bottom_up_remarks');
+        $CI->db->select('bst.budgeted_quantity, bst.bottom_up_remarks');
 
         $CI->db->where('bst.variety_id', $variety);
         $CI->db->where('bst.year', $year);

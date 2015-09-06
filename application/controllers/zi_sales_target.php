@@ -41,7 +41,6 @@ class Zi_sales_target extends ROOT_Controller
         $this->jsonReturn($ajax);
     }
 
-
     public function budget_save()
     {
         $user = User_helper::get_user();

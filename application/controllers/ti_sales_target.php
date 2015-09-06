@@ -41,7 +41,6 @@ class Ti_sales_target extends ROOT_Controller
         $this->jsonReturn($ajax);
     }
 
-
     public function budget_save()
     {
         $user = User_helper::get_user();
@@ -51,7 +50,7 @@ class Ti_sales_target extends ROOT_Controller
         if(!$this->check_validation())
         {
             $ajax['status']=false;
-            $ajax['message']=$this->message;
+            $ajax['message']=$this->lang->line("NO_VALID_INPUT");
             $this->jsonReturn($ajax);
         }
         else
@@ -82,7 +81,7 @@ class Ti_sales_target extends ROOT_Controller
                         $data['created_by'] = $user->user_id;
                         $data['creation_date'] = $time;
 
-                        if($data['required_quantity']>0)
+                        if($data['budgeted_quantity']>0)
                         {
                             if($this->ti_sales_target_model->check_territory_variety_existence($year, $variety_id))
                             {
@@ -119,10 +118,37 @@ class Ti_sales_target extends ROOT_Controller
 
     private function check_validation()
     {
-        $valid=true;
-        return $valid;
-    }
+        $varietyPost = $this->input->post('variety');
+        $validation = array();
 
+        foreach($varietyPost as $crop_id=>$varietyDetail)
+        {
+            foreach($varietyDetail as $type_id=>$varietyInfo)
+            {
+                foreach($varietyInfo as $variety_id=>$detail)
+                {
+                    foreach($detail as $key=>$value)
+                    {
+                        $data[$key] = $value;
+                    }
+
+                    if($data['budgeted_quantity']>0)
+                    {
+                        $validation[] = $data['budgeted_quantity'];
+                    }
+                }
+            }
+        }
+
+        if(sizeof($validation)>0)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
 
     public function get_variety_detail()
     {
