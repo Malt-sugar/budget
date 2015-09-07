@@ -201,3 +201,4 @@ $lang['LABEL_PROPOSED_TOTAL']='Propose';
 $lang['LABEL_BUDGETED_TOTAL']='Budgeted';
 $lang['LABEL_REMARKS']='Remarks';
 $lang['NO_VALID_INPUT']='No Valid Input!';
+$lang['LABEL_VARIANCE']='Variance';

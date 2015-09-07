@@ -883,27 +883,6 @@ class System_helper
         }
     }
 
-    public static function get_total_target_customer($customer_id, $variety, $year)
-    {
-        $CI = & get_instance();
-
-        $CI->db->from('budget_sales_target bst');
-        $CI->db->select('SUM(bst.budgeted_quantity) total_quantity');
-        $CI->db->where('bst.customer_id', $customer_id);
-        $CI->db->where('bst.variety_id', $variety);
-        $CI->db->where('bst.year', $year);
-        $CI->db->where('bst.status', $CI->config->item('status_active'));
-        $result = $CI->db->get()->row_array();
-
-        if($result)
-        {
-            return $result['total_quantity'];
-        }
-        else
-        {
-            return false;
-        }
-    }
 
     public static function get_total_target_territory($territory_id, $variety, $year)
     {
@@ -928,30 +907,7 @@ class System_helper
         }
     }
 
-    public static function get_required_territory_variety_detail($year, $variety)
-    {
-        $CI = & get_instance();
-        $user = User_helper::get_user();
-        $user_territory = $user->territory_id;
 
-        $CI->db->from('budget_sales_target bst');
-        $CI->db->select('bst.budgeted_quantity, bst.bottom_up_remarks');
-        $CI->db->where('bst.territory_id', $user_territory);
-        $CI->db->where('bst.variety_id', $variety);
-        $CI->db->where('bst.year', $year);
-        $CI->db->where('length(bst.customer_id)<2');
-        $CI->db->where('bst.status', $CI->config->item('status_active'));
-        $result = $CI->db->get()->row_array();
-
-        if($result)
-        {
-            return $result;
-        }
-        else
-        {
-            return null;
-        }
-    }
 
     public static function get_required_zone_variety_detail($year, $variety)
     {

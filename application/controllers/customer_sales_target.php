@@ -138,7 +138,7 @@ class Customer_sales_target extends ROOT_Controller
                             foreach($quantity as $variety_id=>$amount)
                             {
                                 $data['variety_id'] = $variety_id;
-                                $data['required_quantity'] = $amount;
+                                $data['budgeted_quantity'] = $amount;
 
                                 if(in_array($variety_id, $existing_varieties))
                                 {
@@ -179,7 +179,7 @@ class Customer_sales_target extends ROOT_Controller
                             foreach($quantity as $variety_id=>$amount)
                             {
                                 $data['variety_id'] = $variety_id;
-                                $data['required_quantity'] = $amount;
+                                $data['budgeted_quantity'] = $amount;
                                 $data['created_by'] = $user->user_id;
                                 $data['creation_date'] = time();
                                 Query_helper::add('budget_sales_target',$data);

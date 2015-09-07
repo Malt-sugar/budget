@@ -37,7 +37,7 @@ class Zi_sales_target_model extends CI_Model
         $user_zone = $user->zone_id;
 
         $this->db->from('budget_sales_target bst');
-        $this->db->select('bst.required_quantity required_quantity');
+        $this->db->select('bst.budgeted_quantity budgeted_quantity');
         $this->db->where('bst.zone_id', $user_zone);
         $this->db->where('bst.variety_id', $variety);
         $this->db->where('bst.year', $year);

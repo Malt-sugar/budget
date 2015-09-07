@@ -61,6 +61,15 @@
             $(this).closest('tr').find('.total').val(sum);
         });
 
+        $(document).on("keyup", ".total", function(event)
+        {
+            var attr = $(this).closest('tr').find('.total');
+            var required_total_attr = $(this).closest('tr').find('.required_total');
+            var variance = attr.val() - required_total_attr.html().trim();
+
+            $(this).closest('tr').find('.variance').val(variance);
+        });
+
         $(document).on("change","#year",function()
         {
             if($(this).val().length>0)

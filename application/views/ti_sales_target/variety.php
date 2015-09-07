@@ -25,7 +25,8 @@
             }
             ?>
             <th class="text-center"><label class="label label-success text-center"><?php echo $this->lang->line('LABEL_TOTAL');?> (kg)</label></th>
-            <th class="text-center"><label class="label label-success text-center"><?php echo $this->lang->line('LABEL_BUDGETED_TOTAL');?> (kg)</label></th>
+            <th class="text-center"><label class="label label-success text-center"><?php echo $this->lang->line('LABEL_BUDGETED_TOTAL');?></label></th>
+            <th class="text-center"><label class="label label-success text-center"><?php echo $this->lang->line('LABEL_VARIANCE');?></label></th>
             <th class="text-center"><label class="label label-success text-center"><?php echo $this->lang->line('LABEL_REMARKS');?></label></th>
         </tr>
 
@@ -79,7 +80,7 @@
                 $total_required = 0;
                 foreach($distributors as $distributor)
                 {
-                    $required = System_helper::get_total_target_customer($distributor['value'], $variety['varriety_id'], $year);
+                    $required = Sales_target_helper::get_total_target_customer($distributor['value'], $variety['varriety_id'], $year);
                     $total_required += $required;
                     ?>
                     <td>
@@ -90,11 +91,12 @@
                 <?php
                 }
 
-                $detail = System_helper::get_required_territory_variety_detail($year, $variety['varriety_id']);
+                $detail = Sales_target_helper::get_required_territory_variety_detail($year, $variety['varriety_id']);
                 ?>
-                <td><label class="label label-info"><?php echo $total_required;?></label> </td>
-                <td><input type="text" name="variety[<?php echo $variety['crop_id']?>][<?php echo $variety['product_type_id']?>][<?php echo $variety['varriety_id'];?>][budgeted_quantity]" class="form-control total" value="<?php echo $detail['budgeted_quantity'];?>" /></td>
-                <td><textarea name="variety[<?php echo $variety['crop_id']?>][<?php echo $variety['product_type_id']?>][<?php echo $variety['varriety_id'];?>][bottom_up_remarks]" class="form-control"><?php echo $detail['bottom_up_remarks'];?></textarea></td>
+                <td><label class="label label-info required_total"><?php echo $total_required;?></label> </td>
+                <td><input type="text" <?php if(Sales_target_helper::check_ti_edit_target_permission($year, $variety['varriety_id'])){echo 'disabled';}?> name="variety[<?php echo $variety['crop_id']?>][<?php echo $variety['product_type_id']?>][<?php echo $variety['varriety_id'];?>][budgeted_quantity]" class="form-control total" value="<?php echo $detail['budgeted_quantity'];?>" /></td>
+                <td><input type="text" readonly class="form-control variance" value="<?php if(isset($detail['budgeted_quantity'])){echo $detail['budgeted_quantity']-$total_required;}?>" /></td>
+                <td><textarea <?php if(Sales_target_helper::check_territory_edit_target_permission($year, $variety['varriety_id'])){echo 'disabled';}?> name="variety[<?php echo $variety['crop_id']?>][<?php echo $variety['product_type_id']?>][<?php echo $variety['varriety_id'];?>][bottom_up_remarks]" class="form-control"><?php echo $detail['bottom_up_remarks'];?></textarea></td>
             </tr>
         <?php
         }

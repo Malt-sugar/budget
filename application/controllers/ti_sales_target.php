@@ -112,7 +112,7 @@ class Ti_sales_target extends ROOT_Controller
                 $this->jsonReturn($ajax);
             }
 
-            $this->budget_add_edit();//this is similar like redirect
+            $this->budget_add_edit();   //this is similar like redirect
         }
     }
 

@@ -117,8 +117,36 @@ class Di_sales_target extends ROOT_Controller
 
     private function check_validation()
     {
-        $valid=true;
-        return $valid;
+        $varietyPost = $this->input->post('variety');
+        $validation = array();
+
+        foreach($varietyPost as $varietyDetail)
+        {
+            foreach($varietyDetail as $varietyInfo)
+            {
+                foreach($varietyInfo as $detail)
+                {
+                    foreach($detail as $key=>$value)
+                    {
+                        $data[$key] = $value;
+                    }
+
+                    if($data['required_quantity']>0)
+                    {
+                        $validation[] = $data['required_quantity'];
+                    }
+                }
+            }
+        }
+
+        if(sizeof($validation)>0)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
 
     public function get_variety_detail()
