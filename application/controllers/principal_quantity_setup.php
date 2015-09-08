@@ -1,14 +1,14 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 require APPPATH.'/libraries/root_controller.php';
 
-class Hom_sales_target extends ROOT_Controller
+class Principal_quantity_setup extends ROOT_Controller
 {
     private  $message;
     public function __construct()
     {
         parent::__construct();
         $this->message="";
-        $this->load->model("hom_sales_target_model");
+        $this->load->model("principal_quantity_setup_model");
     }
 
     public function index($task="add",$id=0)
@@ -33,10 +33,10 @@ class Hom_sales_target extends ROOT_Controller
         $data['years'] = Query_helper::get_info('ait_year',array('year_id value','year_name text'),array('del_status = 0'));
 
         $data['title']="HOM Sales Target";
-        $ajax['page_url']=base_url()."hom_sales_target/index/add";
+        $ajax['page_url']=base_url()."principal_quantity_setup/index/add";
 
         $ajax['status']=true;
-        $ajax['content'][]=array("id"=>"#content","html"=>$this->load->view("hom_sales_target/add_edit",$data,true));
+        $ajax['content'][]=array("id"=>"#content","html"=>$this->load->view("principal_quantity_setup/add_edit",$data,true));
 
         $this->jsonReturn($ajax);
     }
@@ -160,7 +160,7 @@ class Hom_sales_target extends ROOT_Controller
         if(strlen($year_id)>0)
         {
             $ajax['status'] = true;
-            $ajax['content'][]=array("id"=>'#load_variety',"html"=>$this->load->view("hom_sales_target/variety",$data,true));
+            $ajax['content'][]=array("id"=>'#load_variety',"html"=>$this->load->view("principal_quantity_setup/variety",$data,true));
             $this->jsonReturn($ajax);
         }
         else

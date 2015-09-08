@@ -51,7 +51,7 @@ class Di_sales_target extends ROOT_Controller
         if(!$this->check_validation())
         {
             $ajax['status']=false;
-            $ajax['message']=$this->message;
+            $ajax['message']=$this->lang->line('NO_VALID_INPUT');
             $this->jsonReturn($ajax);
         }
         else

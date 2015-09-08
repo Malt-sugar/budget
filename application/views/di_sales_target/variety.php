@@ -79,7 +79,7 @@
                 $total_required = 0;
                 foreach($zones as $zone)
                 {
-                    $required = System_helper::get_total_target_zone($zone['value'], $variety['varriety_id'], $year);
+                    $required = Sales_target_helper::get_total_target_zone($zone['value'], $variety['varriety_id'], $year);
                     $total_required += $required;
                     ?>
                     <td>
@@ -90,7 +90,7 @@
                 <?php
                 }
 
-                $detail = System_helper::get_required_division_variety_detail($year, $variety['varriety_id']);
+                $detail = Sales_target_helper::get_required_division_variety_detail($year, $variety['varriety_id']);
                 ?>
                 <td><label class="label label-info required_total"><?php echo $total_required;?></label> </td>
                 <td><input type="text" <?php if(Sales_target_helper::check_di_edit_target_permission($year, $variety['varriety_id'])){echo 'disabled';}?> name="variety[<?php echo $variety['crop_id']?>][<?php echo $variety['product_type_id']?>][<?php echo $variety['varriety_id'];?>][required_quantity]" class="form-control total" value="<?php echo $detail['required_quantity'];?>" /></td>

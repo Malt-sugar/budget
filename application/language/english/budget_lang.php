@@ -202,3 +202,5 @@ $lang['LABEL_BUDGETED_TOTAL']='Budgeted';
 $lang['LABEL_REMARKS']='Remarks';
 $lang['NO_VALID_INPUT']='No Valid Input!';
 $lang['LABEL_VARIANCE']='Variance';
+$lang['LABEL_PRINCIPAL_TOTAL']='Principal';
+$lang['LABEL_TARGETED_TOTAL']='Target';

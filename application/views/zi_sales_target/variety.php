@@ -79,7 +79,7 @@
                 $total_required = 0;
                 foreach($territories as $territory)
                 {
-                    $required = System_helper::get_total_target_territory($territory['value'], $variety['varriety_id'], $year);
+                    $required = Sales_target_helper::get_total_target_territory($territory['value'], $variety['varriety_id'], $year);
                     $total_required += $required;
                     ?>
                     <td>

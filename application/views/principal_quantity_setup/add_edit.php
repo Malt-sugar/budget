@@ -1,13 +1,13 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
-    $data["link_new"]=base_url()."di_sales_target/index/add";
-    $data["link_back"]=base_url()."di_sales_target";
+    $data["link_new"]=base_url()."principal_quantity_setup/index/add";
+    $data["link_back"]=base_url()."principal_quantity_setup";
     $data["link_approve"]="#";
     $data["hide_approve"]="1";
 
     $this->load->view("action_buttons_edit",$data);
 ?>
 
-<form class="form_valid" id="save_form" action="<?php echo base_url();?>di_sales_target/index/save" method="post">
+<form class="form_valid" id="save_form" action="<?php echo base_url();?>hom_sales_target/index/save" method="post">
     <input type="hidden" name="type_id" id="type_id" value=""/>
     <div class="row widget">
         <div class="widget-header">
@@ -61,22 +61,13 @@
             $(this).closest('tr').find('.total').val(sum);
         });
 
-        $(document).on("keyup", ".total", function(event)
-        {
-            var attr = $(this).closest('tr').find('.total');
-            var required_total_attr = $(this).closest('tr').find('.required_total');
-            var variance = attr.val() - required_total_attr.html().trim();
-
-            $(this).closest('tr').find('.variance').val(variance);
-        });
-
         $(document).on("change","#year",function()
         {
             if($(this).val().length>0)
             {
                 $("#load_variety").show();
                 $.ajax({
-                    url: base_url+"di_sales_target/get_variety_detail/",
+                    url: base_url+"principal_quantity_setup/get_variety_detail/",
                     type: 'POST',
                     dataType: "JSON",
                     data:{year_id:$(this).val()},

@@ -3,7 +3,7 @@
 if (!defined('BASEPATH'))
     exit('No direct script access allowed');
 
-class Hom_sales_target_model extends CI_Model
+class Principal_quantity_setup_model extends CI_Model
 {
     public function __construct() {
         parent::__construct();
