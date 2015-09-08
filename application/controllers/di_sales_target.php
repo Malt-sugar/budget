@@ -80,7 +80,7 @@ class Di_sales_target extends ROOT_Controller
                         $data['created_by'] = $user->user_id;
                         $data['creation_date'] = $time;
 
-                        if($data['required_quantity']>0)
+                        if($data['budgeted_quantity']>0)
                         {
                             if($this->di_sales_target_model->check_division_variety_existence($year, $variety_id))
                             {
@@ -131,9 +131,9 @@ class Di_sales_target extends ROOT_Controller
                         $data[$key] = $value;
                     }
 
-                    if($data['required_quantity']>0)
+                    if($data['budgeted_quantity']>0)
                     {
-                        $validation[] = $data['required_quantity'];
+                        $validation[] = $data['budgeted_quantity'];
                     }
                 }
             }

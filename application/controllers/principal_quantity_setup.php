@@ -32,7 +32,7 @@ class Principal_quantity_setup extends ROOT_Controller
         $user = User_helper::get_user();
         $data['years'] = Query_helper::get_info('ait_year',array('year_id value','year_name text'),array('del_status = 0'));
 
-        $data['title']="HOM Sales Target";
+        $data['title']="Principal Quantity Setup";
         $ajax['page_url']=base_url()."principal_quantity_setup/index/add";
 
         $ajax['status']=true;
@@ -81,9 +81,9 @@ class Principal_quantity_setup extends ROOT_Controller
 
                         if($data['required_quantity']>0)
                         {
-                            if($this->hom_sales_target_model->check_country_variety_existence($year, $variety_id))
+                            if($this->principal_quantity_setup_model->check_country_variety_existence($year, $variety_id))
                             {
-                                $id = $this->hom_sales_target_model->get_country_variety_id($year, $variety_id);
+                                $id = $this->principal_quantity_setup_model->get_country_variety_id($year, $variety_id);
                                 Query_helper::update('budget_sales_target',$data,array("id ='$id'"));
                             }
                             else
@@ -155,7 +155,7 @@ class Principal_quantity_setup extends ROOT_Controller
 
         $data['year'] = $year_id;
         $data['divisions'] = Query_helper::get_info('ait_division_info',array('division_id value','division_name text'),array('del_status =0'));
-        $data['varieties'] = $this->hom_sales_target_model->get_variety_info();
+        $data['varieties'] = $this->principal_quantity_setup_model->get_variety_info();
 
         if(strlen($year_id)>0)
         {

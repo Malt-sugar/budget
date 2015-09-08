@@ -55,6 +55,7 @@ class Customer_sales_target_model extends CI_Model
 
         $this->db->group_by('bst.customer_id');
         $this->db->group_by('bst.year');
+        $this->db->where('length(bst.customer_id)>2');
 
         if($user->budget_group > $this->config->item('user_group_marketing'))
         {

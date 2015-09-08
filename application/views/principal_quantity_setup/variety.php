@@ -24,8 +24,8 @@
             <?php
             }
             ?>
-            <th class="text-center"><label class="label label-success text-center"><?php echo $this->lang->line('LABEL_TOTAL');?> (kg)</label></th>
             <th class="text-center"><label class="label label-success text-center"><?php echo $this->lang->line('LABEL_BUDGETED_TOTAL');?></label></th>
+            <th class="text-center"><label class="label label-success text-center"><?php echo $this->lang->line('LABEL_PRINCIPAL_TOTAL');?></label></th>
             <th class="text-center"><label class="label label-success text-center"><?php echo $this->lang->line('LABEL_REMARKS');?></label></th>
         </tr>
 
@@ -91,7 +91,7 @@
 
                 $detail = Sales_target_helper::get_required_country_variety_detail($year, $variety['varriety_id']);
                 ?>
-                <td><label class="label label-info"><?php echo $total_required;?></label> </td>
+                <td><label class="label label-info"><?php echo $total_required;?></label></td>
                 <td><input type="text" name="variety[<?php echo $variety['crop_id']?>][<?php echo $variety['product_type_id']?>][<?php echo $variety['varriety_id'];?>][required_quantity]" class="form-control total" value="<?php echo $detail['required_quantity'];?>" /></td>
                 <td><textarea name="variety[<?php echo $variety['crop_id']?>][<?php echo $variety['product_type_id']?>][<?php echo $variety['varriety_id'];?>][bottom_up_remarks]" class="form-control"><?php echo $detail['bottom_up_remarks'];?></textarea></td>
             </tr>

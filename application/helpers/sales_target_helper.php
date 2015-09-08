@@ -32,7 +32,9 @@ class Sales_target_helper
         $CI->db->where('bst.division_id', $div_id);
         $CI->db->where('bst.variety_id', $variety);
         $CI->db->where('bst.year', $year);
-        $CI->db->where('length(bst.customer_id)>2');
+        $CI->db->where('length(bst.customer_id)<2');
+        $CI->db->where('length(bst.territory_id)<2');
+        $CI->db->where('length(bst.zone_id)<2');
         $CI->db->where('bst.status', $CI->config->item('status_active'));
         $result = $CI->db->get()->row_array();
 
@@ -55,7 +57,8 @@ class Sales_target_helper
         $CI->db->where('bst.zone_id', $zone_id);
         $CI->db->where('bst.variety_id', $variety);
         $CI->db->where('bst.year', $year);
-        $CI->db->where('length(bst.customer_id)>2');
+        $CI->db->where('length(bst.customer_id)<2');
+        $CI->db->where('length(bst.territory_id)<2');
         $CI->db->where('bst.status', $CI->config->item('status_active'));
         $result = $CI->db->get()->row_array();
 
@@ -68,7 +71,6 @@ class Sales_target_helper
             return false;
         }
     }
-
 
     public static function get_total_target_territory($territory_id, $variety, $year)
     {
@@ -79,7 +81,7 @@ class Sales_target_helper
         $CI->db->where('bst.territory_id', $territory_id);
         $CI->db->where('bst.variety_id', $variety);
         $CI->db->where('bst.year', $year);
-        $CI->db->where('length(bst.customer_id)>2');
+        $CI->db->where('length(bst.customer_id)<2');
         $CI->db->where('bst.status', $CI->config->item('status_active'));
         $result = $CI->db->get()->row_array();
 
@@ -92,8 +94,6 @@ class Sales_target_helper
             return false;
         }
     }
-
-
 
     public static function get_required_zone_variety_detail($year, $variety)
     {
@@ -304,6 +304,35 @@ class Sales_target_helper
         else
         {
             return false;
+        }
+    }
+
+    public static function get_budgeted_sales_target($year, $variety)
+    {
+        $CI = & get_instance();
+        $user = User_helper::get_user();
+
+        $CI->db->from('budget_sales_target bst');
+        $CI->db->select('bst.budgeted_quantity');
+
+        $CI->db->where('bst.variety_id', $variety);
+        $CI->db->where('bst.year', $year);
+
+        $CI->db->where('length(bst.customer_id)<2');
+        $CI->db->where('length(bst.territory_id)<2');
+        $CI->db->where('length(bst.zone_id)<2');
+        $CI->db->where('length(bst.division_id)<2');
+
+        $CI->db->where('bst.status', $CI->config->item('status_active'));
+        $result = $CI->db->get()->row_array();
+
+        if($result)
+        {
+            return $result['budgeted_quantity'];
+        }
+        else
+        {
+            return null;
         }
     }
 }
