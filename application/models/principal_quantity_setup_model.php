@@ -36,7 +36,7 @@ class Principal_quantity_setup_model extends CI_Model
         $user = User_helper::get_user();
 
         $this->db->from('budget_sales_target bst');
-        $this->db->select('bst.budgeted_quantity budgeted_quantity');
+        $this->db->select('bst.principal_quantity principal_quantity');
 
         $this->db->where('bst.variety_id', $variety);
         $this->db->where('bst.year', $year);
@@ -44,6 +44,8 @@ class Principal_quantity_setup_model extends CI_Model
         $this->db->where('length(bst.territory_id)<2');
         $this->db->where('length(bst.zone_id)<2');
         $this->db->where('length(bst.division_id)<2');
+        $this->db->where('bst.principal_quantity >', 0);
+
         $this->db->where('bst.status', $this->config->item('status_active'));
         $result = $this->db->get()->row_array();
 
@@ -70,6 +72,8 @@ class Principal_quantity_setup_model extends CI_Model
         $this->db->where('length(bst.territory_id)<2');
         $this->db->where('length(bst.zone_id)<2');
         $this->db->where('length(bst.division_id)<2');
+        $this->db->where('bst.principal_quantity >', 0);
+
         $this->db->where('bst.status', $this->config->item('status_active'));
         $result = $this->db->get()->row_array();
         return $result['id'];

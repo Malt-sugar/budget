@@ -92,7 +92,7 @@
                 $detail = Sales_target_helper::get_required_country_variety_detail($year, $variety['varriety_id']);
                 ?>
                 <td><label class="label label-info"><?php echo $total_required;?></label> </td>
-                <td><input type="text" name="variety[<?php echo $variety['crop_id']?>][<?php echo $variety['product_type_id']?>][<?php echo $variety['varriety_id'];?>][required_quantity]" class="form-control total" value="<?php echo $detail['required_quantity'];?>" /></td>
+                <td><input type="text" name="variety[<?php echo $variety['crop_id']?>][<?php echo $variety['product_type_id']?>][<?php echo $variety['varriety_id'];?>][budgeted_quantity]" class="form-control total" value="<?php echo $detail['budgeted_quantity'];?>" /></td>
                 <td><textarea name="variety[<?php echo $variety['crop_id']?>][<?php echo $variety['product_type_id']?>][<?php echo $variety['varriety_id'];?>][bottom_up_remarks]" class="form-control"><?php echo $detail['bottom_up_remarks'];?></textarea></td>
             </tr>
         <?php
