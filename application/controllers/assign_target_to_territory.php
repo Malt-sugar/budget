@@ -15,24 +15,22 @@ class Assign_target_to_territory extends ROOT_Controller
     {
         if($task=="add" || $task=="edit")
         {
-            $this->rnd_add_edit($id);
+            $this->budget_add_edit($id);
         }
         elseif($task=="save")
         {
-            $this->rnd_save();
+            $this->budget_save();
         }
         else
         {
-            $this->rnd_add_edit($id);
+            $this->budget_add_edit($id);
         }
     }
 
-    public function rnd_add_edit()
+    public function budget_add_edit()
     {
         $user = User_helper::get_user();
         $data['years'] = Query_helper::get_info('ait_year',array('year_id value','year_name text'),array('del_status = 0'));
-        $data['divisions'] = Query_helper::get_info('ait_division_info',array('division_id value','division_name text'),array('del_status = 0'));
-        $data['varieties'] = $this->assign_target_to_territory_model->get_variety_info();
 
         $data['title']="Assign Target To Territory";
         $ajax['page_url']=base_url()."assign_target_to_territory/index/add";
@@ -44,7 +42,7 @@ class Assign_target_to_territory extends ROOT_Controller
     }
 
     /*
-    public function rnd_save()
+    public function budget_save()
     {
         $user = User_helper::get_user();
         $data = Array();
@@ -86,7 +84,7 @@ class Assign_target_to_territory extends ROOT_Controller
                 $this->message=$this->lang->line("MSG_NOT_SAVED_SUCCESS");
             }
 
-            $this->rnd_add_edit();//this is similar like redirect
+            $this->budget_add_edit();//this is similar like redirect
         }
     }
 
@@ -103,6 +101,7 @@ class Assign_target_to_territory extends ROOT_Controller
         $year_id = $this->input->post('year_id');
         $user_zone = $user->zone_id;
 
+        $data['year'] = $year_id;
         $data['territories'] = Query_helper::get_info('ait_territory_info',array('territory_id value','territory_name text'),array("zone_id ='$user_zone'",'del_status =0'));
         $data['varieties'] = $this->assign_target_to_territory_model->get_variety_info();
 

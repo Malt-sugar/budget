@@ -48,7 +48,6 @@
 </form>
 
 
-
 <script type="text/javascript">
 
     jQuery(document).ready(function()
@@ -58,12 +57,22 @@
 
         $(document).on("click", "#myButtonRight", function(event)
         {
-            $('#scrollTable').animate({'right':'+=100px'});
+            var rightCss = parseInt($("#scrollTable").css('right'));
+
+            if(rightCss<201)
+            {
+                $('#scrollTable').animate({'right':'+=50px'});
+            }
         });
 
         $(document).on("click", "#myButtonLeft", function(event)
         {
-            $('#scrollTable').animate({'right':'-=100px'});
+            var leftCss = parseInt($("#scrollTable").css('left'));
+
+            if(leftCss<0)
+            {
+                $('#scrollTable').animate({'right':'-=50px'});
+            }
         });
 
         $(document).on("keyup", ".quantity", function(event)
@@ -110,6 +119,16 @@
                 $("#load_variety").hide();
                 $("#load_variety").html('');
             }
+        });
+
+        $(document).on("click", ".load_remark", function(event)
+        {
+            $(this).closest('td').find('.popContainer').show();
+        });
+
+        $(document).on("click",".crossSpan",function()
+        {
+            $(".popContainer").hide();
         });
     });
 

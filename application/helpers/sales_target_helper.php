@@ -135,6 +135,7 @@ class Sales_target_helper
         $CI->db->where('length(bst.territory_id)<2');
         $CI->db->where('length(bst.zone_id)<2');
         $CI->db->where('length(bst.division_id)<2');
+
         $CI->db->where('bst.status', $CI->config->item('status_active'));
         $result = $CI->db->get()->row_array();
 
@@ -225,6 +226,8 @@ class Sales_target_helper
             return false;
         }
     }
+
+
 
     public static function get_required_territory_variety_detail($year, $variety)
     {

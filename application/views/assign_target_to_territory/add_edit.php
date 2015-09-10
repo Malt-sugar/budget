@@ -1,13 +1,13 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
-    $data["link_new"]=base_url()."assign_target_to_territory/index/add";
-    $data["link_back"]=base_url()."assign_target_to_territory";
+    $data["link_new"]=base_url()."assign_target_to_customer/index/add";
+    $data["link_back"]=base_url()."assign_target_to_customer";
     $data["link_approve"]="#";
     $data["hide_approve"]="1";
 
     $this->load->view("action_buttons_edit",$data);
 ?>
 
-<form class="form_valid" id="save_form" action="<?php echo base_url();?>assign_target_to_division/index/save" method="post">
+<form class="form_valid" id="save_form" action="<?php echo base_url();?>assign_target_to_territory/index/save" method="post">
     <input type="hidden" name="type_id" id="type_id" value=""/>
     <div class="row widget">
         <div class="widget-header">
@@ -33,6 +33,16 @@
         <div class="col-lg-12" id="load_variety" style="overflow-x: auto; display: none;">
 
         </div>
+
+<!--        <div class="col-lg-12" id="scrollButtons" style="display: none;">-->
+<!--            <div class="col-lg-6 pull-left">-->
+<!--                <input type="button" id="myButtonRight" name="scroll" value="Right" class="btn btn-warning" />-->
+<!--            </div>-->
+<!---->
+<!--            <div class="col-lg-6 pull-right">-->
+<!--                <input type="button" id="myButtonLeft" name="scroll" value="Left" class="btn btn-warning" />-->
+<!--            </div>-->
+<!--        </div>-->
     </div>
     <div class="clearfix"></div>
 </form>
@@ -43,6 +53,16 @@
     {
         $(".form_valid").validationEngine();
         turn_off_triggers();
+
+//        $(document).on("click", "#myButtonRight", function(event)
+//        {
+//            $('#scrollTable').animate({'right':'+=100px'});
+//        });
+//
+//        $(document).on("click", "#myButtonLeft", function(event)
+//        {
+//            $('#scrollTable').animate({'right':'-=100px'});
+//        });
 
         $(document).on("keyup", ".quantity", function(event)
         {
@@ -80,12 +100,24 @@
                         console.log("error");
                     }
                 });
+                $("#scrollButtons").show();
             }
             else
             {
+                $("#scrollButtons").hide();
                 $("#load_variety").html('');
                 $("#load_variety").hide();
             }
+        });
+
+        $(document).on("click", ".load_remark", function(event)
+        {
+            $(this).closest('td').find('.popContainer').show();
+        });
+
+        $(document).on("click",".crossSpan",function()
+        {
+            $(".popContainer").hide();
         });
     });
 

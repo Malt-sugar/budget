@@ -85,6 +85,18 @@
                 $("#load_variety").html('');
             }
         });
+
+
+        $(document).on("click", ".load_remark", function(event)
+        {
+            $(this).closest('td').find('.popContainer').show();
+        });
+
+        $(document).on("click",".crossSpan",function()
+        {
+            $(".popContainer").hide();
+        });
+
     });
 
     $(document).on("keyup", ".quantity", function()

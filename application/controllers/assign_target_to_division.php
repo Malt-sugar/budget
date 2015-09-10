@@ -46,58 +46,60 @@ class Assign_target_to_division extends ROOT_Controller
 
     public function budget_save()
     {
-        $user = User_helper::get_user();
-        $data = Array();
-
-        if(!$this->check_validation())
-        {
-            $ajax['status']=false;
-            $ajax['message']=$this->message;
-            $this->jsonReturn($ajax);
-        }
-        else
-        {
-            $this->db->trans_start();  //DB Transaction Handle START
-
-            $quantityPost = $this->input->post('quantity');
-
-            foreach($quantityPost as $division=>$quantity)
-            {
-                foreach($quantity as $variety=>$number)
-                {
-                    if($number>0)
-                    {
-                        $data['hierarchy_level'] = $user->budget_group;
-                        $data['hierarchy_id'] = $user->user_id;
-                        $data['year'] = $this->input->post('year');
-                        $data['division_id'] = $division;
-                        $data['variety_id'] = $variety;
-                        $data['assigned_qty'] = $number;
-                        $data['created_by'] = $user->id;
-                        $data['creation_date'] = time();
-
-                        Query_helper::add('budget_assign_sales_target',$data);
-                    }
-                }
-            }
-
-            $this->db->trans_complete();   //DB Transaction Handle END
-
-            if ($this->db->trans_status() === TRUE)
-            {
-                $ajax['status']=false;
-                $ajax['message']=$this->lang->line("MSG_CREATE_SUCCESS");
-                $this->jsonReturn($ajax);
-            }
-            else
-            {
-                $ajax['status']=false;
-                $ajax['message']=$this->lang->line("MSG_NOT_SAVED_SUCCESS");
-                $this->jsonReturn($ajax);
-            }
-
-            $this->budget_add_edit();//this is similar like redirect
-        }
+        print_r($this->input->post());
+        exit;
+//        $user = User_helper::get_user();
+//        $data = Array();
+//
+//        if(!$this->check_validation())
+//        {
+//            $ajax['status']=false;
+//            $ajax['message']=$this->message;
+//            $this->jsonReturn($ajax);
+//        }
+//        else
+//        {
+//            $this->db->trans_start();  //DB Transaction Handle START
+//
+//            $quantityPost = $this->input->post('quantity');
+//
+//            foreach($quantityPost as $division=>$quantity)
+//            {
+//                foreach($quantity as $variety=>$number)
+//                {
+//                    if($number>0)
+//                    {
+//                        $data['hierarchy_level'] = $user->budget_group;
+//                        $data['hierarchy_id'] = $user->user_id;
+//                        $data['year'] = $this->input->post('year');
+//                        $data['division_id'] = $division;
+//                        $data['variety_id'] = $variety;
+//                        $data['assigned_qty'] = $number;
+//                        $data['created_by'] = $user->id;
+//                        $data['creation_date'] = time();
+//
+//                        Query_helper::add('budget_assign_sales_target',$data);
+//                    }
+//                }
+//            }
+//
+//            $this->db->trans_complete();   //DB Transaction Handle END
+//
+//            if ($this->db->trans_status() === TRUE)
+//            {
+//                $ajax['status']=false;
+//                $ajax['message']=$this->lang->line("MSG_CREATE_SUCCESS");
+//                $this->jsonReturn($ajax);
+//            }
+//            else
+//            {
+//                $ajax['status']=false;
+//                $ajax['message']=$this->lang->line("MSG_NOT_SAVED_SUCCESS");
+//                $this->jsonReturn($ajax);
+//            }
+//
+//            $this->budget_add_edit();//this is similar like redirect
+//        }
     }
 
     private function check_validation()

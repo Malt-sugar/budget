@@ -1,6 +1,6 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
-
 ?>
+
 <div class="col-xs-12" id="scrollTable">
     <table class="table table-bordered">
         <tr>
@@ -28,6 +28,7 @@
             }
             ?>
             <th class="text-center"><label class="label label-warning text-center"><?php echo $this->lang->line('LABEL_TOTAL');?> (kg)</label></th>
+            <th class="text-center"><label class="label label-warning text-center"><?php echo $this->lang->line('LABEL_TARGETED_TOTAL');?> (kg)</label></th>
         </tr>
 
         <?php
@@ -78,23 +79,38 @@
                 <?php
                 foreach($zones as $zone)
                 {
-                    $required = System_helper::get_total_target_zone($zone['value'], $variety['varriety_id'], $year);
+                    $required = Sales_target_helper::get_total_target_zone($zone['value'], $variety['varriety_id'], $year);
                     ?>
                     <td style="min-width: 220px;">
                         <div class="col-lg-12">
-                            <div class="col-lg-6">
+                            <div class="col-lg-5">
                                 <input type="text" name="quantity[<?php echo $variety['varriety_id'];?>]" class="form-control" readonly value="<?php if($required){echo $required;}else{echo 0;}?>" />
                             </div>
 
-                            <div class="col-lg-6">
+                            <div class="col-lg-5">
                                 <input type="text" name="quantity[<?php echo $variety['varriety_id'];?>]" class="form-control quantity" value="" />
+                            </div>
+
+                            <div class="col-lg-2">
+                                <label class="label label-primary load_remark">R</label>
+                            </div>
+                        </div>
+
+                        <div class="row popContainer" style="display: none;">
+                            <span class="crossSpan">
+                                <img src="<?php echo base_url()?>images/xmark.png" style="cursor: pointer;" width="16px" height="16px"/>
+                            </span>
+
+                            <div class="col-lg-12">
+                                <textarea class="form-control" name="" placeholder="Add Remarks"></textarea>
                             </div>
                         </div>
                     </td>
                 <?php
                 }
                 ?>
-                <td style="min-width: 90px;"><input type="text" name="total[<?php echo $variety['varriety_id'];?>]" class="form-control total" value="" /></td>
+                <td style="min-width: 90px;"><input type="text" name="quantity[<?php echo $variety['varriety_id'];?>][total]" class="form-control total" value="" /></td>
+                <td style="min-width: 90px;"><input type="text" name="quantity[<?php echo $variety['varriety_id'];?>][target]" class="form-control total" value="" /></td>
             </tr>
         <?php
         }
