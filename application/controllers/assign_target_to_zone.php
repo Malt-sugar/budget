@@ -43,7 +43,6 @@ class Assign_target_to_zone extends ROOT_Controller
         $this->jsonReturn($ajax);
     }
 
-    /*
     public function budget_save()
     {
         $user = User_helper::get_user();
@@ -95,7 +94,6 @@ class Assign_target_to_zone extends ROOT_Controller
         $valid=true;
         return $valid;
     }
-    */
 
     public function get_variety_detail()
     {

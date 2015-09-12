@@ -72,4 +72,51 @@ class Ti_sales_target_model extends CI_Model
         return $result['id'];
     }
 
+    public function check_ti_notification_existence($year)
+    {
+        $user = User_helper::get_user();
+        $user_territory = $user->territory_id;
+
+        $this->db->from('budget_sales_target_notification bstn');
+        $this->db->select('bstn.*');
+        $this->db->where('bstn.sending_territory', $user_territory);
+        $this->db->where('bstn.year', $year);
+
+        $this->db->where('bstn.status', $this->config->item('status_active'));
+        $result = $this->db->get()->row_array();
+
+        if($result)
+        {
+            return $result['id'];
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    public function check_ti_budgeting_time_existence($year)
+    {
+        $user = User_helper::get_user();
+        $user_zone = $user->zone_id;
+
+        $this->db->from('budget_sales_target bst');
+        $this->db->select('bst.budgeted_quantity budgeted_quantity');
+        $this->db->where('bst.year', $year);
+        $this->db->where('bst.zone_id', $user_zone);
+        $this->db->where('length(bst.customer_id)<2');
+        $this->db->where('length(bst.territory_id)<2');
+        $this->db->where('length(bst.zone_id)>2');
+        $this->db->where('bst.status', $this->config->item('status_active'));
+        $result = $this->db->get()->result_array();
+
+        if(sizeof($result)>0)
+        {
+            return false;
+        }
+        else
+        {
+            return true;
+        }
+    }
 }

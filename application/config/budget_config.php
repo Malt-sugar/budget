@@ -27,6 +27,8 @@ $config['prediction_phase_final'] = 4;
 $config['budgeted_mrp_cal_year'] = 3;
 
 
-
+// Direction
+$config['direction_up'] = 1;
+$config['direction_down'] = 2;
 
 

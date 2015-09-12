@@ -204,3 +204,5 @@ $lang['NO_VALID_INPUT']='No Valid Input!';
 $lang['LABEL_VARIANCE']='Variance';
 $lang['LABEL_PRINCIPAL_TOTAL']='Principal';
 $lang['LABEL_TARGETED_TOTAL']='Target';
+$lang['LABEL_FORWARD']='Forward';
+$lang['BUDGETING_TIME_OVER']='Budgeting Time Is Over';

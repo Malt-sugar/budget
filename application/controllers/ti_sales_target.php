@@ -44,75 +44,109 @@ class Ti_sales_target extends ROOT_Controller
     public function budget_save()
     {
         $user = User_helper::get_user();
-        $data = Array();
+        $data = array();
+        $notification_data = array();
         $time = time();
 
-        if(!$this->check_validation())
+        if(!$this->check_budgeting_time_validation())
         {
             $ajax['status']=false;
-            $ajax['message']=$this->lang->line("NO_VALID_INPUT");
+            $ajax['message']=$this->lang->line("BUDGETING_TIME_OVER");
             $this->jsonReturn($ajax);
         }
         else
         {
-            $this->db->trans_start();  //DB Transaction Handle START
-
-            $year = $this->input->post('year');
-            $varietyPost = $this->input->post('variety');
-            $data['year'] = $year;
-            $data['division_id'] = $user->division_id;
-            $data['zone_id'] = $user->zone_id;
-            $data['territory_id'] = $user->territory_id;
-
-            foreach($varietyPost as $crop_id=>$varietyDetail)
+            if(!$this->check_validation())
             {
-                $data['crop_id'] = $crop_id;
-                foreach($varietyDetail as $type_id=>$varietyInfo)
-                {
-                    $data['type_id'] = $type_id;
-                    foreach($varietyInfo as $variety_id=>$detail)
-                    {
-                        $data['variety_id'] = $variety_id;
-                        foreach($detail as $key=>$value)
-                        {
-                            $data[$key] = $value;
-                        }
-
-                        $data['created_by'] = $user->user_id;
-                        $data['creation_date'] = $time;
-
-                        if($data['budgeted_quantity']>0)
-                        {
-                            if($this->ti_sales_target_model->check_territory_variety_existence($year, $variety_id))
-                            {
-                                $id = $this->ti_sales_target_model->get_territory_variety_id($year, $variety_id);
-                                Query_helper::update('budget_sales_target',$data,array("id ='$id'"));
-                            }
-                            else
-                            {
-                                Query_helper::add('budget_sales_target',$data);
-                            }
-                        }
-                    }
-                }
-            }
-
-            $this->db->trans_complete();   //DB Transaction Handle END
-
-            if ($this->db->trans_status() === TRUE)
-            {
-                $ajax['status'] = true;
-                $ajax['message']=$this->lang->line("MSG_CREATE_SUCCESS");
+                $ajax['status']=false;
+                $ajax['message']=$this->lang->line("NO_VALID_INPUT");
                 $this->jsonReturn($ajax);
             }
             else
             {
-                $ajax['status'] = true;
-                $ajax['message']=$this->lang->line("MSG_NOT_SAVED_SUCCESS");
-                $this->jsonReturn($ajax);
-            }
+                $this->db->trans_start();  //DB Transaction Handle START
 
-            $this->budget_add_edit();   //this is similar like redirect
+                $year = $this->input->post('year');
+                $varietyPost = $this->input->post('variety');
+                $data['year'] = $year;
+                $data['division_id'] = $user->division_id;
+                $data['zone_id'] = $user->zone_id;
+                $data['territory_id'] = $user->territory_id;
+
+                if($this->input->post('forward') && $this->input->post('forward')==1)
+                {
+                    $notification_data['year'] = $year;
+                    $notification_data['sending_division'] = $user->division_id;
+                    $notification_data['sending_zone'] = $user->zone_id;
+                    $notification_data['sending_territory'] = $user->territory_id;
+                    $notification_data['receiving_division'] = $user->division_id;
+                    $notification_data['receiving_zone'] = $user->zone_id;
+                    $notification_data['direction'] = $this->config->item('direction_up');
+                    $notification_data['created_by'] = $user->user_id;
+                    $notification_data['creation_date'] = $time;
+
+                    if($this->ti_sales_target_model->check_ti_notification_existence($year))
+                    {
+                        $id = $this->ti_sales_target_model->check_ti_notification_existence($year);
+                        $notification_data['is_action_taken'] = 0;
+                        Query_helper::update('budget_sales_target_notification',$notification_data,array("id ='$id'"));
+                    }
+                    else
+                    {
+                        Query_helper::add('budget_sales_target_notification',$notification_data);
+                    }
+                }
+
+                foreach($varietyPost as $crop_id=>$varietyDetail)
+                {
+                    $data['crop_id'] = $crop_id;
+                    foreach($varietyDetail as $type_id=>$varietyInfo)
+                    {
+                        $data['type_id'] = $type_id;
+                        foreach($varietyInfo as $variety_id=>$detail)
+                        {
+                            $data['variety_id'] = $variety_id;
+                            foreach($detail as $key=>$value)
+                            {
+                                $data[$key] = $value;
+                            }
+
+                            $data['created_by'] = $user->user_id;
+                            $data['creation_date'] = $time;
+
+                            if($data['budgeted_quantity']>0)
+                            {
+                                if($this->ti_sales_target_model->check_territory_variety_existence($year, $variety_id))
+                                {
+                                    $id = $this->ti_sales_target_model->get_territory_variety_id($year, $variety_id);
+                                    Query_helper::update('budget_sales_target',$data,array("id ='$id'"));
+                                }
+                                else
+                                {
+                                    Query_helper::add('budget_sales_target',$data);
+                                }
+                            }
+                        }
+                    }
+                }
+
+                $this->db->trans_complete();   //DB Transaction Handle END
+
+                if ($this->db->trans_status() === TRUE)
+                {
+                    $ajax['status'] = true;
+                    $ajax['message']=$this->lang->line("MSG_CREATE_SUCCESS");
+                    $this->jsonReturn($ajax);
+                }
+                else
+                {
+                    $ajax['status'] = true;
+                    $ajax['message']=$this->lang->line("MSG_NOT_SAVED_SUCCESS");
+                    $this->jsonReturn($ajax);
+                }
+
+                $this->budget_add_edit();   //this is similar like redirect
+            }
         }
     }
 
@@ -141,6 +175,20 @@ class Ti_sales_target extends ROOT_Controller
         }
 
         if(sizeof($validation)>0)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    private function check_budgeting_time_validation()
+    {
+        $year = $this->input->post('year');
+
+        if($this->ti_sales_target_model->check_ti_budgeting_time_existence($year))
         {
             return true;
         }
