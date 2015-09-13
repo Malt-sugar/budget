@@ -125,7 +125,7 @@ class Notification_helper
                 if(isset($sending_division) && !isset($sending_zone) && !isset($sending_territory))
                 {
                     $return_array['text'] = Notification_helper::get_division_name($sending_division).' Sales target Set!';
-                    $return_array['link'] = '';
+                    $return_array['link'] = base_url().'hom_sales_target/index/add';
                 }
             }
             elseif($user_group == $CI->config->item('user_group_division'))
@@ -133,7 +133,7 @@ class Notification_helper
                 if(isset($sending_division) && isset($sending_zone) && !isset($sending_territory) && $receiving_division == $user_division)
                 {
                     $return_array['text'] = Notification_helper::get_zone_name($sending_zone).' Sales target Set!';
-                    $return_array['link'] = '';
+                    $return_array['link'] = base_url().'di_sales_target/index/add';
                 }
             }
             elseif($user_group == $CI->config->item('user_group_zone'))
@@ -147,7 +147,22 @@ class Notification_helper
         }
         elseif($direction == $CI->config->item('direction_down'))
         {
+            if($user_group == $CI->config->item('user_group_marketing'))
+            {
 
+            }
+            elseif($user_group == $CI->config->item('user_group_division'))
+            {
+
+            }
+            elseif($user_group == $CI->config->item('user_group_zone'))
+            {
+
+            }
+            elseif($user_group == $CI->config->item('user_group_territory'))
+            {
+
+            }
         }
 
         return $return_array;
