@@ -101,4 +101,16 @@
         }
         ?>
     </table>
+
+    <table class="table table-bordered">
+        <tr>
+            <td class="text-center">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <input type="checkbox" name="forward" value="1" /> <label class="label label-primary"><?php echo $this->lang->line('LABEL_FORWARD');?></label>
+                    </div>
+                </div>
+            </td>
+        </tr>
+    </table>
 </div>

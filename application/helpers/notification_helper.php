@@ -124,7 +124,7 @@ class Notification_helper
             {
                 if(isset($sending_division) && !isset($sending_zone) && !isset($sending_territory))
                 {
-                    $return_array['text'] = Notification_helper::get_division_name($sending_division).' Sales target Set!';
+                    $return_array['text'] = 'Division: '. Notification_helper::get_division_name($sending_division).' Sales target Set!';
                     $return_array['link'] = base_url().'hom_sales_target/index/add';
                 }
             }
@@ -132,7 +132,7 @@ class Notification_helper
             {
                 if(isset($sending_division) && isset($sending_zone) && !isset($sending_territory) && $receiving_division == $user_division)
                 {
-                    $return_array['text'] = Notification_helper::get_zone_name($sending_zone).' Sales target Set!';
+                    $return_array['text'] = 'Zone: ' . Notification_helper::get_zone_name($sending_zone).' Sales target Set!';
                     $return_array['link'] = base_url().'di_sales_target/index/add';
                 }
             }
@@ -140,7 +140,7 @@ class Notification_helper
             {
                 if(isset($sending_division) && isset($sending_zone) && isset($sending_territory) && $receiving_zone == $user_zone)
                 {
-                    $return_array['text'] = Notification_helper::get_territory_name($sending_territory).' Sales target Set!';
+                    $return_array['text'] = 'Territory: ' . Notification_helper::get_territory_name($sending_territory).' Sales target Set!';
                     $return_array['link'] = base_url().'zi_sales_target/index/add';
                 }
             }
@@ -183,7 +183,7 @@ class Notification_helper
         $CI = & get_instance();
         $CI->db->from('ait_zone_info azi');
         $CI->db->select('azi.zone_name');
-        $CI->db->where('adi.zone_id', $zone_id);
+        $CI->db->where('azi.zone_id', $zone_id);
         $result = $CI->db->get()->row_array();
         return $result['zone_name'];
     }
