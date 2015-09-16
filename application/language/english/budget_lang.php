@@ -211,5 +211,5 @@ $lang['LABEL_TERRITORY_BUDGET']='Territory Budget';
 $lang['LABEL_ZONE_BUDGET']='Zone Budget';
 $lang['LABEL_DIVISION_BUDGET']='Division Budget';
 $lang['LABEL_OVERALL_BUDGET']='Overall Budget';
-$lang['LABEL_HOM_BUDGET']='Head Office Budget';
+$lang['LABEL_HOM_BUDGET']='HO Budget';
 $lang['LABEL_PRINCIPAL_QUANTITY']='Principal Quantity';
