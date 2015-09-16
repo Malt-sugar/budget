@@ -7,25 +7,37 @@
             <th><?php echo $this->lang->line('LABEL_CROP');?></th>
             <th><?php echo $this->lang->line('LABEL_PRODUCT_TYPE');?></th>
             <th><?php echo $this->lang->line('LABEL_VARIETY');?></th>
-            <?php
-            foreach($distributors as $distributor)
-            {
-            ?>
-                <td class="text-center">
-                    <table class="table table-bordered">
-                        <tr>
-                            <td class="text-center"><?php echo $distributor['text'];?> Qty (kg)</td>
-                        </tr>
-                        <tr>
-                            <td class="text-center"><label class="label label-info"><?php echo $this->lang->line('REQUIRED');?></label></td>
-                        </tr>
-                    </table>
-                </td>
-            <?php
-            }
-            ?>
+            <td class="text-center">
+                <table class="table table-bordered">
+                    <tr>
+                        <td class="text-center"><label class="label label-success">Customers</label></td>
+                    </tr>
+                </table>
+
+                <table class="table table-bordered">
+                    <tr>
+                        <?php
+                        foreach($distributors as $key=>$distributor)
+                        {
+                        ?>
+                            <td class="customer" style="width: 120px;">
+                                <table class="table table-bordered">
+                                    <tr style="height: 65px;">
+                                        <td class="text-center"><?php echo $distributor['text'];?></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-center"><label class="label label-info"><?php echo $this->lang->line('REQUIRED');?></label></td>
+                                    </tr>
+                                </table>
+                            </td>
+                        <?php
+                        }
+                        ?>
+                    </tr>
+                </table>
+            </td>
             <th class="text-center"><label class="label label-success text-center"><?php echo $this->lang->line('LABEL_TOTAL');?> (kg)</label></th>
-            <th class="text-center"><label class="label label-success text-center"><?php echo $this->lang->line('LABEL_BUDGETED_TOTAL');?></label></th>
+            <th class="text-center"><label class="label label-success text-center"><?php echo $this->lang->line('LABEL_TERRITORY_BUDGET');?></label></th>
             <th class="text-center"><label class="label label-success text-center"><?php echo $this->lang->line('LABEL_VARIANCE');?></label></th>
             <th class="text-center"><label class="label label-success text-center"><?php echo $this->lang->line('LABEL_REMARKS');?></label></th>
         </tr>
@@ -75,28 +87,55 @@
                     ?>
                 </td>
                 <td><?php echo $variety['varriety_name'];?></td>
-                <?php
-
-                $total_required = 0;
-                foreach($distributors as $distributor)
-                {
-                    $required = Sales_target_helper::get_total_target_customer($distributor['value'], $variety['varriety_id'], $year);
-                    $total_required += $required;
-                    ?>
-                    <td>
-                        <div class="col-lg-12" style="width: 120px;">
-                            <label class="label label-warning"><?php if($required){echo $required;}else{echo 0;}?></label>
-                        </div>
-                    </td>
-                <?php
-                }
-
-                $detail = Sales_target_helper::get_required_territory_variety_detail($year, $variety['varriety_id']);
-                ?>
-                <td><label class="label label-info required_total"><?php echo $total_required;?></label> </td>
+                <td>
+                    <table class="table table-bordered">
+                        <tr>
+                            <?php
+                            $total_required = 0;
+                            foreach($distributors as $distributor)
+                            {
+                                $required = Sales_target_helper::get_total_target_customer($distributor['value'], $variety['varriety_id'], $year);
+                                $total_required += $required;
+                                ?>
+                                <td class="customer_value text-center">
+                                    <div class="col-lg-12" style="width: 120px;">
+                                        <label class="label label-warning"><?php if($required){echo $required;}else{echo 0;}?></label>
+                                    </div>
+                                </td>
+                            <?php
+                            }
+                            $detail = Sales_target_helper::get_required_territory_variety_detail($year, $variety['varriety_id']);
+                            ?>
+                        </tr>
+                    </table>
+                </td>
+                <td class="text-center"><label class="label label-info required_total"><?php echo $total_required;?></label> </td>
                 <td><input type="text" <?php if(Sales_target_helper::check_ti_edit_target_permission($year, $variety['varriety_id'])){echo 'readonly';}?> name="variety[<?php echo $variety['crop_id']?>][<?php echo $variety['product_type_id']?>][<?php echo $variety['varriety_id'];?>][budgeted_quantity]" class="form-control total" value="<?php echo $detail['budgeted_quantity'];?>" /></td>
                 <td><input type="text" readonly class="form-control variance" value="<?php if(isset($detail['budgeted_quantity'])){echo $detail['budgeted_quantity']-$total_required;}?>" /></td>
-                <td><textarea <?php if(Sales_target_helper::check_ti_edit_target_permission($year, $variety['varriety_id'])){echo 'readonly';}?> name="variety[<?php echo $variety['crop_id']?>][<?php echo $variety['product_type_id']?>][<?php echo $variety['varriety_id'];?>][bottom_up_remarks]" class="form-control"><?php echo $detail['bottom_up_remarks'];?></textarea></td>
+                <td>
+                    <div class="col-lg-2">
+                        <label data-toggle="tooltip" data-placement="left" title="<?php echo $detail['bottom_up_remarks'];?>" class="label label-primary load_remark">+R</label>
+                    </div>
+
+                    <div class="row popContainer" style="display: none;">
+                        <table class="table table-bordered">
+                            <tr>
+                                <td>
+                                    <div class="col-lg-12">
+                                        <textarea class="form-control" <?php if(Sales_target_helper::check_ti_edit_target_permission($year, $variety['varriety_id'])){echo 'readonly';}?> name="variety[<?php echo $variety['crop_id']?>][<?php echo $variety['product_type_id']?>][<?php echo $variety['varriety_id'];?>][bottom_up_remarks]" placeholder="Add Remarks"><?php echo $detail['bottom_up_remarks'];?></textarea>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="pull-right" style="border: 0px;">
+                                    <div class="col-lg-12">
+                                        <label class="label label-primary crossSpan"><?php echo $this->lang->line('OK');?></label>
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </td>
             </tr>
         <?php
         }
@@ -116,3 +155,20 @@
     </table>
 
 </div>
+
+<script>
+    jQuery(document).ready(function()
+    {
+        $(document).on("click", ".load_remark", function(event)
+        {
+            $(this).closest('td').find('.popContainer').show();
+        });
+
+        $(document).on("click",".crossSpan",function()
+        {
+            $(".popContainer").hide();
+        });
+
+        $('[data-toggle="tooltip"]').tooltip();
+    });
+</script>

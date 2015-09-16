@@ -14,7 +14,7 @@
                 <td class="text-center">
                     <table class="table table-bordered">
                         <tr>
-                            <td class="text-center"><?php echo $division['text'];?> Qty (kg)</td>
+                            <td class="text-center"><?php echo $division['text'];?></td>
                         </tr>
                         <tr>
                             <td class="text-center"><label class="label label-info"><?php echo $this->lang->line('REQUIRED');?></label></td>
@@ -24,8 +24,9 @@
             <?php
             }
             ?>
-            <th class="text-center"><label class="label label-success text-center"><?php echo $this->lang->line('LABEL_BUDGETED_TOTAL');?></label></th>
-            <th class="text-center"><label class="label label-success text-center"><?php echo $this->lang->line('LABEL_PRINCIPAL_TOTAL');?></label></th>
+            <th class="text-center"><label class="label label-success text-center"><?php echo $this->lang->line('LABEL_TOTAL');?></label></th>
+            <th class="text-center"><label class="label label-success text-center"><?php echo $this->lang->line('LABEL_HOM_BUDGET');?></label></th>
+            <th class="text-center"><label class="label label-success text-center"><?php echo $this->lang->line('LABEL_PRINCIPAL_QUANTITY');?></label></th>
             <th class="text-center"><label class="label label-success text-center"><?php echo $this->lang->line('LABEL_REMARKS');?></label></th>
         </tr>
 
@@ -90,8 +91,10 @@
                 }
 
                 $detail = Sales_target_helper::get_required_country_variety_detail_principal($year, $variety['varriety_id']);
+                $hom_detail = Sales_target_helper::get_required_country_variety_detail($year, $variety['varriety_id']);
                 ?>
                 <td><label class="label label-info"><?php echo $total_required;?></label></td>
+                <td><label class="label label-info"><?php echo $hom_detail['budgeted_quantity'];?></label></td>
                 <td><input type="text" name="variety[<?php echo $variety['crop_id']?>][<?php echo $variety['product_type_id']?>][<?php echo $variety['varriety_id'];?>][principal_quantity]" class="form-control total" value="<?php echo $detail['principal_quantity'];?>" /></td>
                 <td><textarea name="variety[<?php echo $variety['crop_id']?>][<?php echo $variety['product_type_id']?>][<?php echo $variety['varriety_id'];?>][bottom_up_remarks]" class="form-control"><?php echo $detail['bottom_up_remarks'];?></textarea></td>
             </tr>

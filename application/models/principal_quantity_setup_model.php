@@ -11,7 +11,6 @@ class Principal_quantity_setup_model extends CI_Model
 
     public function get_variety_info()
     {
-        $user = User_helper::get_user();
         $this->db->select('avi.varriety_id, avi.varriety_name');
         $this->db->select('aci.crop_name, aci.order_crop');
         $this->db->select('apt.product_type, apt.order_type');
@@ -33,8 +32,6 @@ class Principal_quantity_setup_model extends CI_Model
 
     public function check_country_variety_existence($year, $variety)
     {
-        $user = User_helper::get_user();
-
         $this->db->from('budget_sales_target bst');
         $this->db->select('bst.principal_quantity principal_quantity');
 
@@ -61,11 +58,8 @@ class Principal_quantity_setup_model extends CI_Model
 
     public function get_country_variety_id($year, $variety)
     {
-        $user = User_helper::get_user();
-
         $this->db->from('budget_sales_target bst');
         $this->db->select('bst.id');
-
         $this->db->where('bst.variety_id', $variety);
         $this->db->where('bst.year', $year);
         $this->db->where('length(bst.customer_id)<2');

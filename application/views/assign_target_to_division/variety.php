@@ -18,8 +18,8 @@
                 </table>
                 <table class="table table-bordered">
                     <tr>
-                        <td><?php echo $this->lang->line('REQUIRED');?></td>
-                        <td><?php echo $this->lang->line('ASSIGNED');?></td>
+                        <td><?php echo $this->lang->line('LABEL_BUDGETED_TOTAL');?></td>
+                        <td><?php echo $this->lang->line('LABEL_TARGETED_TOTAL');?></td>
                     </tr>
                 </table>
             </td>
@@ -83,15 +83,15 @@
                 <td>
                     <div class="col-lg-12">
                         <div class="col-lg-5">
-                            <input type="text" name="quantity[<?php echo $division['value'];?>][<?php echo $variety['varriety_id'];?>]" class="form-control" disabled value="<?php if($required){echo $required;}else{echo 0;}?>" />
+                            <input type="text" name="" class="form-control" disabled value="<?php if($required){echo $required;}else{echo 0;}?>" />
                         </div>
 
                         <div class="col-lg-5">
-                            <input type="text" name="quantity[<?php echo $division['value'];?>][<?php echo $variety['varriety_id'];?>]" class="form-control quantity" value="" />
+                            <input type="text" name="quantity[<?php echo $division['value'];?>][<?php echo $variety['varriety_id'];?>][assigned]" class="form-control quantity" value="" />
                         </div>
 
                         <div class="col-lg-2">
-                            <label class="label label-primary load_remark">R</label>
+                            <label class="label label-primary load_remark">+R</label>
                         </div>
                     </div>
 
@@ -100,7 +100,7 @@
                             <img src="<?php echo base_url()?>images/xmark.png" style="cursor: pointer;" width="16px" height="16px"/>
                         </span>
                         <div class="col-lg-12">
-                            <textarea class="form-control" name="" placeholder="Add Remarks"></textarea>
+                            <textarea class="form-control" name="quantity[<?php echo $variety['varriety_id'];?>][remark]" placeholder="Add Remarks"></textarea>
                         </div>
                     </div>
                 </td>
@@ -108,7 +108,7 @@
             }
             ?>
             <td><input type="text" name="quantity[<?php echo $variety['varriety_id'];?>][total]" class="form-control total" value="" /></td>
-            <td><input type="text" name="quantity[<?php echo $variety['varriety_id'];?>][quantity]" class="form-control" value="" /></td>
+            <td><input type="text" name="quantity[<?php echo $variety['varriety_id'];?>][target]" class="form-control" value="" /></td>
         </tr>
     <?php
     }

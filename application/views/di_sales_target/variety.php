@@ -14,7 +14,7 @@
                 <td class="text-center">
                     <table class="table table-bordered">
                         <tr>
-                            <td class="text-center"><?php echo $zone['text'];?> Qty (kg)</td>
+                            <td class="text-center"><?php echo $zone['text'];?></td>
                         </tr>
                         <tr>
                             <td class="text-center"><label class="label label-info"><?php echo $this->lang->line('REQUIRED');?></label></td>
@@ -25,7 +25,7 @@
             }
             ?>
             <th class="text-center"><label class="label label-success text-center"><?php echo $this->lang->line('LABEL_TOTAL');?> (kg)</label></th>
-            <th class="text-center"><label class="label label-success text-center"><?php echo $this->lang->line('LABEL_BUDGETED_TOTAL');?></label></th>
+            <th class="text-center"><label class="label label-success text-center"><?php echo $this->lang->line('LABEL_DIVISION_BUDGET');?></label></th>
             <th class="text-center"><label class="label label-success text-center"><?php echo $this->lang->line('LABEL_VARIANCE');?></label></th>
             <th class="text-center"><label class="label label-success text-center"><?php echo $this->lang->line('LABEL_REMARKS');?></label></th>
         </tr>

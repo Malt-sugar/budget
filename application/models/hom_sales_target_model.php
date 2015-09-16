@@ -86,6 +86,7 @@ class Hom_sales_target_model extends CI_Model
         $this->db->where('bstn.is_action_taken', 0);
         $this->db->where('bstn.status', $this->config->item('status_active'));
         $result = $this->db->get()->row_array();
+
         if($result)
         {
             return $result['id'];
@@ -106,7 +107,7 @@ class Hom_sales_target_model extends CI_Model
         $this->db->where('length(bst.zone_id)<2');
         $this->db->where('length(bst.division_id)<2');
         $this->db->where('bst.status', $this->config->item('status_active'));
-        $this->db->where('bst.principal_quantity>', 0);
+        $this->db->where('bst.principal_quantity !=', '');
         $result = $this->db->get()->result_array();
 
         if(sizeof($result)>0)
