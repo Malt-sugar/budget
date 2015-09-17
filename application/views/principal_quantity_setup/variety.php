@@ -39,6 +39,7 @@
             <th class="text-center"><label class="label label-success text-center"><?php echo $this->lang->line('LABEL_TOTAL');?></label></th>
             <th class="text-center"><label class="label label-success text-center"><?php echo $this->lang->line('LABEL_HOM_BUDGET');?></label></th>
             <th class="text-center"><label class="label label-success text-center"><?php echo $this->lang->line('LABEL_PRINCIPAL_QUANTITY');?></label></th>
+            <th class="text-center"><label class="label label-success text-center"><?php echo $this->lang->line('LABEL_VARIANCE');?></label></th>
             <th class="text-center"><label class="label label-success text-center"><?php echo $this->lang->line('LABEL_REMARKS');?></label></th>
         </tr>
 
@@ -111,8 +112,9 @@
                     </table>
                 </td>
                 <td class="text-center"><label class="label label-info"><?php echo $total_required;?></label></td>
-                <td class="text-center"><label class="label label-info"><?php echo $hom_detail['budgeted_quantity'];?></label></td>
+                <td class="text-center"><label class="label label-info required_total"><?php echo $hom_detail['budgeted_quantity'];?></label></td>
                 <td><input type="text" name="variety[<?php echo $variety['crop_id']?>][<?php echo $variety['product_type_id']?>][<?php echo $variety['varriety_id'];?>][principal_quantity]" class="form-control total" value="<?php echo $detail['principal_quantity'];?>" /></td>
+                <td><input type="text" readonly class="form-control variance" value="<?php if(isset($detail['principal_quantity'])){echo $detail['principal_quantity']-$hom_detail['budgeted_quantity'];}?>" /></td>
                 <td>
                     <div class="col-lg-2">
                         <label data-toggle="tooltip" data-placement="left" title="<?php echo $detail['bottom_up_remarks'];?>" class="label label-primary load_remark">+R</label>

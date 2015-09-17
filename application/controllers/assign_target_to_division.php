@@ -46,7 +46,47 @@ class Assign_target_to_division extends ROOT_Controller
 
     public function budget_save()
     {
-        print_r($this->input->post());
+        $varietyPost = $this->input->post('variety');
+        $varietyDetailPost = $this->input->post('detail');
+        $data = array();
+        $detailData = array();
+
+        foreach($varietyPost as $division=>$varietyDetail)
+        {
+            $data['division_id'] = $division;
+            foreach($varietyDetail as $variety=>$detail)
+            {
+                $data['variety_id'] = $variety;
+
+                if(isset($detail) && is_array($detail) && sizeof($detail)>0)
+                {
+                    foreach($varietyDetailPost as $detailVariety=>$varietyDetail)
+                    {
+                        $detailData['variety_id'] = $detailVariety;
+                        foreach($varietyDetail as $detailKey=>$detailVal)
+                        {
+                            $detailData[$detailKey] = $detailVal;
+                            if($detailVariety == $variety)
+                            {
+                                $data[$detailKey] = $detailVal;
+                            }
+                        }
+                    }
+
+                    foreach($detail as $key=>$val)
+                    {
+                        $data[$key] = $val;
+                    }
+
+                    if($data['assigned']>0)
+                    {
+                        print_r($data);
+                    }
+                }
+            }
+        }
+
+
         exit;
 //        $user = User_helper::get_user();
 //        $data = Array();

@@ -87,7 +87,7 @@
                         </div>
 
                         <div class="col-lg-5">
-                            <input type="text" name="quantity[<?php echo $division['value'];?>][<?php echo $variety['varriety_id'];?>][assigned]" class="form-control quantity" value="" />
+                            <input type="text" name="variety[<?php echo $division['value'];?>][<?php echo $variety['varriety_id'];?>][targeted_quantity]" class="form-control quantity" value="" />
                         </div>
 
                         <div class="col-lg-2">
@@ -96,19 +96,29 @@
                     </div>
 
                     <div class="row popContainer" style="display: none;">
-                        <span class="crossSpan">
-                            <img src="<?php echo base_url()?>images/xmark.png" style="cursor: pointer;" width="16px" height="16px"/>
-                        </span>
-                        <div class="col-lg-12">
-                            <textarea class="form-control" name="quantity[<?php echo $variety['varriety_id'];?>][remark]" placeholder="Add Remarks"></textarea>
-                        </div>
+                        <table class="table table-bordered">
+                            <tr>
+                                <td>
+                                    <div class="col-lg-12">
+                                        <textarea class="form-control" name="variety[<?php echo $division['value'];?>][<?php echo $variety['varriety_id'];?>][top_down_remarks]" placeholder="Add Remarks"></textarea>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="pull-right" style="border: 0px;">
+                                    <div class="col-lg-12">
+                                        <label class="label label-primary crossSpan"><?php echo $this->lang->line('OK');?></label>
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
                     </div>
                 </td>
             <?php
             }
             ?>
-            <td><input type="text" name="quantity[<?php echo $variety['varriety_id'];?>][total]" class="form-control total" value="" /></td>
-            <td><input type="text" name="quantity[<?php echo $variety['varriety_id'];?>][target]" class="form-control" value="" /></td>
+            <td><input type="text" name="detail[<?php echo $variety['varriety_id'];?>][total_quantity]" class="form-control total" value="" /></td>
+            <td><input type="text" name="detail[<?php echo $variety['varriety_id'];?>][targeted_quantity]" class="form-control" value="" /></td>
         </tr>
     <?php
     }
