@@ -213,3 +213,7 @@ $lang['LABEL_DIVISION_BUDGET']='Division Budget';
 $lang['LABEL_OVERALL_BUDGET']='Overall Budget';
 $lang['LABEL_HOM_BUDGET']='HO Budget';
 $lang['LABEL_PRINCIPAL_QUANTITY']='Principal Quantity';
+$lang['LABEL_HO']='HO';
+$lang['LABEL_PRINCIPAL']='Principal';
+$lang['LABEL_REMAINING']='Remaining';
+$lang['LABEL_TARGETED']='Targeted';

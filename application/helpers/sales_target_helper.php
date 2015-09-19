@@ -155,7 +155,7 @@ class Sales_target_helper
         $user = User_helper::get_user();
 
         $CI->db->from('budget_sales_target bst');
-        $CI->db->select('bst.principal_quantity, bst.bottom_up_remarks');
+        $CI->db->select('bst.*');
 
         $CI->db->where('bst.variety_id', $variety);
         $CI->db->where('bst.year', $year);
@@ -163,7 +163,6 @@ class Sales_target_helper
         $CI->db->where('length(bst.territory_id)<2');
         $CI->db->where('length(bst.zone_id)<2');
         $CI->db->where('length(bst.division_id)<2');
-        $CI->db->where('bst.principal_quantity >', 0);
 
         $CI->db->where('bst.status', $CI->config->item('status_active'));
         $result = $CI->db->get()->row_array();

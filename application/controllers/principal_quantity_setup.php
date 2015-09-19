@@ -86,10 +86,6 @@ class Principal_quantity_setup extends ROOT_Controller
                                 $id = $this->principal_quantity_setup_model->get_country_variety_id($year, $variety_id);
                                 Query_helper::update('budget_sales_target',$data,array("id ='$id'"));
                             }
-                            else
-                            {
-                                Query_helper::add('budget_sales_target',$data);
-                            }
                         }
                     }
                 }

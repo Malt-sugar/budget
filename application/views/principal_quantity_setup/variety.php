@@ -106,15 +106,14 @@
                             <?php
                             }
                             $detail = Sales_target_helper::get_required_country_variety_detail_principal($year, $variety['varriety_id']);
-                            $hom_detail = Sales_target_helper::get_required_country_variety_detail($year, $variety['varriety_id']);
                             ?>
                         </tr>
                     </table>
                 </td>
                 <td class="text-center"><label class="label label-info"><?php echo $total_required;?></label></td>
-                <td class="text-center"><label class="label label-info required_total"><?php echo $hom_detail['budgeted_quantity'];?></label></td>
+                <td class="text-center"><label class="label label-info required_total"><?php echo $detail['budgeted_quantity'];?></label></td>
                 <td><input type="text" name="variety[<?php echo $variety['crop_id']?>][<?php echo $variety['product_type_id']?>][<?php echo $variety['varriety_id'];?>][principal_quantity]" class="form-control total" value="<?php echo $detail['principal_quantity'];?>" /></td>
-                <td><input type="text" readonly class="form-control variance" value="<?php if(isset($detail['principal_quantity'])){echo $detail['principal_quantity']-$hom_detail['budgeted_quantity'];}?>" /></td>
+                <td><input type="text" readonly class="form-control variance" value="<?php if(isset($detail['principal_quantity'])){echo $detail['principal_quantity']-$detail['budgeted_quantity'];}?>" /></td>
                 <td>
                     <div class="col-lg-2">
                         <label data-toggle="tooltip" data-placement="left" title="<?php echo $detail['bottom_up_remarks'];?>" class="label label-primary load_remark">+R</label>

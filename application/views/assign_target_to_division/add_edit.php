@@ -43,9 +43,15 @@
         $(".form_valid").validationEngine();
         turn_off_triggers();
 
-        $(document).on("keyup", ".quantity", function(event)
+        $(document).on("keyup", ".targeted_total", function(event)
         {
-            var attr = $(this).closest('tr').find('.quantity');
+            var targeted = $(this).val();
+            $(this).closest('tr').find(".remaining").val(targeted)
+        });
+
+        $(document).on("keyup", ".targeted", function(event)
+        {
+            var attr = $(this).closest('.div_target').find('.targeted');
             var sum = 0;
 
             attr.each(function()
@@ -58,7 +64,10 @@
                 }
             });
 
-            $(this).closest('tr').find('.total').val(sum);
+            var targeted_val = $(this).closest('.div_target').closest('tr').find('.targeted_total').val();
+            var new_remaining_val = targeted_val - sum;
+
+            $(this).closest('.div_target').closest('tr').find('.remaining').val(new_remaining_val);
         });
 
         $(document).on("change","#year",function()

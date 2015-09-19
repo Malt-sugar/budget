@@ -46,100 +46,96 @@ class Assign_target_to_division extends ROOT_Controller
 
     public function budget_save()
     {
+        $user = User_helper::get_user();
         $varietyPost = $this->input->post('variety');
         $varietyDetailPost = $this->input->post('detail');
         $data = array();
         $detailData = array();
+        $notificationData = array();
+        $notificationData['direction'] = $this->config->item('direction_down');
+        $year = $this->input->post('year');
 
-        foreach($varietyPost as $division=>$varietyDetail)
+        if(!$this->check_validation())
         {
-            $data['division_id'] = $division;
-            foreach($varietyDetail as $variety=>$detail)
+            $ajax['status']=false;
+            $ajax['message']=$this->message;
+            $this->jsonReturn($ajax);
+        }
+        else
+        {
+            $this->db->trans_start();  //DB Transaction Handle START
+
+            foreach($varietyPost as $division=>$varietyDetail)
             {
-                $data['variety_id'] = $variety;
-
-                if(isset($detail) && is_array($detail) && sizeof($detail)>0)
+                $data['division_id'] = $division;
+                foreach($varietyDetail as $variety=>$detail)
                 {
-                    foreach($varietyDetailPost as $detailVariety=>$varietyDetail)
+                    $data['variety_id'] = $variety;
+
+                    if(isset($detail) && is_array($detail) && sizeof($detail)>0)
                     {
-                        $detailData['variety_id'] = $detailVariety;
-                        foreach($varietyDetail as $detailKey=>$detailVal)
+                        foreach($detail as $key=>$val)
                         {
-                            $detailData[$detailKey] = $detailVal;
-                            if($detailVariety == $variety)
-                            {
-                                $data[$detailKey] = $detailVal;
-                            }
+                            $data[$key] = $val;
                         }
-                    }
 
-                    foreach($detail as $key=>$val)
-                    {
-                        $data[$key] = $val;
-                    }
+                        if($data['targeted_quantity']>0)
+                        {
+                            $row_id = $this->assign_target_to_division->get_division_row_id($year, $division, $variety);
+                            if(isset($row_id) && $row_id>0)
+                            {
+                                Query_helper::update('budget_sales_target',$data,array("id ='$row_id'"));
+                            }
 
-                    if($data['assigned']>0)
-                    {
-                        print_r($data);
+                            $varietyInfo = $this->assign_target_to_division->get_variety_crop_type($variety);
+                            $notificationData['variety_id'] = $variety;
+                            $notificationData['crop_id'] = $varietyInfo['crop_id'];
+                            $notificationData['product_type_id'] = $varietyInfo['type_id'];
+                            $notificationData['receiving_division'] = $division;
+                            $notificationData['created_by'] = $user->user_id;
+                            $notificationData['creation_date'] = time();
+
+                            Query_helper::add('budget_sales_target_notification', $notificationData);
+                        }
                     }
                 }
             }
+
+            foreach($varietyDetailPost as $detailVariety=>$varietyDetail)
+            {
+                $detailData['variety_id'] = $detailVariety;
+                foreach($varietyDetail as $detailKey=>$detailVal)
+                {
+                    $detailData[$detailKey] = $detailVal;
+                }
+
+                if($detailData['targeted_quantity']>0)
+                {
+                    $id = $this->assign_target_to_division->get_country_row_id($year, $detailVariety);
+                    if(isset($id) && $id>0)
+                    {
+                        Query_helper::update('budget_sales_target',$detailData,array("id ='$id'"));
+                    }
+                }
+            }
+
+            $this->db->trans_complete();   //DB Transaction Handle END
+
+            if ($this->db->trans_status() === TRUE)
+            {
+                $ajax['status']=false;
+                $ajax['message']=$this->lang->line("MSG_CREATE_SUCCESS");
+                $this->jsonReturn($ajax);
+            }
+            else
+            {
+                $ajax['status']=false;
+                $ajax['message']=$this->lang->line("MSG_NOT_SAVED_SUCCESS");
+                $this->jsonReturn($ajax);
+            }
+
+            $this->budget_add_edit();//this is similar like redirect
         }
-
-
-        exit;
-//        $user = User_helper::get_user();
-//        $data = Array();
-//
-//        if(!$this->check_validation())
-//        {
-//            $ajax['status']=false;
-//            $ajax['message']=$this->message;
-//            $this->jsonReturn($ajax);
-//        }
-//        else
-//        {
-//            $this->db->trans_start();  //DB Transaction Handle START
-//
-//            $quantityPost = $this->input->post('quantity');
-//
-//            foreach($quantityPost as $division=>$quantity)
-//            {
-//                foreach($quantity as $variety=>$number)
-//                {
-//                    if($number>0)
-//                    {
-//                        $data['hierarchy_level'] = $user->budget_group;
-//                        $data['hierarchy_id'] = $user->user_id;
-//                        $data['year'] = $this->input->post('year');
-//                        $data['division_id'] = $division;
-//                        $data['variety_id'] = $variety;
-//                        $data['assigned_qty'] = $number;
-//                        $data['created_by'] = $user->id;
-//                        $data['creation_date'] = time();
-//
-//                        Query_helper::add('budget_assign_sales_target',$data);
-//                    }
-//                }
-//            }
-//
-//            $this->db->trans_complete();   //DB Transaction Handle END
-//
-//            if ($this->db->trans_status() === TRUE)
-//            {
-//                $ajax['status']=false;
-//                $ajax['message']=$this->lang->line("MSG_CREATE_SUCCESS");
-//                $this->jsonReturn($ajax);
-//            }
-//            else
-//            {
-//                $ajax['status']=false;
-//                $ajax['message']=$this->lang->line("MSG_NOT_SAVED_SUCCESS");
-//                $this->jsonReturn($ajax);
-//            }
-//
-//            $this->budget_add_edit();//this is similar like redirect
-//        }
     }
 
     private function check_validation()

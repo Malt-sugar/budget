@@ -31,4 +31,59 @@ class Assign_target_to_division_model extends CI_Model
         return $results;
     }
 
+    public function get_division_row_id($year, $division, $variety)
+    {
+        $this->db->from('budget_sales_target bst');
+        $this->db->select('bst.id');
+        $this->db->where('bst.division_id', $division);
+        $this->db->where('bst.variety_id', $variety);
+        $this->db->where('bst.year', $year);
+        $this->db->where('length(bst.customer_id)<2');
+        $this->db->where('length(bst.territory_id)<2');
+        $this->db->where('length(bst.zone_id)<2');
+        $this->db->where('bst.status', $this->config->item('status_active'));
+        $result = $this->db->get()->row_array();
+
+        if($result)
+        {
+            return $result['id'];
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    public function get_country_row_id($year, $variety)
+    {
+        $this->db->from('budget_sales_target bst');
+        $this->db->select('bst.id');
+        $this->db->where('bst.variety_id', $variety);
+        $this->db->where('bst.year', $year);
+        $this->db->where('length(bst.customer_id)<2');
+        $this->db->where('length(bst.territory_id)<2');
+        $this->db->where('length(bst.zone_id)<2');
+        $this->db->where('length(bst.division_id)<2');
+        $this->db->where('bst.status', $this->config->item('status_active'));
+        $result = $this->db->get()->row_array();
+
+        if($result)
+        {
+            return $result['id'];
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    public function get_variety_crop_type($variety)
+    {
+        $this->db->from('ait_varriety_info avi');
+        $this->db->select('avi.crop_id, avi.product_type_id');
+        $this->db->where('avi.varriety_id', $variety);
+        $result = $this->db->get()->row_array();
+        return $result;
+    }
+
 }
