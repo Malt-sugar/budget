@@ -86,4 +86,46 @@ class Assign_target_to_division_model extends CI_Model
         return $result;
     }
 
+    public function get_assignment_type($id)
+    {
+        $this->db->from('budget_sales_target bst');
+        $this->db->select('bst.targeted_quantity');
+        $this->db->where('bst.id', $id);
+        $result = $this->db->get()->row_array();
+
+        if(isset($result['targeted_quantity']) && $result['targeted_quantity']>0)
+        {
+            return $result['targeted_quantity'];
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    public function get_old_notification_id($year, $division, $variety)
+    {
+        $this->db->from('budget_sales_target_notification bstn');
+        $this->db->select('bstn.id');
+
+        $this->db->where('bstn.receiving_territory', null);
+        $this->db->where('bstn.receiving_zone', null);
+        $this->db->where('bstn.receiving_division', $division);
+        $this->db->where('bstn.year', $year);
+        $this->db->where('bstn.variety_id', $variety);
+        $this->db->where('bstn.is_action_taken', 0);
+        $this->db->where('bstn.direction', $this->config->item('direction_down'));
+        $this->db->where('bstn.status', $this->config->item('status_active'));
+        $result = $this->db->get()->row_array();
+
+        if($result)
+        {
+            return $result['id'];
+        }
+        else
+        {
+            return false;
+        }
+    }
+
 }

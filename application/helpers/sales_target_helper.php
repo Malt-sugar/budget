@@ -28,7 +28,8 @@ class Sales_target_helper
         $CI = & get_instance();
 
         $CI->db->from('budget_sales_target bst');
-        $CI->db->select('SUM(bst.budgeted_quantity) total_quantity');
+        $CI->db->select('bst.targeted_quantity');
+        $CI->db->select('bst.budgeted_quantity total_quantity');
         $CI->db->where('bst.division_id', $div_id);
         $CI->db->where('bst.variety_id', $variety);
         $CI->db->where('bst.year', $year);
@@ -40,7 +41,7 @@ class Sales_target_helper
 
         if($result)
         {
-            return $result['total_quantity'];
+            return $result;
         }
         else
         {

@@ -31,4 +31,8 @@ $config['budgeted_mrp_cal_year'] = 3;
 $config['direction_up'] = 1;
 $config['direction_down'] = 2;
 
+// Top Down Assign Type
+$config['assign_type_new'] = 1;
+$config['assign_type_old'] = 2;
+
 

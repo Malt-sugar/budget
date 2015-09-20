@@ -81,21 +81,45 @@ class Assign_target_to_division extends ROOT_Controller
 
                         if($data['targeted_quantity']>0)
                         {
-                            $row_id = $this->assign_target_to_division->get_division_row_id($year, $division, $variety);
+                            $row_id = $this->assign_target_to_division_model->get_division_row_id($year, $division, $variety);
+
+                            $old_target = $this->assign_target_to_division_model->get_assignment_type($row_id);
+
+                            if($old_target>0 && $data['targeted_quantity'] != $old_target)
+                            {
+                                $notificationData['assignment_type'] = $this->config->item('assign_type_old');
+                            }
+                            else
+                            {
+                                $notificationData['assignment_type'] = $this->config->item('assign_type_new');
+                            }
+
                             if(isset($row_id) && $row_id>0)
                             {
                                 Query_helper::update('budget_sales_target',$data,array("id ='$row_id'"));
                             }
 
-                            $varietyInfo = $this->assign_target_to_division->get_variety_crop_type($variety);
+                            $varietyInfo = $this->assign_target_to_division_model->get_variety_crop_type($variety);
+                            $notificationData['year'] = $year;
                             $notificationData['variety_id'] = $variety;
                             $notificationData['crop_id'] = $varietyInfo['crop_id'];
-                            $notificationData['product_type_id'] = $varietyInfo['type_id'];
+                            $notificationData['type_id'] = $varietyInfo['product_type_id'];
                             $notificationData['receiving_division'] = $division;
                             $notificationData['created_by'] = $user->user_id;
                             $notificationData['creation_date'] = time();
 
-                            Query_helper::add('budget_sales_target_notification', $notificationData);
+                            $old_notification_id = $this->assign_target_to_division_model->get_old_notification_id($year, $division, $variety);
+
+                            if(isset($old_notification_id) && $old_notification_id>0)
+                            {
+                                unset($notificationData['assignment_type']);
+                                Query_helper::update('budget_sales_target_notification',$notificationData,array("id ='$old_notification_id'"));
+                            }
+                            else
+                            {
+                                $notificationData['is_action_taken'] = 0;
+                                Query_helper::add('budget_sales_target_notification', $notificationData);
+                            }
                         }
                     }
                 }
@@ -111,7 +135,7 @@ class Assign_target_to_division extends ROOT_Controller
 
                 if($detailData['targeted_quantity']>0)
                 {
-                    $id = $this->assign_target_to_division->get_country_row_id($year, $detailVariety);
+                    $id = $this->assign_target_to_division_model->get_country_row_id($year, $detailVariety);
                     if(isset($id) && $id>0)
                     {
                         Query_helper::update('budget_sales_target',$detailData,array("id ='$id'"));

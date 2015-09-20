@@ -94,16 +94,18 @@
                 <table class="table table-bordered" style="margin-bottom: 0px;">
                     <tr>
                     <?php
+                    $total_required = 0;
                     foreach($divisions as $division)
                     {
                         $required = Sales_target_helper::get_total_target_division($division['value'], $variety['varriety_id'], $year);
-                        ?>
+                        $total_required+=$required['targeted_quantity'];
+                    ?>
                         <td>
                             <div style="margin-top: 0px; z-index: 1000;" class="pull-right"><label class="label label-primary load_remark">+R</label></div>
                             <table class="table table-bordered" style="margin: 0px;">
                                 <tr>
-                                    <td><input type="text" name="" class="form-control" disabled value="<?php if($required){echo $required;}else{echo 0;}?>" /></td>
-                                    <td><input type="text" name="variety[<?php echo $division['value'];?>][<?php echo $variety['varriety_id'];?>][targeted_quantity]" class="form-control quantity targeted" value="" /></td>
+                                    <td><input type="text" name="" class="form-control" disabled value="<?php if(isset($required['total_quantity'])){echo $required['total_quantity'];}else{echo 0;}?>" /></td>
+                                    <td><input type="text" name="variety[<?php echo $division['value'];?>][<?php echo $variety['varriety_id'];?>][targeted_quantity]" class="form-control quantity targeted" value="<?php if(isset($required['targeted_quantity'])){echo $required['targeted_quantity'];}else{echo 0;}?>" /></td>
                                 </tr>
                             </table>
 
@@ -133,11 +135,13 @@
                 </table>
             </td>
 
-            <?php $detail = Sales_target_helper::get_required_country_variety_detail_principal($year, $variety['varriety_id']);?>
+            <?php
+            $detail = Sales_target_helper::get_required_country_variety_detail_principal($year, $variety['varriety_id']);
+            ?>
             <td class="text-center"><label class="label label-success"><?php echo $detail['budgeted_quantity'];?></label></td>
             <td class="text-center"><label class="label label-success"><?php echo $detail['principal_quantity'];?></label></td>
-            <td class="text-center"><input type="text" name="detail[<?php echo $variety['varriety_id'];?>][targeted_quantity]" class="form-control quantity targeted_total" value="" /></td>
-            <td class="text-center"><input type="text" name="" class="form-control quantity remaining" value="" /></td>
+            <td class="text-center"><input type="text" name="detail[<?php echo $variety['varriety_id'];?>][targeted_quantity]" class="form-control quantity targeted_total" value="<?php echo $detail['targeted_quantity'];?>" /></td>
+            <td class="text-center"><input type="text" name="" class="form-control quantity remaining" value="<?php if(isset($detail['targeted_quantity']) && $detail['targeted_quantity']>0){echo $detail['targeted_quantity']-$total_required;}?>" /></td>
             <td class="text-center">
                 <label class="label label-primary load_remark">+R</label>
                 <div class="row popContainer" style="display: none;">
@@ -145,7 +149,7 @@
                         <tr>
                             <td>
                                 <div class="col-lg-12">
-                                    <textarea class="form-control" name="detail[<?php echo $variety['varriety_id'];?>][top_down_remarks]" placeholder="Add Remarks"></textarea>
+                                    <textarea class="form-control" name="detail[<?php echo $variety['varriety_id'];?>][top_down_remarks]" placeholder="Add Remarks"><?php echo $detail['top_down_remarks'];?></textarea>
                                 </div>
                             </td>
                         </tr>

@@ -22,11 +22,13 @@ class Notification_helper
             $CI->db->where('bstn.receiving_territory', null);
             $CI->db->where('bstn.receiving_zone', null);
             $CI->db->where('bstn.receiving_division', $user_division);
+            $CI->db->group_by('bstn.receiving_division');
         }
         elseif($user_group==$CI->config->item('user_group_zone'))
         {
             $CI->db->where('bstn.receiving_territory', null);
             $CI->db->where('bstn.receiving_zone', $user_zone);
+            $CI->db->group_by('bstn.receiving_zone');
         }
         elseif($user_group==$CI->config->item('user_group_territory'))
         {
@@ -34,6 +36,7 @@ class Notification_helper
             $CI->db->where('length(bstn.receiving_zone)>2');
             $CI->db->where('length(bstn.receiving_division)>2');
             $CI->db->where('bstn.receiving_territory', $user_territory);
+            $CI->db->group_by('bstn.receiving_territory');
         }
 
         $CI->db->from('budget_sales_target_notification bstn');
@@ -72,11 +75,13 @@ class Notification_helper
             $CI->db->where('bstn.receiving_territory', null);
             $CI->db->where('bstn.receiving_zone', null);
             $CI->db->where('bstn.receiving_division', $user_division);
+            $CI->db->group_by('bstn.receiving_division');
         }
         elseif($user_group==$CI->config->item('user_group_zone'))
         {
             $CI->db->where('bstn.receiving_territory', null);
             $CI->db->where('bstn.receiving_zone', $user_zone);
+            $CI->db->group_by('bstn.receiving_zone');
         }
         elseif($user_group==$CI->config->item('user_group_territory'))
         {
@@ -84,6 +89,7 @@ class Notification_helper
             $CI->db->where('length(bstn.receiving_zone)>2');
             $CI->db->where('length(bstn.receiving_division)>2');
             $CI->db->where('bstn.receiving_territory', $user_territory);
+            $CI->db->group_by('bstn.receiving_territory');
         }
 
         $CI->db->from('budget_sales_target_notification bstn');
@@ -117,6 +123,7 @@ class Notification_helper
         $receiving_territory = $notification['receiving_territory'];
         $direction = $notification['direction'];
         $is_read = $notification['is_read'];
+        $assignment_type = $notification['assignment_type'];
 
         if($direction == $CI->config->item('direction_up'))
         {
@@ -147,13 +154,21 @@ class Notification_helper
         }
         elseif($direction == $CI->config->item('direction_down'))
         {
-            if($user_group == $CI->config->item('user_group_marketing'))
+            if($user_group == $CI->config->item('user_group_division'))
             {
-
-            }
-            elseif($user_group == $CI->config->item('user_group_division'))
-            {
-
+                if(!isset($sending_division) && !isset($sending_zone) && !isset($sending_territory) && $receiving_division == $user_division)
+                {
+                    if($assignment_type == $CI->config->item('assign_type_new'))
+                    {
+                        $return_array['text'] = 'Target Assigned For Your Division. Please Distribute!';
+                        $return_array['link'] = base_url().'di_sales_target/index/add';
+                    }
+                    elseif($assignment_type == $CI->config->item('assign_type_old'))
+                    {
+                        $return_array['text'] = 'Target Reassigned For Your Division. Please Distribute Again!';
+                        $return_array['link'] = base_url().'di_sales_target/index/add';
+                    }
+                }
             }
             elseif($user_group == $CI->config->item('user_group_zone'))
             {
