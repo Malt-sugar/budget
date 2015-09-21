@@ -7,8 +7,7 @@
     $this->load->view("action_buttons_edit",$data);
 ?>
 
-<form class="form_valid" id="save_form" action="<?php echo base_url();?>assign_target_to_division/index/save" method="post">
-    <input type="hidden" name="type_id" id="type_id" value=""/>
+<form class="form_valid" id="save_form" action="<?php echo base_url();?>assign_target_to_zone/index/save" method="post">
     <div class="row widget">
         <div class="widget-header">
             <div class="title">
@@ -30,23 +29,12 @@
             </div>
         </div>
 
-        <div class="col-lg-12" id="load_variety" style="overflow-x: auto; display: none;">
+        <div class="col-lg-12" id="load_variety" style="overflow-x: auto;">
 
-        </div>
-
-        <div class="col-lg-12" id="scrollButtons" style="display: none;">
-            <div class="col-lg-6 pull-left">
-                <input type="button" id="myButtonRight" name="scroll" value="Right" class="btn btn-warning" />
-            </div>
-
-            <div class="col-lg-6 pull-right">
-                <input type="button" id="myButtonLeft" name="scroll" value="Left" class="btn btn-warning" />
-            </div>
         </div>
     </div>
     <div class="clearfix"></div>
 </form>
-
 
 <script type="text/javascript">
 
@@ -55,30 +43,17 @@
         $(".form_valid").validationEngine();
         turn_off_triggers();
 
-        $(document).on("click", "#myButtonRight", function(event)
+        $(document).on("keyup", ".targeted_total", function(event)
         {
-            var rightCss = parseInt($("#scrollTable").css('right'));
-
-            if(rightCss<201)
-            {
-                $('#scrollTable').animate({'right':'+=50px'});
-            }
+            var targeted = $(this).val();
+            $(this).closest('tr').find(".remaining").val(targeted)
         });
 
-        $(document).on("click", "#myButtonLeft", function(event)
+        $(document).on("keyup", ".targeted", function(event)
         {
-            var leftCss = parseInt($("#scrollTable").css('left'));
-
-            if(leftCss<0)
-            {
-                $('#scrollTable').animate({'right':'-=50px'});
-            }
-        });
-
-        $(document).on("keyup", ".quantity", function(event)
-        {
-            var attr = $(this).closest('tr').find('.quantity');
+            var attr = $(this).closest('.div_target').find('.targeted');
             var sum = 0;
+
             attr.each(function()
             {
                 var val = $(this).val();
@@ -89,15 +64,16 @@
                 }
             });
 
-            $(this).closest('tr').find('.total').val(sum);
+            var targeted_val = $(this).closest('.div_target').closest('tr').find('.targeted_total').val();
+            var new_remaining_val = targeted_val - sum;
+
+            $(this).closest('.div_target').closest('tr').find('.remaining').val(new_remaining_val);
         });
 
         $(document).on("change","#year",function()
         {
             if($(this).val().length>0)
             {
-                $("#scrollButtons").show();
-                $("#load_variety").show();
                 $.ajax({
                     url: base_url+"assign_target_to_zone/get_variety_detail/",
                     type: 'POST',
@@ -115,11 +91,10 @@
             }
             else
             {
-                $("#scrollButtons").hide();
-                $("#load_variety").hide();
                 $("#load_variety").html('');
             }
         });
+
 
         $(document).on("click", ".load_remark", function(event)
         {
@@ -130,6 +105,7 @@
         {
             $(".popContainer").hide();
         });
+
     });
 
     $(document).on("keyup", ".quantity", function()

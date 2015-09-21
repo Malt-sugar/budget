@@ -54,7 +54,8 @@ class Sales_target_helper
         $CI = & get_instance();
 
         $CI->db->from('budget_sales_target bst');
-        $CI->db->select('SUM(bst.budgeted_quantity) total_quantity');
+        $CI->db->select('bst.targeted_quantity');
+        $CI->db->select('bst.budgeted_quantity total_quantity');
         $CI->db->where('bst.zone_id', $zone_id);
         $CI->db->where('bst.variety_id', $variety);
         $CI->db->where('bst.year', $year);
@@ -62,10 +63,9 @@ class Sales_target_helper
         $CI->db->where('length(bst.territory_id)<2');
         $CI->db->where('bst.status', $CI->config->item('status_active'));
         $result = $CI->db->get()->row_array();
-
         if($result)
         {
-            return $result['total_quantity'];
+            return $result;
         }
         else
         {
@@ -78,7 +78,7 @@ class Sales_target_helper
         $CI = & get_instance();
 
         $CI->db->from('budget_sales_target bst');
-        $CI->db->select('SUM(bst.budgeted_quantity) total_quantity');
+        $CI->db->select('bst.budgeted_quantity total_quantity');
         $CI->db->where('bst.territory_id', $territory_id);
         $CI->db->where('bst.variety_id', $variety);
         $CI->db->where('bst.year', $year);
@@ -185,7 +185,7 @@ class Sales_target_helper
         $user_division = $user->division_id;
 
         $CI->db->from('budget_sales_target bst');
-        $CI->db->select('bst.budgeted_quantity, bst.bottom_up_remarks');
+        $CI->db->select('bst.budgeted_quantity, bst.bottom_up_remarks, bst.targeted_quantity, bst.top_down_remarks');
         $CI->db->where('bst.division_id', $user_division);
         $CI->db->where('bst.variety_id', $variety);
         $CI->db->where('bst.year', $year);

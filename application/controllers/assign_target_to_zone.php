@@ -30,8 +30,10 @@ class Assign_target_to_zone extends ROOT_Controller
     public function budget_add_edit()
     {
         $user = User_helper::get_user();
+        $user_div = $user->division_id;
+
         $data['years'] = Query_helper::get_info('ait_year',array('year_id value','year_name text'),array('del_status = 0'));
-        $data['divisions'] = Query_helper::get_info('ait_division_info',array('division_id value','division_name text'),array('del_status = 0'));
+        $data['zones'] = Query_helper::get_info('ait_zone_info',array('zone_id value','zone_name text'),array('del_status = 0', 'division_id = "'.$user_div.'"'));
         $data['varieties'] = $this->assign_target_to_zone_model->get_variety_info();
 
         $data['title']="Assign Target To Zone";
@@ -46,7 +48,13 @@ class Assign_target_to_zone extends ROOT_Controller
     public function budget_save()
     {
         $user = User_helper::get_user();
-        $data = Array();
+        $varietyPost = $this->input->post('variety');
+        $varietyDetailPost = $this->input->post('detail');
+        $data = array();
+        $detailData = array();
+        $notificationData = array();
+        $notificationData['direction'] = $this->config->item('direction_down');
+        $year = $this->input->post('year');
 
         if(!$this->check_validation())
         {
@@ -58,31 +66,101 @@ class Assign_target_to_zone extends ROOT_Controller
         {
             $this->db->trans_start();  //DB Transaction Handle START
 
-            $data['crop_id'] = $this->input->post('crop');
-            $data['type_id'] = $this->input->post('type');
-
-            $data['create_by'] = $user->user_id;
-            $data['create_date'] = time();
-
-            $quantityPost = $this->input->post('quantity');
-            $existings = $this->customer_sales_target_model->get_existing_sales_targets($data['year'], $data['crop_id'], $data['type_id'], $data['customer_id']);
-
-            foreach($quantityPost as $variety_id=>$quantity)
+            foreach($varietyPost as $zone=>$varietyDetail)
             {
-                $data['variety'] = $variety_id;
-                $data['quantity'] = $quantity;
-                Query_helper::add('budget_sales_target',$data);
+                $data['zone_id'] = $zone;
+                foreach($varietyDetail as $variety=>$detail)
+                {
+                    $data['variety_id'] = $variety;
+
+                    if(isset($detail) && is_array($detail) && sizeof($detail)>0)
+                    {
+                        foreach($detail as $key=>$val)
+                        {
+                            $data[$key] = $val;
+                        }
+
+                        if($data['targeted_quantity']>0)
+                        {
+                            $row_id = $this->assign_target_to_zone_model->get_zone_row_id($year, $zone, $variety);
+
+                            $old_target = $this->assign_target_to_zone_model->get_assignment_type($row_id);
+
+                            if($old_target>0 && $data['targeted_quantity'] != $old_target)
+                            {
+                                $notificationData['assignment_type'] = $this->config->item('assign_type_old');
+                            }
+                            else
+                            {
+                                $notificationData['assignment_type'] = $this->config->item('assign_type_new');
+                            }
+
+                            if(isset($row_id) && $row_id>0)
+                            {
+                                Query_helper::update('budget_sales_target',$data,array("id ='$row_id'"));
+                                // Update Notification Action Taken Field
+                                $this->assign_target_to_zone_model->update_notification_table($year, $variety);
+                            }
+
+                            $varietyInfo = $this->assign_target_to_zone_model->get_variety_crop_type($variety);
+                            $notificationData['year'] = $year;
+                            $notificationData['variety_id'] = $variety;
+                            $notificationData['crop_id'] = $varietyInfo['crop_id'];
+                            $notificationData['type_id'] = $varietyInfo['product_type_id'];
+                            $notificationData['sending_division'] = $user->division_id;
+                            $notificationData['receiving_division'] = $user->division_id;
+                            $notificationData['receiving_zone'] = $zone;
+                            $notificationData['created_by'] = $user->user_id;
+                            $notificationData['creation_date'] = time();
+
+                            $old_notification_id = $this->assign_target_to_zone_model->get_old_notification_id($year, $zone, $variety);
+
+                            if(isset($old_notification_id) && $old_notification_id>0)
+                            {
+                                unset($notificationData['assignment_type']);
+                                Query_helper::update('budget_sales_target_notification',$notificationData,array("id ='$old_notification_id'"));
+                            }
+                            else
+                            {
+                                $notificationData['is_action_taken'] = 0;
+                                Query_helper::add('budget_sales_target_notification', $notificationData);
+                            }
+                        }
+                    }
+                }
+            }
+
+            foreach($varietyDetailPost as $detailVariety=>$varietyDetail)
+            {
+                $detailData['variety_id'] = $detailVariety;
+                foreach($varietyDetail as $detailKey=>$detailVal)
+                {
+                    $detailData[$detailKey] = $detailVal;
+                }
+
+                if($detailData['targeted_quantity']>0)
+                {
+                    $id = $this->assign_target_to_zone_model->get_division_row_id($year, $detailVariety);
+                    if(isset($id) && $id>0)
+                    {
+                        Query_helper::update('budget_sales_target',$detailData,array("id ='$id'"));
+                    }
+                }
             }
 
             $this->db->trans_complete();   //DB Transaction Handle END
 
             if ($this->db->trans_status() === TRUE)
             {
-                $this->message=$this->lang->line("MSG_CREATE_SUCCESS");
+                $ajax['status']=false;
+                $ajax['message']=$this->lang->line("MSG_CREATE_SUCCESS");
+                $this->jsonReturn($ajax);
             }
             else
             {
-                $this->message=$this->lang->line("MSG_NOT_SAVED_SUCCESS");
+                $ajax['status']=false;
+                $ajax['message']=$this->lang->line("MSG_NOT_SAVED_SUCCESS");
+                $this->jsonReturn($ajax);
             }
 
             $this->budget_add_edit();//this is similar like redirect
@@ -98,11 +176,11 @@ class Assign_target_to_zone extends ROOT_Controller
     public function get_variety_detail()
     {
         $user = User_helper::get_user();
-        $year_id = $this->input->post('year_id');
         $user_div = $user->division_id;
+        $year_id = $this->input->post('year_id');
 
         $data['year'] = $year_id;
-        $data['zones'] = Query_helper::get_info('ait_zone_info',array('zone_id value','zone_name text'),array("division_id ='$user_div'",'del_status =0'));
+        $data['zones'] = Query_helper::get_info('ait_zone_info',array('zone_id value','zone_name text'),array('del_status = 0', 'division_id = "'.$user_div.'"'));
         $data['varieties'] = $this->assign_target_to_zone_model->get_variety_info();
 
         if(strlen($year_id)>0)
