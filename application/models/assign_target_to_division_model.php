@@ -113,7 +113,7 @@ class Assign_target_to_division_model extends CI_Model
         $this->db->where('bstn.receiving_division', $division);
         $this->db->where('bstn.year', $year);
         $this->db->where('bstn.variety_id', $variety);
-        $this->db->where('bstn.is_action_taken', 0);
+        //$this->db->where('bstn.is_action_taken', 0);
         $this->db->where('bstn.direction', $this->config->item('direction_down'));
         $this->db->where('bstn.status', $this->config->item('status_active'));
         $result = $this->db->get()->row_array();

@@ -78,6 +78,7 @@ class Sales_target_helper
         $CI = & get_instance();
 
         $CI->db->from('budget_sales_target bst');
+        $CI->db->select('bst.targeted_quantity');
         $CI->db->select('bst.budgeted_quantity total_quantity');
         $CI->db->where('bst.territory_id', $territory_id);
         $CI->db->where('bst.variety_id', $variety);
@@ -88,7 +89,7 @@ class Sales_target_helper
 
         if($result)
         {
-            return $result['total_quantity'];
+            return $result;
         }
         else
         {
@@ -103,7 +104,7 @@ class Sales_target_helper
         $user_zone = $user->zone_id;
 
         $CI->db->from('budget_sales_target bst');
-        $CI->db->select('bst.budgeted_quantity, bst.bottom_up_remarks');
+        $CI->db->select('bst.budgeted_quantity, bst.bottom_up_remarks, bst.targeted_quantity, bst.top_down_remarks');
         $CI->db->where('bst.zone_id', $user_zone);
         $CI->db->where('bst.variety_id', $variety);
         $CI->db->where('bst.year', $year);
@@ -365,6 +366,73 @@ class Sales_target_helper
         else
         {
             return null;
+        }
+    }
+    
+    public static function get_di_varieties_for_redistribution($year)
+    {
+        $CI = & get_instance();
+        $user = User_helper::get_user();
+        $user_div = $user->division_id;
+        $CI->db->from('budget_sales_target_notification bstn');
+        $CI->db->select('bstn.variety_id');
+
+        $CI->db->where('bstn.receiving_territory', null);
+        $CI->db->where('bstn.receiving_zone', null);
+        $CI->db->where('bstn.receiving_division', $user_div);
+
+        $CI->db->where('bstn.year', $year);
+        $CI->db->where('bstn.is_action_taken', 0);
+        $CI->db->where('bstn.assignment_type', $CI->config->item('assign_type_old'));
+        $CI->db->where('bstn.direction', $CI->config->item('direction_down'));
+        $CI->db->where('bstn.status', $CI->config->item('status_active'));
+        $results = $CI->db->get()->result_array();
+
+        if($results)
+        {
+            foreach($results as $result)
+            {
+                $new_array[] = $result['variety_id'];
+            }
+            return $new_array;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    public static function get_zi_varieties_for_redistribution($year)
+    {
+        $CI = & get_instance();
+        $user = User_helper::get_user();
+        $user_div = $user->division_id;
+        $user_zone = $user->zone_id;
+        $CI->db->from('budget_sales_target_notification bstn');
+        $CI->db->select('bstn.variety_id');
+
+        $CI->db->where('bstn.receiving_territory', null);
+        $CI->db->where('bstn.receiving_zone', $user_zone);
+        $CI->db->where('bstn.receiving_division', $user_div);
+
+        $CI->db->where('bstn.year', $year);
+        $CI->db->where('bstn.is_action_taken', 0);
+        $CI->db->where('bstn.assignment_type', $CI->config->item('assign_type_old'));
+        $CI->db->where('bstn.direction', $CI->config->item('direction_down'));
+        $CI->db->where('bstn.status', $CI->config->item('status_active'));
+        $results = $CI->db->get()->result_array();
+
+        if($results)
+        {
+            foreach($results as $result)
+            {
+                $new_array[] = $result['variety_id'];
+            }
+            return $new_array;
+        }
+        else
+        {
+            return false;
         }
     }
 }

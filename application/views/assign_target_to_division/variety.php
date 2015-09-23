@@ -138,11 +138,11 @@
             <?php
             $detail = Sales_target_helper::get_required_country_variety_detail_principal($year, $variety['varriety_id']);
             ?>
-            <td class="text-center"><label class="label label-success"><?php echo $detail['budgeted_quantity'];?></label></td>
-            <td class="text-center"><label class="label label-success"><?php echo $detail['principal_quantity'];?></label></td>
-            <td class="text-center"><input type="text" name="detail[<?php echo $variety['varriety_id'];?>][targeted_quantity]" class="form-control quantity targeted_total" value="<?php echo $detail['targeted_quantity'];?>" /></td>
-            <td class="text-center"><input type="text" name="" class="form-control quantity remaining" value="<?php if(isset($detail['targeted_quantity']) && $detail['targeted_quantity']>0){echo $detail['targeted_quantity']-$total_required;}?>" /></td>
-            <td class="text-center">
+            <td class="text-center" style="padding-top: 45px;"><label class="label label-success"><?php echo $detail['budgeted_quantity'];?></label></td>
+            <td class="text-center" style="padding-top: 45px;"><label class="label label-success"><?php echo $detail['principal_quantity'];?></label></td>
+            <td class="text-center" style="padding-top: 35px;"><input type="text" name="detail[<?php echo $variety['varriety_id'];?>][targeted_quantity]" class="form-control quantity targeted_total" value="<?php echo $detail['targeted_quantity'];?>" /></td>
+            <td class="text-center" style="padding-top: 35px;"><input type="text" name="" class="form-control quantity remaining" value="<?php if(isset($detail['targeted_quantity']) && $detail['targeted_quantity']>0){echo $detail['targeted_quantity']-$total_required;}?>" /></td>
+            <td class="text-center" style="padding-top: 45px;">
                 <label class="label label-primary load_remark">+R</label>
                 <div class="row popContainer" style="display: none;">
                     <table class="table table-bordered">

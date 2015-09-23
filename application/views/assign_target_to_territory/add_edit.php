@@ -1,6 +1,6 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
-    $data["link_new"]=base_url()."assign_target_to_customer/index/add";
-    $data["link_back"]=base_url()."assign_target_to_customer";
+    $data["link_new"]=base_url()."assign_target_to_zone/index/add";
+    $data["link_back"]=base_url()."assign_target_to_zone";
     $data["link_approve"]="#";
     $data["hide_approve"]="1";
 
@@ -8,7 +8,6 @@
 ?>
 
 <form class="form_valid" id="save_form" action="<?php echo base_url();?>assign_target_to_territory/index/save" method="post">
-    <input type="hidden" name="type_id" id="type_id" value=""/>
     <div class="row widget">
         <div class="widget-header">
             <div class="title">
@@ -30,19 +29,9 @@
             </div>
         </div>
 
-        <div class="col-lg-12" id="load_variety" style="overflow-x: auto; display: none;">
+        <div class="col-lg-12" id="load_variety" style="overflow-x: auto;">
 
         </div>
-
-<!--        <div class="col-lg-12" id="scrollButtons" style="display: none;">-->
-<!--            <div class="col-lg-6 pull-left">-->
-<!--                <input type="button" id="myButtonRight" name="scroll" value="Right" class="btn btn-warning" />-->
-<!--            </div>-->
-<!---->
-<!--            <div class="col-lg-6 pull-right">-->
-<!--                <input type="button" id="myButtonLeft" name="scroll" value="Left" class="btn btn-warning" />-->
-<!--            </div>-->
-<!--        </div>-->
     </div>
     <div class="clearfix"></div>
 </form>
@@ -54,20 +43,17 @@
         $(".form_valid").validationEngine();
         turn_off_triggers();
 
-//        $(document).on("click", "#myButtonRight", function(event)
-//        {
-//            $('#scrollTable').animate({'right':'+=100px'});
-//        });
-//
-//        $(document).on("click", "#myButtonLeft", function(event)
-//        {
-//            $('#scrollTable').animate({'right':'-=100px'});
-//        });
-
-        $(document).on("keyup", ".quantity", function(event)
+        $(document).on("keyup", ".targeted_total", function(event)
         {
-            var attr = $(this).closest('tr').find('.quantity');
+            var targeted = $(this).val();
+            $(this).closest('tr').find(".remaining").val(targeted)
+        });
+
+        $(document).on("keyup", ".targeted", function(event)
+        {
+            var attr = $(this).closest('.div_target').find('.targeted');
             var sum = 0;
+
             attr.each(function()
             {
                 var val = $(this).val();
@@ -78,14 +64,16 @@
                 }
             });
 
-            $(this).closest('tr').find('.total').val(sum);
+            var targeted_val = $(this).closest('.div_target').closest('tr').find('.targeted_total').val();
+            var new_remaining_val = targeted_val - sum;
+
+            $(this).closest('.div_target').closest('tr').find('.remaining').val(new_remaining_val);
         });
 
         $(document).on("change","#year",function()
         {
             if($(this).val().length>0)
             {
-                $("#load_variety").show();
                 $.ajax({
                     url: base_url+"assign_target_to_territory/get_variety_detail/",
                     type: 'POST',
@@ -100,15 +88,13 @@
                         console.log("error");
                     }
                 });
-                $("#scrollButtons").show();
             }
             else
             {
-                $("#scrollButtons").hide();
                 $("#load_variety").html('');
-                $("#load_variety").hide();
             }
         });
+
 
         $(document).on("click", ".load_remark", function(event)
         {
@@ -119,6 +105,7 @@
         {
             $(".popContainer").hide();
         });
+
     });
 
     $(document).on("keyup", ".quantity", function()

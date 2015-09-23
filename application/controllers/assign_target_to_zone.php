@@ -150,7 +150,7 @@ class Assign_target_to_zone extends ROOT_Controller
 
             $this->db->trans_complete();   //DB Transaction Handle END
 
-            if ($this->db->trans_status() === TRUE)
+            if($this->db->trans_status() === TRUE)
             {
                 $ajax['status']=false;
                 $ajax['message']=$this->lang->line("MSG_CREATE_SUCCESS");
@@ -163,7 +163,7 @@ class Assign_target_to_zone extends ROOT_Controller
                 $this->jsonReturn($ajax);
             }
 
-            $this->budget_add_edit();//this is similar like redirect
+            $this->budget_add_edit(); //this is similar like redirect
         }
     }
 

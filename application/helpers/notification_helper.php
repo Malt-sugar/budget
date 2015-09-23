@@ -161,22 +161,46 @@ class Notification_helper
                     if($assignment_type == $CI->config->item('assign_type_new'))
                     {
                         $return_array['text'] = 'Target Assigned For Your Division. Please Distribute!';
-                        $return_array['link'] = base_url().'di_sales_target/index/add';
+                        $return_array['link'] = base_url().'assign_target_to_division/index/add';
                     }
                     elseif($assignment_type == $CI->config->item('assign_type_old'))
                     {
                         $return_array['text'] = 'Target Reassigned For Your Division. Please Distribute Again!';
-                        $return_array['link'] = base_url().'di_sales_target/index/add';
+                        $return_array['link'] = base_url().'assign_target_to_division/index/add';
                     }
                 }
             }
             elseif($user_group == $CI->config->item('user_group_zone'))
             {
-
+                if(isset($sending_division) && !isset($sending_zone) && !isset($sending_territory) && $receiving_zone == $user_zone)
+                {
+                    if($assignment_type == $CI->config->item('assign_type_new'))
+                    {
+                        $return_array['text'] = 'Target Assigned For Your Zone. Please Distribute!';
+                        $return_array['link'] = base_url().'assign_target_to_zone/index/add';
+                    }
+                    elseif($assignment_type == $CI->config->item('assign_type_old'))
+                    {
+                        $return_array['text'] = 'Target Reassigned For Your Zone. Please Distribute Again!';
+                        $return_array['link'] = base_url().'assign_target_to_zone/index/add';
+                    }
+                }
             }
             elseif($user_group == $CI->config->item('user_group_territory'))
             {
-
+                if(isset($sending_division) && isset($sending_zone) && !isset($sending_territory) && $receiving_territory == $user_territory)
+                {
+                    if($assignment_type == $CI->config->item('assign_type_new'))
+                    {
+                        $return_array['text'] = 'Target Assigned For Your Territory.';
+                        $return_array['link'] = '';
+                    }
+                    elseif($assignment_type == $CI->config->item('assign_type_old'))
+                    {
+                        $return_array['text'] = 'Target Reassigned For Your Territory.';
+                        $return_array['link'] = '';
+                    }
+                }
             }
         }
 
