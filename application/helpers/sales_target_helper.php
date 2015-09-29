@@ -435,4 +435,107 @@ class Sales_target_helper
             return false;
         }
     }
+
+    public static function get_targeted_territory_variety_detail($year, $variety)
+    {
+        $CI = & get_instance();
+        $user = User_helper::get_user();
+        $user_territory = $user->territory_id;
+
+        $CI->db->from('budget_sales_target bst');
+        $CI->db->select('bst.*');
+        $CI->db->where('bst.territory_id', $user_territory);
+        $CI->db->where('bst.variety_id', $variety);
+        $CI->db->where('bst.year', $year);
+        $CI->db->where('length(bst.customer_id)<2');
+        $CI->db->where('bst.status', $CI->config->item('status_active'));
+        $result = $CI->db->get()->row_array();
+
+        if($result)
+        {
+            return $result;
+        }
+        else
+        {
+            return null;
+        }
+    }
+
+    public static function get_variety_months($year, $variety)
+    {
+        $CI = & get_instance();
+        $CI->db->from('ait_session_info asi');
+        $CI->db->select('asi.*');
+        $CI->db->where('asi.year_id', $year);
+        $CI->db->where('asi.varriety_id', $variety);
+        $CI->db->where('asi.status', 'Active');
+        $result = $CI->db->get()->row_array();
+
+        if($result)
+        {
+            $sStartDate = $result['session_from_date'];
+            $sEndDate = $result['session_to_date'];
+
+            $sStartDate = date("Y-m-d", strtotime($sStartDate));
+            $sEndDate = date("Y-m-d", strtotime($sEndDate));
+
+            $aDays[] = $sStartDate;
+            $sCurrentDate = $sStartDate;
+
+            while($sCurrentDate < $sEndDate)
+            {
+                $sCurrentDate = date("Y-m-d", strtotime("+1 day", strtotime($sCurrentDate)));
+                $aDays[] = $sCurrentDate;
+            }
+
+            foreach($aDays as $aDay)
+            {
+                $months[] = @date('m', strtotime($aDay));
+            }
+            $months_array = array_unique($months);
+            return $months_array;
+        }
+    }
+
+    public static function get_monthWise_ti_sales_target($year, $month, $variety)
+    {
+        $CI = & get_instance();
+        $CI->db->from('budget_sales_target_monthwise bstm');
+        $CI->db->select('bstm.*');
+        $CI->db->where('bstm.year', $year);
+        $CI->db->where('bstm.month', $month);
+        $CI->db->where('bstm.variety_id', $variety);
+        $CI->db->where('bstm.status', $CI->config->item('status_active'));
+        $result = $CI->db->get()->row_array();
+
+        if($result)
+        {
+            return $result;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    public static function get_monthWise_zi_sales_target($year, $month, $variety, $type, $territory)
+    {
+        $CI = & get_instance();
+        $CI->db->from('budget_sales_target_monthwise bstm');
+        $CI->db->select('bstm.*');
+        $CI->db->where('bstm.year', $year);
+        $CI->db->where('bstm.month', $month);
+        $CI->db->where('bstm.variety_id', $variety);
+        $CI->db->where('bstm.status', $CI->config->item('status_active'));
+        $result = $CI->db->get()->row_array();
+
+        if($result)
+        {
+            return $result;
+        }
+        else
+        {
+            return false;
+        }
+    }
 }

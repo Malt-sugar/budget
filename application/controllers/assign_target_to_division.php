@@ -87,6 +87,7 @@ class Assign_target_to_division extends ROOT_Controller
 
                             if($old_target>0 && $data['targeted_quantity'] != $old_target)
                             {
+                                $notificationData['is_action_taken'] = 0;
                                 $notificationData['assignment_type'] = $this->config->item('assign_type_old');
                             }
                             else
@@ -108,7 +109,7 @@ class Assign_target_to_division extends ROOT_Controller
                             $notificationData['created_by'] = $user->user_id;
                             $notificationData['creation_date'] = time();
 
-                            $old_notification_id = $this->assign_target_to_division_model->get_old_notification_array($year, $division, $variety);
+                            $old_notification_id = $this->assign_target_to_division_model->get_old_notification_id($year, $division, $variety);
 
                             if(isset($old_notification_id) && $old_notification_id>0)
                             {

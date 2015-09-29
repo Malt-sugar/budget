@@ -217,3 +217,5 @@ $lang['LABEL_HO']='HO';
 $lang['LABEL_PRINCIPAL']='Principal';
 $lang['LABEL_REMAINING']='Remaining';
 $lang['LABEL_TARGETED']='Targeted';
+$lang['TERRITORYWISE']='Territory Wise';
+$lang['ZONEWISE']='Zone Wise';

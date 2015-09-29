@@ -1,6 +1,13 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+
+$user = User_helper::get_user();
+$user_group = $user->budget_group;
 ?>
 
+<?php
+if($user_group>3)
+{
+    ?>
 <div class="row">
     <div class="pull-right" style="margin-right: 10px;">
         <span>
@@ -21,6 +28,9 @@
         </span>
     </div>
 </div>
+<?php
+}
+?>
 
 <div class="row widget">
     <div class="widget-header">

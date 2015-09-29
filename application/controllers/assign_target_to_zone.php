@@ -88,6 +88,7 @@ class Assign_target_to_zone extends ROOT_Controller
 
                             if($old_target>0 && $data['targeted_quantity'] != $old_target)
                             {
+                                $notificationData['is_action_taken'] = 0;
                                 $notificationData['assignment_type'] = $this->config->item('assign_type_old');
                             }
                             else

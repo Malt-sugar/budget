@@ -35,4 +35,16 @@ $config['direction_down'] = 2;
 $config['assign_type_new'] = 1;
 $config['assign_type_old'] = 2;
 
-
+// Month Config
+$config['month']['01'] = 'January';
+$config['month']['02'] = 'February';
+$config['month']['03'] = 'March';
+$config['month']['04'] = 'April';
+$config['month']['05'] = 'May';
+$config['month']['06'] = 'June';
+$config['month']['07'] = 'July';
+$config['month']['08'] = 'August';
+$config['month']['09'] = 'September';
+$config['month']['10'] = 'October';
+$config['month']['11'] = 'November';
+$config['month']['12'] = 'December';
