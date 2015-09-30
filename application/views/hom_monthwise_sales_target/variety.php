@@ -85,28 +85,28 @@
                                                 <td style="width: 100px;">
                                                     <input type="text" disabled class="form-control month_total quantity" name="variety[<?php echo $variety['varriety_id'];?>][<?php echo $month;?>][target]" value="<?php echo $existingDetail['target'];?>" />
 
-                                                    <div class="col-lg-1 pull-right" style="margin-top: -44px;">
-                                                        <label class="label label-primary load_remark">+R</label>
-                                                    </div>
-
-                                                    <div class="row popContainer" style="display: none;">
-                                                        <table class="table table-bordered">
-                                                            <tr>
-                                                                <td>
-                                                                    <div class="col-lg-12">
-                                                                        <textarea class="form-control" disabled name="variety[<?php echo $variety['varriety_id'];?>][<?php echo $month;?>][remarks]" placeholder="Add Remarks"><?php echo $existingDetail['remarks'];?></textarea>
-                                                                    </div>
-                                                                </td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td class="pull-right" style="border: 0px;">
-                                                                    <div class="col-lg-12">
-                                                                        <label class="label label-primary crossSpan"><?php echo $this->lang->line('OK');?></label>
-                                                                    </div>
-                                                                </td>
-                                                            </tr>
-                                                        </table>
-                                                    </div>
+<!--                                                    <div class="col-lg-1 pull-right" style="margin-top: -44px;">-->
+<!--                                                        <label class="label label-primary load_remark">+R</label>-->
+<!--                                                    </div>-->
+<!---->
+<!--                                                    <div class="row popContainer" style="display: none;">-->
+<!--                                                        <table class="table table-bordered">-->
+<!--                                                            <tr>-->
+<!--                                                                <td>-->
+<!--                                                                    <div class="col-lg-12">-->
+<!--                                                                        <textarea class="form-control" disabled name="variety[--><?php //echo $variety['varriety_id'];?><!--][--><?php //echo $month;?><!--][remarks]" placeholder="Add Remarks">--><?php //echo $existingDetail['remarks'];?><!--</textarea>-->
+<!--                                                                    </div>-->
+<!--                                                                </td>-->
+<!--                                                            </tr>-->
+<!--                                                            <tr>-->
+<!--                                                                <td class="pull-right" style="border: 0px;">-->
+<!--                                                                    <div class="col-lg-12">-->
+<!--                                                                        <label class="label label-primary crossSpan">--><?php //echo $this->lang->line('OK');?><!--</label>-->
+<!--                                                                    </div>-->
+<!--                                                                </td>-->
+<!--                                                            </tr>-->
+<!--                                                        </table>-->
+<!--                                                    </div>-->
                                                 </td>
                                             </tr>
                                         </table>

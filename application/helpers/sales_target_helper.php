@@ -524,7 +524,7 @@ class Sales_target_helper
         $user = User_helper::get_user();
 
         $CI->db->from('budget_sales_target_monthwise bstm');
-        $CI->db->select('bstm.*');
+        $CI->db->select('SUM(bstm.target) target');
 
         if($type == 1)
         {
@@ -557,7 +557,7 @@ class Sales_target_helper
         $user = User_helper::get_user();
 
         $CI->db->from('budget_sales_target_monthwise bstm');
-        $CI->db->select('bstm.*');
+        $CI->db->select('SUM(bstm.target) target');
 
         if($type == 1)
         {
@@ -587,10 +587,8 @@ class Sales_target_helper
     public static function get_monthWise_hom_sales_target($year, $month, $variety, $type, $division)
     {
         $CI = & get_instance();
-        $user = User_helper::get_user();
-
         $CI->db->from('budget_sales_target_monthwise bstm');
-        $CI->db->select('bstm.*');
+        $CI->db->select('SUM(bstm.target) target');
 
         if($type == 1)
         {

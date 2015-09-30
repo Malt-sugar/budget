@@ -220,4 +220,4 @@ $lang['LABEL_TARGETED']='Targeted';
 $lang['TERRITORYWISE']='Territory Wise';
 $lang['ZONEWISE']='Zone Wise';
 $lang['DIVISIONWISE']='Division Wise';
-$lang['OVERALL']='Over All';
+$lang['OVERALL']='Overall';
