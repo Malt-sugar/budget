@@ -101,6 +101,7 @@
         {
             if($(this).val()==1)
             {
+                $("#territory").val('');
                 $("#territory_div").show();
                 $("#scrollButtons").hide();
                 $("#load_variety").html('');

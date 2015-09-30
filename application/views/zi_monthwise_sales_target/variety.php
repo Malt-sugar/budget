@@ -94,7 +94,7 @@
                                                             <tr>
                                                                 <td>
                                                                     <div class="col-lg-12">
-                                                                        <textarea class="form-control" name="variety[<?php echo $variety['varriety_id'];?>][<?php echo $month;?>][remarks]" placeholder="Add Remarks"><?php echo $existingDetail['remarks'];?></textarea>
+                                                                        <textarea class="form-control" disabled name="variety[<?php echo $variety['varriety_id'];?>][<?php echo $month;?>][remarks]" placeholder="Add Remarks"><?php echo $existingDetail['remarks'];?></textarea>
                                                                     </div>
                                                                 </td>
                                                             </tr>
@@ -114,7 +114,7 @@
                                 <?php
                                 }
                             }
-                            $detail = Sales_target_helper::get_targeted_territory_variety_detail($year, $variety['varriety_id']);
+                            $detail = Sales_target_helper::get_zi_monthwise_variety_detail($year, $variety['varriety_id'], $type, $territory);
                             ?>
                         </tr>
                     </table>

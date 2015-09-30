@@ -521,8 +521,20 @@ class Sales_target_helper
     public static function get_monthWise_zi_sales_target($year, $month, $variety, $type, $territory)
     {
         $CI = & get_instance();
+        $user = User_helper::get_user();
+
         $CI->db->from('budget_sales_target_monthwise bstm');
         $CI->db->select('bstm.*');
+
+        if($type == 1)
+        {
+            $CI->db->where('bstm.territory_id', $territory);
+        }
+        elseif($type == 2)
+        {
+            $CI->db->where('bstm.zone_id', $user->zone_id);
+        }
+
         $CI->db->where('bstm.year', $year);
         $CI->db->where('bstm.month', $month);
         $CI->db->where('bstm.variety_id', $variety);
@@ -536,6 +548,43 @@ class Sales_target_helper
         else
         {
             return false;
+        }
+    }
+
+    public static function get_zi_monthwise_variety_detail($year, $variety, $type, $territory)
+    {
+        $CI = & get_instance();
+        $user = User_helper::get_user();
+        $user_zone = $user->zone_id;
+
+        $CI->db->from('budget_sales_target bst');
+        $CI->db->select('bst.*');
+
+        if($type == 1)
+        {
+            $CI->db->where('bst.territory_id', $territory);
+            $CI->db->where('length(bst.customer_id)<2');
+        }
+        elseif($type == 2)
+        {
+            $CI->db->where('bst.zone_id', $user_zone);
+            $CI->db->where('length(bst.customer_id)<2');
+            $CI->db->where('length(bst.territory_id)<2');
+        }
+
+        $CI->db->where('bst.variety_id', $variety);
+        $CI->db->where('bst.year', $year);
+
+        $CI->db->where('bst.status', $CI->config->item('status_active'));
+        $result = $CI->db->get()->row_array();
+
+        if($result)
+        {
+            return $result;
+        }
+        else
+        {
+            return null;
         }
     }
 }
