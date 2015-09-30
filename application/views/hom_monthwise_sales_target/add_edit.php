@@ -1,6 +1,6 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
-    $data["link_new"]=base_url()."zi_sales_target/index/add";
-    $data["link_back"]=base_url()."zi_sales_target";
+    $data["link_new"]=base_url()."di_sales_target/index/add";
+    $data["link_back"]=base_url()."di_sales_target";
     $data["link_approve"]="#";
     $data["hide_approve"]="1";
     $data["link_save"]="#";
@@ -9,7 +9,7 @@
     $this->load->view("action_buttons_edit",$data);
 ?>
 
-<form class="form_valid" id="save_form" action="<?php echo base_url();?>zi_monthwise_sales_target/index/save" method="post">
+<form class="form_valid" id="save_form" action="<?php echo base_url();?>hom_monthwise_sales_target/index/save" method="post">
     <div class="row widget">
         <div class="widget-header">
             <div class="title">
@@ -38,20 +38,20 @@
             <div class="col-sm-4 col-xs-8">
                 <select name="type" id="type" class="form-control validate[required]">
                     <option value=""><?php echo $this->lang->line('SELECT');?></option>
-                    <option value="1"><?php echo $this->lang->line('TERRITORYWISE');?></option>
-                    <option value="2"><?php echo $this->lang->line('ZONEWISE');?></option>
+                    <option value="1"><?php echo $this->lang->line('DIVISIONWISE');?></option>
+                    <option value="2"><?php echo $this->lang->line('OVERALL');?></option>
                 </select>
             </div>
         </div>
 
-        <div class="row show-grid" id="territory_div" style="display: none;">
+        <div class="row show-grid" id="division_div" style="display: none;">
             <div class="col-xs-4">
-                <label class="control-label pull-right"><?php echo $this->lang->line('LABEL_TERRITORY');?><span style="color:#FF0000">*</span></label>
+                <label class="control-label pull-right"><?php echo $this->lang->line('LABEL_DIVISION');?><span style="color:#FF0000">*</span></label>
             </div>
             <div class="col-sm-4 col-xs-8">
-                <select name="territory" id="territory" class="form-control">
+                <select name="division" id="division" class="form-control">
                     <?php
-                    $this->load->view('dropdown',array('drop_down_options'=>$territories,'drop_down_selected'=>''));
+                    $this->load->view('dropdown',array('drop_down_options'=>$divisions,'drop_down_selected'=>''));
                     ?>
                 </select>
             </div>
@@ -101,20 +101,20 @@
         {
             if($(this).val()==1)
             {
-                $("#territory").val('');
-                $("#territory_div").show();
+                $("#division").val('');
+                $("#division_div").show();
                 $("#scrollButtons").hide();
                 $("#load_variety").html('');
                 $("#load_variety").hide();
             }
             else
             {
-                $("#territory_div").hide();
+                $("#division_div").hide();
                 if($(this).val()==2 && $("#year").val().length>0)
                 {
                     $("#load_variety").show();
                     $.ajax({
-                        url: base_url+"zi_monthwise_sales_target/get_variety_detail/",
+                        url: base_url+"hom_monthwise_sales_target/get_variety_detail/",
                         type: 'POST',
                         dataType: "JSON",
                         data:{year_id:$("#year").val(), type: $("#type").val()},
@@ -138,16 +138,16 @@
             }
         });
 
-        $(document).on("change","#territory",function()
+        $(document).on("change","#division",function()
         {
             if($("#type").val()==1 && $("#year").val().length>0 && $(this).val().length>0)
             {
                 $("#load_variety").show();
                 $.ajax({
-                    url: base_url+"zi_monthwise_sales_target/get_variety_detail/",
+                    url: base_url+"hom_monthwise_sales_target/get_variety_detail/",
                     type: 'POST',
                     dataType: "JSON",
-                    data:{year_id:$("#year").val(), type: $("#type").val(), territory: $(this).val()},
+                    data:{year_id:$("#year").val(), type: $("#type").val(), division: $(this).val()},
                     success: function (data, status)
                     {
 

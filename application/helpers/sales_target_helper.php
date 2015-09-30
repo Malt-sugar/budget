@@ -551,6 +551,68 @@ class Sales_target_helper
         }
     }
 
+    public static function get_monthWise_di_sales_target($year, $month, $variety, $type, $zone)
+    {
+        $CI = & get_instance();
+        $user = User_helper::get_user();
+
+        $CI->db->from('budget_sales_target_monthwise bstm');
+        $CI->db->select('bstm.*');
+
+        if($type == 1)
+        {
+            $CI->db->where('bstm.zone_id', $zone);
+        }
+        elseif($type == 2)
+        {
+            $CI->db->where('bstm.division_id', $user->division_id);
+        }
+
+        $CI->db->where('bstm.year', $year);
+        $CI->db->where('bstm.month', $month);
+        $CI->db->where('bstm.variety_id', $variety);
+        $CI->db->where('bstm.status', $CI->config->item('status_active'));
+        $result = $CI->db->get()->row_array();
+
+        if($result)
+        {
+            return $result;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    public static function get_monthWise_hom_sales_target($year, $month, $variety, $type, $division)
+    {
+        $CI = & get_instance();
+        $user = User_helper::get_user();
+
+        $CI->db->from('budget_sales_target_monthwise bstm');
+        $CI->db->select('bstm.*');
+
+        if($type == 1)
+        {
+            $CI->db->where('bstm.division_id', $division);
+        }
+
+        $CI->db->where('bstm.year', $year);
+        $CI->db->where('bstm.month', $month);
+        $CI->db->where('bstm.variety_id', $variety);
+        $CI->db->where('bstm.status', $CI->config->item('status_active'));
+        $result = $CI->db->get()->row_array();
+
+        if($result)
+        {
+            return $result;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
     public static function get_zi_monthwise_variety_detail($year, $variety, $type, $territory)
     {
         $CI = & get_instance();
@@ -570,6 +632,84 @@ class Sales_target_helper
             $CI->db->where('bst.zone_id', $user_zone);
             $CI->db->where('length(bst.customer_id)<2');
             $CI->db->where('length(bst.territory_id)<2');
+        }
+
+        $CI->db->where('bst.variety_id', $variety);
+        $CI->db->where('bst.year', $year);
+
+        $CI->db->where('bst.status', $CI->config->item('status_active'));
+        $result = $CI->db->get()->row_array();
+
+        if($result)
+        {
+            return $result;
+        }
+        else
+        {
+            return null;
+        }
+    }
+
+    public static function get_di_monthwise_variety_detail($year, $variety, $type, $zone)
+    {
+        $CI = & get_instance();
+        $user = User_helper::get_user();
+        $user_division = $user->division_id;
+
+        $CI->db->from('budget_sales_target bst');
+        $CI->db->select('bst.*');
+
+        if($type == 1)
+        {
+            $CI->db->where('bst.zone_id', $zone);
+            $CI->db->where('length(bst.customer_id)<2');
+            $CI->db->where('length(bst.territory_id)<2');
+        }
+        elseif($type == 2)
+        {
+            $CI->db->where('bst.division_id', $user_division);
+            $CI->db->where('length(bst.customer_id)<2');
+            $CI->db->where('length(bst.territory_id)<2');
+            $CI->db->where('length(bst.zone_id)<2');
+        }
+
+        $CI->db->where('bst.variety_id', $variety);
+        $CI->db->where('bst.year', $year);
+
+        $CI->db->where('bst.status', $CI->config->item('status_active'));
+        $result = $CI->db->get()->row_array();
+
+        if($result)
+        {
+            return $result;
+        }
+        else
+        {
+            return null;
+        }
+    }
+
+    public static function get_hom_monthwise_variety_detail($year, $variety, $type, $division)
+    {
+        $CI = & get_instance();
+        $user = User_helper::get_user();
+
+        $CI->db->from('budget_sales_target bst');
+        $CI->db->select('bst.*');
+
+        if($type == 1)
+        {
+            $CI->db->where('bst.division_id', $division);
+            $CI->db->where('length(bst.customer_id)<2');
+            $CI->db->where('length(bst.territory_id)<2');
+            $CI->db->where('length(bst.zone_id)<2');
+        }
+        elseif($type == 2)
+        {
+            $CI->db->where('length(bst.customer_id)<2');
+            $CI->db->where('length(bst.territory_id)<2');
+            $CI->db->where('length(bst.zone_id)<2');
+            $CI->db->where('length(bst.division_id)<2');
         }
 
         $CI->db->where('bst.variety_id', $variety);
