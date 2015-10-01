@@ -500,11 +500,13 @@ class Sales_target_helper
     public static function get_monthWise_ti_sales_target($year, $month, $variety)
     {
         $CI = & get_instance();
+        $user = User_helper::get_user();
         $CI->db->from('budget_sales_target_monthwise bstm');
         $CI->db->select('bstm.*');
         $CI->db->where('bstm.year', $year);
         $CI->db->where('bstm.month', $month);
         $CI->db->where('bstm.variety_id', $variety);
+        $CI->db->where('bstm.territory_id', $user->territory_id);
         $CI->db->where('bstm.status', $CI->config->item('status_active'));
         $result = $CI->db->get()->row_array();
 
@@ -588,7 +590,7 @@ class Sales_target_helper
     {
         $CI = & get_instance();
         $CI->db->from('budget_sales_target_monthwise bstm');
-        $CI->db->select('SUM(bstm.target) target');
+        $CI->db->select('SUM(bstm.target) as target');
 
         if($type == 1)
         {
@@ -616,12 +618,12 @@ class Sales_target_helper
         $CI = & get_instance();
         $user = User_helper::get_user();
         $user_zone = $user->zone_id;
-
         $CI->db->from('budget_sales_target bst');
         $CI->db->select('bst.*');
 
         if($type == 1)
         {
+            $CI->db->select('bst.*');
             $CI->db->where('bst.territory_id', $territory);
             $CI->db->where('length(bst.customer_id)<2');
         }
@@ -693,10 +695,10 @@ class Sales_target_helper
         $user = User_helper::get_user();
 
         $CI->db->from('budget_sales_target bst');
-        $CI->db->select('bst.*');
 
         if($type == 1)
         {
+            $CI->db->select('bst.*');
             $CI->db->where('bst.division_id', $division);
             $CI->db->where('length(bst.customer_id)<2');
             $CI->db->where('length(bst.territory_id)<2');
@@ -704,6 +706,7 @@ class Sales_target_helper
         }
         elseif($type == 2)
         {
+            $CI->db->select('SUM(bst.targeted_quantity) targeted_quantity');
             $CI->db->where('length(bst.customer_id)<2');
             $CI->db->where('length(bst.territory_id)<2');
             $CI->db->where('length(bst.zone_id)<2');

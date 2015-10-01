@@ -83,11 +83,13 @@ class Ti_monthwise_sales_target_model extends CI_Model
 
     public function check_monthwise_target_existence($year, $month, $variety_id)
     {
+        $user = User_helper::get_user();
         $this->db->from('budget_sales_target_monthwise bstm');
         $this->db->select('bstm.id');
         $this->db->where('bstm.year', $year);
         $this->db->where('bstm.month', $month);
         $this->db->where('bstm.variety_id', $variety_id);
+        $this->db->where('bstm.territory_id', $user->territory_id);
         //$this->db->where('bst.status', $this->config->item('status_active'));
         $result = $this->db->get()->row_array();
 
@@ -103,10 +105,12 @@ class Ti_monthwise_sales_target_model extends CI_Model
 
     public function monthwise_target_initial_update($year, $month, $variety_id)
     {
+        $user = User_helper::get_user();
         $data = array('status'=>0);
         $this->db->where('year',$year);
         $this->db->where('month',$month);
         $this->db->where('variety_id',$variety_id);
+        $this->db->where('territory_id',$user->territory_id);
 
         $this->db->update('budget_sales_target_monthwise',$data);
     }

@@ -120,7 +120,6 @@
                     </table>
                 </td>
                 <td class="text-center" style="padding-top: 36px;">
-                    <input type="hidden" name="sales_id[<?php echo $variety['varriety_id'];?>]" value="<?php echo $detail['id'];?>"/>
                     <?php if($detail['targeted_quantity']>0){ ?>
                         <label class="label label-info targeted_total">
                             <?php echo $detail['targeted_quantity'];?>

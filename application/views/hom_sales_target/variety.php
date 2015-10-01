@@ -109,7 +109,7 @@
                         </tr>
                     </table>
                 </td>
-                <td><label class="label label-info required_total"><?php echo $total_required;?></label> </td>
+                <td class="text-center"><label class="label label-info required_total"><?php echo $total_required;?></label> </td>
                 <td><input type="text" name="variety[<?php echo $variety['crop_id']?>][<?php echo $variety['product_type_id']?>][<?php echo $variety['varriety_id'];?>][budgeted_quantity]" class="form-control total" value="<?php echo $detail['budgeted_quantity'];?>" /></td>
                 <td><input type="text" readonly class="form-control variance" value="<?php if(isset($detail['budgeted_quantity'])){echo $detail['budgeted_quantity']-$total_required;}?>" /></td>
                 <td>
