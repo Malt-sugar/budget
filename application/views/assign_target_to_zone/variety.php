@@ -137,7 +137,7 @@
             <?php
             $detail = Sales_target_helper::get_required_division_variety_detail($year, $variety['varriety_id']);
             ?>
-            <td class="text-center" style="padding-top: 35px;"><input type="text" name="" class="form-control" readonly value="<?php echo $detail['budgeted_quantity'];?>" /></td>
+            <td class="text-center" style="padding-top: 35px;"><input type="text" name="" class="form-control" disabled value="<?php echo $detail['budgeted_quantity'];?>" /></td>
             <td class="text-center">
                 <div style="margin-top: 16px; z-index: 1000;" class="pull-right"><label class="label label-primary load_remark">+R</label></div>
                 <input style="border: <?php if(is_array($redistribution_array) && sizeof($redistribution_array)>0 && in_array($variety['varriety_id'], $redistribution_array)){echo "2px solid red;";}else{echo "";}?>" type="text" name="detail[<?php echo $variety['varriety_id'];?>][targeted_quantity]" class="form-control quantity targeted_total" value="<?php echo $detail['targeted_quantity'];?>" />
@@ -160,7 +160,7 @@
                     </table>
                 </div>
             </td>
-            <td class="text-center" style="padding-top: 35px;"><input type="text" name="" class="form-control quantity remaining" value="<?php if(isset($detail['targeted_quantity']) && $detail['targeted_quantity']>0){echo $detail['targeted_quantity']-$total_required;}?>" /></td>
+            <td class="text-center" style="padding-top: 35px;"><input type="text" disabled name="" class="form-control quantity remaining" value="<?php if(isset($detail['targeted_quantity']) && $detail['targeted_quantity']>0){echo $detail['targeted_quantity']-$total_required;}?>" /></td>
         </tr>
     <?php
     }

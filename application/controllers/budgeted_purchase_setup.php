@@ -11,40 +11,66 @@ class Budgeted_purchase_setup extends ROOT_Controller
         $this->load->model("budgeted_purchase_setup_model");
     }
 
-    public function index($task="add",$id=0)
+    public function index($task="list",$id=0)
     {
         if($task=="add" || $task=="edit")
         {
-            $this->rnd_add_edit();
+            $this->budget_add_edit($id);
+        }
+        elseif($task=="list")
+        {
+            $this->budget_list();
         }
         elseif($task=="save")
         {
-            $this->rnd_save();
+            $this->budget_save();
         }
         else
         {
-            $this->rnd_add_edit();
+            $this->budget_list();
         }
     }
 
-    public function rnd_add_edit()
+    public function budget_list($page=0)
+    {
+        $config = System_helper::pagination_config(base_url() . "budgeted_purchase_setup/index/list/",$this->budgeted_purchase_setup_model->get_total_purchase_years(),4);
+        $this->pagination->initialize($config);
+        $data["links"] = $this->pagination->create_links();
+
+        if($page>0)
+        {
+            $page=$page-1;
+        }
+
+        $data['purchases'] = $this->budgeted_purchase_setup_model->get_purchase_year_info($page);
+        $data['title']="Budget Purchase Setup List";
+
+        $ajax['status']=true;
+        $ajax['content'][]=array("id"=>"#content","html"=>$this->load->view("budgeted_purchase_setup/list",$data,true));
+
+        if($this->message)
+        {
+            $ajax['message']=$this->message;
+        }
+
+        $ajax['page_url']=base_url()."budgeted_purchase_setup/index/list/".($page+1);
+        $this->jsonReturn($ajax);
+    }
+
+    public function budget_add_edit($id)
     {
         $data['years'] = Query_helper::get_info('ait_year',array('year_id value','year_name text'),array('del_status = 0'));
 
-        $existence = $this->budgeted_purchase_setup_model->check_budget_purchase_setup();
-
-        if($existence)
+        if($id>0)
         {
             $data['title']="Edit Budgeted Purchase Setup";
-            $data["purchase"] = $this->budgeted_purchase_setup_model->get_budget_purchase_data();
-
+            $data["purchase"] = $this->budgeted_purchase_setup_model->get_budget_purchase_data($id);
             $ajax['page_url']=base_url()."budgeted_purchase_setup/index/edit";
         }
         else
         {
             $data['title']="Budgeted Purchase Setup";
             $data["purchase"] = Array();
-
             $ajax['page_url']=base_url()."budgeted_purchase_setup/index/add";
         }
 
@@ -54,11 +80,13 @@ class Budgeted_purchase_setup extends ROOT_Controller
         $this->jsonReturn($ajax);
     }
 
-    public function rnd_save()
+    public function budget_save()
     {
         $user = User_helper::get_user();
+        $id = $this->input->post('setup_id');
 
         $data = Array(
+            'year'=>$this->input->post('year'),
             'purchase_type'=>$this->config->item('purchase_type_budget'),
             'usd_conversion_rate'=>$this->input->post('usd_conversion_rate'),
             'lc_exp'=>$this->input->post('lc_exp'),
@@ -76,15 +104,14 @@ class Budgeted_purchase_setup extends ROOT_Controller
         }
         else
         {
-            $existence = $this->budgeted_purchase_setup_model->check_budget_purchase_setup();
-            if($existence)
+            if($id>0)
             {
                 $this->db->trans_start();  //DB Transaction Handle START
 
                 $data['modified_by'] = $user->user_id;
                 $data['modification_date'] = time();
 
-                Query_helper::update('budget_purchase_setup',$data,array("purchase_type = ".$this->config->item('purchase_type_budget')));
+                Query_helper::update('budget_purchase_setup',$data,array("id = ".$id));
 
                 $this->db->trans_complete();   //DB Transaction Handle END
 
@@ -119,28 +146,39 @@ class Budgeted_purchase_setup extends ROOT_Controller
 
             }
 
-            $this->rnd_add_edit();//this is similar like redirect
+            $this->budget_list();//this is similar like redirect
         }
-
     }
 
     private function check_validation()
     {
-        $this->load->library('form_validation');
-        $this->form_validation->set_rules('usd_conversion_rate',$this->lang->line('LABEL_USD_CONVERSION_RATE'),'required');
-        $this->form_validation->set_rules('lc_exp',$this->lang->line('LABEL_LC_EXP'),'required');
-        $this->form_validation->set_rules('insurance_exp',$this->lang->line('LABEL_INSURANCE_EXP'),'required');
-        $this->form_validation->set_rules('packing_material',$this->lang->line('LABEL_PACKING_MATERIAL'),'required');
-        $this->form_validation->set_rules('carriage_inwards',$this->lang->line('LABEL_CARRIAGE_INWARDS'),'required');
-        $this->form_validation->set_rules('air_freight_and_docs',$this->lang->line('LABEL_AIR_FREIGHT_AND_DOCS'),'required');
+        $id = $this->input->post('setup_id');
+        $year = $this->input->post('year');
 
-        if($this->form_validation->run() == FALSE)
+        $year_existence = $this->budgeted_purchase_setup_model->check_budget_purchase_year_existence($id, $year);
+
+        if($year_existence)
         {
-            $this->message=validation_errors();
+            $this->message=$this->lang->line("BUDGET_PURCHASE_SET_ALREADY");
             return false;
         }
+        else
+        {
+            $this->load->library('form_validation');
+            $this->form_validation->set_rules('usd_conversion_rate',$this->lang->line('LABEL_USD_CONVERSION_RATE'),'required');
+            $this->form_validation->set_rules('lc_exp',$this->lang->line('LABEL_LC_EXP'),'required');
+            $this->form_validation->set_rules('insurance_exp',$this->lang->line('LABEL_INSURANCE_EXP'),'required');
+            $this->form_validation->set_rules('packing_material',$this->lang->line('LABEL_PACKING_MATERIAL'),'required');
+            $this->form_validation->set_rules('carriage_inwards',$this->lang->line('LABEL_CARRIAGE_INWARDS'),'required');
+            $this->form_validation->set_rules('air_freight_and_docs',$this->lang->line('LABEL_AIR_FREIGHT_AND_DOCS'),'required');
+
+            if($this->form_validation->run() == FALSE)
+            {
+                $this->message=validation_errors();
+                return false;
+            }
+        }
+
         return true;
     }
-
-
 }

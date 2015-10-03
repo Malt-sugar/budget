@@ -8,7 +8,7 @@
 //print_r($purchase);
 ?>
 <form class="form_valid" id="save_form" action="<?php echo base_url();?>budgeted_purchase_setup/index/save" method="post">
-    <input type="hidden" name="type_id" id="type_id" value=""/>
+    <input type="hidden" name="setup_id" id="setup_id" value="<?php if(isset($purchase['id'])){echo $purchase['id'];}else{echo 0;}?>"/>
     <div class="row widget">
         <div class="widget-header">
             <div class="title">
@@ -17,18 +17,18 @@
             <div class="clearfix"></div>
         </div>
 
-<!--        <div class="row show-grid">-->
-<!--            <div class="col-xs-4">-->
-<!--                <label class="control-label pull-right">--><?php //echo $this->lang->line('LABEL_YEAR');?><!--<span style="color:#FF0000">*</span></label>-->
-<!--            </div>-->
-<!--            <div class="col-sm-4 col-xs-8">-->
-<!--                <select name="year" id="year" class="form-control validate[required]">-->
-<!--                    --><?php
-//                    $this->load->view('dropdown',array('drop_down_options'=>$years,'drop_down_selected'=>''));
-//                    ?>
-<!--                </select>-->
-<!--            </div>-->
-<!--        </div>-->
+        <div class="row show-grid">
+            <div class="col-xs-4">
+                <label class="control-label pull-right"><?php echo $this->lang->line('LABEL_YEAR');?><span style="color:#FF0000">*</span></label>
+            </div>
+            <div class="col-sm-4 col-xs-8">
+                <select name="year" id="year" class="form-control validate[required]">
+                    <?php
+                    $this->load->view('dropdown',array('drop_down_options'=>$years,'drop_down_selected'=>isset($purchase['year'])?$purchase['year']:''));
+                    ?>
+                </select>
+            </div>
+        </div>
 
         <div style="" class="row show-grid">
             <div class="col-xs-4">
