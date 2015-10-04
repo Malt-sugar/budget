@@ -724,10 +724,9 @@ class System_helper
         $CI = & get_instance();
 
         $CI->db->from('budget_sales_target bst');
-        $CI->db->select('SUM(bst.quantity) finalised_quantity');
+        $CI->db->select('SUM(bst.targeted_quantity) finalised_quantity');
         $CI->db->where('bst.year', $year);
         $CI->db->where('bst.variety_id', $variety);
-        $CI->db->where('bst.is_approved_by_hom', 1);
         $result = $CI->db->get()->row_array();
 
         if($result)

@@ -68,9 +68,22 @@ class Packing_material_setup extends ROOT_Controller
                 $data['modified_by'] = $user->user_id;
                 $data['modification_date'] = $time;
 
-                if($detail==1)
+                if($this->packing_material_setup_model->check_variety_existence($variety_id))
                 {
-                    Query_helper::update('budget_packing_material_setup',$data,array("varriety_id ='$variety_id'"));
+                    Query_helper::update('budget_packing_material_setup',$data,array("variety_id ='$variety_id'"));
+                }
+                else
+                {
+                    $variety_data = $this->packing_material_setup_model->get_variety_detail($variety_id);
+                    $insert_data['crop_id'] = $variety_data['crop_id'];
+                    $insert_data['product_type_id'] = $variety_data['product_type_id'];
+                    $insert_data['variety_id'] = $variety_data['varriety_id'];
+                    $insert_data['variety_name'] = $variety_data['varriety_name'];
+                    $insert_data['packing_material'] = 1;
+                    $insert_data['modified_by'] = $user->user_id;
+                    $insert_data['modification_date'] = $time;
+
+                    Query_helper::add('budget_packing_material_setup',$insert_data);
                 }
             }
 

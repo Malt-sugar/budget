@@ -1,5 +1,5 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
-    $data["link_new"]=base_url()."budgeted_purchase_setup/index/add";
+    $data["link_new"]=base_url()."direct_cost_setup/index/add";
     $this->load->view("action_buttons",$data);
 //echo '<pre>';
 //print_r($purchases);
@@ -34,7 +34,7 @@
                     <td><?php echo $key+1;?></td>
                     <td><?php echo $purchase['year_name'];?></td>
                     <td>
-                        <a href="<?php echo base_url();?>budgeted_purchase_setup/index/edit/<?php echo $purchase['id'];?>">
+                        <a href="<?php echo base_url();?>direct_cost_setup/index/edit/<?php echo $purchase['id'];?>">
                             <img src="<?php echo base_url();?>images/edit_record.png">
                         </a>
                     </td>

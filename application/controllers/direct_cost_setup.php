@@ -1,14 +1,14 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 require APPPATH.'/libraries/root_controller.php';
 
-class Budgeted_purchase_setup extends ROOT_Controller
+class Direct_cost_setup extends ROOT_Controller
 {
     private  $message;
     public function __construct()
     {
         parent::__construct();
         $this->message="";
-        $this->load->model("budgeted_purchase_setup_model");
+        $this->load->model("direct_cost_setup_model");
     }
 
     public function index($task="list",$id=0)
@@ -33,7 +33,7 @@ class Budgeted_purchase_setup extends ROOT_Controller
 
     public function budget_list($page=0)
     {
-        $config = System_helper::pagination_config(base_url() . "budgeted_purchase_setup/index/list/",$this->budgeted_purchase_setup_model->get_total_purchase_years(),4);
+        $config = System_helper::pagination_config(base_url() . "direct_cost_setup/index/list/",$this->direct_cost_setup_model->get_total_purchase_years(),4);
         $this->pagination->initialize($config);
         $data["links"] = $this->pagination->create_links();
 
@@ -42,18 +42,18 @@ class Budgeted_purchase_setup extends ROOT_Controller
             $page=$page-1;
         }
 
-        $data['purchases'] = $this->budgeted_purchase_setup_model->get_purchase_year_info($page);
-        $data['title']="Budget Purchase Setup List";
+        $data['purchases'] = $this->direct_cost_setup_model->get_purchase_year_info($page);
+        $data['title']="Direct Cost Setup List";
 
         $ajax['status']=true;
-        $ajax['content'][]=array("id"=>"#content","html"=>$this->load->view("budgeted_purchase_setup/list",$data,true));
+        $ajax['content'][]=array("id"=>"#content","html"=>$this->load->view("direct_cost_setup/list",$data,true));
 
         if($this->message)
         {
             $ajax['message']=$this->message;
         }
 
-        $ajax['page_url']=base_url()."budgeted_purchase_setup/index/list/".($page+1);
+        $ajax['page_url']=base_url()."direct_cost_setup/index/list/".($page+1);
         $this->jsonReturn($ajax);
     }
 
@@ -63,19 +63,19 @@ class Budgeted_purchase_setup extends ROOT_Controller
 
         if($id>0)
         {
-            $data['title']="Edit Budgeted Purchase Setup";
-            $data["purchase"] = $this->budgeted_purchase_setup_model->get_budget_purchase_data($id);
-            $ajax['page_url']=base_url()."budgeted_purchase_setup/index/edit";
+            $data['title']="Edit Direct Cost Setup";
+            $data["purchase"] = $this->direct_cost_setup_model->get_budget_purchase_data($id);
+            $ajax['page_url']=base_url()."direct_cost_setup/index/edit";
         }
         else
         {
-            $data['title']="Budgeted Purchase Setup";
+            $data['title']="Direct Cost Setup";
             $data["purchase"] = Array();
-            $ajax['page_url']=base_url()."budgeted_purchase_setup/index/add";
+            $ajax['page_url']=base_url()."direct_cost_setup/index/add";
         }
 
         $ajax['status']=true;
-        $ajax['content'][]=array("id"=>"#content","html"=>$this->load->view("budgeted_purchase_setup/add_edit",$data,true));
+        $ajax['content'][]=array("id"=>"#content","html"=>$this->load->view("direct_cost_setup/add_edit",$data,true));
 
         $this->jsonReturn($ajax);
     }
@@ -93,7 +93,8 @@ class Budgeted_purchase_setup extends ROOT_Controller
             'insurance_exp'=>$this->input->post('insurance_exp'),
             'packing_material'=>$this->input->post('packing_material'),
             'carriage_inwards'=>$this->input->post('carriage_inwards'),
-            'air_freight_and_docs'=>$this->input->post('air_freight_and_docs')
+            'air_freight_and_docs'=>$this->input->post('air_freight_and_docs'),
+            'cnf'=>$this->input->post('cnf')
         );
 
         if(!$this->check_validation())
@@ -111,7 +112,7 @@ class Budgeted_purchase_setup extends ROOT_Controller
                 $data['modified_by'] = $user->user_id;
                 $data['modification_date'] = time();
 
-                Query_helper::update('budget_purchase_setup',$data,array("id = ".$id));
+                Query_helper::update('budget_direct_cost',$data,array("id = ".$id));
 
                 $this->db->trans_complete();   //DB Transaction Handle END
 
@@ -131,7 +132,7 @@ class Budgeted_purchase_setup extends ROOT_Controller
                 $data['created_by'] = $user->user_id;
                 $data['creation_date'] = time();
 
-                Query_helper::add('budget_purchase_setup',$data);
+                Query_helper::add('budget_direct_cost',$data);
 
                 $this->db->trans_complete();   //DB Transaction Handle END
 
@@ -155,11 +156,11 @@ class Budgeted_purchase_setup extends ROOT_Controller
         $id = $this->input->post('setup_id');
         $year = $this->input->post('year');
 
-        $year_existence = $this->budgeted_purchase_setup_model->check_budget_purchase_year_existence($id, $year);
+        $year_existence = $this->direct_cost_setup_model->check_budget_purchase_year_existence($id, $year);
 
         if($year_existence)
         {
-            $this->message=$this->lang->line("BUDGET_PURCHASE_SET_ALREADY");
+            $this->message=$this->lang->line("LABEL_BUDGET_DIRECT_COST_SET_ALREADY");
             return false;
         }
         else
@@ -171,6 +172,7 @@ class Budgeted_purchase_setup extends ROOT_Controller
             $this->form_validation->set_rules('packing_material',$this->lang->line('LABEL_PACKING_MATERIAL'),'required');
             $this->form_validation->set_rules('carriage_inwards',$this->lang->line('LABEL_CARRIAGE_INWARDS'),'required');
             $this->form_validation->set_rules('air_freight_and_docs',$this->lang->line('LABEL_AIR_FREIGHT_AND_DOCS'),'required');
+            $this->form_validation->set_rules('cnf',$this->lang->line('LABEL_CNF'),'required');
 
             if($this->form_validation->run() == FALSE)
             {

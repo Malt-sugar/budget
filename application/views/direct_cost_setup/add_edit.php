@@ -1,13 +1,12 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
     $data["link_new"]="#";
     $data["hide_new"]="1";
-    $data["link_back"]="#";
-    $data["hide_back"]="1";
+    $data["link_back"]=base_url().'direct_cost_setup/index/list';
     $data["hide_approve"]="1";
     $this->load->view("action_buttons_edit",$data);
 //print_r($purchase);
 ?>
-<form class="form_valid" id="save_form" action="<?php echo base_url();?>budgeted_purchase_setup/index/save" method="post">
+<form class="form_valid" id="save_form" action="<?php echo base_url();?>direct_cost_setup/index/save" method="post">
     <input type="hidden" name="setup_id" id="setup_id" value="<?php if(isset($purchase['id'])){echo $purchase['id'];}else{echo 0;}?>"/>
     <div class="row widget">
         <div class="widget-header">
@@ -81,6 +80,15 @@
             </div>
             <div class="col-sm-4 col-xs-8">
                 <input type="text" name="air_freight_and_docs" class="form-control validate[required]" value="<?php if(isset($purchase['air_freight_and_docs'])){echo $purchase['air_freight_and_docs'];}?>" />
+            </div>
+        </div>
+
+        <div style="" class="row show-grid">
+            <div class="col-xs-4">
+                <label class="control-label pull-right"><?php echo $this->lang->line('LABEL_CNF');?><span style="color:#FF0000">*</span></label>
+            </div>
+            <div class="col-sm-4 col-xs-8">
+                <input type="text" name="cnf" class="form-control validate[required]" value="<?php if(isset($purchase['cnf'])){echo $purchase['cnf'];}?>" />
             </div>
         </div>
     </div>

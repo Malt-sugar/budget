@@ -3,6 +3,8 @@
     $data["link_back"]=base_url()."packing_material_setup";
     $data["link_approve"]="#";
     $data["hide_approve"]="1";
+    $data["link_back"]="#";
+    $data["hide_back"]="1";
 
     $this->load->view("action_buttons_edit",$data);
 ?>

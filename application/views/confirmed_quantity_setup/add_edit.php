@@ -1,10 +1,9 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
     $data["link_new"]="#";
     $data["hide_new"]="1";
-    $data["link_back"]=base_url()."budgeted_purchase";
+    $data["link_back"]=base_url()."confirmed_quantity_setup";
     $data["hide_approve"]="1";
     $this->load->view("action_buttons_edit",$data);
-
 
 $arranged_purchase = array();
 
@@ -18,10 +17,10 @@ if(is_array($purchases) && sizeof($purchases)>0)
         $arranged_purchase['crop'][$purchase['crop_id']][$purchase['type_id']]['variety'][$purchase['variety_id']]['price_per_kg'] = $purchase['price_per_kg'];
         $arranged_purchase['crop'][$purchase['crop_id']][$purchase['type_id']]['variety'][$purchase['variety_id']]['created_by'] = $purchase['created_by'];
     }
-}
+}2
 
 ?>
-<form class="form_valid" id="save_form" action="<?php echo base_url();?>budgeted_purchase/index/save" method="post">
+<form class="form_valid" id="save_form" action="<?php echo base_url();?>confirmed_quantity_setup/index/save" method="post">
     <input type="hidden" name="year_id" value="<?php if(isset($arranged_purchase['year'])){echo $arranged_purchase['year'];}else{echo 0;}?>" />
     <div class="row widget">
         <div class="widget-header">
@@ -140,33 +139,13 @@ if(is_array($purchases) && sizeof($purchases)>0)
                                             {
                                                 ?>
                                                 <th><?php echo $this->lang->line('LABEL_VARIETY')?></th>
-                                                <th><?php echo $this->lang->line('LABEL_QUANTITY')?></th>
-                                                <th><?php echo $this->lang->line('LABEL_PRICE_PER_KG_USD')?></th>
+                                                <th><?php echo $this->lang->line('LABEL_BUDGETED_SALES_QTY_HO')?></th>
+                                                <th><?php echo $this->lang->line('LABEL_VARIANCE')?></th>
                                                 <th><?php echo $this->lang->line('LABEL_TOTAL_PRICE_USD')?></th>
                                                 <?php
                                                 foreach($typeVal['variety'] as $varKey=>$detail)
                                                 {
-                                                    $current_stock = System_helper::get_current_stock($key, $typeKey, $varKey);
 
-                                                    if($current_stock>0)
-                                                    {
-                                                        $display_current_stock = 'Current Stock: '.$current_stock;
-                                                    }
-                                                    else
-                                                    {
-                                                        $display_current_stock = 'Current Stock: '.'Not Available';
-                                                    }
-
-                                                    $finalised_sales_target = System_helper::get_finalised_sales_target($varKey, $arranged_purchase['year']);
-
-                                                    if($finalised_sales_target>0)
-                                                    {
-                                                        $display_sales_target = 'Sales target: '.$finalised_sales_target;
-                                                    }
-                                                    else
-                                                    {
-                                                        $display_sales_target = 'Sales target: '.'Not Available';
-                                                    }
                                                     ?>
                                                     <tr>
                                                         <td><?php echo $detail['variety_name']?></td>
@@ -209,9 +188,9 @@ if(is_array($purchases) && sizeof($purchases)>0)
     ?>
         <div class="budget_add_more_container">
             <div class="row widget">
-                <div class="widget-header">
+                <div class="widget-header" style="padding: 3px 4px 3px 10px;">
                     <div class="title">
-                        <?php echo $this->lang->line('LABEL_PURCHASE'); ?>
+                        <?php echo $this->lang->line('LABEL_QUANTITY'); ?>
                     </div>
                     <div class="clearfix"></div>
                 </div>
@@ -242,7 +221,20 @@ if(is_array($purchases) && sizeof($purchases)>0)
                     </div>
                 </div>
 
-                <div class="col-xs-6 variety_quantity" id="variety0" data-variety-current-id="0">
+                <div class="variety" style="display: none;">
+                    <div class="col-xs-1">
+                        <label class="control-label pull-right"><?php echo $this->lang->line('LABEL_VARIETY');?></label>
+                    </div>
+                    <div class="col-xs-2">
+                        <select name="purchase[0][variety]" class="form-control variety_id" id="variety0" data-variety-current-id="0">
+                            <?php
+                            $this->load->view('dropdown',array('drop_down_options'=>$varieties,'drop_down_selected'=>''));
+                            ?>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="col-xs-6 variety_quantity" id="variety_quantity0" data-varietyDetail-current-id="0">
                 </div>
             </div>
         </div>
@@ -252,7 +244,7 @@ if(is_array($purchases) && sizeof($purchases)>0)
     </div>
 
     <div class="row text-center" id="add_more">
-        <button type="button" class="btn btn-warning budget_add_more_button"><?php echo $this->lang->line('ADD_MORE');?></button>
+        <button type="button" class="btn btn-success budget_add_more_button"><?php echo $this->lang->line('ADD_MORE');?></button>
     </div>
 
     <h1>&nbsp;</h1>
@@ -262,11 +254,11 @@ if(is_array($purchases) && sizeof($purchases)>0)
 
 <div class="budget_add_more_content" style="display: none;">
     <div class="row widget budget_add_more_holder budget_add_more_container"  data-current-id="<?php if(isset($sl)){echo ($sl-1);}else{echo 0;}?>">
-        <div class="widget-header">
+        <div class="widget-header" style="padding: 3px 4px 3px 10px;">
             <div class="title">
-                <?php echo $this->lang->line('LABEL_BUDGETED_PURCHASE'); ?>
+                <?php echo $this->lang->line('LABEL_QUANTITY'); ?>
             </div>
-            <button type="button" class="btn btn-danger pull-right budget_add_more_delete"><?php echo $this->lang->line('DELETE'); ?></button>
+            <div class="pull-right budget_add_more_delete"><img style="width: 25px; height: 25px;" src="<?php echo base_url().'images/xmark.png'?>" /></div>
             <div class="clearfix"></div>
         </div>
 
@@ -296,6 +288,19 @@ if(is_array($purchases) && sizeof($purchases)>0)
             </div>
         </div>
 
+        <div class="variety" style="display: none;">
+            <div class="col-xs-1">
+                <label class="control-label pull-right"><?php echo $this->lang->line('LABEL_VARIETY');?></label>
+            </div>
+            <div class="col-xs-2">
+                <select name="" class="form-control variety_id" id="variety_id">
+                    <?php
+                    $this->load->view('dropdown',array('drop_down_options'=>$varieties,'drop_down_selected'=>''));
+                    ?>
+                </select>
+            </div>
+        </div>
+
         <div class="col-xs-6 variety_quantity" id="variety_quantity">
         </div>
     </div>
@@ -318,17 +323,20 @@ if(is_array($purchases) && sizeof($purchases)>0)
 
             $('.budget_add_more_content .budget_add_more_holder .crop_id').attr('name','purchase['+current_id+'][crop]');
             $('.budget_add_more_content .budget_add_more_holder .type_id').attr('name','purchase['+current_id+'][type]');
+            $('.budget_add_more_content .budget_add_more_holder .variety_id').attr('name','purchase['+current_id+'][variety]');
 
             $('.budget_add_more_content .budget_add_more_holder .crop_id').attr('data-crop-current-id',current_id);
             $('.budget_add_more_content .budget_add_more_holder .type_id').attr('data-type-current-id',current_id);
+            $('.budget_add_more_content .budget_add_more_holder .variety_id').attr('data-variety-current-id',current_id);
 
             $('.budget_add_more_content .budget_add_more_holder .crop_id').attr('id','crop'+current_id);
             $('.budget_add_more_content .budget_add_more_holder .type_id').attr('id','type'+current_id);
+            $('.budget_add_more_content .budget_add_more_holder .variety_id').attr('id','variety'+current_id);
 
-            $('.budget_add_more_content .budget_add_more_holder .variety_quantity').attr('data-variety-current-id',current_id);
-            $('.budget_add_more_content .budget_add_more_holder .variety_quantity').attr('id','variety'+current_id);
+            $('.budget_add_more_content .budget_add_more_holder .variety_quantity').attr('data-varietyDetail-current-id',current_id);
+            $('.budget_add_more_content .budget_add_more_holder .variety_quantity').attr('id','variety_quantity'+current_id);
 
-            var html=$('.budget_add_more_content').html();
+            var html = $('.budget_add_more_content').html();
             $('#budget_add_more_container').append(html);
         });
 
@@ -372,15 +380,47 @@ if(is_array($purchases) && sizeof($purchases)>0)
 
         $(document).on("change",".type_id",function()
         {
-            var current_id=parseInt($(this).parents().next('.variety_quantity').attr('data-variety-current-id'));
+            var current_id=parseInt($(this).parents().next('.variety').find('.variety_id').attr('data-variety-current-id'));
+
+            if($(this).val().length>0)
+            {
+                $(this).parents().next('.variety').show();
+                $(this).parents().next('.variety').next('.variety_quantity').html('');
+
+                $.ajax({
+                    url: base_url+"budget_common/get_dropDown_variety_by_cropType/",
+                    type: 'POST',
+                    dataType: "JSON",
+                    data:{crop_id:$("#crop"+current_id).val(), type_id:$(this).val(), current_id:current_id},
+                    success: function (data, status)
+                    {
+
+                    },
+                    error: function (xhr, desc, err)
+                    {
+                        console.log("error");
+                    }
+                });
+            }
+            else
+            {
+                $(this).parents().next('.variety').hide();
+                $(this).parents().next('.variety').val('');
+                $(this).parents().next('.variety').next('.variety_quantity').html('');
+            }
+        });
+
+        $(document).on("change",".variety_id",function()
+        {
+            var current_id=parseInt($(this).parents().next('.variety_quantity').attr('data-varietyDetail-current-id'));
 
             if($(this).val().length>0)
             {
                 $.ajax({
-                    url: base_url+"budgeted_purchase/get_varieties_by_crop_type/",
+                    url: base_url+"budgeted_purchase/get_quantity_detail_by_variety/",
                     type: 'POST',
                     dataType: "JSON",
-                    data:{crop_id:$("#crop"+current_id).val(), type_id:$(this).val(), current_id: current_id, year:$("#year").val()},
+                    data:{crop_id: $("#crop"+current_id).val(), type_id: $("#type"+current_id).val(), variety_id: $(this).val(), current_id: current_id, year: $("#year").val()},
                     success: function (data, status)
                     {
 
@@ -397,26 +437,25 @@ if(is_array($purchases) && sizeof($purchases)>0)
             }
         });
 
-
         $(document).on("change","#year",function()
         {
-            if($(this).val().length>0)
-            {
-                $.ajax({
-                    url: base_url+"budgeted_purchase/check_budget_purchase_this_year/",
-                    type: 'POST',
-                    dataType: "JSON",
-                    data:{year:$(this).val()},
-                    success: function (data, status)
-                    {
-
-                    },
-                    error: function (xhr, desc, err)
-                    {
-                        console.log("error");
-                    }
-                });
-            }
+//            if($(this).val().length>0)
+//            {
+//                $.ajax({
+//                    url: base_url+"budgeted_purchase/check_budget_purchase_this_year/",
+//                    type: 'POST',
+//                    dataType: "JSON",
+//                    data:{year:$(this).val()},
+//                    success: function (data, status)
+//                    {
+//
+//                    },
+//                    error: function (xhr, desc, err)
+//                    {
+//                        console.log("error");
+//                    }
+//                });
+//            }
         });
 
         $(document).on("keyup", ".variety_quantity", function()

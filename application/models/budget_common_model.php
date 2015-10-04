@@ -102,6 +102,16 @@ class Budget_common_model extends CI_Model
         return $results;
     }
 
+    public function get_ordered_varieties()
+    {
+        $this->db->select('avi.varriety_id value, avi.varriety_name text');
+        $this->db->from('ait_varriety_info avi');
+        $this->db->order_by('avi.order_variety');
+        $this->db->where('avi.del_status', 0);
+        $results = $this->db->get()->result_array();
+        return $results;
+    }
+
     public function get_variety_by_crop_type($crop_id, $type_id)
     {
         $this->db->from('ait_varriety_info avi');
