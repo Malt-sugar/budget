@@ -39,12 +39,13 @@ class Confirmed_quantity_setup_model extends CI_Model
         return $query->result_array();
     }
 
-    public function check_budget_purchase_existence()
+    public function check_quantity_year_existence($year)
     {
         $this->db->select('bp.*');
         $this->db->from('budget_purchase_quantity bp');
-        $this->db->where('bp.purchase_type',$this->config->item('purchase_type_budget'));
+        $this->db->where('bp.year', $year);
         $results = $this->db->get()->result_array();
+
         if($results)
         {
             return true;
@@ -55,15 +56,13 @@ class Confirmed_quantity_setup_model extends CI_Model
         }
     }
 
-    public function get_purchase_detail($year)
+    public function get_confirmed_quantity_detail($year)
     {
         $this->db->from('budget_purchase_quantity bp');
         $this->db->select('bp.*');
         $this->db->select('avi.varriety_name variety_name');
         $this->db->where('bp.year', $year);
-        $this->db->where('bp.purchase_type',$this->config->item('purchase_type_budget'));
-        $this->db->where('bp.status',$this->config->item('status_active'));
-
+        $this->db->where('bp.status', $this->config->item('status_active'));
         $this->db->join('ait_varriety_info avi', 'avi.varriety_id = bp.variety_id', 'left');
         $results = $this->db->get()->result_array();
         return $results;
@@ -139,5 +138,97 @@ class Confirmed_quantity_setup_model extends CI_Model
         {
             return false;
         }
+    }
+
+    public function get_budgeted_sales_quantity($year, $crop_id, $type_id, $variety_id)
+    {
+        $this->db->from('budget_sales_target bst');
+        $this->db->select('bst.budgeted_quantity');
+
+        $this->db->where('bst.crop_id', $crop_id);
+        $this->db->where('bst.type_id', $type_id);
+        $this->db->where('bst.variety_id', $variety_id);
+        $this->db->where('bst.year', $year);
+
+        $this->db->where('length(bst.customer_id)<2');
+        $this->db->where('length(bst.territory_id)<2');
+        $this->db->where('length(bst.zone_id)<2');
+        $this->db->where('length(bst.division_id)<2');
+
+        $this->db->where('bst.status', $this->config->item('status_active'));
+        $result = $this->db->get()->row_array();
+
+        if($result)
+        {
+            return $result['budgeted_quantity'];
+        }
+        else
+        {
+            return null;
+        }
+    }
+
+    public function get_budget_min_stock_quantity($crop_id, $type_id, $variety_id)
+    {
+        $this->db->from('budget_min_stock_quantity bms');
+        $this->db->select('bms.min_stock_quantity');
+        $this->db->where('bms.crop_id', $crop_id);
+        $this->db->where('bms.type_id', $type_id);
+        $this->db->where('bms.variety_id', $variety_id);
+        $result = $this->db->get()->row_array();
+
+        if($result)
+        {
+            return $result['min_stock_quantity'];
+        }
+        else
+        {
+            return null;
+        }
+    }
+
+    public function get_variety_info($variety_id)
+    {
+        $this->db->select('avi.varriety_name');
+        $this->db->select('aci.crop_name');
+        $this->db->select('apt.product_type');
+        $this->db->from('ait_varriety_info avi');
+
+        $this->db->where('avi.type', 0);
+        $this->db->where('avi.varriety_id', $variety_id);
+        $this->db->join("ait_crop_info aci","aci.crop_id = avi.crop_id","LEFT");
+        $this->db->join("ait_product_type apt","apt.product_type_id = avi.product_type_id","LEFT");
+
+        $this->db->where('avi.status', 'Active');
+        $result = $this->db->get()->row_array();
+        return $result;
+    }
+
+    public function check_confirmed_quantity_existence($year, $crop, $type, $variety)
+    {
+        $this->db->from('budget_purchase_quantity bpq');
+        $this->db->select('bpq.*');
+        $this->db->where('bpq.year', $year);
+        $this->db->where('bpq.crop_id', $crop);
+        $this->db->where('bpq.type_id', $type);
+        $this->db->where('bpq.variety_id', $variety);
+        $result = $this->db->get()->row_array();
+
+        if($result)
+        {
+            return $result['id'];
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    public function confirmed_quantity_initial_update($year)
+    {
+        $data = array('status'=>0);
+        $this->db->where('year',$year);
+
+        $this->db->update('budget_purchase_quantity',$data);
     }
 }

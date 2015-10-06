@@ -28,16 +28,16 @@
 
             <tbody>
             <?php
-                if(sizeof($purchases)>0)
+                if(sizeof($setups)>0)
                 {
-                    foreach($purchases as $key=>$purchase)
+                    foreach($setups as $key=>$setup)
                     {
                         ?>
                         <tr>
                             <td><?php echo $key+1;?></td>
-                            <td><?php echo $purchase['year_name'];?></td>
+                            <td><?php echo $setup['year_name'];?></td>
                             <td>
-                                <a href="<?php echo base_url();?>confirmed_quantity_setup/index/edit/<?php echo $purchase['year'];?>">
+                                <a href="<?php echo base_url();?>confirmed_quantity_setup/index/edit/<?php echo $setup['year'];?>">
                                     <img src="<?php echo base_url();?>images/edit_record.png">
                                 </a>
                             </td>

@@ -5,23 +5,9 @@
     $data["hide_approve"]="1";
     $this->load->view("action_buttons_edit",$data);
 
-$arranged_purchase = array();
-
-if(is_array($purchases) && sizeof($purchases)>0)
-{
-    foreach($purchases as $purchase)
-    {
-        $arranged_purchase['year'] = $purchase['year'];
-        $arranged_purchase['crop'][$purchase['crop_id']][$purchase['type_id']]['variety'][$purchase['variety_id']]['variety_name'] = $purchase['variety_name'];
-        $arranged_purchase['crop'][$purchase['crop_id']][$purchase['type_id']]['variety'][$purchase['variety_id']]['purchase_quantity'] = $purchase['purchase_quantity'];
-        $arranged_purchase['crop'][$purchase['crop_id']][$purchase['type_id']]['variety'][$purchase['variety_id']]['price_per_kg'] = $purchase['price_per_kg'];
-        $arranged_purchase['crop'][$purchase['crop_id']][$purchase['type_id']]['variety'][$purchase['variety_id']]['created_by'] = $purchase['created_by'];
-    }
-}2
-
 ?>
 <form class="form_valid" id="save_form" action="<?php echo base_url();?>confirmed_quantity_setup/index/save" method="post">
-    <input type="hidden" name="year_id" value="<?php if(isset($arranged_purchase['year'])){echo $arranged_purchase['year'];}else{echo 0;}?>" />
+    <input type="hidden" name="year_id" value="<?php echo isset($year)?$year:0;?>" />
     <div class="row widget">
         <div class="widget-header">
             <div class="title">
@@ -35,16 +21,16 @@ if(is_array($purchases) && sizeof($purchases)>0)
                 <label class="control-label pull-right"><?php echo $this->lang->line('LABEL_YEAR');?><span style="color:#FF0000">*</span></label>
             </div>
             <div class="col-sm-4 col-xs-8">
-                <select name="year" id="year" class="form-control validate[required]" <?php if(isset($arranged_purchase['year']) && strlen($arranged_purchase['year'])>1){echo 'disabled';}?>>
+                <select name="year" id="year" class="form-control validate[required]" <?php if(isset($year) && strlen($year)>1){echo 'disabled';}?>>
                     <?php
-                    $this->load->view('dropdown',array('drop_down_options'=>$years,'drop_down_selected'=>isset($arranged_purchase['year'])?$arranged_purchase['year']:''));
+                    $this->load->view('dropdown',array('drop_down_options'=>$years,'drop_down_selected'=>isset($year)?$year:''));
                     ?>
                 </select>
                 <?php
-                if(isset($arranged_purchase['year']) && strlen($arranged_purchase['year'])>1)
+                if(isset($year) && strlen($year)>1)
                 {
                     ?>
-                    <input type="hidden" name="year" value="<?php echo $arranged_purchase['year'];?>" />
+                    <input type="hidden" name="year" value="<?php echo $year;?>" />
                 <?php
                 }
                 ?>
@@ -54,133 +40,118 @@ if(is_array($purchases) && sizeof($purchases)>0)
 
     <div id="budget_add_more_container">
     <?php
-    if(isset($arranged_purchase['crop']))
+    if(is_array($quantity_setups) && sizeof($quantity_setups)>0)
     {
-        $sl = 0;
-        foreach($arranged_purchase['crop'] as $key=>$crop)
+        foreach($quantity_setups as $key=>$quantity)
         {
-            foreach($crop as $typeKey=>$typeVal)
-            {
-            ?>
-            <div class="budget_add_more_container" style="display: <?php if(isset($crop) && sizeof($crop)>0){echo 'show';}else{echo 'none';}?>;">
-                <div class="row widget">
-                    <div class="widget-header">
-                        <div class="title">
-                            <?php echo $this->lang->line('LABEL_PURCHASE'); ?>
-                        </div>
-                        <?php
-                        foreach($typeVal['variety'] as $perm)
-                        {
-                            $created_by = $perm['created_by'];
-                        }
-
-                        if(User_helper::check_edit_permission($created_by))
-                        {
-                        ?>
-                            <button type="button" class="btn btn-danger pull-right budget_add_more_delete"><?php echo $this->lang->line('DELETE'); ?></button>
-                        <?php
-                        }
-                        ?>
-                        <div class="clearfix"></div>
+        ?>
+        <div class="budget_add_more_container" style="display: <?php if(isset($quantity['crop_id']) && sizeof($quantity['crop_id'])>0){echo 'show';}else{echo 'none';}?>;">
+            <div class="row widget">
+                <div class="widget-header" style="padding: 3px 4px 3px 10px;">
+                    <div class="title">
+                        <?php echo $this->lang->line('LABEL_QUANTITY'); ?>
                     </div>
+                    <div class="pull-right budget_add_more_delete"><img style="width: 25px; height: 25px;" src="<?php echo base_url().'images/xmark.png'?>" /></div>
+                    <div class="clearfix"></div>
+                </div>
 
-                    <div class="crop">
-                        <div class="col-xs-1">
-                            <label class="control-label pull-right"><?php echo $this->lang->line('LABEL_CROP');?></label>
-                        </div>
-                        <div class="col-xs-2">
-                            <select name="purchase[<?php echo $sl;?>][crop]" class="form-control crop_id" id="crop<?php echo $sl;?>" <?php if(isset($key) && strlen($key)>1){echo 'disabled';}?>>
-                                <?php
-                                $this->load->view('dropdown',array('drop_down_options'=>$crops,'drop_down_selected'=>isset($key)?$key:''));
-                                ?>
-                            </select>
+                <div class="crop">
+                    <div class="col-xs-1">
+                        <label class="control-label pull-right"><?php echo $this->lang->line('LABEL_CROP');?></label>
+                    </div>
+                    <div class="col-xs-2">
+                        <select name="" class="form-control crop_id" id="crop<?php echo $key;?>" <?php if(isset($quantity['crop_id']) && strlen($quantity['crop_id'])>1){echo 'disabled';}?>>
                             <?php
-                            if(isset($key) && strlen($key)>1)
-                            {
-                                ?>
-                                <input type="hidden" name="purchase[<?php echo $sl;?>][crop]" value="<?php echo $key;?>" />
-                            <?php
-                            }
+                            $this->load->view('dropdown',array('drop_down_options'=>$crops,'drop_down_selected'=>isset($quantity['crop_id'])?$quantity['crop_id']:''));
                             ?>
-                        </div>
+                        </select>
                     </div>
+                </div>
 
-                    <div class="type" style="display: <?php if(isset($crop) && sizeof($crop)>0){echo 'show';}else{echo 'none';}?>;">
-                        <div class="col-xs-1">
-                            <label class="control-label pull-right"><?php echo $this->lang->line('LABEL_TYPE');?></label>
-                        </div>
-                        <div class="col-xs-2">
-                            <select name="purchase[<?php echo $sl;?>][type]" class="form-control type_id" id="type<?php echo $sl;?>" <?php if(strlen($typeKey)>1){echo 'disabled';}?> data-type-current-id="<?php echo $sl;?>">
-                                <?php
-                                $this->load->view('dropdown',array('drop_down_options'=>$types,'drop_down_selected'=>isset($typeKey)?$typeKey:''));
-                                ?>
-                            </select>
+                <div class="type" style="display: <?php if(isset($quantity['type_id']) && sizeof($quantity['type_id'])>0){echo 'show';}else{echo 'none';}?>;">
+                    <div class="col-xs-1">
+                        <label class="control-label pull-right"><?php echo $this->lang->line('LABEL_TYPE');?></label>
+                    </div>
+                    <div class="col-xs-2">
+                        <select name="purchase[<?php echo $key;?>][type]" class="form-control type_id" id="type<?php echo $key;?>" <?php if(strlen($quantity['type_id'])>1){echo 'disabled';}?> data-type-current-id="<?php echo $key;?>">
                             <?php
-                            if(isset($typeKey) && strlen($typeKey)>1)
-                            {
-                                ?>
-                                <input type="hidden" name="purchase[<?php echo $sl;?>][type]" value="<?php echo $typeKey;?>" />
-                            <?php
-                            }
+                            $this->load->view('dropdown',array('drop_down_options'=>$types,'drop_down_selected'=>isset($quantity['type_id'])?$quantity['type_id']:''));
                             ?>
-                        </div>
+                        </select>
                     </div>
+                </div>
 
-                    <div class="col-xs-6 variety_quantity" id="variety<?php echo $sl;?>" data-variety-current-id="<?php echo $sl;?>">
-                        <?php
-                            if(isset($crop) && sizeof($crop)>0)
-                            {
-                                ?>
-                                <div class="row show-grid">
-                                    <div class="col-lg-12">
-                                        <table class="table table-hover table-bordered">
-                                            <?php
-                                            if(is_array($typeVal['variety']) && sizeof($typeVal['variety'])>0)
-                                            {
-                                                ?>
-                                                <th><?php echo $this->lang->line('LABEL_VARIETY')?></th>
-                                                <th><?php echo $this->lang->line('LABEL_BUDGETED_SALES_QTY_HO')?></th>
-                                                <th><?php echo $this->lang->line('LABEL_VARIANCE')?></th>
-                                                <th><?php echo $this->lang->line('LABEL_TOTAL_PRICE_USD')?></th>
-                                                <?php
-                                                foreach($typeVal['variety'] as $varKey=>$detail)
-                                                {
-
-                                                    ?>
-                                                    <tr>
-                                                        <td><?php echo $detail['variety_name']?></td>
-                                                        <td>
-                                                            <input type="text" class="form-control variety_quantity" data-toggle="tooltip" data-placement="left" title="<?php echo $display_current_stock.', '.$display_sales_target;?>"  name="detail[<?php echo $sl;?>][<?php echo $varKey;?>][purchase_quantity]" value="<?php if(isset($detail['purchase_quantity'])){echo $detail['purchase_quantity'];}?>" />
-                                                        </td>
-                                                        <td>
-                                                            <input type="text" class="form-control variety_price_per_kg"  name="detail[<?php echo $sl;?>][<?php echo $varKey;?>][price_per_kg]" value="<?php if(isset($detail['price_per_kg'])){echo $detail['price_per_kg'];}?>" />
-                                                            </td>
-                                                        <td>
-                                                            <input type="text" class="form-control variety_total_quantity"  name="" value="<?php if(isset($detail['purchase_quantity']) && isset($detail['price_per_kg'])){echo $detail['purchase_quantity']*$detail['price_per_kg'];}?>" />
-                                                        </td>
-                                                    </tr>
-                                                <?php
-                                                }
-                                            }
-                                            else
-                                            {
-                                                ?>
-                                                <tr><td class="label-danger"><?php echo $this->lang->line('NO_VARIETY_EXIST');?></td></tr>
-                                            <?php
-                                            }
-                                            ?>
-                                        </table>
-                                    </div>
-                                </div>
+                <div class="variety" style="display: <?php if(isset($quantity['variety_id']) && sizeof($quantity['variety_id'])>0){echo 'show';}else{echo 'none';}?>;">
+                    <div class="col-xs-1">
+                        <label class="control-label pull-right"><?php echo $this->lang->line('LABEL_VARIETY');?></label>
+                    </div>
+                    <div class="col-xs-2">
+                        <select name="" class="form-control variety_id" id="variety<?php echo $key;?>" <?php if(strlen($quantity['variety_id'])>1){echo 'disabled';}?> data-variety-current-id="<?php echo $key;?>">
                             <?php
-                            }
-                        ?>
+                            $this->load->view('dropdown',array('drop_down_options'=>$varieties,'drop_down_selected'=>isset($quantity['variety_id'])?$quantity['variety_id']:''));
+                            ?>
+                        </select>
                     </div>
                 </div>
             </div>
-            <?php
-                $sl++;
-            }
+
+            <div class="row variety_quantity" id="variety_quantity<?php echo $key;?>" data-varietyDetail-current-id="<?php echo $key;?>">
+                <?php
+                $variety_detail = Purchase_helper::get_variety_detail($quantity['variety_id']);
+                $current_stock = Purchase_helper::get_current_stock($quantity['crop_id'], $quantity['type_id'], $quantity['variety_id']);
+                $min_stock_quantity = Purchase_helper::get_budget_min_stock_quantity($quantity['crop_id'], $quantity['type_id'], $quantity['variety_id']);
+                $budgeted_sales_quantity = Purchase_helper::get_budgeted_sales_quantity($year, $quantity['crop_id'], $quantity['type_id'], $quantity['variety_id']);
+                ?>
+                <div class="row show-grid">
+                    <div class="col-lg-12">
+                        <table class="table table-hover table-bordered">
+                            <th class="text-center"><?php echo $this->lang->line('LABEL_CROP')?></th>
+                            <th class="text-center"><?php echo $this->lang->line('LABEL_TYPE')?></th>
+                            <th class="text-center"><?php echo $this->lang->line('LABEL_VARIETY')?></th>
+                            <th class="text-center"><?php echo $this->lang->line('LABEL_BUDGETED_SALES_QTY_HO')?></th>
+                            <th class="text-center"><?php echo $this->lang->line('LABEL_VARIANCE')?></th>
+                            <th class="text-center"><?php echo $this->lang->line('LABEL_BUDGETED_PURCHASE_QUANTITY')?></th>
+                            <th class="text-center"><?php echo $this->lang->line('LABEL_ACTUAL_PURCHASE_CONFIRMED')?></th>
+                            <th class="text-center"><?php echo $this->lang->line('LABEL_PI_VALUE_US')?></th>
+                            <th class="text-center"><?php echo $this->lang->line('LABEL_REMARKS')?></th>
+
+                            <tr>
+                                <td class="text-center"><?php echo $variety_detail['crop_name'];?></td>
+                                <td class="text-center"><?php echo $variety_detail['product_type'];?></td>
+                                <td class="text-center"><?php echo $variety_detail['varriety_name'];?></td>
+                                <td class="text-center"><?php echo $budgeted_sales_quantity;?></td>
+                                <td class="text-center"><?php echo $current_stock - $min_stock_quantity;?></td>
+                                <td class="text-center"><?php echo $budgeted_sales_quantity - ($current_stock - $min_stock_quantity);?></td>
+                                <td class="text-center"><input type="text" class="form-control variety_total_quantity" name="quantity[<?php echo $quantity['crop_id'];?>][<?php echo $quantity['type_id'];?>][<?php echo $quantity['variety_id'];?>][confirmed_quantity]" value="<?php echo $quantity['confirmed_quantity'];?>" /></td>
+                                <td class="text-center"><input type="text" class="form-control variety_total_quantity" name="quantity[<?php echo $quantity['crop_id'];?>][<?php echo $quantity['type_id'];?>][<?php echo $quantity['variety_id'];?>][pi_value]" value="<?php echo $quantity['pi_value'];?>" /></td>
+                                <td class="text-center" style="vertical-align: middle;">
+                                    <label class="label label-primary load_remark">+R</label>
+                                    <div class="row popContainer" style="display: none;">
+                                        <table class="table table-bordered">
+                                            <tr>
+                                                <td>
+                                                    <div class="col-lg-12">
+                                                        <textarea class="form-control" name="quantity[<?php echo $quantity['crop_id'];?>][<?php echo $quantity['type_id'];?>][<?php echo $quantity['variety_id'];?>][remarks]" placeholder="Add Remarks"><?php echo $quantity['remarks'];?></textarea>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="pull-right" style="border: 0px;">
+                                                    <div class="col-lg-12">
+                                                        <label class="label label-primary crossSpan"><?php echo $this->lang->line('OK');?></label>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <?php
         }
     }
     else
@@ -200,7 +171,7 @@ if(is_array($purchases) && sizeof($purchases)>0)
                         <label class="control-label pull-right"><?php echo $this->lang->line('LABEL_CROP');?></label>
                     </div>
                     <div class="col-xs-2">
-                        <select name="purchase[0][crop]" class="form-control crop_id" id="crop0">
+                        <select name="" class="form-control crop_id" id="crop0">
                             <?php
                             $this->load->view('dropdown',array('drop_down_options'=>$crops,'drop_down_selected'=>''));
                             ?>
@@ -213,7 +184,7 @@ if(is_array($purchases) && sizeof($purchases)>0)
                         <label class="control-label pull-right"><?php echo $this->lang->line('LABEL_TYPE');?></label>
                     </div>
                     <div class="col-xs-2">
-                        <select name="purchase[0][type]" class="form-control type_id" id="type0" data-type-current-id="0">
+                        <select name="" class="form-control type_id" id="type0" data-type-current-id="0">
                             <?php
                             $this->load->view('dropdown',array('drop_down_options'=>$types,'drop_down_selected'=>''));
                             ?>
@@ -226,16 +197,16 @@ if(is_array($purchases) && sizeof($purchases)>0)
                         <label class="control-label pull-right"><?php echo $this->lang->line('LABEL_VARIETY');?></label>
                     </div>
                     <div class="col-xs-2">
-                        <select name="purchase[0][variety]" class="form-control variety_id" id="variety0" data-variety-current-id="0">
+                        <select name="" class="form-control variety_id" id="variety0" data-variety-current-id="0">
                             <?php
                             $this->load->view('dropdown',array('drop_down_options'=>$varieties,'drop_down_selected'=>''));
                             ?>
                         </select>
                     </div>
                 </div>
+            </div>
 
-                <div class="col-xs-6 variety_quantity" id="variety_quantity0" data-varietyDetail-current-id="0">
-                </div>
+            <div class="row variety_quantity" id="variety_quantity0" data-varietyDetail-current-id="0">
             </div>
         </div>
         <?php
@@ -253,7 +224,7 @@ if(is_array($purchases) && sizeof($purchases)>0)
 </form>
 
 <div class="budget_add_more_content" style="display: none;">
-    <div class="row widget budget_add_more_holder budget_add_more_container"  data-current-id="<?php if(isset($sl)){echo ($sl-1);}else{echo 0;}?>">
+    <div class="row widget budget_add_more_holder budget_add_more_container" data-current-id="<?php if(isset($quantity_setups)){echo (sizeof($quantity_setups)-1);}else{echo 0;}?>">
         <div class="widget-header" style="padding: 3px 4px 3px 10px;">
             <div class="title">
                 <?php echo $this->lang->line('LABEL_QUANTITY'); ?>
@@ -300,9 +271,9 @@ if(is_array($purchases) && sizeof($purchases)>0)
                 </select>
             </div>
         </div>
+    </div>
 
-        <div class="col-xs-6 variety_quantity" id="variety_quantity">
-        </div>
+    <div class="row variety_quantity" id="variety_quantity" data-varietyDetail-current-id="">
     </div>
 </div>
 
@@ -316,14 +287,14 @@ if(is_array($purchases) && sizeof($purchases)>0)
         // ROW INCREMENT FUNCTION
         $(document).on("click", ".budget_add_more_button", function(event)
         {
-            var current_id=parseInt($('.budget_add_more_content .budget_add_more_holder').attr('data-current-id'));
-            current_id=current_id+1;
+            var current_id = parseInt($('.budget_add_more_content .budget_add_more_holder').attr('data-current-id'));
+            current_id = current_id+1;
 
             $('.budget_add_more_content .budget_add_more_holder').attr('data-current-id',current_id);
 
-            $('.budget_add_more_content .budget_add_more_holder .crop_id').attr('name','purchase['+current_id+'][crop]');
-            $('.budget_add_more_content .budget_add_more_holder .type_id').attr('name','purchase['+current_id+'][type]');
-            $('.budget_add_more_content .budget_add_more_holder .variety_id').attr('name','purchase['+current_id+'][variety]');
+//            $('.budget_add_more_content .budget_add_more_holder .crop_id').attr('name','purchase['+current_id+'][crop]');
+//            $('.budget_add_more_content .budget_add_more_holder .type_id').attr('name','purchase['+current_id+'][type]');
+//            $('.budget_add_more_content .budget_add_more_holder .variety_id').attr('name','purchase['+current_id+'][variety]');
 
             $('.budget_add_more_content .budget_add_more_holder .crop_id').attr('data-crop-current-id',current_id);
             $('.budget_add_more_content .budget_add_more_holder .type_id').attr('data-type-current-id',current_id);
@@ -333,8 +304,8 @@ if(is_array($purchases) && sizeof($purchases)>0)
             $('.budget_add_more_content .budget_add_more_holder .type_id').attr('id','type'+current_id);
             $('.budget_add_more_content .budget_add_more_holder .variety_id').attr('id','variety'+current_id);
 
-            $('.budget_add_more_content .budget_add_more_holder .variety_quantity').attr('data-varietyDetail-current-id',current_id);
-            $('.budget_add_more_content .budget_add_more_holder .variety_quantity').attr('id','variety_quantity'+current_id);
+            $('.budget_add_more_content .budget_add_more_holder').next('.variety_quantity').attr('data-varietyDetail-current-id',current_id);
+            $('.budget_add_more_content .budget_add_more_holder').next('.variety_quantity').attr('id','variety_quantity'+current_id);
 
             var html = $('.budget_add_more_content').html();
             $('#budget_add_more_container').append(html);
@@ -343,12 +314,13 @@ if(is_array($purchases) && sizeof($purchases)>0)
         // Incremented Row Delete Button
         $(document).on("click", ".budget_add_more_delete", function(event)
         {
+            $(this).closest('.budget_add_more_container').next('.variety_quantity').remove();
             $(this).closest('.budget_add_more_container').remove();
         });
 
         $(document).on("change",".crop_id",function()
         {
-            var current_id=parseInt($(this).parents().next('.type').find('.type_id').attr('data-type-current-id'));
+            var current_id = parseInt($(this).parents().next('.type').find('.type_id').attr('data-type-current-id'));
 
             if($(this).val().length>0)
             {
@@ -380,7 +352,7 @@ if(is_array($purchases) && sizeof($purchases)>0)
 
         $(document).on("change",".type_id",function()
         {
-            var current_id=parseInt($(this).parents().next('.variety').find('.variety_id').attr('data-variety-current-id'));
+            var current_id = parseInt($(this).parents().next('.variety').find('.variety_id').attr('data-variety-current-id'));
 
             if($(this).val().length>0)
             {
@@ -412,12 +384,11 @@ if(is_array($purchases) && sizeof($purchases)>0)
 
         $(document).on("change",".variety_id",function()
         {
-            var current_id=parseInt($(this).parents().next('.variety_quantity').attr('data-varietyDetail-current-id'));
-
+            var current_id = parseInt($(this).parents().next('.variety_quantity').attr('data-varietyDetail-current-id'));
             if($(this).val().length>0)
             {
                 $.ajax({
-                    url: base_url+"budgeted_purchase/get_quantity_detail_by_variety/",
+                    url: base_url+"confirmed_quantity_setup/get_quantity_detail_by_variety/",
                     type: 'POST',
                     dataType: "JSON",
                     data:{crop_id: $("#crop"+current_id).val(), type_id: $("#type"+current_id).val(), variety_id: $(this).val(), current_id: current_id, year: $("#year").val()},
@@ -439,23 +410,23 @@ if(is_array($purchases) && sizeof($purchases)>0)
 
         $(document).on("change","#year",function()
         {
-//            if($(this).val().length>0)
-//            {
-//                $.ajax({
-//                    url: base_url+"budgeted_purchase/check_budget_purchase_this_year/",
-//                    type: 'POST',
-//                    dataType: "JSON",
-//                    data:{year:$(this).val()},
-//                    success: function (data, status)
-//                    {
-//
-//                    },
-//                    error: function (xhr, desc, err)
-//                    {
-//                        console.log("error");
-//                    }
-//                });
-//            }
+            if($(this).val().length>0)
+            {
+                $.ajax({
+                    url: base_url+"confirmed_quantity_setup/check_budget_purchase_this_year/",
+                    type: 'POST',
+                    dataType: "JSON",
+                    data:{year:$(this).val()},
+                    success: function (data, status)
+                    {
+
+                    },
+                    error: function (xhr, desc, err)
+                    {
+                        console.log("error");
+                    }
+                });
+            }
         });
 
         $(document).on("keyup", ".variety_quantity", function()
@@ -478,6 +449,16 @@ if(is_array($purchases) && sizeof($purchases)>0)
         });
 
         // tooltip trigger
-        $('[data-toggle="tooltip"]').tooltip();
+        //$('[data-toggle="tooltip"]').tooltip();
+
+        $(document).on("click", ".load_remark", function(event)
+        {
+            $(this).closest('td').find('.popContainer').show();
+        });
+
+        $(document).on("click",".crossSpan",function()
+        {
+            $(".popContainer").hide();
+        });
     });
 </script>
