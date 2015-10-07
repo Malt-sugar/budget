@@ -230,3 +230,4 @@ $lang['LABEL_ACTUAL_PURCHASE_CONFIRMED']='Actual Purchase Confirmed';
 $lang['LABEL_PI_VALUE_US']='PI Value (USD)';
 $lang['LABEL_BUDGET_DIRECT_COST_SET_ALREADY']='Budget Direct Cost Set Already!';
 $lang['SALES_TARGET_NOT_SET']='Sales Target Not Set!';
+$lang['LABEL_CONSIGNMENT_NO']='Consignment No.';

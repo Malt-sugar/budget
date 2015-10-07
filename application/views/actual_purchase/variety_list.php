@@ -1,8 +1,4 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
-
-//echo '<pre>';
-//print_r($varieties);
-//echo '</pre>';
 ?>
 
 <div class="clearfix"></div>
@@ -10,34 +6,64 @@
 <div class="row show-grid">
     <div class="col-lg-12">
         <table class="table table-hover table-bordered">
-            <?php
-            if(is_array($varieties) && sizeof($varieties)>0)
-            {
-            ?>
-                <th><?php echo $this->lang->line('LABEL_VARIETY')?></th>
-                <th><?php echo $this->lang->line('LABEL_QUANTITY')?></th>
-                <th><?php echo $this->lang->line('LABEL_PRICE_PER_KG_USD')?></th>
-                <th><?php echo $this->lang->line('LABEL_TOTAL_PRICE_USD')?></th>
-                <?php
-                foreach($varieties as $variety)
-                {
-                ?>
-                <tr>
-                    <td><?php echo $variety['varriety_name']?></td>
-                    <td><input type="text" class="form-control variety_quantity" name="detail[<?php echo $serial;?>][<?php echo $variety['varriety_id']?>][purchase_quantity]" value="" /></td>
-                    <td><input type="text" class="form-control variety_price_per_kg" name="detail[<?php echo $serial;?>][<?php echo $variety['varriety_id']?>][price_per_kg]" value="" /></td>
-                    <td><input type="text" class="form-control variety_total_quantity" name="" value="" /></td>
-                </tr>
-                <?php
-                }
-            }
-            else
-            {
-            ?>
-                <tr><td class="label-danger"><?php echo $this->lang->line('NO_VARIETY_EXIST');?></td></tr>
-            <?php
-            }
-            ?>
+            <th class="text-center"><?php echo $this->lang->line('LABEL_QUANTITY')?></th>
+            <th class="text-center"><?php echo $this->lang->line('LABEL_PI_VALUE')?></th>
+            <th class="text-center"><?php echo $this->lang->line('LABEL_USD_CONVERSION_RATE')?></th>
+            <th class="text-center"><?php echo $this->lang->line('LABEL_LC_EXP')?></th>
+            <th class="text-center"><?php echo $this->lang->line('LABEL_INSURANCE_EXP')?></th>
+            <th class="text-center"><?php echo $this->lang->line('LABEL_PACKING_MATERIAL')?></th>
+            <th class="text-center"><?php echo $this->lang->line('LABEL_CARRIAGE_INWARDS')?></th>
+            <th class="text-center"><?php echo $this->lang->line('LABEL_AIR_FREIGHT_AND_DOCS')?></th>
+            <th class="text-center"><?php echo $this->lang->line('LABEL_CNF')?></th>
+            <th class="text-center"><?php echo $this->lang->line('LABEL_REMARKS')?></th>
+
+            <tr>
+                <td class="text-center"><input type="text" class="form-control variety_total_quantity numbersOnly" name="quantity[<?php echo $crop_id;?>][<?php echo $type_id;?>][<?php echo $variety_id;?>][confirmed_quantity]" value="" /></td>
+                <td class="text-center"><input type="text" class="form-control variety_total_quantity numbersOnly" name="quantity[<?php echo $crop_id;?>][<?php echo $type_id;?>][<?php echo $variety_id;?>][confirmed_quantity]" value="" /></td>
+                <td class="text-center"><input type="text" class="form-control variety_total_quantity numbersOnly" name="quantity[<?php echo $crop_id;?>][<?php echo $type_id;?>][<?php echo $variety_id;?>][confirmed_quantity]" value="" /></td>
+                <td class="text-center"><input type="text" class="form-control variety_total_quantity numbersOnly" name="quantity[<?php echo $crop_id;?>][<?php echo $type_id;?>][<?php echo $variety_id;?>][confirmed_quantity]" value="" /></td>
+                <td class="text-center"><input type="text" class="form-control variety_total_quantity numbersOnly" name="quantity[<?php echo $crop_id;?>][<?php echo $type_id;?>][<?php echo $variety_id;?>][confirmed_quantity]" value="" /></td>
+                <td class="text-center"><input type="text" class="form-control variety_total_quantity numbersOnly" name="quantity[<?php echo $crop_id;?>][<?php echo $type_id;?>][<?php echo $variety_id;?>][confirmed_quantity]" value="" /></td>
+                <td class="text-center"><input type="text" class="form-control variety_total_quantity numbersOnly" name="quantity[<?php echo $crop_id;?>][<?php echo $type_id;?>][<?php echo $variety_id;?>][confirmed_quantity]" value="" /></td>
+                <td class="text-center"><input type="text" class="form-control variety_total_quantity numbersOnly" name="quantity[<?php echo $crop_id;?>][<?php echo $type_id;?>][<?php echo $variety_id;?>][pi_value]" value="" /></td>
+                <td class="text-center"><input type="text" class="form-control variety_total_quantity numbersOnly" name="quantity[<?php echo $crop_id;?>][<?php echo $type_id;?>][<?php echo $variety_id;?>][pi_value]" value="" /></td>
+                <td class="text-center" style="vertical-align: middle;">
+                    <label class="label label-primary load_remark">+R</label>
+                    <div class="row popContainer" style="display: none;">
+                        <table class="table table-bordered">
+                            <tr>
+                                <td>
+                                    <div class="col-lg-12">
+                                        <textarea class="form-control" name="quantity[<?php echo $crop_id;?>][<?php echo $type_id;?>][<?php echo $variety_id;?>][remarks]" placeholder="Add Remarks"></textarea>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="pull-right" style="border: 0px;">
+                                    <div class="col-lg-12">
+                                        <label class="label label-primary crossSpan"><?php echo $this->lang->line('OK');?></label>
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </td>
+            </tr>
         </table>
     </div>
 </div>
+
+<script>
+    jQuery(document).ready(function()
+    {
+        $(document).on("click", ".load_remark", function(event)
+        {
+            $(this).closest('td').find('.popContainer').show();
+        });
+
+        $(document).on("click",".crossSpan",function()
+        {
+            $(".popContainer").hide();
+        });
+    });
+</script>

@@ -1,12 +1,12 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
     $data["link_new"]="#";
     $data["hide_new"]="1";
-    $data["link_back"]=base_url()."confirmed_quantity_setup";
+    $data["link_back"]=base_url()."budget_purchase";
     $data["hide_approve"]="1";
     $this->load->view("action_buttons_edit",$data);
 
 ?>
-<form class="form_valid" id="save_form" action="<?php echo base_url();?>confirmed_quantity_setup/index/save" method="post">
+<form class="form_valid" id="save_form" action="<?php echo base_url();?>budget_purchase/index/save" method="post">
     <input type="hidden" name="year_id" value="<?php echo isset($year)?$year:0;?>" />
     <div class="row widget">
         <div class="widget-header">
@@ -35,6 +35,9 @@
                 }
                 ?>
             </div>
+        </div>
+
+        <div id="direct_cost_div">
         </div>
     </div>
 
@@ -224,7 +227,7 @@
 </form>
 
 <div class="budget_add_more_content" style="display: none;">
-    <div class="row widget budget_add_more_holder budget_add_more_container" data-current-id="<?php if(isset($quantity_setups) && sizeof($quantity_setups)>0){echo (sizeof($quantity_setups)-1);}else{echo 0;}?>">
+    <div class="row widget budget_add_more_holder budget_add_more_container" data-current-id="<?php if(isset($quantity_setups)){echo (sizeof($quantity_setups)-1);}else{echo 0;}?>">
         <div class="widget-header" style="padding: 3px 4px 3px 10px;">
             <div class="title">
                 <?php echo $this->lang->line('LABEL_QUANTITY'); ?>
@@ -292,10 +295,6 @@
 
             $('.budget_add_more_content .budget_add_more_holder').attr('data-current-id',current_id);
 
-//            $('.budget_add_more_content .budget_add_more_holder .crop_id').attr('name','purchase['+current_id+'][crop]');
-//            $('.budget_add_more_content .budget_add_more_holder .type_id').attr('name','purchase['+current_id+'][type]');
-//            $('.budget_add_more_content .budget_add_more_holder .variety_id').attr('name','purchase['+current_id+'][variety]');
-
             $('.budget_add_more_content .budget_add_more_holder .crop_id').attr('data-crop-current-id',current_id);
             $('.budget_add_more_content .budget_add_more_holder .type_id').attr('data-type-current-id',current_id);
             $('.budget_add_more_content .budget_add_more_holder .variety_id').attr('data-variety-current-id',current_id);
@@ -322,7 +321,6 @@
         {
             var current_id = parseInt($(this).parents().next('.type').find('.type_id').attr('data-type-current-id'));
 
-            alert(current_id);
             if($(this).val().length>0)
             {
                 $(this).parents().next('.type').show();
@@ -389,7 +387,7 @@
             if($(this).val().length>0)
             {
                 $.ajax({
-                    url: base_url+"confirmed_quantity_setup/get_quantity_detail_by_variety/",
+                    url: base_url+"budget_purchase/get_purchase_detail_by_variety/",
                     type: 'POST',
                     dataType: "JSON",
                     data:{crop_id: $("#crop"+current_id).val(), type_id: $("#type"+current_id).val(), variety_id: $(this).val(), current_id: current_id, year: $("#year").val()},
@@ -414,7 +412,22 @@
             if($(this).val().length>0)
             {
                 $.ajax({
-                    url: base_url+"confirmed_quantity_setup/check_budget_purchase_this_year/",
+                    url: base_url+"budget_purchase/check_budget_purchase_this_year/",
+                    type: 'POST',
+                    dataType: "JSON",
+                    data:{year:$(this).val()},
+                    success: function (data, status)
+                    {
+
+                    },
+                    error: function (xhr, desc, err)
+                    {
+                        console.log("error");
+                    }
+                });
+
+                $.ajax({
+                    url: base_url+"budget_purchase/get_direct_cost_this_year/",
                     type: 'POST',
                     dataType: "JSON",
                     data:{year:$(this).val()},
@@ -428,15 +441,16 @@
                     }
                 });
             }
+            else
+            {
+                $("#direct_cost_div").html('');
+            }
         });
 
         $(document).on("keyup", ".numbersOnly", function()
         {
             this.value = this.value.replace(/[^0-9\.]/g,'');
         });
-
-        // tooltip trigger
-        //$('[data-toggle="tooltip"]').tooltip();
 
         $(document).on("click", ".load_remark", function(event)
         {

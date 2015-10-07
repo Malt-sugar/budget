@@ -5,27 +5,14 @@ class Test extends CI_Controller
 {
     public static function index()
     {
-        $sStartDate = '20-09-2015';
-        $sEndDate = '30-11-2015';
+        $arr = array("4", "4", "3", "4", "3", "3");
 
-        $sStartDate = date("Y-m-d", strtotime($sStartDate));
-        $sEndDate = date("Y-m-d", strtotime($sEndDate));
+        $new_arr = array_unique($arr, SORT_REGULAR);
 
-        $aDays[] = $sStartDate;
-        $sCurrentDate = $sStartDate;
-
-        while($sCurrentDate < $sEndDate)
+        if($arr != $new_arr)
         {
-            $sCurrentDate = date("Y-m-d", strtotime("+1 day", strtotime($sCurrentDate)));
-            $aDays[] = $sCurrentDate;
+            echo 'not matched';
         }
-
-        foreach($aDays as $aDay)
-        {
-            $month[] = @date('F', strtotime($aDay));
-        }
-
-        print_r($month);
     }
 }
 

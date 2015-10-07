@@ -1,8 +1,12 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-    $data["link_new"]=base_url()."actual_purchase/index/add";
+    $data["link_new"]=base_url()."budget_purchase/index/add";
     $data["hide_approve"]="1";
     $this->load->view("action_buttons",$data);
+
+//echo '<pre>';
+//print_r($purchases);
+//echo '</pre>';
 ?>
 
 <div class="row widget">
@@ -33,7 +37,7 @@
                             <td><?php echo $key+1;?></td>
                             <td><?php echo $setup['year_name'];?></td>
                             <td>
-                                <a href="<?php echo base_url();?>actual_purchase/index/edit/<?php echo $setup['year'];?>">
+                                <a href="<?php echo base_url();?>budget_purchase/index/edit/<?php echo $setup['year'];?>">
                                     <img src="<?php echo base_url();?>images/edit_record.png">
                                 </a>
                             </td>

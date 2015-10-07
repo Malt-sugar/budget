@@ -231,6 +231,7 @@ function turn_off_triggers()
     $(document).off("click", ".budget_add_more_delete");
     $(document).off("change", ".crop_id");
     $(document).off("change", ".type_id");
+    $(document).off("change", ".variety_id");
     $(document).off("keyup", ".variety_quantity");
     $(document).off("keyup", ".quantity");
     $(document).off("keyup", ".number_only_class");

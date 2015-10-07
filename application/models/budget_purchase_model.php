@@ -3,7 +3,7 @@
 if (!defined('BASEPATH'))
     exit('No direct script access allowed');
 
-class Actual_purchase_model extends CI_Model
+class Budget_purchase_model extends CI_Model
 {
     public function __construct()
     {
