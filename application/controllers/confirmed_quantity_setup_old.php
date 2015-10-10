@@ -11,11 +11,15 @@ class Confirmed_quantity_setup extends ROOT_Controller
         $this->load->model("confirmed_quantity_setup_model");
     }
 
-    public function index($task="list", $id=0)
+    public function index($task="list", $year_id=0)
     {
-        if($task=="add" || $task=="edit")
+        if($task=="list")
         {
-            $this->budget_add_edit($id);
+            $this->budget_list();
+        }
+        elseif($task=="add" || $task=="edit")
+        {
+            $this->budget_add_edit($year_id);
         }
         elseif($task=="save")
         {
@@ -23,20 +27,47 @@ class Confirmed_quantity_setup extends ROOT_Controller
         }
         else
         {
-            $this->budget_add_edit($id);
+            $this->budget_list();
         }
     }
 
-    public function budget_add_edit($id)
+    public function budget_list($page=0)
+    {
+        $config = System_helper::pagination_config(base_url() . "confirmed_quantity_setup/index/list/",$this->confirmed_quantity_setup_model->get_total_purchase_years(),4);
+        $this->pagination->initialize($config);
+        $data["links"] = $this->pagination->create_links();
+
+        if($page>0)
+        {
+            $page=$page-1;
+        }
+
+        $data['setups'] = $this->confirmed_quantity_setup_model->get_purchase_year_info($page);
+        $data['title']="Confirmed Quantity Setup List";
+
+        $ajax['status']=true;
+        $ajax['content'][]=array("id"=>"#content","html"=>$this->load->view("confirmed_quantity_setup/list",$data,true));
+
+        if($this->message)
+        {
+            $ajax['message']=$this->message;
+        }
+
+        $ajax['page_url']=base_url()."confirmed_quantity_setup/index/list/".($page+1);
+        $this->jsonReturn($ajax);
+    }
+
+    public function budget_add_edit($year)
     {
         $data['years'] = Query_helper::get_info('ait_year',array('year_id value','year_name text'),array('del_status = 0'));
         $data['crops'] = $this->budget_common_model->get_ordered_crops();
         $data['types'] = $this->budget_common_model->get_ordered_crop_types();
         $data['varieties'] = $this->budget_common_model->get_ordered_varieties();
 
-        if(strlen($id)>1)
+        if(strlen($year)>1)
         {
-            $data['quantity_setups'] = $this->confirmed_quantity_setup_model->get_confirmed_quantity_detail($id);
+            $data['year'] = $year;
+            $data['quantity_setups'] = $this->confirmed_quantity_setup_model->get_confirmed_quantity_detail($year);
             $data['title'] = "Edit Confirmed Quantity Setup";
             $ajax['page_url']=base_url()."confirmed_quantity_setup/index/edit/";
         }
@@ -191,15 +222,24 @@ class Confirmed_quantity_setup extends ROOT_Controller
     {
         $crop_id = $this->input->post('crop_id');
         $type_id = $this->input->post('type_id');
+        $variety_id = $this->input->post('variety_id');
+        $current_id = $this->input->post('current_id');
         $data['year'] = $this->input->post('year');
 
-        $data['varieties'] = $this->confirmed_quantity_setup_model->get_varieties_by_crop_type($crop_id, $type_id);
+        $data['budgeted_sales_quantity'] = $this->confirmed_quantity_setup_model->get_budgeted_sales_quantity($data['year'], $crop_id, $type_id, $variety_id);
+        $data['min_stock_quantity'] = $this->confirmed_quantity_setup_model->get_budget_min_stock_quantity($crop_id, $type_id, $variety_id);
+        $data['current_stock'] = Purchase_helper::get_current_stock($crop_id, $type_id, $variety_id);
+        $data['variety_info'] = $this->confirmed_quantity_setup_model->get_variety_info($variety_id);
+        $data['crop_id'] = $crop_id;
+        $data['type_id'] = $type_id;
+        $data['variety_id'] = $variety_id;
 
-        if(isset($data['year']) && sizeof($data['varieties'])>0)
+        if(isset($data['year']) && $data['budgeted_sales_quantity']>0)
         {
+            $data['serial'] = $current_id;
             $data['title'] = 'Confirmed Quantity';
             $ajax['status'] = true;
-            $ajax['content'][]=array("id"=>'#variety_quantity',"html"=>$this->load->view("confirmed_quantity_setup/variety_list",$data,true));
+            $ajax['content'][]=array("id"=>'#variety_quantity'.$current_id,"html"=>$this->load->view("confirmed_quantity_setup/variety_list",$data,true));
             $this->jsonReturn($ajax);
         }
         else
