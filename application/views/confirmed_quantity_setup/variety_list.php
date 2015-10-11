@@ -33,7 +33,7 @@
                 <td class="text-center"><input type="text" class="form-control variety_total_quantity confirmed_quantity_input numbersOnly" name="quantity[<?php echo $variety['crop_id'];?>][<?php echo $variety['product_type_id'];?>][<?php echo $variety['varriety_id'];?>][confirmed_quantity]" value="" /></td>
                 <td class="text-center"><input type="text" class="form-control variety_total_quantity pi_value_input numbersOnly" name="quantity[<?php echo $variety['crop_id'];?>][<?php echo $variety['product_type_id'];?>][<?php echo $variety['varriety_id'];?>][pi_value]" value="" /></td>
                 <td class="text-center" style="vertical-align: middle;">
-                    <label class="label label-primary load_month">+S</label>
+                    <label class="label label-info load_month">+S</label>
                     <div class="row popContainer2" style="display: none; max-height: 500px; overflow-y: auto;">
                         <table class="table table-bordered">
                             <tr>
