@@ -83,7 +83,7 @@
 
                                     <td>
                                         <div>
-                                            <input style="width: 100px;" type="text" name="month_setup[<?php echo $variety['varriety_id'];?>][quantity]" id="quantity" class="form-control month_qty" />
+                                            <input style="width: 100px;" type="text" name="month_setup[<?php echo $variety['varriety_id'];?>][quantity]" id="quantity" class="form-control month_qty numbersOnly" />
                                         </div>
                                     </td>
 
@@ -143,8 +143,6 @@
     </div>
 </div>
 
-
-
 <script>
 
     jQuery(document).ready(function()
@@ -169,7 +167,22 @@
             if(confirmed_quantity>0)
             {
                 $(this).closest('.main_tr').find('.confirmed_quantity_label').html(confirmed_quantity);
-                $(this).closest('.main_tr').find('.remaining_quantity_label').html(confirmed_quantity);
+
+                var attr = $(this).closest('.main_tr').find('.month_qty');
+                var sum = 0;
+
+                attr.each(function()
+                {
+                    var val = $(this).val();
+                    if(val)
+                    {
+                        val = parseFloat( val.replace( /^\$/, "" ));
+                        sum += !isNaN( val ) ? val : 0;
+                    }
+                });
+
+                var new_remaining_qty = confirmed_quantity - sum;
+                $(this).closest('.main_tr').find('.remaining_quantity_label').html(new_remaining_qty);
             }
             else
             {
@@ -196,7 +209,7 @@
             var confirmed_qty = parseInt($(this).closest('.main_tr').find('.confirmed_quantity_label').html());
             var new_remaining_val = confirmed_qty - sum;
 
-            $(this).closest('.main_tr').closest('.main_tr').find('.remaining_quantity_label').html(new_remaining_val);
+            $(this).closest('.main_tr').find('.remaining_quantity_label').html(new_remaining_val);
         });
 
         $(document).on("click",".crossSpanMonth",function()
@@ -224,7 +237,7 @@
             echo "<option value='$val'>".$month. "</option>";
         ?>";
         var cell1 = row.insertCell(1);
-        cell1.innerHTML = "<input style='width: 100px;' type='text' name='month_setup[" + variety + "][quantity]' id='quantity" + ExId + "' class='form-control month_qty'/>\n\
+        cell1.innerHTML = "<input style='width: 100px;' type='text' name='month_setup[" + variety + "][quantity]' id='quantity" + ExId + "' class='form-control month_qty numbersOnly'/>\n\
         <input type='hidden' id='task_id[]' name='task_id[]' value=''/>\n\
         <input type='hidden' id='elmIndex[]' name='elmIndex[]' value='" + ExId + "'/>";
         cell1.style.cursor = "default";
