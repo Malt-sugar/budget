@@ -239,6 +239,9 @@ function turn_off_triggers()
     $(document).off("click", "#load_report");
     $(document).off("click", "#myButtonRight");
     $(document).off("click", "#myButtonLeft");
+    $(document).off("click", ".load_remark");
+    $(document).off("click", ".load_month");
+    $(document).off("keyup", ".month_qty");
 }
 
 function isNumberKey(evt)

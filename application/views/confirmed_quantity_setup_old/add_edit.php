@@ -323,6 +323,8 @@
         turn_off_triggers();
         $(".form_valid").validationEngine();
 
+
+
         $(document).on("change", "#selection_type", function(event)
         {
             if($(this).val()>0)

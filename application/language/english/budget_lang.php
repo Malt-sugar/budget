@@ -232,6 +232,7 @@ $lang['LABEL_BUDGET_DIRECT_COST_SET_ALREADY']='Budget Direct Cost Set Already!';
 $lang['SALES_TARGET_NOT_SET']='Sales Target Not Set!';
 $lang['LABEL_CONSIGNMENT_NO']='Consignment No.';
 $lang['LABEL_MONTH_SETUP']='Month Setup';
+$lang['LABEL_MONTH']='Month';
 $lang['LABEL_CONFIRMED_QUANTITY']='Confirmed Quantity';
 $lang['LABEL_REMAINING_QUANTITY']='Remaining Quantity';
 $lang['LABEL_SELECTION_TYPE']='Selection Type';
