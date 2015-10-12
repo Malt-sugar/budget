@@ -75,10 +75,7 @@ class Confirmed_quantity_setup extends ROOT_Controller
         {
             $this->db->trans_start();  //DB Transaction Handle START
 
-            if(strlen($this->input->post('year_id'))>1)
-            {
-                $this->confirmed_quantity_setup_model->confirmed_quantity_initial_update($year); // initial update
-            }
+            $this->confirmed_quantity_setup_model->confirmed_quantity_initial_update($year); // initial update
 
             foreach($quantityPost as $crop_id=>$typeVarietyPost)
             {
@@ -118,10 +115,7 @@ class Confirmed_quantity_setup extends ROOT_Controller
 
             // MONTH WISE PURCHASE SETUP EXECUTION //
 
-            if(strlen($this->input->post('year_id'))>1)
-            {
-                $this->confirmed_quantity_setup_model->budget_month_initial_update($year); // initial update
-            }
+            $this->confirmed_quantity_setup_model->budget_month_initial_update($year); // initial update
 
             foreach($month_setup_post as $variety_id=>$month_setup_detail)
             {
@@ -221,7 +215,6 @@ class Confirmed_quantity_setup extends ROOT_Controller
 
         $quantityPost = $this->input->post('quantity');
         $year = $this->input->post('year');
-        $year_id = $this->input->post('year_id');
 
         foreach($quantityPost as $crop_id=>$typeVarietyPost)
         {
@@ -264,15 +257,15 @@ class Confirmed_quantity_setup extends ROOT_Controller
             $this->message .= $this->lang->line("SELECT_YEAR").'<br>';
         }
 
-        if(strlen($year_id)==1)
-        {
-            $existence = $this->confirmed_quantity_setup_model->check_quantity_year_existence($year);
-            if($existence)
-            {
-                $valid=false;
-                $this->message .= $this->lang->line("BUDGET_PURCHASE_SET_ALREADY").'<br>';
-            }
-        }
+//        if(strlen($year_id)==1)
+//        {
+//            $existence = $this->confirmed_quantity_setup_model->check_quantity_year_existence($year);
+//            if($existence)
+//            {
+//                $valid=false;
+//                $this->message .= $this->lang->line("BUDGET_PURCHASE_SET_ALREADY").'<br>';
+//            }
+//        }
 
         return $valid;
     }

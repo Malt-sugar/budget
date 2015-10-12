@@ -69,7 +69,7 @@
                             <?php
                             if(is_array($existing_budget_months) && sizeof($existing_budget_months)>0)
                             {
-                                foreach($existing_budget_months as $key=>$budget_month)
+                                foreach($existing_budget_months as $budget_month)
                                 {
                                 ?>
                                 <tr id="edit_tr">
