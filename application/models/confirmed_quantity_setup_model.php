@@ -193,6 +193,7 @@ class Confirmed_quantity_setup_model extends CI_Model
         $this->db->select('aci.crop_name');
         $this->db->select('apt.product_type');
         $this->db->from('ait_varriety_info avi');
+        $this->db->select('avi.*');
 
         $this->db->where('avi.type', 0);
         $this->db->where('avi.varriety_id', $variety_id);
@@ -260,5 +261,32 @@ class Confirmed_quantity_setup_model extends CI_Model
         $this->db->where('avi.status', 'Active');
         $results = $this->db->get()->result_array();
         return $results;
+    }
+
+    public function get_existing_month_edit_id($year, $variety_id, $month)
+    {
+        $this->db->from('budget_purchase_months bpm');
+        $this->db->select('bpm.id');
+        $this->db->where('bpm.year', $year);
+        $this->db->where('bpm.month', $month);
+        $this->db->where('bpm.variety_id', $variety_id);
+        $result = $this->db->get()->row_array();
+
+        if($result)
+        {
+            return $result['id'];
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    public function budget_month_initial_update($year)
+    {
+        $data = array('status'=>0);
+        $this->db->where('year',$year);
+
+        $this->db->update('budget_purchase_months',$data);
     }
 }

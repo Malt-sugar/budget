@@ -153,4 +153,42 @@ class Purchase_helper
         }
     }
 
+    public static function get_existing_confirmed_quantity($year, $variety)
+    {
+        $CI = & get_instance();
+        $CI->db->from('budget_purchase_quantity bpq');
+        $CI->db->select('bpq.*');
+        $CI->db->where('bpq.variety_id', $variety);
+        $CI->db->where('bpq.year', $year);
+        $CI->db->where('bpq.status', $CI->config->item('status_active'));
+        $result = $CI->db->get()->row_array();
+        if($result)
+        {
+            return $result;
+        }
+        else
+        {
+            return null;
+        }
+    }
+
+    public static function get_existing_budget_months($year, $variety)
+    {
+        $CI = & get_instance();
+        $CI->db->from('budget_purchase_months bpm');
+        $CI->db->select('bpm.*');
+        $CI->db->where('bpm.variety_id', $variety);
+        $CI->db->where('bpm.year', $year);
+        $CI->db->where('bpm.status', $CI->config->item('status_active'));
+        $results = $CI->db->get()->result_array();
+        if($results)
+        {
+            return $results;
+        }
+        else
+        {
+            return null;
+        }
+    }
+
 }

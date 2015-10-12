@@ -22,6 +22,8 @@
                 $budgeted_sales_quantity = $this->confirmed_quantity_setup_model->get_budgeted_sales_quantity($year, $variety['crop_id'], $variety['product_type_id'], $variety['varriety_id']);
                 $min_stock_quantity = $this->confirmed_quantity_setup_model->get_budget_min_stock_quantity($variety['crop_id'], $variety['product_type_id'], $variety['varriety_id']);
                 $current_stock = Purchase_helper::get_current_stock($variety['crop_id'], $variety['product_type_id'], $variety['varriety_id']);
+                $existing_confirmed_quantity = Purchase_helper::get_existing_confirmed_quantity($year, $variety['varriety_id']);
+                $existing_budget_months = Purchase_helper::get_existing_budget_months($year, $variety['varriety_id']);
             ?>
             <tr class="main_tr">
                 <td class="text-center"><?php echo $variety['crop_name'];?></td>
@@ -30,8 +32,8 @@
                 <td class="text-center"><?php echo $budgeted_sales_quantity;?></td>
                 <td class="text-center"><?php echo $current_stock - $min_stock_quantity;?></td>
                 <td class="text-center"><?php echo $budgeted_sales_quantity - ($current_stock - $min_stock_quantity);?></td>
-                <td class="text-center"><input type="text" class="form-control variety_total_quantity confirmed_quantity_input numbersOnly" name="quantity[<?php echo $variety['crop_id'];?>][<?php echo $variety['product_type_id'];?>][<?php echo $variety['varriety_id'];?>][confirmed_quantity]" value="" /></td>
-                <td class="text-center"><input type="text" class="form-control variety_total_quantity pi_value_input numbersOnly" name="quantity[<?php echo $variety['crop_id'];?>][<?php echo $variety['product_type_id'];?>][<?php echo $variety['varriety_id'];?>][pi_value]" value="" /></td>
+                <td class="text-center"><input type="text" class="form-control variety_total_quantity confirmed_quantity_input numbersOnly" name="quantity[<?php echo $variety['crop_id'];?>][<?php echo $variety['product_type_id'];?>][<?php echo $variety['varriety_id'];?>][confirmed_quantity]" value="<?php if(isset($existing_confirmed_quantity['confirmed_quantity'])){echo $existing_confirmed_quantity['confirmed_quantity'];}?>" /></td>
+                <td class="text-center"><input type="text" class="form-control variety_total_quantity pi_value_input numbersOnly" name="quantity[<?php echo $variety['crop_id'];?>][<?php echo $variety['product_type_id'];?>][<?php echo $variety['varriety_id'];?>][pi_value]" value="<?php if(isset($existing_confirmed_quantity['pi_value'])){echo $existing_confirmed_quantity['pi_value'];}?>" /></td>
                 <td class="text-center" style="vertical-align: middle;">
                     <label class="label label-info load_month">+S</label>
                     <div class="row popContainer2" style="display: none; max-height: 500px; overflow-y: auto;">
@@ -63,10 +65,51 @@
                             </thead>
 
                             <tbody>
+
+                            <?php
+                            if(is_array($existing_budget_months) && sizeof($existing_budget_months)>0)
+                            {
+                                foreach($existing_budget_months as $key=>$budget_month)
+                                {
+                                ?>
+                                <tr id="edit_tr">
+                                    <td>
+                                        <div>
+                                            <select name="month_setup[<?php echo $variety['varriety_id'];?>][month][]" id="month" class="form-control">
+                                                <option value=""><?php echo $this->lang->line('SELECT');?></option>
+                                                <?php
+                                                $months = $this->config->item('month');
+                                                foreach($months as $val=>$month)
+                                                {
+                                                    ?>
+                                                    <option value="<?php echo $val?>" <?php if($budget_month['month']==$val){echo 'selected';}?>><?php echo $month;?></option>
+                                                <?php
+                                                }
+                                                ?>
+                                            </select>
+                                        </div>
+                                    </td>
+
+                                    <td>
+                                        <div>
+                                            <input style="width: 100px;" type="text" name="month_setup[<?php echo $variety['varriety_id'];?>][quantity][]" id="quantity" class="form-control month_qty numbersOnly" value="<?php if(isset($budget_month['quantity'])){echo $budget_month['quantity'];}?>" />
+                                        </div>
+                                    </td>
+
+                                    <td style="min-width: 25px;" id="delete_edit_tr">
+                                        <img src="<?php echo base_url().'images/xmark.png';?>" style="height: 25px; width: 25px;" />
+                                    </td>
+                                </tr>
+                            <?php
+                                }
+                            }
+                            else
+                            {
+                                ?>
                                 <tr>
                                     <td>
                                         <div>
-                                            <select name="month_setup[<?php echo $variety['varriety_id'];?>][month]" id="month" class="form-control">
+                                            <select name="month_setup[<?php echo $variety['varriety_id'];?>][month][]" id="month" class="form-control">
                                                 <option value=""><?php echo $this->lang->line('SELECT');?></option>
                                                 <?php
                                                 $months = $this->config->item('month');
@@ -83,14 +126,16 @@
 
                                     <td>
                                         <div>
-                                            <input style="width: 100px;" type="text" name="month_setup[<?php echo $variety['varriety_id'];?>][quantity]" id="quantity" class="form-control month_qty numbersOnly" />
+                                            <input style="width: 100px;" type="text" name="month_setup[<?php echo $variety['varriety_id'];?>][quantity][]" id="quantity" class="form-control month_qty numbersOnly" />
                                         </div>
                                     </td>
 
                                     <td style="min-width: 25px;">
-<!--                                        <img style="width: 25px; height: 25px;" src="--><?php //echo base_url().'images/xmark.png'?><!--" />-->
                                     </td>
                                 </tr>
+                            <?php
+                            }
+                            ?>
                             </tbody>
                         </table>
 
@@ -121,7 +166,7 @@
                             <tr>
                                 <td>
                                     <div class="col-lg-12">
-                                        <textarea class="form-control" name="quantity[<?php echo $variety['crop_id'];?>][<?php echo $variety['product_type_id'];?>][<?php echo $variety['varriety_id'];?>][remarks]" placeholder="Add Remarks"></textarea>
+                                        <textarea class="form-control" name="quantity[<?php echo $variety['crop_id'];?>][<?php echo $variety['product_type_id'];?>][<?php echo $variety['varriety_id'];?>][remarks]" placeholder="Add Remarks"><?php if(isset($existing_confirmed_quantity['remarks'])){echo $existing_confirmed_quantity['remarks'];}?></textarea>
                                     </div>
                                 </td>
                             </tr>
@@ -156,6 +201,11 @@
         $(document).on("click",".crossSpan",function()
         {
             $(".popContainer").hide();
+        });
+
+        $(document).on("click","#delete_edit_tr",function()
+        {
+            $(this).closest('#edit_tr').remove();
         });
 
         $(document).on("click", ".load_month", function(event)
@@ -230,14 +280,14 @@
         row.className = "tableHover";
         //alert(row.id);
         var cell1 = row.insertCell(0);
-        cell1.innerHTML = "<select name='month_setup[" + variety + "][month]' id='month" + ExId + "' class='form-control'>\n\
+        cell1.innerHTML = "<select name='month_setup[" + variety + "][month][]' id='month" + ExId + "' class='form-control'>\n\
         <option value=''><?php echo $this->lang->line('SELECT');?></option>\n\
         <?php
         foreach ($months as $val=>$month)
             echo "<option value='$val'>".$month. "</option>";
         ?>";
         var cell1 = row.insertCell(1);
-        cell1.innerHTML = "<input style='width: 100px;' type='text' name='month_setup[" + variety + "][quantity]' id='quantity" + ExId + "' class='form-control month_qty numbersOnly'/>\n\
+        cell1.innerHTML = "<input style='width: 100px;' type='text' name='month_setup[" + variety + "][quantity][]' id='quantity" + ExId + "' class='form-control month_qty numbersOnly'/>\n\
         <input type='hidden' id='task_id[]' name='task_id[]' value=''/>\n\
         <input type='hidden' id='elmIndex[]' name='elmIndex[]' value='" + ExId + "'/>";
         cell1.style.cursor = "default";

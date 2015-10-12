@@ -62,6 +62,9 @@ class Confirmed_quantity_setup extends ROOT_Controller
         $data['year'] = $year;
         $quantityPost = $this->input->post('quantity');
 
+        $month_setup_post = $this->input->post('month_setup');
+        $setup_data = array();
+
         if(!$this->check_validation())
         {
             $ajax['status']=false;
@@ -91,20 +94,103 @@ class Confirmed_quantity_setup extends ROOT_Controller
                             $data[$detailKey] = $val;
                         }
 
-                        $edit_id = $this->confirmed_quantity_setup_model->check_confirmed_quantity_existence($year, $crop_id, $type_id, $variety_id);
-
-                        if($edit_id>0)
+                        if($data['confirmed_quantity']>0 && $data['pi_value']>0)
                         {
-                            $data['modified_by'] = $user->user_id;
-                            $data['modification_date'] = $time;
-                            $data['status'] = 1;
-                            Query_helper::update('budget_purchase_quantity',$data,array("id ='$edit_id'"));
+                            $edit_id = $this->confirmed_quantity_setup_model->check_confirmed_quantity_existence($year, $crop_id, $type_id, $variety_id);
+
+                            if($edit_id>0)
+                            {
+                                $data['modified_by'] = $user->user_id;
+                                $data['modification_date'] = $time;
+                                $data['status'] = 1;
+                                Query_helper::update('budget_purchase_quantity',$data,array("id ='$edit_id'"));
+                            }
+                            else
+                            {
+                                $data['created_by'] = $user->user_id;
+                                $data['creation_date'] = $time;
+                                Query_helper::add('budget_purchase_quantity', $data);
+                            }
+                        }
+                    }
+                }
+            }
+
+            // MONTH WISE PURCHASE SETUP EXECUTION //
+
+            if(strlen($this->input->post('year_id'))>1)
+            {
+                $this->confirmed_quantity_setup_model->budget_month_initial_update($year); // initial update
+            }
+
+            foreach($month_setup_post as $variety_id=>$month_setup_detail)
+            {
+                $new_arr = array();
+                $setup_data = array();
+                $monthArray = array();
+                $quantityArray = array();
+                $setup_data['year'] = $this->input->post('year');
+                $variety_info = $this->confirmed_quantity_setup_model->get_variety_info($variety_id);
+                $setup_data['crop_id'] = $variety_info['crop_id'];
+                $setup_data['type_id'] = $variety_info['product_type_id'];
+                $setup_data['variety_id'] = $variety_id;
+
+                foreach($month_setup_detail as $item=>$detail)
+                {
+                    if($item=='month')
+                    {
+                        foreach($detail as $month)
+                        {
+                            $monthArray[] = $month;
+                        }
+                    }
+
+                    if($item=='quantity')
+                    {
+                        foreach($detail as $quantity)
+                        {
+                            $quantityArray[] = $quantity;
+                        }
+                    }
+
+                    if(isset($monthArray) && isset($quantityArray))
+                    {
+                        foreach($monthArray as $mk=>$month)
+                        {
+                            if(isset($quantityArray[$mk]))
+                            {
+                                $new_arr[] = array(
+                                    'month'=>$month,
+                                    'quantity'=>$quantityArray[$mk]
+                                );
+                            }
+                        }
+                    }
+                }
+
+                foreach($new_arr as $arrayOne)
+                {
+                    foreach($arrayOne as $index=>$val)
+                    {
+                        $setup_data[$index] = $val;
+                    }
+
+                    if($setup_data['month']>0 && $setup_data['quantity']>0)
+                    {
+                        $existing_month_edit_id = $this->confirmed_quantity_setup_model->get_existing_month_edit_id($year, $variety_id, $setup_data['month']);
+
+                        if($existing_month_edit_id>0)
+                        {
+                            $setup_data['modified_by'] = $user->user_id;
+                            $setup_data['modification_date'] = $time;
+                            $setup_data['status'] = 1;
+                            Query_helper::update('budget_purchase_months',$setup_data,array("id ='$existing_month_edit_id'"));
                         }
                         else
                         {
-                            $data['created_by'] = $user->user_id;
-                            $data['creation_date'] = $time;
-                            Query_helper::add('budget_purchase_quantity', $data);
+                            $setup_data['created_by'] = $user->user_id;
+                            $setup_data['creation_date'] = $time;
+                            Query_helper::add('budget_purchase_months', $setup_data);
                         }
                     }
                 }
@@ -112,16 +198,20 @@ class Confirmed_quantity_setup extends ROOT_Controller
 
             $this->db->trans_complete();   //DB Transaction Handle END
 
-            if ($this->db->trans_status() === TRUE)
+            if($this->db->trans_status() === TRUE)
             {
-                $this->message=$this->lang->line("MSG_CREATE_SUCCESS");
+                $ajax['status']=false;
+                $ajax['message']=$this->lang->line("MSG_CREATE_SUCCESS");
+                $this->jsonReturn($ajax);
             }
             else
             {
-                $this->message=$this->lang->line("MSG_NOT_SAVED_SUCCESS");
+                $ajax['status']=false;
+                $ajax['message']=$this->lang->line("MSG_NOT_SAVED_SUCCESS");
+                $this->jsonReturn($ajax);
             }
 
-            $this->budget_list();//this is similar like redirect
+            $this->budget_add_edit(0);//this is similar like redirect
         }
     }
 
