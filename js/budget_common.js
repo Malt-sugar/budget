@@ -242,6 +242,9 @@ function turn_off_triggers()
     $(document).off("click", ".load_remark");
     $(document).off("click", ".load_month");
     $(document).off("keyup", ".month_qty");
+    $(document).off("change", "#selection_type");
+    $(document).off("change", "#crop_select");
+    $(document).off("change", "#type_select");
 }
 
 function isNumberKey(evt)

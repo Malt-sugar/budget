@@ -31,10 +31,11 @@ class Assign_target_to_zone extends ROOT_Controller
     {
         $user = User_helper::get_user();
         $user_div = $user->division_id;
-
+        $data['crops'] = $this->budget_common_model->get_ordered_crops();
+        $data['types'] = $this->budget_common_model->get_ordered_crop_types();
         $data['years'] = Query_helper::get_info('ait_year',array('year_id value','year_name text'),array('del_status = 0'));
         $data['zones'] = Query_helper::get_info('ait_zone_info',array('zone_id value','zone_name text'),array('del_status = 0', 'division_id = "'.$user_div.'"'));
-        $data['varieties'] = $this->assign_target_to_zone_model->get_variety_info();
+        //$data['varieties'] = $this->assign_target_to_zone_model->get_variety_info();
 
         $data['title']="Assign Target To Zone";
         $ajax['page_url']=base_url()."assign_target_to_zone/index/add";
@@ -178,11 +179,13 @@ class Assign_target_to_zone extends ROOT_Controller
     {
         $user = User_helper::get_user();
         $user_div = $user->division_id;
-        $year_id = $this->input->post('year_id');
+        $crop_id = $this->input->post('crop_id');
+        $type_id = $this->input->post('type_id');
+        $year_id = $this->input->post('year');
 
         $data['year'] = $year_id;
         $data['zones'] = Query_helper::get_info('ait_zone_info',array('zone_id value','zone_name text'),array('del_status = 0', 'division_id = "'.$user_div.'"'));
-        $data['varieties'] = $this->assign_target_to_zone_model->get_variety_info();
+        $data['varieties'] = $this->assign_target_to_zone_model->get_variety_info($crop_id, $type_id);
 
         if(strlen($year_id)>0)
         {
@@ -196,6 +199,25 @@ class Assign_target_to_zone extends ROOT_Controller
             $ajax['content'][]=array("id"=>'#load_variety',"html"=>"","",true);
             $this->jsonReturn($ajax);
         }
+    }
+
+    public function get_dropDown_type_by_crop()
+    {
+        $crop_id = $this->input->post('crop_id');
+        $types = $this->budget_common_model->get_type_by_crop($crop_id);
+
+        $data = array();
+        if(is_array($types) && sizeof($types)>0)
+        {
+            foreach($types as $type)
+            {
+                $data[] = array('value'=>$type['product_type_id'], 'text'=>$type['product_type']);
+            }
+        }
+
+        $ajax['status'] = true;
+        $ajax['content'][] = array("id"=>'#type_select',"html"=>$this->load->view("dropdown",array('drop_down_options'=>$data),true));
+        $this->jsonReturn($ajax);
     }
 
 }

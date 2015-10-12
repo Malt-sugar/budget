@@ -7,6 +7,7 @@
 
 ?>
 <form class="form_valid" id="save_form" action="<?php echo base_url();?>confirmed_quantity_setup/index/save" method="post">
+    <input type="hidden" name="year_id" value="<?php echo isset($year)?$year:0;?>" />
     <div class="row widget">
         <div class="widget-header">
             <div class="title">
@@ -166,23 +167,23 @@
 
         $(document).on("change","#year",function()
         {
-//            if($(this).val().length>0)
-//            {
-//                $.ajax({
-//                    url: base_url+"confirmed_quantity_setup/check_budget_purchase_this_year/",
-//                    type: 'POST',
-//                    dataType: "JSON",
-//                    data:{year:$(this).val()},
-//                    success: function (data, status)
-//                    {
-//
-//                    },
-//                    error: function (xhr, desc, err)
-//                    {
-//                        console.log("error");
-//                    }
-//                });
-//            }
+            if($(this).val().length>0)
+            {
+                $.ajax({
+                    url: base_url+"confirmed_quantity_setup/check_budget_purchase_this_year/",
+                    type: 'POST',
+                    dataType: "JSON",
+                    data:{year:$(this).val()},
+                    success: function (data, status)
+                    {
+
+                    },
+                    error: function (xhr, desc, err)
+                    {
+                        console.log("error");
+                    }
+                });
+            }
         });
 
         $(document).on("keyup", ".numbersOnly", function()
