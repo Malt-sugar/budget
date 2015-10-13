@@ -222,7 +222,17 @@
     </div>
 
     <h1>&nbsp;</h1>
-
+    <div class="row grand_total_div" style="display: none;">
+        <div class="col-lg-12">
+            <table class="table table-bordered">
+                <tr>
+                    <td class="pull-right" style="border: 0px;">
+                        <?php echo $this->lang->line('LABEL_GRAND_TOTAL');?>: <label style="vertical-align: middle;" class="label label-danger grand_total">00.00</label>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
     <div class="clearfix"></div>
 </form>
 
@@ -440,10 +450,13 @@
                         console.log("error");
                     }
                 });
+
+                $(".grand_total_div").show();
             }
             else
             {
                 $("#direct_cost_div").html('');
+                $(".grand_total_div").hide();
             }
         });
 
@@ -489,17 +502,17 @@
             pi_attr.each(function()
             {
                 var val = $(this).val();
-                var pi_percentage = ((val/pi_sum)*100).toFixed(2);
-                var lc_exp = ((pi_percentage/100)*total_lc_exp).toFixed(2);
-                var insurance_exp = ((pi_percentage/100)*total_insurance_exp).toFixed(2);
-                var packing_material = ((pi_percentage/100)*total_packing_material).toFixed(2);
-                var carriage_inwards = ((pi_percentage/100)*total_carriage_inwards).toFixed(2);
-                var docs = ((pi_percentage/100)*total_docs).toFixed(2);
-                var cnf = ((pi_percentage/100)*total_cnf).toFixed(2);
-                var cogs = parseInt(val) + parseInt(lc_exp) + parseInt(insurance_exp) + parseInt(packing_material) + parseInt(carriage_inwards) + parseInt(docs) + parseInt(cnf);
+                var pi_percentage = parseFloat(((val/pi_sum)*100).toFixed(2));
+                var lc_exp = parseFloat(((pi_percentage/100)*total_lc_exp).toFixed(2));
+                var insurance_exp = parseFloat(((pi_percentage/100)*total_insurance_exp).toFixed(2));
+                var packing_material = parseFloat(((pi_percentage/100)*total_packing_material).toFixed(2));
+                var carriage_inwards = parseFloat(((pi_percentage/100)*total_carriage_inwards).toFixed(2));
+                var docs = parseFloat(((pi_percentage/100)*total_docs).toFixed(2));
+                var cnf = parseFloat(((pi_percentage/100)*total_cnf).toFixed(2));
+                var cogs = (parseFloat(val) + parseFloat(lc_exp) + parseFloat(insurance_exp) + parseFloat(packing_material) + parseFloat(carriage_inwards) + parseFloat(docs) + parseFloat(cnf)).toFixed(2);
 
                 var purchase_quantity = $(this).closest('tr').find('.purchase_quantity').val();
-                var total_cogs = cogs*purchase_quantity;
+                var total_cogs = (cogs*purchase_quantity).toFixed(2);
 
                 $(this).closest('tr').find('.lc_exp').val(lc_exp);
                 $(this).closest('tr').find('.insurance_exp').val(insurance_exp);
@@ -510,6 +523,23 @@
                 $(this).closest('tr').find('.cogs').val(cogs);
                 $(this).closest('tr').find('.total_cogs').val(total_cogs);
             });
+
+            // Grand Total
+            var total_cogs_attr = $(this).closest('.main_div').find('.total_cogs');
+            var total_cogs_sum = 0;
+
+            total_cogs_attr.each(function()
+            {
+                var total_cogs_val = $(this).val();
+                if(total_cogs_val)
+                {
+                    total_cogs_val = parseFloat( total_cogs_val.replace( /^\$/, "" ));
+                    total_cogs_sum += !isNaN( total_cogs_val ) ? total_cogs_val : 0;
+                }
+            });
+
+            var grand_total = total_cogs_sum.toFixed(2);
+            $(".grand_total").html(grand_total);
         });
     });
 </script>

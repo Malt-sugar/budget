@@ -36,6 +36,7 @@ $lang['NO_VARIETY_EXIST'] = 'No Variety Exists';
 $lang['LABEL_CUSTOMER_NAME'] = 'Customer Name';
 $lang['LABEL_YES'] = 'Yes';
 $lang['LABEL_NO'] = 'No';
+$lang['LABEL_GRAND_TOTAL'] = 'Grand Total';
 
 //login
 $lang['MSG_USERNAME_PASSWORD_INVALID'] = 'Username and Password did not match or Invalid';
