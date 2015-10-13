@@ -8,25 +8,27 @@
         <table class="table table-hover table-bordered">
             <th class="text-center"><?php echo $this->lang->line('LABEL_QUANTITY')?></th>
             <th class="text-center"><?php echo $this->lang->line('LABEL_PI_VALUE')?></th>
-            <th class="text-center"><?php echo $this->lang->line('LABEL_USD_CONVERSION_RATE')?></th>
-            <th class="text-center"><?php echo $this->lang->line('LABEL_LC_EXP')?></th>
-            <th class="text-center"><?php echo $this->lang->line('LABEL_INSURANCE_EXP')?></th>
-            <th class="text-center"><?php echo $this->lang->line('LABEL_PACKING_MATERIAL')?></th>
-            <th class="text-center"><?php echo $this->lang->line('LABEL_CARRIAGE_INWARDS')?></th>
-            <th class="text-center"><?php echo $this->lang->line('LABEL_AIR_FREIGHT_AND_DOCS')?></th>
+            <th class="text-center"><?php echo $this->lang->line('LABEL_LC_EXP_ACTUAL')?></th>
+            <th class="text-center"><?php echo $this->lang->line('LABEL_INSURANCE_EXP_ACTUAL')?></th>
+            <th class="text-center"><?php echo $this->lang->line('LABEL_PACKING_MATERIAL_ACTUAL')?></th>
+            <th class="text-center"><?php echo $this->lang->line('LABEL_CARRIAGE_INWARDS_ACTUAL')?></th>
+            <th class="text-center"><?php echo $this->lang->line('LABEL_DOCS_ACTUAL')?></th>
             <th class="text-center"><?php echo $this->lang->line('LABEL_CNF')?></th>
+            <th class="text-center"><?php echo $this->lang->line('LABEL_COGS')?></th>
+            <th class="text-center"><?php echo $this->lang->line('LABEL_TOTAL_COGS')?></th>
             <th class="text-center"><?php echo $this->lang->line('LABEL_REMARKS')?></th>
 
             <tr>
-                <td class="text-center"><input type="text" class="form-control numbersOnly purchase_quantity" name="quantity[<?php echo $crop_id;?>][<?php echo $type_id;?>][<?php echo $variety_id;?>][confirmed_quantity]" value="" /></td>
-                <td class="text-center"><input type="text" class="form-control numbersOnly pi_value" name="quantity[<?php echo $crop_id;?>][<?php echo $type_id;?>][<?php echo $variety_id;?>][confirmed_quantity]" value="" /></td>
-                <td class="text-center"><input type="text" class="form-control numbersOnly usd_conversion_rate" name="quantity[<?php echo $crop_id;?>][<?php echo $type_id;?>][<?php echo $variety_id;?>][confirmed_quantity]" value="" /></td>
-                <td class="text-center"><input type="text" class="form-control numbersOnly lc_exp" name="quantity[<?php echo $crop_id;?>][<?php echo $type_id;?>][<?php echo $variety_id;?>][confirmed_quantity]" value="" /></td>
-                <td class="text-center"><input type="text" class="form-control numbersOnly insurance_exp" name="quantity[<?php echo $crop_id;?>][<?php echo $type_id;?>][<?php echo $variety_id;?>][confirmed_quantity]" value="" /></td>
-                <td class="text-center"><input type="text" class="form-control numbersOnly packing_material" name="quantity[<?php echo $crop_id;?>][<?php echo $type_id;?>][<?php echo $variety_id;?>][confirmed_quantity]" value="" /></td>
-                <td class="text-center"><input type="text" class="form-control numbersOnly carriage_inwards" name="quantity[<?php echo $crop_id;?>][<?php echo $type_id;?>][<?php echo $variety_id;?>][confirmed_quantity]" value="" /></td>
-                <td class="text-center"><input type="text" class="form-control numbersOnly docs" name="quantity[<?php echo $crop_id;?>][<?php echo $type_id;?>][<?php echo $variety_id;?>][pi_value]" value="" /></td>
-                <td class="text-center"><input type="text" class="form-control numbersOnly cnf" name="quantity[<?php echo $crop_id;?>][<?php echo $type_id;?>][<?php echo $variety_id;?>][pi_value]" value="" /></td>
+                <td class="text-center"><input type="text" class="form-control numbersOnly purchase_quantity" name="quantity[<?php echo $crop_id;?>][<?php echo $type_id;?>][<?php echo $variety_id;?>][purchase_quantity]" value="" /></td>
+                <td class="text-center"><input type="text" class="form-control numbersOnly pi_value" name="quantity[<?php echo $crop_id;?>][<?php echo $type_id;?>][<?php echo $variety_id;?>][pi_value]" value="" /></td>
+                <td class="text-center"><input type="text" readonly class="form-control numbersOnly lc_exp" name="quantity[<?php echo $crop_id;?>][<?php echo $type_id;?>][<?php echo $variety_id;?>][lc_exp]" value="" /></td>
+                <td class="text-center"><input type="text" readonly class="form-control numbersOnly insurance_exp" name="quantity[<?php echo $crop_id;?>][<?php echo $type_id;?>][<?php echo $variety_id;?>][insurance_exp]" value="" /></td>
+                <td class="text-center"><input type="text" readonly class="form-control numbersOnly packing_material" name="quantity[<?php echo $crop_id;?>][<?php echo $type_id;?>][<?php echo $variety_id;?>][packing_material]" value="" /></td>
+                <td class="text-center"><input type="text" readonly class="form-control numbersOnly carriage_inwards" name="quantity[<?php echo $crop_id;?>][<?php echo $type_id;?>][<?php echo $variety_id;?>][carriage_inwards]" value="" /></td>
+                <td class="text-center"><input type="text" readonly class="form-control numbersOnly docs" name="quantity[<?php echo $crop_id;?>][<?php echo $type_id;?>][<?php echo $variety_id;?>][docs]" value="" /></td>
+                <td class="text-center"><input type="text" readonly class="form-control numbersOnly cnf" name="quantity[<?php echo $crop_id;?>][<?php echo $type_id;?>][<?php echo $variety_id;?>][cnf]" value="" /></td>
+                <td class="text-center"><input type="text" readonly class="form-control numbersOnly cogs" name="" value="" /></td>
+                <td class="text-center"><input type="text" readonly class="form-control numbersOnly total_cogs" name="" value="" /></td>
                 <td class="text-center" style="vertical-align: middle;">
                     <label class="label label-primary load_remark">+R</label>
                     <div class="row popContainer" style="display: none;">

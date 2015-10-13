@@ -41,7 +41,7 @@
         </div>
     </div>
 
-    <div id="budget_add_more_container">
+    <div id="budget_add_more_container" class="main_div">
     <?php
     if(is_array($quantity_setups) && sizeof($quantity_setups)>0)
     {
@@ -460,6 +460,56 @@
         $(document).on("click",".crossSpan",function()
         {
             $(".popContainer").hide();
+        });
+
+        $(document).on("keyup",".pi_value",function()
+        {
+            var total_lc_exp = $(".total_lc_exp").val();
+            var total_insurance_exp = $(".total_insurance_exp").val();
+            var total_packing_material = $(".total_packing_material").val();
+            var total_carriage_inwards = $(".total_carriage_inwards").val();
+            var total_docs = $(".total_docs").val();
+            var total_cnf = $(".total_cnf").val();
+
+            var pi_value = parseInt($(this).closest('tr').find('.pi_value').val());
+
+            var pi_attr = $(this).closest('.main_div').find('.pi_value');
+            var pi_sum = 0;
+
+            pi_attr.each(function()
+            {
+                var val = $(this).val();
+                if(val)
+                {
+                    val = parseFloat( val.replace( /^\$/, "" ));
+                    pi_sum += !isNaN( val ) ? val : 0;
+                }
+            });
+
+            pi_attr.each(function()
+            {
+                var val = $(this).val();
+                var pi_percentage = ((val/pi_sum)*100).toFixed(2);
+                var lc_exp = ((pi_percentage/100)*total_lc_exp).toFixed(2);
+                var insurance_exp = ((pi_percentage/100)*total_insurance_exp).toFixed(2);
+                var packing_material = ((pi_percentage/100)*total_packing_material).toFixed(2);
+                var carriage_inwards = ((pi_percentage/100)*total_carriage_inwards).toFixed(2);
+                var docs = ((pi_percentage/100)*total_docs).toFixed(2);
+                var cnf = ((pi_percentage/100)*total_cnf).toFixed(2);
+                var cogs = parseInt(val) + parseInt(lc_exp) + parseInt(insurance_exp) + parseInt(packing_material) + parseInt(carriage_inwards) + parseInt(docs) + parseInt(cnf);
+
+                var purchase_quantity = $(this).closest('tr').find('.purchase_quantity').val();
+                var total_cogs = cogs*purchase_quantity;
+
+                $(this).closest('tr').find('.lc_exp').val(lc_exp);
+                $(this).closest('tr').find('.insurance_exp').val(insurance_exp);
+                $(this).closest('tr').find('.packing_material').val(packing_material);
+                $(this).closest('tr').find('.carriage_inwards').val(carriage_inwards);
+                $(this).closest('tr').find('.docs').val(docs);
+                $(this).closest('tr').find('.cnf').val(cnf);
+                $(this).closest('tr').find('.cogs').val(cogs);
+                $(this).closest('tr').find('.total_cogs').val(total_cogs);
+            });
         });
     });
 </script>

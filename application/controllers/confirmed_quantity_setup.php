@@ -37,13 +37,13 @@ class Confirmed_quantity_setup extends ROOT_Controller
         if(strlen($id)>1)
         {
             $data['quantity_setups'] = $this->confirmed_quantity_setup_model->get_confirmed_quantity_detail($id);
-            $data['title'] = "Edit Confirmed Quantity Setup";
+            $data['title'] = "Edit Budgeted Purchase";
             $ajax['page_url']=base_url()."confirmed_quantity_setup/index/edit/";
         }
         else
         {
             $data['quantity_setups'] = array();
-            $data['title'] = "Confirmed Quantity Setup";
+            $data['title'] = "Budgeted Purchase";
             $ajax['page_url'] = base_url()."confirmed_quantity_setup/index/add";
         }
 
