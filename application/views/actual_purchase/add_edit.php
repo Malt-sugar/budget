@@ -325,11 +325,31 @@
     <h1>&nbsp;</h1>
     <div class="row grand_total_div" style="display: <?php if($edit_id>0){echo 'show';}else{echo 'none';}?>;">
         <div class="col-lg-12">
-            <table class="table table-bordered">
+            <table class="table table-hover table-bordered">
+                <th class="text-center" style="display: none;"><?php echo $this->lang->line('LABEL_QUANTITY')?></th>
+                <th class="text-center" style="display: none;"><?php echo $this->lang->line('LABEL_PI_VALUE')?></th>
+                <th class="text-center" style="display: none;"><?php echo $this->lang->line('LABEL_LC_EXP_ACTUAL')?></th>
+                <th class="text-center" style="display: none;"><?php echo $this->lang->line('LABEL_INSURANCE_EXP_ACTUAL')?></th>
+                <th class="text-center" style="display: none;"><?php echo $this->lang->line('LABEL_PACKING_MATERIAL_ACTUAL')?></th>
+                <th class="text-center" style="display: none;"><?php echo $this->lang->line('LABEL_CARRIAGE_INWARDS_ACTUAL')?></th>
+                <th class="text-center" style="display: none;"><?php echo $this->lang->line('LABEL_DOCS_ACTUAL')?></th>
+                <th class="text-center" style="display: none;"><?php echo $this->lang->line('LABEL_CNF')?></th>
+                <th class="text-center" style="display: none;"><?php echo $this->lang->line('LABEL_COGS')?></th>
+                <th class="text-center" style="display: none;"><?php echo $this->lang->line('LABEL_TOTAL_COGS')?></th>
+                <th class="text-center" style="display: none;"><?php echo $this->lang->line('LABEL_REMARKS')?></th>
+
                 <tr>
-                    <td class="pull-right" style="border: 0px;">
-                        <?php echo $this->lang->line('LABEL_GRAND_TOTAL');?>: <label style="vertical-align: middle;" class="label label-danger grand_total"><?php if($edit_id>0){echo $grand_total;}else{echo '00.00';}?></label>
-                    </td>
+                    <td class="text-center"></td>
+                    <td class="text-center"></td>
+                    <td class="text-center"></td>
+                    <td class="text-center"></td>
+                    <td class="text-center"></td>
+                    <td class="text-center"></td>
+                    <td class="text-center"></td>
+                    <td class="text-center"></td>
+                    <td class="text-center" style="width: 100px; font-weight: bold;"><?php echo $this->lang->line('LABEL_GRAND_TOTAL');?>: </td>
+                    <td class="text-center" style="width: 100px; vertical-align: middle;"><label style="vertical-align: middle;" class="label label-danger grand_total"><?php if($edit_id>0){echo $grand_total;}else{echo '00.00';}?></label></td>
+                    <td class="text-center" style="width: 70px;"></td>
                 </tr>
             </table>
         </div>
