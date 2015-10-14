@@ -293,23 +293,23 @@ class Confirmed_quantity_setup extends ROOT_Controller
         }
     }
 
-    public function check_budget_purchase_this_year()
-    {
-        $year = $this->input->post('year');
-        $existence = $this->confirmed_quantity_setup_model->check_quantity_year_existence($year);
-
-        if($existence)
-        {
-            $ajax['status'] = false;
-            $ajax['message'] = $this->lang->line("BUDGET_PURCHASE_SET_ALREADY");
-            $this->jsonReturn($ajax);
-        }
-        else
-        {
-            $ajax['status'] = true;
-            $this->jsonReturn($ajax);
-        }
-    }
+//    public function check_budget_purchase_this_year()
+//    {
+//        $year = $this->input->post('year');
+//        $existence = $this->confirmed_quantity_setup_model->check_quantity_year_existence($year);
+//
+//        if($existence)
+//        {
+//            $ajax['status'] = false;
+//            $ajax['message'] = $this->lang->line("BUDGET_PURCHASE_SET_ALREADY");
+//            $this->jsonReturn($ajax);
+//        }
+//        else
+//        {
+//            $ajax['status'] = true;
+//            $this->jsonReturn($ajax);
+//        }
+//    }
 
     public function get_dropDown_type_by_crop()
     {

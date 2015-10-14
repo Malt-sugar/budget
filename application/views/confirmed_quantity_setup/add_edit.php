@@ -83,6 +83,10 @@
 
         $(document).on("change", "#selection_type", function(event)
         {
+            $("#crop_select").val('');
+            $("#type_select").val('');
+            $("#variety_quantity").html('');
+
             if($(this).val()>0)
             {
                 $("#crop_select_div").show();
@@ -118,6 +122,8 @@
             else if($(this).val().length>1 && $("#selection_type").val()==2)
             {
                 $("#type_select_div").show();
+                $("#variety_quantity").html('');
+
                 $.ajax({
                     url: base_url+"confirmed_quantity_setup/get_dropDown_type_by_crop/",
                     type: 'POST',
@@ -167,23 +173,23 @@
 
         $(document).on("change","#year",function()
         {
-            if($(this).val().length>0)
-            {
-                $.ajax({
-                    url: base_url+"confirmed_quantity_setup/check_budget_purchase_this_year/",
-                    type: 'POST',
-                    dataType: "JSON",
-                    data:{year:$(this).val()},
-                    success: function (data, status)
-                    {
-
-                    },
-                    error: function (xhr, desc, err)
-                    {
-                        console.log("error");
-                    }
-                });
-            }
+//            if($(this).val().length>0)
+//            {
+//                $.ajax({
+//                    url: base_url+"confirmed_quantity_setup/check_budget_purchase_this_year/",
+//                    type: 'POST',
+//                    dataType: "JSON",
+//                    data:{year:$(this).val()},
+//                    success: function (data, status)
+//                    {
+//
+//                    },
+//                    error: function (xhr, desc, err)
+//                    {
+//                        console.log("error");
+//                    }
+//                });
+//            }
         });
 
         $(document).on("keyup", ".numbersOnly", function()
