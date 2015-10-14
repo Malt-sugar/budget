@@ -239,3 +239,4 @@ $lang['LABEL_REMAINING_QUANTITY']='Remaining Quantity';
 $lang['LABEL_SELECTION_TYPE']='Selection Type';
 $lang['LABEL_CROP_WISE']='Crop Wise';
 $lang['LABEL_TYPE_WISE']='Type Wise';
+$lang['CONSIGNMENT_NO_CANNOT_BE_DUPLICATE']='Consignment no. can not be duplicate in a month!';

@@ -7,7 +7,7 @@
 ?>
 
 <form class="form_valid" id="save_form" action="<?php echo base_url();?>actual_purchase/index/save" method="post">
-    <input type="hidden" name="year_id" value="<?php echo isset($year)?$year:0;?>" />
+    <input type="hidden" name="edit_id" class="edit_id" value="<?php echo isset($edit_id)?$edit_id:0;?>" />
     <div class="row widget">
         <div class="widget-header">
             <div class="title">
@@ -21,16 +21,16 @@
                 <label class="control-label pull-right"><?php echo $this->lang->line('LABEL_YEAR');?><span style="color:#FF0000">*</span></label>
             </div>
             <div class="col-sm-4 col-xs-8">
-                <select name="year" id="year" class="form-control validate[required]" <?php if(isset($year) && strlen($year)>1){echo 'disabled';}?>>
+                <select name="year" id="year" class="form-control validate[required]" <?php if(isset($setup['year']) && strlen($setup['year'])>1){echo 'disabled';}?>>
                     <?php
-                    $this->load->view('dropdown',array('drop_down_options'=>$years,'drop_down_selected'=>isset($year)?$year:''));
+                    $this->load->view('dropdown',array('drop_down_options'=>$years,'drop_down_selected'=>isset($setup['year'])?$setup['year']:''));
                     ?>
                 </select>
                 <?php
-                if(isset($year) && strlen($year)>1)
+                if(isset($setup['year']) && strlen($setup['year'])>1)
                 {
                     ?>
-                    <input type="hidden" name="year" value="<?php echo $year;?>" />
+                    <input type="hidden" name="year" value="<?php echo $setup['year'];?>" />
                 <?php
                 }
                 ?>
@@ -38,14 +38,113 @@
         </div>
 
         <div id="direct_cost_div">
+            <?php
+            if($edit_id>0)
+            {
+            ?>
+                <div class="row show-grid">
+                    <div class="col-xs-4">
+                        <label class="control-label pull-right"><?php echo $this->lang->line('LABEL_USD_CONVERSION_RATE');?><span style="color:#FF0000">*</span></label>
+                    </div>
+                    <div class="col-sm-4 col-xs-8">
+                        <input type="text" name="usd_conversion_rate" class="form-control validate[required] total_usd_conversion_rate" value="<?php echo $setup['usd_conversion_rate'];?>" />
+                    </div>
+                </div>
+
+                <div class="row show-grid">
+                    <div class="col-xs-4">
+                        <label class="control-label pull-right"><?php echo $this->lang->line('LABEL_LC_EXP_ACTUAL');?><span style="color:#FF0000">*</span></label>
+                    </div>
+                    <div class="col-sm-4 col-xs-8">
+                        <input type="text" name="lc_exp" class="form-control validate[required] total_lc_exp" value="<?php echo $setup['lc_exp'];?>" />
+                    </div>
+                </div>
+
+                <div class="row show-grid">
+                    <div class="col-xs-4">
+                        <label class="control-label pull-right"><?php echo $this->lang->line('LABEL_INSURANCE_EXP_ACTUAL');?><span style="color:#FF0000">*</span></label>
+                    </div>
+                    <div class="col-sm-4 col-xs-8">
+                        <input type="text" name="insurance_exp" class="form-control validate[required] total_insurance_exp" value="<?php echo $setup['insurance_exp'];?>" />
+                    </div>
+                </div>
+
+                <div class="row show-grid">
+                    <div class="col-xs-4">
+                        <label class="control-label pull-right"><?php echo $this->lang->line('LABEL_PACKING_MATERIAL_ACTUAL');?><span style="color:#FF0000">*</span></label>
+                    </div>
+                    <div class="col-sm-4 col-xs-8">
+                        <input type="text" name="packing_material" class="form-control validate[required] total_packing_material" value="<?php echo $setup['packing_material'];?>" />
+                    </div>
+                </div>
+
+                <div class="row show-grid">
+                    <div class="col-xs-4">
+                        <label class="control-label pull-right"><?php echo $this->lang->line('LABEL_CARRIAGE_INWARDS_ACTUAL');?><span style="color:#FF0000">*</span></label>
+                    </div>
+                    <div class="col-sm-4 col-xs-8">
+                        <input type="text" name="carriage_inwards" class="form-control validate[required] total_carriage_inwards" value="<?php echo $setup['carriage_inwards'];?>" />
+                    </div>
+                </div>
+
+                <div class="row show-grid">
+                    <div class="col-xs-4">
+                        <label class="control-label pull-right"><?php echo $this->lang->line('LABEL_DOCS_ACTUAL');?><span style="color:#FF0000">*</span></label>
+                    </div>
+                    <div class="col-sm-4 col-xs-8">
+                        <input type="text" name="docs" class="form-control validate[required] total_docs" value="<?php echo $setup['docs'];?>" />
+                    </div>
+                </div>
+
+                <div class="row show-grid">
+                    <div class="col-xs-4">
+                        <label class="control-label pull-right"><?php echo $this->lang->line('LABEL_CNF');?><span style="color:#FF0000">*</span></label>
+                    </div>
+                    <div class="col-sm-4 col-xs-8">
+                        <input type="text" name="cnf" class="form-control validate[required] total_cnf" value="<?php echo $setup['cnf'];?>" />
+                    </div>
+                </div>
+
+                <div class="row show-grid">
+                    <div class="col-xs-4">
+                        <label class="control-label pull-right"><?php echo $this->lang->line('LABEL_MONTH_OF_PURCHASE');?><span style="color:#FF0000">*</span></label>
+                    </div>
+                    <div class="col-sm-4 col-xs-8">
+                        <select name="month_of_purchase" class="form-control validate[required]">
+                            <option value=""><?php echo $this->lang->line('SELECT');?></option>
+                            <?php
+                            $months = $this->config->item('month');
+                            foreach($months as $key=>$val)
+                            {
+                                ?>
+                                <option value="<?php echo $key;?>" <?php if(isset($setup['month_of_purchase']) && str_pad($setup['month_of_purchase'], 2, "0", STR_PAD_LEFT)==$key){echo 'selected';}?>><?php echo $val;?></option>
+                            <?php
+                            }
+                            ?>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="row show-grid">
+                    <div class="col-xs-4">
+                        <label class="control-label pull-right"><?php echo $this->lang->line('LABEL_CONSIGNMENT_NO');?><span style="color:#FF0000">*</span></label>
+                    </div>
+                    <div class="col-sm-4 col-xs-8">
+                        <input type="text" name="consignment_no" class="form-control validate[required]" value="<?php echo $setup['consignment_no'];?>" />
+                    </div>
+                </div>
+            <?php
+            }
+            ?>
         </div>
     </div>
 
     <div id="budget_add_more_container" class="main_div">
     <?php
-    if(is_array($quantity_setups) && sizeof($quantity_setups)>0)
+    if(is_array($purchases) && sizeof($purchases)>0)
     {
-        foreach($quantity_setups as $key=>$quantity)
+        $grand_total = 0;
+        foreach($purchases as $key=>$quantity)
         {
         ?>
         <div class="budget_add_more_container" style="display: <?php if(isset($quantity['crop_id']) && sizeof($quantity['crop_id'])>0){echo 'show';}else{echo 'none';}?>;">
@@ -100,33 +199,35 @@
 
             <div class="row variety_quantity" id="variety_quantity<?php echo $key;?>" data-varietyDetail-current-id="<?php echo $key;?>">
                 <?php
-                $variety_detail = Purchase_helper::get_variety_detail($quantity['variety_id']);
-                $current_stock = Purchase_helper::get_current_stock($quantity['crop_id'], $quantity['type_id'], $quantity['variety_id']);
-                $min_stock_quantity = Purchase_helper::get_budget_min_stock_quantity($quantity['crop_id'], $quantity['type_id'], $quantity['variety_id']);
-                $budgeted_sales_quantity = Purchase_helper::get_budgeted_sales_quantity($year, $quantity['crop_id'], $quantity['type_id'], $quantity['variety_id']);
+                    $variety_values = Purchase_helper::get_variety_actual_purchase_values($edit_id, $quantity['variety_id'], $setup['lc_exp'], $setup['insurance_exp'], $setup['packing_material'], $setup['carriage_inwards'], $setup['docs'], $setup['cnf']);
+                    $grand_total+=$variety_values['total_cogs'];
                 ?>
                 <div class="row show-grid">
                     <div class="col-lg-12">
                         <table class="table table-hover table-bordered">
-                            <th class="text-center"><?php echo $this->lang->line('LABEL_CROP')?></th>
-                            <th class="text-center"><?php echo $this->lang->line('LABEL_TYPE')?></th>
-                            <th class="text-center"><?php echo $this->lang->line('LABEL_VARIETY')?></th>
-                            <th class="text-center"><?php echo $this->lang->line('LABEL_BUDGETED_SALES_QTY_HO')?></th>
-                            <th class="text-center"><?php echo $this->lang->line('LABEL_VARIANCE')?></th>
-                            <th class="text-center"><?php echo $this->lang->line('LABEL_BUDGETED_PURCHASE_QUANTITY')?></th>
-                            <th class="text-center"><?php echo $this->lang->line('LABEL_ACTUAL_PURCHASE_CONFIRMED')?></th>
-                            <th class="text-center"><?php echo $this->lang->line('LABEL_PI_VALUE_US')?></th>
+                            <th class="text-center"><?php echo $this->lang->line('LABEL_QUANTITY')?></th>
+                            <th class="text-center"><?php echo $this->lang->line('LABEL_PI_VALUE')?></th>
+                            <th class="text-center"><?php echo $this->lang->line('LABEL_LC_EXP_ACTUAL')?></th>
+                            <th class="text-center"><?php echo $this->lang->line('LABEL_INSURANCE_EXP_ACTUAL')?></th>
+                            <th class="text-center"><?php echo $this->lang->line('LABEL_PACKING_MATERIAL_ACTUAL')?></th>
+                            <th class="text-center"><?php echo $this->lang->line('LABEL_CARRIAGE_INWARDS_ACTUAL')?></th>
+                            <th class="text-center"><?php echo $this->lang->line('LABEL_DOCS_ACTUAL')?></th>
+                            <th class="text-center"><?php echo $this->lang->line('LABEL_CNF')?></th>
+                            <th class="text-center"><?php echo $this->lang->line('LABEL_COGS')?></th>
+                            <th class="text-center"><?php echo $this->lang->line('LABEL_TOTAL_COGS')?></th>
                             <th class="text-center"><?php echo $this->lang->line('LABEL_REMARKS')?></th>
 
                             <tr>
-                                <td class="text-center"><?php echo $variety_detail['crop_name'];?></td>
-                                <td class="text-center"><?php echo $variety_detail['product_type'];?></td>
-                                <td class="text-center"><?php echo $variety_detail['varriety_name'];?></td>
-                                <td class="text-center"><?php echo $budgeted_sales_quantity;?></td>
-                                <td class="text-center"><?php echo $current_stock - $min_stock_quantity;?></td>
-                                <td class="text-center"><?php echo $budgeted_sales_quantity - ($current_stock - $min_stock_quantity);?></td>
-                                <td class="text-center"><input type="text" class="form-control variety_total_quantity numbersOnly" name="quantity[<?php echo $quantity['crop_id'];?>][<?php echo $quantity['type_id'];?>][<?php echo $quantity['variety_id'];?>][confirmed_quantity]" value="<?php echo $quantity['confirmed_quantity'];?>" /></td>
-                                <td class="text-center"><input type="text" class="form-control variety_total_quantity numbersOnly" name="quantity[<?php echo $quantity['crop_id'];?>][<?php echo $quantity['type_id'];?>][<?php echo $quantity['variety_id'];?>][pi_value]" value="<?php echo $quantity['pi_value'];?>" /></td>
+                                <td class="text-center"><input type="text" class="form-control numbersOnly purchase_quantity" name="quantity[<?php echo $quantity['crop_id'];?>][<?php echo $quantity['type_id'];?>][<?php echo $quantity['variety_id'];?>][purchase_quantity]" value="<?php echo $variety_values['purchase_quantity'];?>" /></td>
+                                <td class="text-center"><input type="text" class="form-control numbersOnly pi_value" name="quantity[<?php echo $quantity['crop_id'];?>][<?php echo $quantity['type_id'];?>][<?php echo $quantity['variety_id'];?>][pi_value]" value="<?php echo $variety_values['pi_value'];?>" /></td>
+                                <td class="text-center"><input type="text" disabled class="form-control lc_exp" name="quantity[<?php echo $quantity['crop_id'];?>][<?php echo $quantity['type_id'];?>][<?php echo $quantity['variety_id'];?>][lc_exp]" value="<?php echo $variety_values['lc_exp'];?>" /></td>
+                                <td class="text-center"><input type="text" disabled class="form-control insurance_exp" name="quantity[<?php echo $quantity['crop_id'];?>][<?php echo $quantity['type_id'];?>][<?php echo $quantity['variety_id'];?>][insurance_exp]" value="<?php echo $variety_values['insurance_exp'];?>" /></td>
+                                <td class="text-center"><input type="text" disabled class="form-control packing_material" name="quantity[<?php echo $quantity['crop_id'];?>][<?php echo $quantity['type_id'];?>][<?php echo $quantity['variety_id'];?>][packing_material]" value="<?php echo $variety_values['packing_material'];?>" /></td>
+                                <td class="text-center"><input type="text" disabled class="form-control carriage_inwards" name="quantity[<?php echo $quantity['crop_id'];?>][<?php echo $quantity['type_id'];?>][<?php echo $quantity['variety_id'];?>][carriage_inwards]" value="<?php echo $variety_values['carriage_inwards'];?>" /></td>
+                                <td class="text-center"><input type="text" disabled class="form-control docs" name="quantity[<?php echo $quantity['crop_id'];?>][<?php echo $quantity['type_id'];?>][<?php echo $quantity['variety_id'];?>][docs]" value="<?php echo $variety_values['docs'];?>" /></td>
+                                <td class="text-center"><input type="text" disabled class="form-control cnf" name="quantity[<?php echo $quantity['crop_id'];?>][<?php echo $quantity['type_id'];?>][<?php echo $quantity['variety_id'];?>][cnf]" value="<?php echo $variety_values['cnf'];?>" /></td>
+                                <td class="text-center"><input type="text" disabled class="form-control cogs" name="" value="<?php echo $variety_values['cogs'];?>" /></td>
+                                <td class="text-center"><input type="text" disabled class="form-control total_cogs" name="" value="<?php echo $variety_values['total_cogs'];?>" /></td>
                                 <td class="text-center" style="vertical-align: middle;">
                                     <label class="label label-primary load_remark">+R</label>
                                     <div class="row popContainer" style="display: none;">
@@ -134,7 +235,7 @@
                                             <tr>
                                                 <td>
                                                     <div class="col-lg-12">
-                                                        <textarea class="form-control" name="quantity[<?php echo $quantity['crop_id'];?>][<?php echo $quantity['type_id'];?>][<?php echo $quantity['variety_id'];?>][remarks]" placeholder="Add Remarks"><?php echo $quantity['remarks'];?></textarea>
+                                                        <textarea class="form-control" name="quantity[<?php echo $quantity['crop_id'];?>][<?php echo $quantity['type_id'];?>][<?php echo $quantity['variety_id'];?>][remarks]" placeholder="Add Remarks"><?php echo $variety_values['remarks'];?></textarea>
                                                     </div>
                                                 </td>
                                             </tr>
@@ -222,12 +323,12 @@
     </div>
 
     <h1>&nbsp;</h1>
-    <div class="row grand_total_div" style="display: none;">
+    <div class="row grand_total_div" style="display: <?php if($edit_id>0){echo 'show';}else{echo 'none';}?>;">
         <div class="col-lg-12">
             <table class="table table-bordered">
                 <tr>
                     <td class="pull-right" style="border: 0px;">
-                        <?php echo $this->lang->line('LABEL_GRAND_TOTAL');?>: <label style="vertical-align: middle;" class="label label-danger grand_total">00.00</label>
+                        <?php echo $this->lang->line('LABEL_GRAND_TOTAL');?>: <label style="vertical-align: middle;" class="label label-danger grand_total"><?php if($edit_id>0){echo $grand_total;}else{echo '00.00';}?></label>
                     </td>
                 </tr>
             </table>
@@ -237,7 +338,7 @@
 </form>
 
 <div class="budget_add_more_content" style="display: none;">
-    <div class="row widget budget_add_more_holder budget_add_more_container" data-current-id="<?php if(isset($quantity_setups) && sizeof($quantity_setups)>0){echo (sizeof($quantity_setups)-1);}else{echo 0;}?>">
+    <div class="row widget budget_add_more_holder budget_add_more_container" data-current-id="<?php if(isset($purchases) && sizeof($purchases)>0){echo (sizeof($purchases)-1);}else{echo 0;}?>">
         <div class="widget-header" style="padding: 3px 4px 3px 10px;">
             <div class="title">
                 <?php echo $this->lang->line('LABEL_PURCHASE'); ?>
@@ -422,21 +523,6 @@
             if($(this).val().length>0)
             {
                 $.ajax({
-                    url: base_url+"actual_purchase/check_actual_purchase_this_year/",
-                    type: 'POST',
-                    dataType: "JSON",
-                    data:{year:$(this).val()},
-                    success: function (data, status)
-                    {
-
-                    },
-                    error: function (xhr, desc, err)
-                    {
-                        console.log("error");
-                    }
-                });
-
-                $.ajax({
                     url: base_url+"actual_purchase/get_direct_cost_this_year/",
                     type: 'POST',
                     dataType: "JSON",
@@ -457,6 +543,41 @@
             {
                 $("#direct_cost_div").html('');
                 $(".grand_total_div").hide();
+            }
+        });
+
+        $(document).on("blur",".consignment_no",function()
+        {
+            if($("#year").val().length>1)
+            {
+                if($(".month_of_purchase").val()>0)
+                {
+                    if($(this).val().length>0)
+                    {
+                        $.ajax({
+                            url: base_url+"actual_purchase/check_consignment_no/",
+                            type: 'POST',
+                            dataType: "JSON",
+                            data:{year:$("#year").val(), month_of_purchase: $(".month_of_purchase").val(), consignment_no: $(this).val(), edit_id: $(".edit_id").val()},
+                            success: function (data, status)
+                            {
+
+                            },
+                            error: function (xhr, desc, err)
+                            {
+                                console.log("error");
+                            }
+                        });
+                    }
+                }
+                else
+                {
+                    $(".consignment_no").val('');
+                }
+            }
+            else
+            {
+                $(".month_of_purchase").val('');
             }
         });
 

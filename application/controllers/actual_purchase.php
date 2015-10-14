@@ -11,7 +11,7 @@ class Actual_purchase extends ROOT_Controller
         $this->load->model("actual_purchase_model");
     }
 
-    public function index($task="list", $year_id=0)
+    public function index($task="list", $edit_id=0)
     {
         if($task=="list")
         {
@@ -19,7 +19,7 @@ class Actual_purchase extends ROOT_Controller
         }
         elseif($task=="add" || $task=="edit")
         {
-            $this->budget_add_edit($year_id);
+            $this->budget_add_edit($edit_id);
         }
         elseif($task=="save")
         {
@@ -33,7 +33,7 @@ class Actual_purchase extends ROOT_Controller
 
     public function budget_list($page=0)
     {
-        $config = System_helper::pagination_config(base_url() . "actual_purchase/index/list/",$this->actual_purchase_model->get_total_purchase_years(),4);
+        $config = System_helper::pagination_config(base_url() . "actual_purchase/index/list/",$this->actual_purchase_model->get_total_purchases(),4);
         $this->pagination->initialize($config);
         $data["links"] = $this->pagination->create_links();
 
@@ -42,7 +42,7 @@ class Actual_purchase extends ROOT_Controller
             $page=$page-1;
         }
 
-        $data['setups'] = $this->actual_purchase_model->get_purchase_year_info($page);
+        $data['setups'] = $this->actual_purchase_model->get_purchase_info($page);
         $data['title']="Actual Purchase List";
 
         $ajax['status']=true;
@@ -57,23 +57,26 @@ class Actual_purchase extends ROOT_Controller
         $this->jsonReturn($ajax);
     }
 
-    public function budget_add_edit($year)
+    public function budget_add_edit($edit_id)
     {
         $data['years'] = Query_helper::get_info('ait_year',array('year_id value','year_name text'),array('del_status = 0'));
         $data['crops'] = $this->budget_common_model->get_ordered_crops();
         $data['types'] = $this->budget_common_model->get_ordered_crop_types();
         $data['varieties'] = $this->budget_common_model->get_ordered_varieties();
 
-        if(strlen($year)>1)
+        if($edit_id>0)
         {
-            $data['year'] = $year;
-            $data['quantity_setups'] = $this->actual_purchase_model->get_confirmed_quantity_detail($year);
+            $data['edit_id'] = $edit_id;
+            $data['setup'] = $this->actual_purchase_model->get_purchase_setup($edit_id);
+            $data['purchases'] = $this->actual_purchase_model->get_purchase_detail($edit_id);
             $data['title'] = "Edit Actual Purchase";
             $ajax['page_url']=base_url()."actual_purchase/index/edit/";
         }
         else
         {
-            $data['quantity_setups'] = array();
+            $data['edit_id'] = 0;
+            $data['setup'] = array();
+            $data['purchases'] = array();
             $data['title'] = "Actual Purchase";
             $ajax['page_url'] = base_url()."actual_purchase/index/add";
         }
@@ -88,9 +91,10 @@ class Actual_purchase extends ROOT_Controller
     {
         $user = User_helper::get_user();
         $data = array();
+        $setup_data = array();
         $time = time();
         $year = $this->input->post('year');
-        $data['year'] = $year;
+        $edit_id = $this->input->post('edit_id');
         $quantityPost = $this->input->post('quantity');
 
         if(!$this->check_validation())
@@ -103,9 +107,35 @@ class Actual_purchase extends ROOT_Controller
         {
             $this->db->trans_start();  //DB Transaction Handle START
 
-            if(strlen($this->input->post('year_id'))>1)
+            $setup_data['year'] = $year;
+            $setup_data['month_of_purchase'] = $this->input->post('month_of_purchase');
+            $setup_data['consignment_no'] = $this->input->post('consignment_no');
+            $setup_data['purchase_type'] = $this->config->item('purchase_type_actual');
+            $setup_data['usd_conversion_rate'] = $this->input->post('usd_conversion_rate');
+            $setup_data['lc_exp'] = $this->input->post('lc_exp');
+            $setup_data['insurance_exp'] = $this->input->post('insurance_exp');
+            $setup_data['packing_material'] = $this->input->post('packing_material');
+            $setup_data['carriage_inwards'] = $this->input->post('carriage_inwards');
+            $setup_data['docs'] = $this->input->post('docs');
+            $setup_data['cnf'] = $this->input->post('cnf');
+
+            if($edit_id>0)
             {
-                $this->actual_purchase_model->confirmed_quantity_initial_update($year); // initial update
+                $setup_data['modified_by'] = $user->user_id;
+                $setup_data['modification_date'] = $time;
+                Query_helper::update('budget_purchase_setup', $setup_data, array("id ='$edit_id'"));
+                $setup_id = $edit_id;
+            }
+            else
+            {
+                $setup_data['created_by'] = $user->user_id;
+                $setup_data['creation_date'] = $time;
+                $setup_id = Query_helper::add('budget_purchase_setup', $setup_data);
+            }
+
+            if($edit_id>0)
+            {
+                $this->actual_purchase_model->actual_purchase_initial_update($edit_id); // Initial update
             }
 
             foreach($quantityPost as $crop_id=>$typeVarietyPost)
@@ -122,20 +152,21 @@ class Actual_purchase extends ROOT_Controller
                             $data[$detailKey] = $val;
                         }
 
-                        $edit_id = $this->actual_purchase_model->check_confirmed_quantity_existence($year, $crop_id, $type_id, $variety_id);
+                        $purchase_edit_id = $this->actual_purchase_model->get_existing_purchase_and_id($edit_id, $variety_id);
 
-                        if($edit_id>0)
+                        if(isset($purchase_edit_id) && $purchase_edit_id>0)
                         {
                             $data['modified_by'] = $user->user_id;
                             $data['modification_date'] = $time;
                             $data['status'] = 1;
-                            Query_helper::update('actual_purchase_quantity', $data, array("id ='$edit_id'"));
+                            Query_helper::update('budget_purchases', $data, array("id ='$purchase_edit_id'"));
                         }
                         else
                         {
+                            $data['setup_id'] = $setup_id;
                             $data['created_by'] = $user->user_id;
                             $data['creation_date'] = $time;
-                            Query_helper::add('actual_purchase_quantity', $data);
+                            Query_helper::add('budget_purchases', $data);
                         }
                     }
                 }
@@ -158,64 +189,22 @@ class Actual_purchase extends ROOT_Controller
 
     private function check_validation()
     {
-        $valid=true;
-
-        $quantityPost = $this->input->post('quantity');
         $year = $this->input->post('year');
-        $year_id = $this->input->post('year_id');
+        $month_of_purchase = $this->input->post('month_of_purchase');
+        $consignment_no = $this->input->post('consignment_no');
+        $edit_id = $this->input->post('edit_id');
 
-        foreach($quantityPost as $crop_id=>$typeVarietyPost)
+        $existence = $this->actual_purchase_model->check_consignment_no_existence($year, $month_of_purchase, $consignment_no, $edit_id);
+
+        if($existence)
         {
-            foreach($typeVarietyPost as $type_id=>$varietyPost)
-            {
-                foreach($varietyPost as $variety_id=>$detailPost)
-                {
-                    $variety_array[] = $variety_id;
-                }
-            }
-        }
-
-        $new_arr = array_unique($variety_array, SORT_REGULAR);
-
-        if($variety_array != $new_arr)
-        {
-            $valid=false;
-            $this->message .= $this->lang->line("DUPLICATE_CROP_TYPE").'<br>';
-        }
-
-        if(is_array($variety_array) && sizeof($variety_array)>0)
-        {
-            $new_arr = array_unique($variety_array, SORT_REGULAR);
-
-            if($variety_array != $new_arr)
-            {
-                $valid=false;
-                $this->message .= $this->lang->line("DUPLICATE_CROP_TYPE").'<br>';
-            }
+            $this->message = $this->lang->line("CONSIGNMENT_NO_CANNOT_BE_DUPLICATE");
+            return false;
         }
         else
         {
-            $valid=false;
-            $this->message .= $this->lang->line("NO_VALID_ENTRY").'<br>';
+            return true;
         }
-
-        if(!$year)
-        {
-            $valid=false;
-            $this->message .= $this->lang->line("SELECT_YEAR").'<br>';
-        }
-
-        if(strlen($year_id)==1)
-        {
-            $existence = $this->actual_purchase_model->check_quantity_year_existence($year);
-            if($existence)
-            {
-                $valid=false;
-                $this->message .= $this->lang->line("actual_purchase_SET_ALREADY").'<br>';
-            }
-        }
-
-        return $valid;
     }
 
     public function get_purchase_detail_by_variety()
@@ -226,8 +215,6 @@ class Actual_purchase extends ROOT_Controller
         $current_id = $this->input->post('current_id');
         $data['year'] = $this->input->post('year');
 
-//        $data['quantity_detail'] = $this->actual_purchase_model->get_quantity_detail($data['year'], $crop_id, $type_id, $variety_id);
-//        $data['previously_purchased'] = $this->actual_purchase_model->get_previously_purchased_quantity($data['year'], $crop_id, $type_id, $variety_id);
         $data['variety_info'] = $this->actual_purchase_model->get_variety_info($variety_id);
         $data['crop_id'] = $crop_id;
         $data['type_id'] = $type_id;
@@ -266,15 +253,19 @@ class Actual_purchase extends ROOT_Controller
         }
     }
 
-    public function check_actual_purchase_this_year()
+    public function check_consignment_no()
     {
         $year = $this->input->post('year');
-        $existence = $this->actual_purchase_model->check_quantity_year_existence($year);
+        $month_of_purchase = $this->input->post('month_of_purchase');
+        $consignment_no = $this->input->post('consignment_no');
+        $edit_id = $this->input->post('edit_id');
+
+        $existence = $this->actual_purchase_model->check_consignment_no_existence($year, $month_of_purchase, $consignment_no, $edit_id);
 
         if($existence)
         {
             $ajax['status'] = false;
-            $ajax['message'] = $this->lang->line("actual_purchase_SET_ALREADY");
+            $ajax['message'] = $this->lang->line("CONSIGNMENT_NO_CANNOT_BE_DUPLICATE");
             $this->jsonReturn($ajax);
         }
         else

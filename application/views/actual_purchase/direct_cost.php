@@ -71,7 +71,7 @@
         <label class="control-label pull-right"><?php echo $this->lang->line('LABEL_MONTH_OF_PURCHASE');?><span style="color:#FF0000">*</span></label>
     </div>
     <div class="col-sm-4 col-xs-8">
-        <select name="month_of_purchase" class="form-control validate[required]">
+        <select name="month_of_purchase" class="form-control validate[required] month_of_purchase">
             <option value=""><?php echo $this->lang->line('SELECT');?></option>
             <?php
             $months = $this->config->item('month');
@@ -91,6 +91,6 @@
         <label class="control-label pull-right"><?php echo $this->lang->line('LABEL_CONSIGNMENT_NO');?><span style="color:#FF0000">*</span></label>
     </div>
     <div class="col-sm-4 col-xs-8">
-        <input type="text" name="consignment_no" class="form-control validate[required]" value="" />
+        <input type="text" name="consignment_no" class="form-control validate[required] consignment_no" value="" />
     </div>
 </div>

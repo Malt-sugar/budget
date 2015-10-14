@@ -191,4 +191,39 @@ class Purchase_helper
         }
     }
 
+    public static function get_variety_actual_purchase_values($edit_id, $variety, $total_lc_exp, $total_insurance_exp, $total_packing_material, $total_carriage_inwards, $total_docs, $total_cnf)
+    {
+        $CI = & get_instance();
+        $data = array();
+        $active = $CI->config->item('status_active');
+
+        $CI->db->from('budget_purchases bp');
+        $CI->db->select('bp.*');
+
+        $CI->db->select('(SELECT SUM(pi_value) FROM `budget_purchases` bp WHERE bp.setup_id="'.$edit_id.'" AND bp.status="'.$active.'") as total_pi_value');
+
+        $CI->db->where('bp.setup_id', $edit_id);
+        $CI->db->where('bp.variety_id', $variety);
+        $CI->db->where('bp.status', $CI->config->item('status_active'));
+        $result = $CI->db->get()->row_array();
+
+        $data['purchase_quantity'] = $result['purchase_quantity'];
+        $data['pi_value'] = $result['pi_value'];
+        $data['remarks'] = $result['remarks'];
+
+        $total_pi_value = $result['total_pi_value'];
+        $pi_value_percentage = ($data['pi_value']/$total_pi_value)*100;
+
+        $data['lc_exp'] = round(($pi_value_percentage/100)*$total_lc_exp, 2);
+        $data['insurance_exp'] = round(($pi_value_percentage/100)*$total_insurance_exp, 2);
+        $data['packing_material'] = round(($pi_value_percentage/100)*$total_packing_material, 2);
+        $data['carriage_inwards'] = round(($pi_value_percentage/100)*$total_carriage_inwards, 2);
+        $data['docs'] = round(($pi_value_percentage/100)*$total_docs, 2);
+        $data['cnf'] = round(($pi_value_percentage/100)*$total_cnf, 2);
+        $data['cogs'] = round(($data['pi_value']+$data['lc_exp']+$data['insurance_exp']+$data['packing_material']+$data['carriage_inwards']+$data['docs']+$data['cnf']), 2);
+        $data['total_cogs'] = round(($data['cogs']*$data['purchase_quantity']), 2);
+
+        return $data;
+    }
+
 }
