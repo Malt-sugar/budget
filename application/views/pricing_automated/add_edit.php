@@ -6,7 +6,7 @@
     $this->load->view("action_buttons_edit",$data);
 
 ?>
-<form class="form_valid" id="save_form" action="<?php echo base_url();?>confirmed_quantity_setup/index/save" method="post">
+<form class="form_valid" id="save_form" action="<?php echo base_url();?>pricing_automated/index/save" method="post">
     <input type="hidden" name="year_id" value="<?php echo isset($year)?$year:0;?>" />
     <div class="row widget">
         <div class="widget-header">
@@ -105,7 +105,7 @@
             if($(this).val().length>1 && $("#selection_type").val()==1)
             {
                 $.ajax({
-                    url: base_url+"confirmed_quantity_setup/get_quantity_detail_by_variety/",
+                    url: base_url+"pricing_automated/get_quantity_detail_by_variety/",
                     type: 'POST',
                     dataType: "JSON",
                     data:{crop_id: $(this).val(), type_id: 0, year: $("#year").val()},
@@ -125,7 +125,7 @@
                 $("#variety_quantity").html('');
 
                 $.ajax({
-                    url: base_url+"confirmed_quantity_setup/get_dropDown_type_by_crop/",
+                    url: base_url+"pricing_automated/get_dropDown_type_by_crop/",
                     type: 'POST',
                     dataType: "JSON",
                     data:{crop_id:$(this).val()},
@@ -151,7 +151,7 @@
             if($(this).val().length>1 && $("#crop_select").val().length>1 && $("#selection_type").val()==2)
             {
                 $.ajax({
-                    url: base_url+"confirmed_quantity_setup/get_quantity_detail_by_variety/",
+                    url: base_url+"pricing_automated/get_quantity_detail_by_variety/",
                     type: 'POST',
                     dataType: "JSON",
                     data:{crop_id: $("#crop_select").val(), type_id: $(this).val(), year: $("#year").val()},
@@ -169,27 +169,6 @@
             {
                 $("#variety_quantity").html('');
             }
-        });
-
-        $(document).on("change","#year",function()
-        {
-//            if($(this).val().length>0)
-//            {
-//                $.ajax({
-//                    url: base_url+"confirmed_quantity_setup/check_budget_purchase_this_year/",
-//                    type: 'POST',
-//                    dataType: "JSON",
-//                    data:{year:$(this).val()},
-//                    success: function (data, status)
-//                    {
-//
-//                    },
-//                    error: function (xhr, desc, err)
-//                    {
-//                        console.log("error");
-//                    }
-//                });
-//            }
         });
 
         $(document).on("keyup", ".numbersOnly", function()

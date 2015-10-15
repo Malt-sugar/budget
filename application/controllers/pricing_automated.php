@@ -49,7 +49,6 @@ class Pricing_automated extends ROOT_Controller
 
         $ajax['status'] = true;
         $ajax['content'][] = array("id"=>"#content","html"=>$this->load->view("pricing_automated/add_edit",$data,true));
-
         $this->jsonReturn($ajax);
     }
 
@@ -200,7 +199,7 @@ class Pricing_automated extends ROOT_Controller
 
         if(isset($data['year']) && sizeof($data['varieties'])>0)
         {
-            $data['title'] = 'Confirmed Quantity';
+            $data['title'] = 'Pricing Automated';
             $ajax['status'] = true;
             $ajax['content'][]=array("id"=>'#variety_quantity',"html"=>$this->load->view("pricing_automated/variety_list",$data,true));
             $this->jsonReturn($ajax);

@@ -48,3 +48,9 @@ $config['month']['09'] = 'September';
 $config['month']['10'] = 'October';
 $config['month']['11'] = 'November';
 $config['month']['12'] = 'December';
+
+// Pricing Type
+$config['pricing_type_automated'] = 1;
+$config['pricing_type_initial'] = 2;
+$config['pricing_type_marketing'] = 3;
+$config['pricing_type_final'] = 4;
