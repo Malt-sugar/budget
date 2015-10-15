@@ -55,6 +55,14 @@
                 <input type="text" name="finance_cost" class="form-control validate[required]" value="<?php if(isset($cost['finance_cost'])){echo $cost['finance_cost'];}?>" />
             </div>
         </div>
+    </div>
+
+    <div class="row widget">
+        <div class="widget-header">
+            <div class="title">
+            </div>
+            <div class="clearfix"></div>
+        </div>
 
         <div style="" class="row show-grid">
             <div class="col-xs-4">

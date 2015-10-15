@@ -63,19 +63,19 @@ class Indirect_cost_setup extends ROOT_Controller
 
         if($id>0)
         {
-            $data['title']="Edit Indirect Cost Setup";
+            $data['title'] = "Edit Indirect Cost Setup";
             $data["cost"] = $this->indirect_cost_setup_model->get_indirect_cost_detail($id);
-            $ajax['page_url']=base_url()."indirect_cost_setup/index/edit";
+            $ajax['page_url'] = base_url()."indirect_cost_setup/index/edit";
         }
         else
         {
-            $data['title']="Indirect Cost Setup";
-            $data["purchase"] = Array();
-            $ajax['page_url']=base_url()."indirect_cost_setup/index/add";
+            $data['title'] = "Indirect Cost Setup";
+            $data["cost"] = Array();
+            $ajax['page_url'] = base_url()."indirect_cost_setup/index/add";
         }
 
-        $ajax['status']=true;
-        $ajax['content'][]=array("id"=>"#content","html"=>$this->load->view("indirect_cost_setup/add_edit",$data,true));
+        $ajax['status'] = true;
+        $ajax['content'][] = array("id"=>"#content","html"=>$this->load->view("indirect_cost_setup/add_edit",$data,true));
 
         $this->jsonReturn($ajax);
     }
@@ -141,7 +141,6 @@ class Indirect_cost_setup extends ROOT_Controller
                 {
                     $this->message=$this->lang->line("MSG_NOT_SAVED_SUCCESS");
                 }
-
             }
 
             $this->budget_list();//this is similar like redirect
