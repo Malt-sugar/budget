@@ -192,7 +192,6 @@
 
     jQuery(document).ready(function()
     {
-        turn_off_triggers();
         $(document).on("click", ".load_remark", function(event)
         {
             $(this).closest('td').find('.popContainer').show();

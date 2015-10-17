@@ -59,7 +59,7 @@ class Pricing_automated extends ROOT_Controller
         $time = time();
         $year = $this->input->post('year');
         $data['year'] = $year;
-        $quantityPost = $this->input->post('quantity');
+        $pricingPost = $this->input->post('pricing');
 
         if(!$this->check_validation())
         {
@@ -71,9 +71,7 @@ class Pricing_automated extends ROOT_Controller
         {
             $this->db->trans_start();  //DB Transaction Handle START
 
-            $this->pricing_automated_model->confirmed_quantity_initial_update($year); // initial update
-
-            foreach($quantityPost as $crop_id=>$typeVarietyPost)
+            foreach($pricingPost as $crop_id=>$typeVarietyPost)
             {
                 $data['crop_id'] = $crop_id;
                 foreach($typeVarietyPost as $type_id=>$varietyPost)
@@ -87,22 +85,22 @@ class Pricing_automated extends ROOT_Controller
                             $data[$detailKey] = $val;
                         }
 
-                        if($data['confirmed_quantity']>0 && $data['pi_value']>0)
+                        if($data['mrp']>0)
                         {
-                            $edit_id = $this->pricing_automated_model->check_confirmed_quantity_existence($year, $crop_id, $type_id, $variety_id);
+                            $edit_id = $this->pricing_automated_model->check_sales_pricing_existence($year, $crop_id, $type_id, $variety_id);
 
                             if($edit_id>0)
                             {
                                 $data['modified_by'] = $user->user_id;
                                 $data['modification_date'] = $time;
                                 $data['status'] = 1;
-                                Query_helper::update('budget_purchase_quantity',$data,array("id ='$edit_id'"));
+                                Query_helper::update('budget_sales_pricing',$data,array("id ='$edit_id'"));
                             }
                             else
                             {
                                 $data['created_by'] = $user->user_id;
                                 $data['creation_date'] = $time;
-                                Query_helper::add('budget_purchase_quantity', $data);
+                                Query_helper::add('budget_sales_pricing', $data);
                             }
                         }
                     }
@@ -131,61 +129,6 @@ class Pricing_automated extends ROOT_Controller
     private function check_validation()
     {
         $valid=true;
-
-        $quantityPost = $this->input->post('quantity');
-        $year = $this->input->post('year');
-
-        foreach($quantityPost as $crop_id=>$typeVarietyPost)
-        {
-            foreach($typeVarietyPost as $type_id=>$varietyPost)
-            {
-                foreach($varietyPost as $variety_id=>$detailPost)
-                {
-                    $variety_array[] = $variety_id;
-                }
-            }
-        }
-
-        $new_arr = array_unique($variety_array, SORT_REGULAR);
-
-        if($variety_array != $new_arr)
-        {
-            $valid=false;
-            $this->message .= $this->lang->line("DUPLICATE_CROP_TYPE").'<br>';
-        }
-
-        if(is_array($variety_array) && sizeof($variety_array)>0)
-        {
-            $new_arr = array_unique($variety_array, SORT_REGULAR);
-
-            if($variety_array != $new_arr)
-            {
-                $valid=false;
-                $this->message .= $this->lang->line("DUPLICATE_CROP_TYPE").'<br>';
-            }
-        }
-        else
-        {
-            $valid=false;
-            $this->message .= $this->lang->line("NO_VALID_ENTRY").'<br>';
-        }
-
-        if(!$year)
-        {
-            $valid=false;
-            $this->message .= $this->lang->line("SELECT_YEAR").'<br>';
-        }
-
-//        if(strlen($year_id)==1)
-//        {
-//            $existence = $this->pricing_automated_model->check_quantity_year_existence($year);
-//            if($existence)
-//            {
-//                $valid=false;
-//                $this->message .= $this->lang->line("BUDGET_PURCHASE_SET_ALREADY").'<br>';
-//            }
-//        }
-
         return $valid;
     }
 
@@ -201,7 +144,7 @@ class Pricing_automated extends ROOT_Controller
         {
             $data['title'] = 'Pricing Automated';
             $ajax['status'] = true;
-            $ajax['content'][]=array("id"=>'#variety_quantity',"html"=>$this->load->view("pricing_automated/variety_list",$data,true));
+            $ajax['content'][] = array("id"=>'#variety_quantity',"html"=>$this->load->view("pricing_automated/variety_list",$data,true));
             $this->jsonReturn($ajax);
         }
         else

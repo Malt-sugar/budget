@@ -253,3 +253,4 @@ $lang['LABEL_TOTAL_BUDGETED_MRP']='Total Budgeted MRP';
 $lang['LABEL_TOTAL_NET_SALES']='Total Net Sales';
 $lang['LABEL_TOTAL_NET_PROFIT']='Total Net Profit';
 $lang['LABEL_AUTOMATED_MRP']='Automated MRP';
+$lang['LABEL_TARGETED_QUANTITY']='Targeted Quantity';
