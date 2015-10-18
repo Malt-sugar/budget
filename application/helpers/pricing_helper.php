@@ -55,4 +55,58 @@ class Pricing_helper
         return $result;
     }
 
+    public static function get_pricing_marketing_existing_info($year, $variety)
+    {
+        $CI = & get_instance();
+
+        $CI->db->from('budget_sales_pricing bsp');
+        $CI->db->select('bsp.*');
+        $CI->db->where('bsp.year', $year);
+        $CI->db->where('bsp.variety_id', $variety);
+        $CI->db->where('bsp.pricing_type', $CI->config->item('pricing_type_marketing'));
+        $result = $CI->db->get()->row_array();
+        return $result;
+    }
+
+    public static function get_pricing_initial_existing_info($year, $variety)
+    {
+        $CI = & get_instance();
+
+        $CI->db->from('budget_sales_pricing bsp');
+        $CI->db->select('bsp.*');
+        $CI->db->where('bsp.year', $year);
+        $CI->db->where('bsp.variety_id', $variety);
+        $CI->db->where('bsp.pricing_type', $CI->config->item('pricing_type_initial'));
+        $result = $CI->db->get()->row_array();
+        return $result;
+    }
+
+    public static function get_pricing_marketing_info($year, $variety)
+    {
+        $CI = & get_instance();
+        $data = array();
+
+        $CI->db->from('budget_indirect_cost_setup bics');
+        $CI->db->select('bics.*');
+        $CI->db->where('bics.year', $year);
+        $result = $CI->db->get()->row_array();
+        $data['ho_and_gen_exp'] = $result['ho_and_gen_exp'];
+        $data['marketing'] = isset($result['marketing'])?$result['marketing']:0;
+        $data['finance_cost'] = isset($result['finance_cost'])?$result['finance_cost']:0;
+        $data['target_profit'] = isset($result['target_profit'])?$result['target_profit']:0;
+        $data['sales_commission'] = isset($result['sales_commission'])?$result['sales_commission']:0;
+
+        // MRP BY MGT
+
+        $CI->db->from('budget_sales_pricing bsp');
+        $CI->db->select('bsp.mrp');
+        $CI->db->where('bsp.year', $year);
+        $CI->db->where('bsp.variety_id', $variety);
+        $CI->db->where('bsp.pricing_type', $CI->config->item('pricing_type_initial'));
+        $result = $CI->db->get()->row_array();
+        $data['mrp_by_mgt'] = isset($result['mrp'])?$result['mrp']:0;
+
+        return $data;
+    }
+
 }

@@ -254,3 +254,7 @@ $lang['LABEL_TOTAL_NET_SALES']='Total Net Sales';
 $lang['LABEL_TOTAL_NET_PROFIT']='Total Net Profit';
 $lang['LABEL_AUTOMATED_MRP']='Automated MRP';
 $lang['LABEL_TARGETED_QUANTITY']='Targeted Quantity';
+$lang['LABEL_LAST_YEAR_MRP']='Last Year MRP';
+$lang['LABEL_MRP_BY_MGT']='MRP By MGT';
+$lang['LABEL_MARKETING_MRP']='Marketing MRP';
+$lang['LABEL_SALES_COMMISSION']='Sales Commission';
