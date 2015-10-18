@@ -77,6 +77,7 @@ class Pricing_automated_model extends CI_Model
         $this->db->where('bsp.crop_id', $crop);
         $this->db->where('bsp.type_id', $type);
         $this->db->where('bsp.variety_id', $variety);
+        $this->db->where('bsp.pricing_type', $this->config->item('pricing_type_automated'));
         $result = $this->db->get()->row_array();
         if($result)
         {

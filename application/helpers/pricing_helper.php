@@ -42,4 +42,17 @@ class Pricing_helper
         return $data;
     }
 
+    public static function get_pricing_automated_existing_info($year, $variety)
+    {
+        $CI = & get_instance();
+
+        $CI->db->from('budget_sales_pricing bsp');
+        $CI->db->select('bsp.*');
+        $CI->db->where('bsp.year', $year);
+        $CI->db->where('bsp.variety_id', $variety);
+        $CI->db->where('bsp.pricing_type', $CI->config->item('pricing_type_automated'));
+        $result = $CI->db->get()->row_array();
+        return $result;
+    }
+
 }

@@ -60,6 +60,7 @@ class Pricing_automated extends ROOT_Controller
         $year = $this->input->post('year');
         $data['year'] = $year;
         $pricingPost = $this->input->post('pricing');
+        $data['pricing_type'] = $this->config->item('pricing_type_automated');
 
         if(!$this->check_validation())
         {
