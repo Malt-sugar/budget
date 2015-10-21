@@ -49,7 +49,14 @@
 
                     $net_profit = round($existing_data['mrp'] - $total_cogs, 2);
                     $total_net_profit = round($net_profit*$detail['principal_quantity'], 2);
-                    $profit_percentage = round(($total_net_profit/$total_cogs)*100, 2);
+                    if($total_cogs>0)
+                    {
+                        $profit_percentage = round(($total_net_profit/$total_cogs)*100, 2);
+                    }
+                    else
+                    {
+                        $profit_percentage = 0;
+                    }
                 }
             ?>
             <tr class="main_tr">
@@ -99,7 +106,7 @@
                 <td class="text-center"><?php echo $detail['sales_commission'];?><input type="hidden" name="sales_commission" class="sales_commission" value="<?php echo $detail['sales_commission'];?>" /></td>
                 <td class="text-center"><input type="text" name="pricing[<?php echo $variety['crop_id'];?>][<?php echo $variety['product_type_id'];?>][<?php echo $variety['varriety_id'];?>][sales_bonus]" class="form-control sales_bonus numbersOnly" value="<?php echo isset($existing_data['sales_bonus'])?$existing_data['sales_bonus']:'';?>" /></td>
                 <td class="text-center"><input type="text" name="pricing[<?php echo $variety['crop_id'];?>][<?php echo $variety['product_type_id'];?>][<?php echo $variety['varriety_id'];?>][other_incentive]" class="form-control other_incentive numbersOnly" value="<?php echo isset($existing_data['other_incentive'])?$existing_data['other_incentive']:'';?>" /></td>
-                <td class="text-center"><input type="text" name="pricing[<?php echo $variety['crop_id'];?>][<?php echo $variety['product_type_id'];?>][<?php echo $variety['varriety_id'];?>][mrp]" class="form-control mrp_by_mgt numbersOnly" value="<?php echo isset($existing_data['mrp'])?$existing_data['mrp']:'';?>" /></td>
+                <td class="text-center"><input type="text" name="pricing[<?php echo $variety['crop_id'];?>][<?php echo $variety['product_type_id'];?>][<?php echo $variety['varriety_id'];?>][mrp]" class="form-control mrp_final numbersOnly" value="<?php echo isset($existing_data['mrp'])?$existing_data['mrp']:'';?>" /></td>
                 <td class="text-center net_sales_price"><?php if(isset($net_sales_price)){echo $net_sales_price;}?></td>
                 <td class="text-center net_profit"><?php if(isset($net_profit)){echo $net_profit;}?></td>
                 <td class="text-center total_net_sales"><?php if(isset($total_net_sales_price)){echo $total_net_sales_price;}?></td>
@@ -148,22 +155,22 @@
             $(".popContainer").hide();
         });
 
-        $(document).on("keyup",".mrp_by_mgt",function()
+        $(document).on("keyup",".mrp_final",function()
         {
             var total_cogs = parseFloat($(this).closest('.main_tr').find(".total_cogs").val());
             var targeted_quantity = parseInt($(this).closest('.main_tr').find(".targeted_quantity").val());
             var sales_commission = parseFloat($(this).closest('.main_tr').find(".sales_commission").val());
             var sales_bonus = parseFloat($(this).closest('.main_tr').find(".sales_bonus").val());
             var other_incentive = parseFloat($(this).closest('.main_tr').find(".other_incentive").val());
-            var mrp_by_mgt = parseFloat($(this).val());
+            var mrp_final = parseFloat($(this).val());
 
-            var net_sales_price = (mrp_by_mgt - (sales_commission/100)*mrp_by_mgt - (sales_bonus/100)*mrp_by_mgt - (other_incentive/100)*mrp_by_mgt).toFixed(2);
+            var net_sales_price = (mrp_final - (sales_commission/100)*mrp_final - (sales_bonus/100)*mrp_final - (other_incentive/100)*mrp_final).toFixed(2);
             var total_net_sales_price = net_sales_price*targeted_quantity;
 
             $(this).closest('.main_tr').find(".net_sales_price").html(net_sales_price);
             $(this).closest('.main_tr').find(".total_net_sales").html(total_net_sales_price);
 
-            var net_profit = (mrp_by_mgt - total_cogs).toFixed(2);
+            var net_profit = (mrp_final - total_cogs).toFixed(2);
             var total_net_profit = (net_profit*targeted_quantity).toFixed(2);
 
             $(this).closest('.main_tr').find(".net_profit").html(net_profit);

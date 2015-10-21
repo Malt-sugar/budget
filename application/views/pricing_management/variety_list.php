@@ -47,7 +47,14 @@
 
                     $net_profit = round($existing_data['mrp'] - $total_cogs, 2);
                     $total_net_profit = round($net_profit*$detail['principal_quantity'], 2);
-                    $profit_percentage = round(($total_net_profit/$total_cogs)*100, 2);
+                    if($total_cogs>0)
+                    {
+                        $profit_percentage = round(($total_net_profit/$total_cogs)*100, 2);
+                    }
+                    else
+                    {
+                        $profit_percentage = 0;
+                    }
                 }
             ?>
             <tr class="main_tr">
