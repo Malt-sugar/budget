@@ -97,8 +97,8 @@
                 <td class="text-center"><input type="text" name="pricing[<?php echo $variety['crop_id'];?>][<?php echo $variety['product_type_id'];?>][<?php echo $variety['varriety_id'];?>][other_incentive]" class="form-control other_incentive numbersOnly" value="<?php echo isset($existing_data['other_incentive'])?$existing_data['other_incentive']:'';?>" /></td>
                 <td class="text-center"><input type="text" name="pricing[<?php echo $variety['crop_id'];?>][<?php echo $variety['product_type_id'];?>][<?php echo $variety['varriety_id'];?>][mrp]" class="form-control mrp_by_mgt numbersOnly" value="<?php echo isset($existing_data['mrp'])?$existing_data['mrp']:'';?>" /></td>
                 <td class="text-center net_sales_price"><?php if(isset($net_sales_price)){echo $net_sales_price;}?></td>
-                <td class="text-center net_profit"><?php if(isset($total_net_sales_price)){echo $total_net_sales_price;}?></td>
-                <td class="text-center total_net_sales"><?php if(isset($net_profit)){echo $net_profit;}?></td>
+                <td class="text-center net_profit"><?php if(isset($net_profit)){echo $net_profit;}?></td>
+                <td class="text-center total_net_sales"><?php if(isset($total_net_sales_price)){echo $total_net_sales_price;}?></td>
                 <td class="text-center total_net_profit"><?php if(isset($total_net_profit)){echo $total_net_profit;}?></td>
                 <td class="text-center profit_percentage"><?php if(isset($profit_percentage)){echo $profit_percentage;}?></td>
                 <td class="text-center" style="vertical-align: middle;">
@@ -159,7 +159,7 @@
             $(this).closest('.main_tr').find(".net_sales_price").html(net_sales_price);
             $(this).closest('.main_tr').find(".total_net_sales").html(total_net_sales_price);
 
-            var net_profit = (total_cogs - mrp_by_mgt).toFixed(2);
+            var net_profit = (mrp_by_mgt - total_cogs).toFixed(2);
             var total_net_profit = (net_profit*targeted_quantity).toFixed(2);
 
             $(this).closest('.main_tr').find(".net_profit").html(net_profit);
