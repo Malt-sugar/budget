@@ -262,3 +262,5 @@ $lang['LABEL_MARKETING_MRP']='Marketing MRP';
 $lang['LABEL_SALES_COMMISSION']='Sales Commission';
 $lang['LABEL_NET_PROFIT']='Net Profit';
 $lang['LABEL_PROFIT_PER']='Profit (%)';
+$lang['LABEL_MGT_MRP']='MGT MRP';
+$lang['LABEL_FINAL_MRP']='Final MRP(MGT)';

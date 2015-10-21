@@ -62,7 +62,7 @@
                     ?>
                 </td>
                 <td class="text-center"><?php echo $variety['varriety_name'];?></td>
-                <td class="text-center"><?php echo '';?></td>
+                <td class="text-center"><?php echo $detail['last_year_mrp'];?></td>
                 <td class="text-center"><?php echo $detail['mrp_by_mgt'];?></td>
                 <td class="text-center"><?php echo $detail['sales_commission'];?></td>
                 <td class="text-center"><input type="text" name="pricing[<?php echo $variety['crop_id'];?>][<?php echo $variety['product_type_id'];?>][<?php echo $variety['varriety_id'];?>][mrp]" class="form-control sales_bonus numbersOnly" value="<?php echo isset($existing_data['mrp'])?$existing_data['mrp']:'';?>" /></td>
