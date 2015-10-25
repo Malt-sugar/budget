@@ -1,13 +1,12 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
     $data["link_new"]="#";
     $data["hide_new"]="1";
-    $data["link_back"]=base_url()."pricing_final";
+    $data["link_back"]=base_url()."marketing_pricing_detail";
     $data["hide_approve"]="1";
     $this->load->view("action_buttons_edit",$data);
 
 ?>
-<form class="form_valid" id="save_form" action="<?php echo base_url();?>pricing_final/index/save" method="post">
-    <input type="hidden" name="year_id" value="<?php echo isset($year)?$year:0;?>" />
+<form class="form_valid" id="save_form" action="<?php echo base_url();?>marketing_pricing_detail/index/save" method="post">
     <div class="row widget">
         <div class="widget-header">
             <div class="title">
@@ -105,7 +104,7 @@
             if($(this).val().length>1 && $("#selection_type").val()==1)
             {
                 $.ajax({
-                    url: base_url+"pricing_final/get_quantity_detail_by_variety/",
+                    url: base_url+"marketing_pricing_detail/get_quantity_detail_by_variety/",
                     type: 'POST',
                     dataType: "JSON",
                     data:{crop_id: $(this).val(), type_id: 0, year: $("#year").val()},
@@ -125,7 +124,7 @@
                 $("#variety_quantity").html('');
 
                 $.ajax({
-                    url: base_url+"pricing_final/get_dropDown_type_by_crop/",
+                    url: base_url+"marketing_pricing_detail/get_dropDown_type_by_crop/",
                     type: 'POST',
                     dataType: "JSON",
                     data:{crop_id:$(this).val()},
@@ -151,7 +150,7 @@
             if($(this).val().length>1 && $("#crop_select").val().length>1 && $("#selection_type").val()==2)
             {
                 $.ajax({
-                    url: base_url+"pricing_final/get_quantity_detail_by_variety/",
+                    url: base_url+"marketing_pricing_detail/get_quantity_detail_by_variety/",
                     type: 'POST',
                     dataType: "JSON",
                     data:{crop_id: $("#crop_select").val(), type_id: $(this).val(), year: $("#year").val()},
