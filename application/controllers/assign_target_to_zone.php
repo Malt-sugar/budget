@@ -35,7 +35,6 @@ class Assign_target_to_zone extends ROOT_Controller
         $data['types'] = $this->budget_common_model->get_ordered_crop_types();
         $data['years'] = Query_helper::get_info('ait_year',array('year_id value','year_name text'),array('del_status = 0'));
         $data['zones'] = Query_helper::get_info('ait_zone_info',array('zone_id value','zone_name text'),array('del_status = 0', 'division_id = "'.$user_div.'"'));
-        //$data['varieties'] = $this->assign_target_to_zone_model->get_variety_info();
 
         $data['title']="Assign Target To Zone";
         $ajax['page_url']=base_url()."assign_target_to_zone/index/add";

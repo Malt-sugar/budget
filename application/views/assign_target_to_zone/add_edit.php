@@ -1,6 +1,6 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
     $data["link_new"]=base_url()."assign_target_to_zone/index/add";
-    $data["link_back"]=base_url()."assign_target_to_zone";
+    $data["link_back"]=base_url()."home";
     $data["link_approve"]="#";
     $data["hide_approve"]="1";
 
@@ -28,6 +28,7 @@
                 </select>
             </div>
         </div>
+
         <div class="row show-grid">
             <div class="col-xs-4">
                 <label class="control-label pull-right"><?php echo $this->lang->line('LABEL_SELECTION_TYPE');?><span style="color:#FF0000">*</span></label>
@@ -152,7 +153,7 @@
                 $("#type_select_div").show();
 
                 $.ajax({
-                    url: base_url+"confirmed_quantity_setup/get_dropDown_type_by_crop/",
+                    url: base_url+"assign_target_to_zone/get_dropDown_type_by_crop/",
                     type: 'POST',
                     dataType: "JSON",
                     data:{crop_id:$(this).val()},

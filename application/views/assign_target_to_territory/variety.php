@@ -9,7 +9,7 @@
         <td class="text-center">
             <table class="table table-bordered" style="margin: 0px;">
                 <tr>
-                    <td class="text-center"><label class="label label-success">Zones</label></td>
+                    <td class="text-center"><label class="label label-success">Territories</label></td>
                 </tr>
             </table>
 

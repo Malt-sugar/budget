@@ -1,6 +1,6 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
     $data["link_new"]=base_url()."principal_quantity_setup/index/add";
-    $data["link_back"]=base_url()."principal_quantity_setup";
+    $data["link_back"]=base_url()."home";
     $data["link_approve"]="#";
     $data["hide_approve"]="1";
 

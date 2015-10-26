@@ -10,7 +10,7 @@ class Assign_target_to_territory_model extends CI_Model
         parent::__construct();
     }
 
-    public function get_variety_info()
+    public function get_variety_info($crop_id, $type_id)
     {
         $user = User_helper::get_user();
         $this->db->select('avi.varriety_id, avi.varriety_name');
@@ -25,6 +25,16 @@ class Assign_target_to_territory_model extends CI_Model
         $this->db->order_by('aci.order_crop');
         $this->db->order_by('apt.order_type');
         $this->db->order_by('avi.order_variety');
+
+        if(strlen($crop_id)>1)
+        {
+            $this->db->where('avi.crop_id', $crop_id);
+        }
+
+        if(strlen($type_id)>1)
+        {
+            $this->db->where('avi.product_type_id', $type_id);
+        }
 
         $this->db->where('avi.status', 'Active');
         $results = $this->db->get()->result_array();

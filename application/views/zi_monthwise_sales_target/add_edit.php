@@ -1,6 +1,6 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
-    $data["link_new"]=base_url()."zi_sales_target/index/add";
-    $data["link_back"]=base_url()."zi_sales_target";
+    $data["link_new"]=base_url()."zi_monthwise_sales_target/index/add";
+    $data["link_back"]=base_url()."home";
     $data["link_approve"]="#";
     $data["hide_approve"]="1";
     $data["link_save"]="#";
