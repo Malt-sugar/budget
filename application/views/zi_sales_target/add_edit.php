@@ -30,7 +30,46 @@
             </div>
         </div>
 
-        <div id="load_variety" style="overflow-x: auto; display: none;">
+        <div class="row show-grid">
+            <div class="col-xs-4">
+                <label class="control-label pull-right"><?php echo $this->lang->line('LABEL_SELECTION_TYPE');?><span style="color:#FF0000">*</span></label>
+            </div>
+            <div class="col-sm-4 col-xs-8">
+                <select name="selection_type" id="selection_type" class="form-control validate[required]">
+                    <option value=""><?php echo $this->lang->line('SELECT');?></option>
+                    <option value="1"><?php echo $this->lang->line('LABEL_CROP_WISE');?></option>
+                    <option value="2"><?php echo $this->lang->line('LABEL_TYPE_WISE');?></option>
+                </select>
+            </div>
+        </div>
+
+        <div class="row show-grid" id="crop_select_div" style="display: none;">
+            <div class="col-xs-4">
+                <label class="control-label pull-right"><?php echo $this->lang->line('LABEL_CROP');?></label>
+            </div>
+            <div class="col-sm-4 col-xs-8">
+                <select name="crop_select" id="crop_select" class="form-control">
+                    <?php
+                    $this->load->view('dropdown',array('drop_down_options'=>$crops,'drop_down_selected'=>''));
+                    ?>
+                </select>
+            </div>
+        </div>
+
+        <div class="row show-grid" id="type_select_div" style="display: none;">
+            <div class="col-xs-4">
+                <label class="control-label pull-right"><?php echo $this->lang->line('LABEL_TYPE');?></label>
+            </div>
+            <div class="col-sm-4 col-xs-8">
+                <select name="type_select" id="type_select" class="form-control">
+                    <?php
+                    $this->load->view('dropdown',array('drop_down_options'=>$types,'drop_down_selected'=>''));
+                    ?>
+                </select>
+            </div>
+        </div>
+
+        <div id="variety_quantity" style="overflow-x: auto; display: none;">
 
         </div>
     </div>
@@ -70,16 +109,35 @@
             $(this).closest('tr').find('.variance').val(variance);
         });
 
-        $(document).on("change","#year",function()
+        $(document).on("change", "#selection_type", function(event)
         {
-            if($(this).val().length>0)
+            $("#crop_select").val('');
+            $("#type_select").val('');
+            $("#variety_quantity").html('');
+
+            if($(this).val()>0)
             {
-                $("#load_variety").show();
+                $("#crop_select_div").show();
+                $("#type_select_div").hide();
+            }
+            else
+            {
+                $("#crop_select_div").hide();
+                $("#type_select_div").hide();
+                $("#variety_quantity").html('');
+            }
+        });
+
+        $(document).on("change", "#crop_select", function(event)
+        {
+            if($(this).val().length>1 && $("#selection_type").val()==1)
+            {
+                $("#variety_quantity").show();
                 $.ajax({
                     url: base_url+"zi_sales_target/get_variety_detail/",
                     type: 'POST',
                     dataType: "JSON",
-                    data:{year_id:$(this).val()},
+                    data:{crop_id: $(this).val(), type_id: 0, year: $("#year").val()},
                     success: function (data, status)
                     {
 
@@ -89,14 +147,87 @@
                         console.log("error");
                     }
                 });
-                $("#scrollButtons").show();
+            }
+            else if($(this).val().length>1 && $("#selection_type").val()==2)
+            {
+                $("#type_select_div").show();
+                $("#variety_quantity").html('');
+
+                $.ajax({
+                    url: base_url+"zi_sales_target/get_dropDown_type_by_crop/",
+                    type: 'POST',
+                    dataType: "JSON",
+                    data:{crop_id:$(this).val()},
+                    success: function (data, status)
+                    {
+
+                    },
+                    error: function (xhr, desc, err)
+                    {
+                        console.log("error");
+                    }
+                });
             }
             else
             {
-                $("#scrollButtons").hide();
-                $("#load_variety").html('');
-                $("#load_variety").hide();
+                $("#type_select_div").hide();
+                $("#variety_quantity").html('');
             }
+        });
+
+        $(document).on("change", "#type_select", function(event)
+        {
+            if($(this).val().length>1 && $("#crop_select").val().length>1 && $("#selection_type").val()==2)
+            {
+                $("#variety_quantity").show();
+                $.ajax({
+                    url: base_url+"zi_sales_target/get_variety_detail/",
+                    type: 'POST',
+                    dataType: "JSON",
+                    data:{crop_id: $("#crop_select").val(), type_id: $(this).val(), year: $("#year").val()},
+                    success: function (data, status)
+                    {
+
+                    },
+                    error: function (xhr, desc, err)
+                    {
+                        console.log("error");
+                    }
+                });
+            }
+            else
+            {
+                $("#variety_quantity").html('');
+            }
+        });
+
+        $(document).on("change","#year",function()
+        {
+//            if($(this).val().length>0)
+//            {
+//                $("#load_variety").show();
+//                $.ajax({
+//                    url: base_url+"zi_sales_target/get_variety_detail/",
+//                    type: 'POST',
+//                    dataType: "JSON",
+//                    data:{year_id:$(this).val()},
+//                    success: function (data, status)
+//                    {
+//
+//                    },
+//                    error: function (xhr, desc, err)
+//                    {
+//                        console.log("error");
+//                    }
+//                });
+//                $("#scrollButtons").show();
+//            }
+//            else
+//            {
+//                $("#scrollButtons").hide();
+//                $("#load_variety").html('');
+//                $("#load_variety").hide();
+//            }
         });
     });
 

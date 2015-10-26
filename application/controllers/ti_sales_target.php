@@ -31,6 +31,9 @@ class Ti_sales_target extends ROOT_Controller
     {
         $user = User_helper::get_user();
         $data['years'] = Query_helper::get_info('ait_year',array('year_id value','year_name text'),array('del_status = 0'));
+        $data['crops'] = $this->budget_common_model->get_ordered_crops();
+        $data['types'] = $this->budget_common_model->get_ordered_crop_types();
+        $data['varieties'] = $this->budget_common_model->get_ordered_varieties();
 
         $data['title']="TI Sales Target";
         $ajax['page_url']=base_url()."ti_sales_target/index/add";
@@ -201,25 +204,46 @@ class Ti_sales_target extends ROOT_Controller
     public function get_variety_detail()
     {
         $user = User_helper::get_user();
-        $year_id = $this->input->post('year_id');
+        $year = $this->input->post('year');
+        $crop_id = $this->input->post('crop_id');
+        $type_id = $this->input->post('type_id');
         $user_territory = $user->territory_id;
 
-        $data['year'] = $year_id;
+        $data['year'] = $year;
         $data['distributors'] = Query_helper::get_info('ait_distributor_info',array('distributor_id value','distributor_name text'),array("territory_id ='$user_territory'",'del_status =0'));
-        $data['varieties'] = $this->ti_sales_target_model->get_variety_info();
+        $data['varieties'] = $this->ti_sales_target_model->get_varieties_by_crop_type($crop_id, $type_id);
 
-        if(strlen($year_id)>0)
+        if(isset($data['year']) && sizeof($data['varieties'])>0)
         {
             $ajax['status'] = true;
-            $ajax['content'][]=array("id"=>'#load_variety',"html"=>$this->load->view("ti_sales_target/variety",$data,true));
+            $ajax['content'][]=array("id"=>'#variety_quantity',"html"=>$this->load->view("ti_sales_target/variety",$data,true));
             $this->jsonReturn($ajax);
         }
         else
         {
             $ajax['status'] = true;
-            $ajax['content'][]=array("id"=>'#load_variety',"html"=>"","",true);
+            $ajax['content'][]=array("id"=>'#variety_quantity',"html"=>"","",true);
             $this->jsonReturn($ajax);
         }
+    }
+
+    public function get_dropDown_type_by_crop()
+    {
+        $crop_id = $this->input->post('crop_id');
+        $types = $this->budget_common_model->get_type_by_crop($crop_id);
+
+        $data = array();
+        if(is_array($types) && sizeof($types)>0)
+        {
+            foreach($types as $type)
+            {
+                $data[] = array('value'=>$type['product_type_id'], 'text'=>$type['product_type']);
+            }
+        }
+
+        $ajax['status'] = true;
+        $ajax['content'][] = array("id"=>'#type_select',"html"=>$this->load->view("dropdown",array('drop_down_options'=>$data),true));
+        $this->jsonReturn($ajax);
     }
 
 }
