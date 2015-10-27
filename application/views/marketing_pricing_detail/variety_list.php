@@ -41,10 +41,10 @@
                 if(is_array($existing_data) && sizeof($existing_data)>0)
                 {
                     $net_sales_price = round($existing_data['mrp'] - ($existing_data['sales_bonus']/100)*$existing_data['mrp'] - ($existing_data['other_incentive']/100)*$existing_data['mrp'] - ($detail['sales_commission']/100)*$existing_data['mrp'], 2);
-                    $total_net_sales_price = round($net_sales_price*$detail['principal_quantity'], 2);
+                    $total_net_sales_price = round($net_sales_price*$detail['targeted_quantity'], 2);
 
                     $net_profit = round($existing_data['mrp'] - $total_cogs, 2);
-                    $total_net_profit = round($net_profit*$detail['principal_quantity'], 2);
+                    $total_net_profit = round($net_profit*$detail['targeted_quantity'], 2);
                     if($total_cogs>0)
                     {
                         $profit_percentage = round(($total_net_profit/$total_cogs)*100, 2);

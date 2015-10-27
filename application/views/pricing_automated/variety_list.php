@@ -73,7 +73,7 @@
                     ?>
                 </td>
                 <td class="text-center"><?php echo $variety['varriety_name'];?></td>
-                <td class="text-center"><?php echo $detail['principal_quantity'];?></td>
+                <td class="text-center"><?php echo $detail['targeted_quantity'];?></td>
                 <td class="text-center"><?php echo $detail['pi_value'];?></td>
                 <td class="text-center"><?php echo $detail['ho_and_gen_exp'];?></td>
                 <td class="text-center"><?php echo $detail['marketing'];?></td>
@@ -84,8 +84,8 @@
                 <td class="text-center"><input type="text" name="pricing[<?php echo $variety['crop_id'];?>][<?php echo $variety['product_type_id'];?>][<?php echo $variety['varriety_id'];?>][sales_bonus]" class="form-control sales_bonus numbersOnly" value="<?php echo isset($existing_data['sales_bonus'])?$existing_data['sales_bonus']:'';?>" /></td>
                 <td class="text-center"><input type="text" name="pricing[<?php echo $variety['crop_id'];?>][<?php echo $variety['product_type_id'];?>][<?php echo $variety['varriety_id'];?>][other_incentive]" class="form-control other_incentive numbersOnly" value="<?php echo isset($existing_data['other_incentive'])?$existing_data['other_incentive']:'';?>" /></td>
                 <td class="text-center"><input type="text" readonly name="pricing[<?php echo $variety['crop_id'];?>][<?php echo $variety['product_type_id'];?>][<?php echo $variety['varriety_id'];?>][mrp]" class="form-control total_budgeted_mrp numbersOnly" value="<?php echo isset($existing_data['mrp'])?$existing_data['mrp']:'';?>" /></td>
-                <td class="text-center total_net_sales"><?php echo $net_sales_price*$detail['principal_quantity'];?></td>
-                <td class="text-center total_net_profit"><?php echo $detail['principal_quantity']*$detail['target_profit'];?></td>
+                <td class="text-center total_net_sales"><?php echo $net_sales_price*$detail['targeted_quantity'];?></td>
+                <td class="text-center total_net_profit"><?php echo $detail['targeted_quantity']*$detail['target_profit'];?></td>
                 <td class="text-center" style="vertical-align: middle;">
                     <label class="label label-primary load_remark">+R</label>
                     <div class="row popContainer" style="display: none;">

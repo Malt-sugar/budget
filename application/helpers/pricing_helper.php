@@ -17,9 +17,9 @@ class Pricing_helper
         $data['target_profit'] = isset($result['target_profit'])?$result['target_profit']:0;
         $data['sales_commission'] = isset($result['sales_commission'])?$result['sales_commission']:0;
 
-        // Principal Quantity
+        // Targeted Quantity
         $CI->db->from('budget_sales_target bst');
-        $CI->db->select('bst.principal_quantity');
+        $CI->db->select('bst.targeted_quantity');
         $CI->db->where('bst.variety_id', $variety);
         $CI->db->where('bst.year', $year);
         $CI->db->where('length(bst.customer_id)<2');
@@ -28,7 +28,7 @@ class Pricing_helper
         $CI->db->where('length(bst.division_id)<2');
         $CI->db->where('bst.status', $CI->config->item('status_active'));
         $sales_result = $CI->db->get()->row_array();
-        $data['principal_quantity'] = isset($sales_result['principal_quantity'])?$sales_result['principal_quantity']:0;
+        $data['targeted_quantity'] = isset($sales_result['targeted_quantity'])?$sales_result['targeted_quantity']:0;
 
         // Budgeted PI or COGS
         $CI->db->from('budget_purchase_quantity bpq');
@@ -75,9 +75,9 @@ class Pricing_helper
         $data['target_profit'] = isset($result['target_profit'])?$result['target_profit']:0;
         $data['sales_commission'] = isset($result['sales_commission'])?$result['sales_commission']:0;
 
-        // Principal Quantity
+        // Targeted Quantity
         $CI->db->from('budget_sales_target bst');
-        $CI->db->select('bst.principal_quantity');
+        $CI->db->select('bst.targeted_quantity');
         $CI->db->where('bst.variety_id', $variety);
         $CI->db->where('bst.year', $year);
         $CI->db->where('length(bst.customer_id)<2');
@@ -86,7 +86,7 @@ class Pricing_helper
         $CI->db->where('length(bst.division_id)<2');
         $CI->db->where('bst.status', $CI->config->item('status_active'));
         $sales_result = $CI->db->get()->row_array();
-        $data['principal_quantity'] = isset($sales_result['principal_quantity'])?$sales_result['principal_quantity']:0;
+        $data['targeted_quantity'] = isset($sales_result['targeted_quantity'])?$sales_result['targeted_quantity']:0;
 
         // Budgeted PI or COGS
         $CI->db->from('budget_purchase_quantity bpq');
@@ -136,9 +136,9 @@ class Pricing_helper
         $data['target_profit'] = isset($result['target_profit'])?$result['target_profit']:0;
         $data['sales_commission'] = isset($result['sales_commission'])?$result['sales_commission']:0;
 
-        // Principal Quantity
+        // Targeted Quantity
         $CI->db->from('budget_sales_target bst');
-        $CI->db->select('bst.principal_quantity');
+        $CI->db->select('bst.targeted_quantity');
         $CI->db->where('bst.variety_id', $variety);
         $CI->db->where('bst.year', $year);
         $CI->db->where('length(bst.customer_id)<2');
@@ -147,7 +147,7 @@ class Pricing_helper
         $CI->db->where('length(bst.division_id)<2');
         $CI->db->where('bst.status', $CI->config->item('status_active'));
         $sales_result = $CI->db->get()->row_array();
-        $data['principal_quantity'] = isset($sales_result['principal_quantity'])?$sales_result['principal_quantity']:0;
+        $data['targeted_quantity'] = isset($sales_result['targeted_quantity'])?$sales_result['targeted_quantity']:0;
 
         // Budgeted PI or COGS
         $CI->db->from('budget_purchase_quantity bpq');
@@ -215,9 +215,9 @@ class Pricing_helper
         $data['target_profit'] = isset($result['target_profit'])?$result['target_profit']:0;
         $data['sales_commission'] = isset($result['sales_commission'])?$result['sales_commission']:0;
 
-        // Principal Quantity
+        // Targeted Quantity
         $CI->db->from('budget_sales_target bst');
-        $CI->db->select('bst.principal_quantity');
+        $CI->db->select('bst.targeted_quantity');
         $CI->db->where('bst.variety_id', $variety);
         $CI->db->where('bst.year', $year);
         $CI->db->where('length(bst.customer_id)<2');
@@ -226,7 +226,7 @@ class Pricing_helper
         $CI->db->where('length(bst.division_id)<2');
         $CI->db->where('bst.status', $CI->config->item('status_active'));
         $sales_result = $CI->db->get()->row_array();
-        $data['principal_quantity'] = isset($sales_result['principal_quantity'])?$sales_result['principal_quantity']:0;
+        $data['targeted_quantity'] = isset($sales_result['targeted_quantity'])?$sales_result['targeted_quantity']:0;
 
         // Budgeted PI or COGS
         $CI->db->from('budget_purchase_quantity bpq');

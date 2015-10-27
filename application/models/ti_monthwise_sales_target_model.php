@@ -114,4 +114,38 @@ class Ti_monthwise_sales_target_model extends CI_Model
 
         $this->db->update('budget_sales_target_monthwise',$data);
     }
+
+    public function get_varieties_by_crop_type($crop_id, $type_id)
+    {
+        $this->db->select('avi.varriety_name');
+        $this->db->select('aci.crop_name');
+        $this->db->select('apt.product_type');
+        $this->db->select('avi.crop_id');
+        $this->db->select('avi.product_type_id');
+        $this->db->select('avi.varriety_id');
+        $this->db->from('ait_varriety_info avi');
+
+        $this->db->where('avi.type', 0);
+
+        if(isset($crop_id) && strlen($crop_id)>1)
+        {
+            $this->db->where('avi.crop_id', $crop_id);
+        }
+
+        if(isset($type_id) && strlen($type_id)>1)
+        {
+            $this->db->where('avi.product_type_id', $type_id);
+        }
+
+        $this->db->order_by('aci.order_crop');
+        $this->db->order_by('apt.order_type');
+        $this->db->order_by('avi.order_variety');
+
+        $this->db->join("ait_crop_info aci","aci.crop_id = avi.crop_id","LEFT");
+        $this->db->join("ait_product_type apt","apt.product_type_id = avi.product_type_id","LEFT");
+
+        $this->db->where('avi.status', 'Active');
+        $results = $this->db->get()->result_array();
+        return $results;
+    }
 }

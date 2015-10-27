@@ -29,6 +29,7 @@ class Sales_target_helper
 
         $CI->db->from('budget_sales_target bst');
         $CI->db->select('bst.targeted_quantity');
+        $CI->db->select('bst.bottom_up_remarks');
         $CI->db->select('bst.budgeted_quantity total_quantity');
         $CI->db->where('bst.division_id', $div_id);
         $CI->db->where('bst.variety_id', $variety);
@@ -55,6 +56,7 @@ class Sales_target_helper
 
         $CI->db->from('budget_sales_target bst');
         $CI->db->select('bst.targeted_quantity');
+        $CI->db->select('bst.bottom_up_remarks');
         $CI->db->select('bst.budgeted_quantity total_quantity');
         $CI->db->where('bst.zone_id', $zone_id);
         $CI->db->where('bst.variety_id', $variety);
@@ -79,6 +81,7 @@ class Sales_target_helper
 
         $CI->db->from('budget_sales_target bst');
         $CI->db->select('bst.targeted_quantity');
+        $CI->db->select('bst.bottom_up_remarks');
         $CI->db->select('bst.budgeted_quantity total_quantity');
         $CI->db->where('bst.territory_id', $territory_id);
         $CI->db->where('bst.variety_id', $variety);

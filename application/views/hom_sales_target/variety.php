@@ -99,7 +99,7 @@
                                 ?>
                                 <td class="customer_value text-center">
                                     <div class="col-lg-12" style="width: 120px;">
-                                        <label class="label label-warning"><?php if($required['total_quantity']){echo $required['total_quantity'];}else{echo 0;}?></label>
+                                        <label data-toggle="tooltip" title="<?php echo $required['bottom_up_remarks'];?>" class="label label-warning"><?php if($required['total_quantity']){echo $required['total_quantity'];}else{echo 0;}?></label>
                                     </div>
                                 </td>
                             <?php
