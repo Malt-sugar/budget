@@ -1,7 +1,6 @@
 <?php
 class Notification_helper
 {
-
     public static function get_all_notifications()
     {
         $CI = & get_instance();

@@ -72,7 +72,7 @@ class Ti_sales_target_model extends CI_Model
         return $result['id'];
     }
 
-    public function check_ti_notification_existence($year)
+    public function check_ti_notification_existence($year, $variety_id)
     {
         $user = User_helper::get_user();
         $user_territory = $user->territory_id;
@@ -81,6 +81,7 @@ class Ti_sales_target_model extends CI_Model
         $this->db->select('bstn.*');
         $this->db->where('bstn.sending_territory', $user_territory);
         $this->db->where('bstn.year', $year);
+        $this->db->where('bstn.variety_id', $variety_id);
         $this->db->where('bstn.direction', $this->config->item('direction_up'));
         $this->db->where('bstn.is_action_taken', 0);
         $this->db->where('bstn.status', $this->config->item('status_active'));

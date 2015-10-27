@@ -76,36 +76,6 @@ class Zi_sales_target extends ROOT_Controller
                 $data['division_id'] = $user->division_id;
                 $data['zone_id'] = $user->zone_id;
 
-                $notification_id = $this->zi_sales_target_model->check_notification_existence($year);
-
-                if($notification_id)
-                {
-                    $notification_update_data['is_action_taken'] = 1;
-                    Query_helper::update('budget_sales_target_notification',$notification_update_data,array("id ='$notification_id'"));
-                }
-
-                if($this->input->post('forward') && $this->input->post('forward')==1)
-                {
-                    $notification_data['year'] = $year;
-                    $notification_data['sending_division'] = $user->division_id;
-                    $notification_data['sending_zone'] = $user->zone_id;
-                    $notification_data['receiving_division'] = $user->division_id;
-                    $notification_data['direction'] = $this->config->item('direction_up');
-                    $notification_data['created_by'] = $user->user_id;
-                    $notification_data['creation_date'] = $time;
-
-                    if($this->zi_sales_target_model->check_notification_existence_for_di($year))
-                    {
-                        $id = $this->zi_sales_target_model->check_notification_existence_for_di($year);
-                        $notification_data['is_action_taken'] = 0;
-                        Query_helper::update('budget_sales_target_notification',$notification_data,array("id ='$id'"));
-                    }
-                    else
-                    {
-                        Query_helper::add('budget_sales_target_notification',$notification_data);
-                    }
-                }
-
                 foreach($varietyPost as $crop_id=>$varietyDetail)
                 {
                     $data['crop_id'] = $crop_id;
@@ -133,6 +103,40 @@ class Zi_sales_target extends ROOT_Controller
                                 else
                                 {
                                     Query_helper::add('budget_sales_target',$data);
+                                }
+
+                                // Notification Table Operations
+                                $notification_id = $this->zi_sales_target_model->check_notification_existence($year, $variety_id);
+
+                                if($notification_id)
+                                {
+                                    $notification_update_data['is_action_taken'] = 1;
+                                    Query_helper::update('budget_sales_target_notification',$notification_update_data,array("id ='$notification_id'"));
+                                }
+
+                                if($this->input->post('forward') && $this->input->post('forward')==1)
+                                {
+                                    $notification_data['year'] = $year;
+                                    $notification_data['crop_id'] = $crop_id;
+                                    $notification_data['type_id'] = $type_id;
+                                    $notification_data['variety_id'] = $variety_id;
+                                    $notification_data['sending_division'] = $user->division_id;
+                                    $notification_data['sending_zone'] = $user->zone_id;
+                                    $notification_data['receiving_division'] = $user->division_id;
+                                    $notification_data['direction'] = $this->config->item('direction_up');
+                                    $notification_data['created_by'] = $user->user_id;
+                                    $notification_data['creation_date'] = $time;
+
+                                    if($this->zi_sales_target_model->check_notification_existence_for_di($year, $variety_id))
+                                    {
+                                        $nid = $this->zi_sales_target_model->check_notification_existence_for_di($year);
+                                        $notification_data['is_action_taken'] = 0;
+                                        Query_helper::update('budget_sales_target_notification',$notification_data,array("id ='$nid'"));
+                                    }
+                                    else
+                                    {
+                                        Query_helper::add('budget_sales_target_notification',$notification_data);
+                                    }
                                 }
                             }
                         }

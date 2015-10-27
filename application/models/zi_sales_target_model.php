@@ -73,7 +73,7 @@ class Zi_sales_target_model extends CI_Model
         return $result['id'];
     }
 
-    public function check_notification_existence($year)
+    public function check_notification_existence($year, $variety_id)
     {
         $user = User_helper::get_user();
         $user_zone = $user->zone_id;
@@ -82,6 +82,7 @@ class Zi_sales_target_model extends CI_Model
         $this->db->select('bstn.id');
         $this->db->where('bstn.receiving_zone', $user_zone);
         $this->db->where('bstn.year', $year);
+        $this->db->where('bstn.variety_id', $variety_id);
         $this->db->where('bstn.direction', $this->config->item('direction_up'));
         $this->db->where('bstn.is_action_taken', 0);
         $this->db->where('bstn.status', $this->config->item('status_active'));
@@ -96,7 +97,7 @@ class Zi_sales_target_model extends CI_Model
         }
     }
 
-    public function check_notification_existence_for_di($year)
+    public function check_notification_existence_for_di($year, $variety_id)
     {
         $user = User_helper::get_user();
         $user_division = $user->division_id;
@@ -106,6 +107,7 @@ class Zi_sales_target_model extends CI_Model
         $this->db->where('bstn.receiving_division', $user_division);
         $this->db->where('bstn.receiving_zone', null);
         $this->db->where('bstn.year', $year);
+        $this->db->where('bstn.variety_id', $variety_id);
         $this->db->where('bstn.direction', $this->config->item('direction_up'));
         $this->db->where('bstn.is_action_taken', 0);
         $this->db->where('bstn.status', $this->config->item('status_active'));
