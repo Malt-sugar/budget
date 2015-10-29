@@ -11,7 +11,6 @@ class Budget_common extends ROOT_Controller
         $this->load->model("budget_common_model");
     }
 
-
     public function get_zone_by_access()
     {
         $division_id = $this->input->post('division_id');
@@ -135,5 +134,47 @@ class Budget_common extends ROOT_Controller
         $ajax['content'][] = array("id"=>'#variety',"html"=>$this->load->view("dropdown",array('drop_down_options'=>$data),true));
         $this->jsonReturn($ajax);
     }
+
+    public function get_dropDown_zone_by_division()
+    {
+        $division_id = $this->input->post('division_id');
+
+        $zones = $this->budget_common_model->get_zones_by_division($division_id);
+
+        $data = array();
+        if(is_array($zones) && sizeof($zones)>0)
+        {
+            foreach($zones as $zone)
+            {
+                $data[] = array('value'=>$zone['zone_id'], 'text'=>$zone['zone_name']);
+            }
+        }
+
+        $ajax['status'] = true;
+        $ajax['content'][] = array("id"=>'#zone',"html"=>$this->load->view("dropdown",array('drop_down_options'=>$data),true));
+        $this->jsonReturn($ajax);
+    }
+
+    public function get_dropDown_territory_by_zone()
+    {
+        $zone_id = $this->input->post('zone_id');
+
+        $territories = $this->budget_common_model->get_territories_by_zone($zone_id);
+
+        $data = array();
+        if(is_array($territories) && sizeof($territories)>0)
+        {
+            foreach($territories as $territory)
+            {
+                $data[] = array('value'=>$territory['territory_id'], 'text'=>$territory['territory_name']);
+            }
+        }
+
+        $ajax['status'] = true;
+        $ajax['content'][] = array("id"=>'#territory',"html"=>$this->load->view("dropdown",array('drop_down_options'=>$data),true));
+        $this->jsonReturn($ajax);
+    }
+
+
 
 }

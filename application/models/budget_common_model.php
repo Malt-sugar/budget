@@ -137,4 +137,22 @@ class Budget_common_model extends CI_Model
 
         return $result['quantity'];
     }
+
+    public function get_zones_by_division($division_id)
+    {
+        $this->db->from('ait_zone_info azi');
+        $this->db->select('azi.*');
+        $this->db->where('azi.division_id', $division_id);
+        $results = $this->db->get()->result_array();
+        return $results;
+    }
+
+    public function get_territories_by_zone($zone_id)
+    {
+        $this->db->from('ait_territory_info ati');
+        $this->db->select('ati.*');
+        $this->db->where('ati.zone_id', $zone_id);
+        $results = $this->db->get()->result_array();
+        return $results;
+    }
 }
