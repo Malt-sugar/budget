@@ -376,6 +376,10 @@
         {
             var current_id = parseInt($(this).parents().next('.type').find('.type_id').attr('data-type-current-id'));
 
+            $(this).parents().next('.type').next('.variety').hide();
+            $(this).parents().next('.type').next('.variety_id').val('');
+            $(this).parents().next('.type').next('.variety').next('.variety_quantity').html('');
+
             if($(this).val().length>0)
             {
                 $(this).parents().next('.type').show();
@@ -400,9 +404,11 @@
             {
                 $(this).parents().next('.type').hide();
                 $(this).parents().next('.type_id').val('');
-                $(this).parents().next('.variety').hide();
-                $(this).parents().next('.variety_id').val('');
-                $(this).parents().next('.type').next('.variety_quantity').html('');
+
+                $(this).parents().next('.type').next('.variety').hide();
+                $(this).parents().next('.type').next('.variety_id').val('');
+
+                $(this).parents().next('.type').next('.variety').next('.variety_quantity').html('');
             }
         });
 

@@ -50,7 +50,49 @@ class Sales_target_edit extends ROOT_Controller
     public function budget_save()
     {
         $user = User_helper::get_user();
-        $data = Array();
+        $update_data = Array();
+        $quantity_post = $this->input->post('quantity');
+
+        $edit_type = $this->input->post('edit_type');
+        $year = $this->input->post('year');
+        $division = $this->input->post('division');
+        $zone = $this->input->post('zone');
+        $territory = $this->input->post('territory');
+        $customer = $this->input->post('customer');
+
+        foreach($quantity_post as $sl=>$quantity)
+        {
+            foreach($quantity as $field=>$info)
+            {
+                $data[$field] = $info;
+                if($field=='crop')
+                {
+                    $crop_id = $info;
+                }
+                if($field=='type')
+                {
+                    $type_id = $info;
+                }
+                if($field=='variety')
+                {
+                    $variety_id = $info;
+                }
+                if($field=='budgeted_quantity')
+                {
+                    $update_data['budgeted_quantity'] = $info;
+                }
+                if($field=='bottom_up_remarks')
+                {
+                    $update_data['bottom_up_remarks'] = $info;
+                }
+
+                // Update Sales target
+
+            }
+        }
+
+        print_r($data);
+        exit;
 
         if(!$this->check_validation())
         {
@@ -62,75 +104,9 @@ class Sales_target_edit extends ROOT_Controller
         {
             $this->db->trans_start();  //DB Transaction Handle START
 
-            $crop_type_Post = $this->input->post('stock');
             $quantity_post = $this->input->post('quantity');
 
-            $stock_existence = $this->sales_target_edit_model->check_min_stock_existence();
 
-            if($stock_existence)
-            {
-                // Initial update
-                $update_status = array('status'=>0);
-                Query_helper::update('budget_min_stock_quantity',$update_status,array());
-                $existing_varieties = $this->sales_target_edit_model->get_existing_minimum_stocks();
-
-                foreach($crop_type_Post as $cropTypeKey=>$crop_type)
-                {
-                    foreach($quantity_post as $quantityKey=>$quantity)
-                    {
-                        if($quantityKey==$cropTypeKey)
-                        {
-                            $data['crop_id'] = $crop_type['crop'];
-                            $data['type_id'] = $crop_type['type'];
-
-                            foreach($quantity as $variety_id=>$amount)
-                            {
-                                $data['variety_id'] = $variety_id;
-                                $data['min_stock_quantity'] = $amount;
-
-                                if(in_array($variety_id, $existing_varieties))
-                                {
-                                    $data['modified_by'] = $user->user_id;
-                                    $data['modification_date'] = time();
-                                    $data['status'] = 1;
-                                    $crop_id = $data['crop_id'];
-                                    $type_id = $data['type_id'];
-                                    Query_helper::update('budget_min_stock_quantity',$data,array("crop_id ='$crop_id'", "type_id ='$type_id'", "variety_id ='$variety_id'"));
-                                }
-                                else
-                                {
-                                    $data['created_by'] = $user->user_id;
-                                    $data['creation_date'] = time();
-                                    Query_helper::add('budget_min_stock_quantity',$data);
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-            else
-            {
-                foreach($crop_type_Post as $cropTypeKey=>$crop_type)
-                {
-                    foreach($quantity_post as $quantityKey=>$quantity)
-                    {
-                        if($quantityKey==$cropTypeKey)
-                        {
-                            $data['crop_id'] = $crop_type['crop'];
-                            $data['type_id'] = $crop_type['type'];
-
-                            foreach($quantity as $variety_id=>$amount)
-                            {
-                                $data['variety_id'] = $variety_id;
-                                $data['min_stock_quantity'] = $amount;
-                                $data['created_by'] = $user->user_id;
-                                $data['creation_date'] = time();
-                                Query_helper::add('budget_min_stock_quantity',$data);
-                            }
-                        }
-                    }
-                }
-            }
 
             $this->db->trans_complete();   //DB Transaction Handle END
 
@@ -145,7 +121,6 @@ class Sales_target_edit extends ROOT_Controller
 
             $this->budget_add_edit();//this is similar like redirect
         }
-
     }
 
     private function check_validation()
@@ -196,7 +171,7 @@ class Sales_target_edit extends ROOT_Controller
         $data['variety_id'] = $variety_id;
         $data['serial'] = $current_id;
 
-        if(sizeof($data['details'])>0)
+        if(sizeof($data['details'])>0 && $edit_type>0)
         {
             $data['serial'] = $current_id;
             $data['title'] = 'Sales Target Edit';
