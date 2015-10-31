@@ -102,12 +102,16 @@ class Sales_target_edit extends ROOT_Controller
     {
         $year = $this->input->post('year');
         $edit_type = $this->input->post('edit_type');
+        $division = $this->input->post('division');
+        $zone = $this->input->post('zone');
+        $territory = $this->input->post('territory');
+        $customer = $this->input->post('customer');
         $crop_id = $this->input->post('crop_id');
         $type_id = $this->input->post('type_id');
         $variety_id = $this->input->post('variety_id');
         $current_id = $this->input->post('current_id');
 
-        $data['details'] = $this->sales_target_edit_model->get_variety_sales_target_info($edit_type, $year, $crop_id, $type_id, $variety_id);
+        $data['details'] = $this->sales_target_edit_model->get_variety_sales_target_info($edit_type, $year, $crop_id, $type_id, $variety_id, $division, $zone, $territory, $customer);
         $data['crop_id'] = $crop_id;
         $data['type_id'] = $type_id;
         $data['variety_id'] = $variety_id;

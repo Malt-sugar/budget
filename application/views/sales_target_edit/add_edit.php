@@ -453,7 +453,7 @@
                     url: base_url+"sales_target_edit/get_sales_target_edit_detail/",
                     type: 'POST',
                     dataType: "JSON",
-                    data:{crop_id: $("#crop"+current_id).val(), type_id: $("#type"+current_id).val(), variety_id: $(this).val(), current_id: current_id, year: $("#year").val(), edit_type: $("#edit_type").val()},
+                    data:{crop_id: $("#crop"+current_id).val(), type_id: $("#type"+current_id).val(), variety_id: $(this).val(), current_id: current_id, year: $("#year").val(), edit_type: $("#edit_type").val(), division: $("#division").val(), zone: $("#zone").val(), territory: $("#territory").val(), customer: $("#customer").val()},
                     success: function (data, status)
                     {
 

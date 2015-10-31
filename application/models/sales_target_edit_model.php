@@ -23,7 +23,7 @@ class Sales_target_edit_model extends CI_Model
         return $results;
     }
 
-    public function get_variety_sales_target_info($type, $year, $crop_id, $type_id, $variety_id)
+    public function get_variety_sales_target_info($type, $year, $crop_id, $type_id, $variety_id, $division, $zone, $territory, $customer)
     {
         $this->db->from('budget_sales_target bst');
         $this->db->select('bst.budgeted_quantity, bst.bottom_up_remarks');
@@ -35,31 +35,31 @@ class Sales_target_edit_model extends CI_Model
 
         if($type == 1)
         {
-            $this->db->where('length(bst.customer_id)<2');
-            $this->db->where('length(bst.territory_id)<2');
-            $this->db->where('length(bst.zone_id)<2');
-            $this->db->where('length(bst.division_id)>2');
+            $this->db->where('length(customer_id)<2');
+            $this->db->where('length(territory_id)<2');
+            $this->db->where('length(zone_id)<2');
+            $this->db->where('division_id', $division);
         }
         elseif($type == 2)
         {
-            $this->db->where('length(bst.customer_id)<2');
-            $this->db->where('length(bst.territory_id)<2');
-            $this->db->where('length(bst.zone_id)>2');
-            $this->db->where('length(bst.division_id)>2');
+            $this->db->where('length(customer_id)<2');
+            $this->db->where('length(territory_id)<2');
+            $this->db->where('zone_id', $zone);
+            $this->db->where('division_id', $division);
         }
         elseif($type == 3)
         {
-            $this->db->where('length(bst.customer_id)<2');
-            $this->db->where('length(bst.territory_id)>2');
-            $this->db->where('length(bst.zone_id)>2');
-            $this->db->where('length(bst.division_id)>2');
+            $this->db->where('length(customer_id)<2');
+            $this->db->where('territory_id', $territory);
+            $this->db->where('zone_id', $zone);
+            $this->db->where('division_id', $division);
         }
         elseif($type == 4)
         {
-            $this->db->where('length(bst.customer_id)>2');
-            $this->db->where('length(bst.territory_id)>2');
-            $this->db->where('length(bst.zone_id)>2');
-            $this->db->where('length(bst.division_id)>2');
+            $this->db->where('customer_id', $customer);
+            $this->db->where('territory_id', $territory);
+            $this->db->where('zone_id', $zone);
+            $this->db->where('division_id', $division);
         }
 
         $this->db->where('bst.status', $this->config->item('status_active'));
