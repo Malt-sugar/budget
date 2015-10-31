@@ -49,50 +49,13 @@ class Sales_target_edit extends ROOT_Controller
 
     public function budget_save()
     {
-        $user = User_helper::get_user();
-        $update_data = Array();
         $quantity_post = $this->input->post('quantity');
-
         $edit_type = $this->input->post('edit_type');
         $year = $this->input->post('year');
         $division = $this->input->post('division');
         $zone = $this->input->post('zone');
         $territory = $this->input->post('territory');
         $customer = $this->input->post('customer');
-
-        foreach($quantity_post as $sl=>$quantity)
-        {
-            foreach($quantity as $field=>$info)
-            {
-                $data[$field] = $info;
-                if($field=='crop')
-                {
-                    $crop_id = $info;
-                }
-                if($field=='type')
-                {
-                    $type_id = $info;
-                }
-                if($field=='variety')
-                {
-                    $variety_id = $info;
-                }
-                if($field=='budgeted_quantity')
-                {
-                    $update_data['budgeted_quantity'] = $info;
-                }
-                if($field=='bottom_up_remarks')
-                {
-                    $update_data['bottom_up_remarks'] = $info;
-                }
-
-                // Update Sales target
-
-            }
-        }
-
-        print_r($data);
-        exit;
 
         if(!$this->check_validation())
         {
@@ -104,19 +67,24 @@ class Sales_target_edit extends ROOT_Controller
         {
             $this->db->trans_start();  //DB Transaction Handle START
 
-            $quantity_post = $this->input->post('quantity');
-
-
+            foreach($quantity_post as $quantity)
+            {
+                $this->sales_target_edit_model->update_sales_target($edit_type, $year, $division, $zone, $territory, $customer, $quantity['crop'], $quantity['type'], $quantity['variety'], $quantity['budgeted_quantity'], $quantity['bottom_up_remarks']);
+            }
 
             $this->db->trans_complete();   //DB Transaction Handle END
 
             if ($this->db->trans_status() === TRUE)
             {
-                $this->message=$this->lang->line("MSG_CREATE_SUCCESS");
+                $ajax['status'] = true;
+                $ajax['message']=$this->lang->line("MSG_CREATE_SUCCESS");
+                $this->jsonReturn($ajax);
             }
             else
             {
-                $this->message=$this->lang->line("MSG_NOT_SAVED_SUCCESS");
+                $ajax['status'] = true;
+                $ajax['message']=$this->lang->line("MSG_NOT_SAVED_SUCCESS");
+                $this->jsonReturn($ajax);
             }
 
             $this->budget_add_edit();//this is similar like redirect
@@ -126,32 +94,6 @@ class Sales_target_edit extends ROOT_Controller
     private function check_validation()
     {
         $valid=true;
-
-        $crop_type_Post = $this->input->post('stock');
-
-        if(is_array($crop_type_Post) && sizeof($crop_type_Post)>0)
-        {
-            foreach($crop_type_Post as $crop_type)
-            {
-                $crop_type_array[] = array('crop'=>$crop_type['crop'], 'type'=>$crop_type['type']);
-            }
-
-            $new_arr = array_unique($crop_type_array, SORT_REGULAR);
-
-            if($crop_type_array != $new_arr)
-            {
-                $valid=false;
-                $this->message .= $this->lang->line("DUPLICATE_CROP_TYPE").'<br>';
-            }
-        }
-
-        $quantity_post = $this->input->post('quantity');
-
-        if(!$crop_type_Post || !$quantity_post)
-        {
-            $valid=false;
-            $this->message .= $this->lang->line("SET_MIN_STOCK").'<br>';
-        }
 
         return $valid;
     }

@@ -66,4 +66,46 @@ class Sales_target_edit_model extends CI_Model
         $result = $this->db->get()->row_array();
         return $result;
     }
+
+    public function update_sales_target($edit_type, $year, $division, $zone, $territory, $customer, $crop_id, $type_id, $variety_id, $budgeted_quantity, $bottom_up_remarks)
+    {
+        $this->db->where('crop_id', $crop_id);
+        $this->db->where('type_id', $type_id);
+        $this->db->where('variety_id', $variety_id);
+        $this->db->where('year', $year);
+
+        if($edit_type == 1)
+        {
+            $this->db->where('length(customer_id)<2');
+            $this->db->where('length(territory_id)<2');
+            $this->db->where('length(zone_id)<2');
+            $this->db->where('division_id', $division);
+        }
+        elseif($edit_type == 2)
+        {
+            $this->db->where('length(customer_id)<2');
+            $this->db->where('length(territory_id)<2');
+            $this->db->where('zone_id', $zone);
+            $this->db->where('division_id', $division);
+        }
+        elseif($edit_type == 3)
+        {
+            $this->db->where('length(customer_id)<2');
+            $this->db->where('territory_id', $territory);
+            $this->db->where('zone_id', $zone);
+            $this->db->where('division_id', $division);
+        }
+        elseif($edit_type == 4)
+        {
+            $this->db->where('customer_id', $customer);
+            $this->db->where('territory_id', $territory);
+            $this->db->where('zone_id', $zone);
+            $this->db->where('division_id', $division);
+        }
+
+        //$this->db->where('status', $this->config->item('status_active'));
+
+        $update_data = array('budgeted_quantity'=>$budgeted_quantity, 'bottom_up_remarks'=>$bottom_up_remarks);
+        $this->db->update('budget_sales_target', $update_data);
+    }
 }
