@@ -1,8 +1,10 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
     $data["link_new"]="#";
     $data["hide_new"]="1";
-    $data["link_back"]=base_url()."pricing_management";
+    $data["link_back"]="#";
     $data["hide_approve"]="1";
+    $data["hide_back"]="1";
+
     $this->load->view("action_buttons_edit",$data);
 
 ?>

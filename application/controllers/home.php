@@ -8,13 +8,13 @@ class Home extends ROOT_Controller
 		$this->login();
 	}
 
-    public function login()
+    public function login($module_id=0)
     {
         $user=User_helper::get_user();
 
         if($user)
         {
-            $this->dashboard_page();
+            $this->dashboard_page($module_id);
         }
         else
         {
@@ -22,7 +22,7 @@ class Home extends ROOT_Controller
             {
                 if(User_helper::login($this->input->post("username"),$this->input->post("password")))
                 {
-                    $this->dashboard_page($this->lang->line("MSG_LOGIN_SUCCESS"));
+                    $this->dashboard_page($module_id,$this->lang->line("MSG_LOGIN_SUCCESS"));
                 }
                 else
                 {

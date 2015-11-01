@@ -225,6 +225,12 @@
                 $("#customer").val('');
 
                 $(".division").show();
+
+                $(document).on("change", "#division", function(event)
+                {
+                    $(".variety_quantity").html('');
+                    $(".variety_id").val('');
+                });
             }
             else if($(this).val()==2)
             {
@@ -237,6 +243,12 @@
                 $("#customer").val('');
 
                 $(".zone").show();
+
+                $(document).on("change", "#zone", function(event)
+                {
+                    $(".variety_quantity").html('');
+                    $(".variety_id").val('');
+                });
             }
             else if($(this).val()==3)
             {
@@ -249,6 +261,12 @@
                 $("#customer").val('');
 
                 $(".territory").show();
+
+                $(document).on("change", "#territory", function(event)
+                {
+                    $(".variety_quantity").html('');
+                    $(".variety_id").val('');
+                });
             }
             else if($(this).val()==4)
             {
@@ -261,6 +279,12 @@
                 $("#territory").val('');
 
                 $(".customer").show();
+
+                $(document).on("change", "#customer", function(event)
+                {
+                    $(".variety_quantity").html('');
+                    $(".variety_id").val('');
+                });
             }
             else
             {

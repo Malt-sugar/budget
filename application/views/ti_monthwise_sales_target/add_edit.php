@@ -1,8 +1,9 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
     $data["link_new"]=base_url()."ti_monthwise_sales_target/index/add";
-    $data["link_back"]=base_url()."home";
+    $data["link_back"]="#";
     $data["link_approve"]="#";
     $data["hide_approve"]="1";
+    $data["hide_back"]="1";
 
     $this->load->view("action_buttons_edit",$data);
 ?>

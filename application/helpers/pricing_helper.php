@@ -11,7 +11,7 @@ class Pricing_helper
         $CI->db->select('bics.*');
         $CI->db->where('bics.year', $year);
         $result = $CI->db->get()->row_array();
-        $data['ho_and_gen_exp'] = $result['ho_and_gen_exp'];
+        $data['ho_and_gen_exp'] = isset($result['ho_and_gen_exp'])?$result['ho_and_gen_exp']:0;
         $data['marketing'] = isset($result['marketing'])?$result['marketing']:0;
         $data['finance_cost'] = isset($result['finance_cost'])?$result['finance_cost']:0;
         $data['target_profit'] = isset($result['target_profit'])?$result['target_profit']:0;
@@ -69,7 +69,7 @@ class Pricing_helper
         $CI->db->select('bics.*');
         $CI->db->where('bics.year', $year);
         $result = $CI->db->get()->row_array();
-        $data['ho_and_gen_exp'] = $result['ho_and_gen_exp'];
+        $data['ho_and_gen_exp'] = isset($result['ho_and_gen_exp'])?$result['ho_and_gen_exp']:0;
         $data['marketing'] = isset($result['marketing'])?$result['marketing']:0;
         $data['finance_cost'] = isset($result['finance_cost'])?$result['finance_cost']:0;
         $data['target_profit'] = isset($result['target_profit'])?$result['target_profit']:0;
@@ -130,7 +130,7 @@ class Pricing_helper
         $CI->db->select('bics.*');
         $CI->db->where('bics.year', $year);
         $result = $CI->db->get()->row_array();
-        $data['ho_and_gen_exp'] = $result['ho_and_gen_exp'];
+        $data['ho_and_gen_exp'] = isset($result['ho_and_gen_exp'])?$result['ho_and_gen_exp']:0;
         $data['marketing'] = isset($result['marketing'])?$result['marketing']:0;
         $data['finance_cost'] = isset($result['finance_cost'])?$result['finance_cost']:0;
         $data['target_profit'] = isset($result['target_profit'])?$result['target_profit']:0;
@@ -209,7 +209,7 @@ class Pricing_helper
         $CI->db->select('bics.*');
         $CI->db->where('bics.year', $year);
         $result = $CI->db->get()->row_array();
-        $data['ho_and_gen_exp'] = $result['ho_and_gen_exp'];
+        $data['ho_and_gen_exp'] = isset($result['ho_and_gen_exp'])?$result['ho_and_gen_exp']:0;
         $data['marketing'] = isset($result['marketing'])?$result['marketing']:0;
         $data['finance_cost'] = isset($result['finance_cost'])?$result['finance_cost']:0;
         $data['target_profit'] = isset($result['target_profit'])?$result['target_profit']:0;
@@ -301,7 +301,7 @@ class Pricing_helper
         $CI->db->select('bics.*');
         $CI->db->where('bics.year', $year);
         $result = $CI->db->get()->row_array();
-        $data['ho_and_gen_exp'] = $result['ho_and_gen_exp'];
+        $data['ho_and_gen_exp'] = isset($result['ho_and_gen_exp'])?$result['ho_and_gen_exp']:0;
         $data['marketing'] = isset($result['marketing'])?$result['marketing']:0;
         $data['finance_cost'] = isset($result['finance_cost'])?$result['finance_cost']:0;
         $data['target_profit'] = isset($result['target_profit'])?$result['target_profit']:0;

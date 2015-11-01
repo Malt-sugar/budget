@@ -16,9 +16,10 @@ class Dashboard_model extends CI_Model {
         $this->db->from("budget_task bt");
         $this->db->join('budget_user_group_role bugr','bt.id = bugr.task_id','INNER');
         $this->db->where("bt.parent",$module_id);
+        $this->db->where("bugr.view",1);
         $this->db->where("bugr.user_group_id",$user->budget_group);
         $this->db->order_by('bt.ordering');
-        $result = $this->db->get()->result_array();
+        $result=$this->db->get()->result_array();
         return $result;
     }
 

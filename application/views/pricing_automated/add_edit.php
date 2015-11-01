@@ -1,10 +1,11 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
     $data["link_new"]="#";
     $data["hide_new"]="1";
-    $data["link_back"]=base_url()."pricing_automated";
+    $data["link_back"]="#";
     $data["hide_approve"]="1";
-    $this->load->view("action_buttons_edit",$data);
+    $data["hide_back"]="1";
 
+    $this->load->view("action_buttons_edit",$data);
 ?>
 <form class="form_valid" id="save_form" action="<?php echo base_url();?>pricing_automated/index/save" method="post">
     <input type="hidden" name="year_id" value="<?php echo isset($year)?$year:0;?>" />

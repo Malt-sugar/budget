@@ -1,11 +1,13 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
     $data["link_new"]="#";
     $data["hide_new"]="1";
-    $data["link_back"]=base_url()."pricing_marketing";
+    $data["link_back"]="#";
     $data["hide_approve"]="1";
-    $this->load->view("action_buttons_edit",$data);
+    $data["hide_back"]="1";
 
+    $this->load->view("action_buttons_edit",$data);
 ?>
+
 <form class="form_valid" id="save_form" action="<?php echo base_url();?>pricing_marketing/index/save" method="post">
     <div class="row widget">
         <div class="widget-header">

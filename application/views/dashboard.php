@@ -66,7 +66,12 @@ if($user_group>3)
 
 <div class="clearfix"></div>
 <div class="" id="sub-menu">
-
+    <?php
+    if(is_array($tasks) && sizeof($tasks)>0)
+    {
+        $this->load->view("sub_menu");
+    }
+    ?>
 </div>
 <div class="clearfix"></div>
 
