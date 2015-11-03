@@ -348,4 +348,15 @@ class Pricing_helper
         return $result['year_id'];
     }
 
+    public static function get_bonus_detail_info($year, $variety_id)
+    {
+        $CI = & get_instance();
+        $CI->db->select('bbs.*');
+        $CI->db->from('budget_bonus_setup bbs');
+        $CI->db->where('bbs.year', $year);
+        $CI->db->where('bbs.variety_id', $variety_id);
+        $result = $CI->db->get()->row_array();
+        return $result;
+    }
+
 }

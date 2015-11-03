@@ -15,6 +15,7 @@ class Notification_helper
             $CI->db->where('bstn.receiving_territory', null);
             $CI->db->where('bstn.receiving_zone', null);
             $CI->db->where('bstn.receiving_division', null);
+            $CI->db->group_by('bstn.sending_division');
         }
         elseif($user_group==$CI->config->item('user_group_division'))
         {
@@ -68,6 +69,7 @@ class Notification_helper
             $CI->db->where('bstn.receiving_territory', null);
             $CI->db->where('bstn.receiving_zone', null);
             $CI->db->where('bstn.receiving_division', null);
+            $CI->db->group_by('bstn.sending_division');
         }
         elseif($user_group==$CI->config->item('user_group_division'))
         {
