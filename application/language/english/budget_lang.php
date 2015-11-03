@@ -271,3 +271,4 @@ $lang['LABEL_BUDGETED']='Budgeted Quantity';
 $lang['SALES_TARGET_EDIT']='Variety Quantity';
 $lang['NOT_BUDGETED']='Not Budgeted';
 $lang['LABEL_BONUS_SETUP_DONE_ALREADY']='Bonus Setup Done Already!';
+$lang['LABEL_BANK_OTHER_CHARGES']='Bank Other Charges';

@@ -94,7 +94,8 @@ class Direct_cost_setup extends ROOT_Controller
             'packing_material'=>$this->input->post('packing_material'),
             'carriage_inwards'=>$this->input->post('carriage_inwards'),
             'air_freight_and_docs'=>$this->input->post('air_freight_and_docs'),
-            'cnf'=>$this->input->post('cnf')
+            'cnf'=>$this->input->post('cnf'),
+            'bank_other_charges'=>$this->input->post('bank_other_charges')
         );
 
         if(!$this->check_validation())
@@ -144,7 +145,6 @@ class Direct_cost_setup extends ROOT_Controller
                 {
                     $this->message=$this->lang->line("MSG_NOT_SAVED_SUCCESS");
                 }
-
             }
 
             $this->budget_list();//this is similar like redirect
@@ -173,6 +173,7 @@ class Direct_cost_setup extends ROOT_Controller
             $this->form_validation->set_rules('carriage_inwards',$this->lang->line('LABEL_CARRIAGE_INWARDS'),'required');
             $this->form_validation->set_rules('air_freight_and_docs',$this->lang->line('LABEL_AIR_FREIGHT_AND_DOCS'),'required');
             $this->form_validation->set_rules('cnf',$this->lang->line('LABEL_CNF'),'required');
+            $this->form_validation->set_rules('bank_other_charges',$this->lang->line('LABEL_BANK_OTHER_CHARGES'),'required');
 
             if($this->form_validation->run() == FALSE)
             {

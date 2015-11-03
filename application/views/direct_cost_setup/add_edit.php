@@ -34,7 +34,7 @@
                 <label class="control-label pull-right"><?php echo $this->lang->line('LABEL_USD_CONVERSION_RATE');?><span style="color:#FF0000">*</span></label>
             </div>
             <div class="col-sm-4 col-xs-8">
-                <input type="text" name="usd_conversion_rate" class="form-control validate[required]" value="<?php if(isset($purchase['usd_conversion_rate'])){echo $purchase['usd_conversion_rate'];}?>" />
+                <input type="text" name="usd_conversion_rate" class="form-control validate[required] quantity" value="<?php if(isset($purchase['usd_conversion_rate'])){echo $purchase['usd_conversion_rate'];}?>" />
             </div>
         </div>
 
@@ -43,7 +43,7 @@
                 <label class="control-label pull-right"><?php echo $this->lang->line('LABEL_LC_EXP');?><span style="color:#FF0000">*</span></label>
             </div>
             <div class="col-sm-4 col-xs-8">
-                <input type="text" name="lc_exp" class="form-control validate[required]" value="<?php if(isset($purchase['lc_exp'])){echo $purchase['lc_exp'];}?>" />
+                <input type="text" name="lc_exp" class="form-control validate[required] quantity" value="<?php if(isset($purchase['lc_exp'])){echo $purchase['lc_exp'];}?>" />
             </div>
         </div>
 
@@ -52,7 +52,7 @@
                 <label class="control-label pull-right"><?php echo $this->lang->line('LABEL_INSURANCE_EXP');?><span style="color:#FF0000">*</span></label>
             </div>
             <div class="col-sm-4 col-xs-8">
-                <input type="text" name="insurance_exp" class="form-control validate[required]" value="<?php if(isset($purchase['insurance_exp'])){echo $purchase['insurance_exp'];}?>" />
+                <input type="text" name="insurance_exp" class="form-control validate[required] quantity" value="<?php if(isset($purchase['insurance_exp'])){echo $purchase['insurance_exp'];}?>" />
             </div>
         </div>
 
@@ -61,7 +61,7 @@
                 <label class="control-label pull-right"><?php echo $this->lang->line('LABEL_PACKING_MATERIAL');?><span style="color:#FF0000">*</span></label>
             </div>
             <div class="col-sm-4 col-xs-8">
-                <input type="text" name="packing_material" class="form-control validate[required]" value="<?php if(isset($purchase['packing_material'])){echo $purchase['packing_material'];}?>" />
+                <input type="text" name="packing_material" class="form-control validate[required] quantity" value="<?php if(isset($purchase['packing_material'])){echo $purchase['packing_material'];}?>" />
             </div>
         </div>
 
@@ -70,7 +70,7 @@
                 <label class="control-label pull-right"><?php echo $this->lang->line('LABEL_CARRIAGE_INWARDS');?><span style="color:#FF0000">*</span></label>
             </div>
             <div class="col-sm-4 col-xs-8">
-                <input type="text" name="carriage_inwards" class="form-control validate[required]" value="<?php if(isset($purchase['carriage_inwards'])){echo $purchase['carriage_inwards'];}?>" />
+                <input type="text" name="carriage_inwards" class="form-control validate[required] quantity" value="<?php if(isset($purchase['carriage_inwards'])){echo $purchase['carriage_inwards'];}?>" />
             </div>
         </div>
 
@@ -79,7 +79,7 @@
                 <label class="control-label pull-right"><?php echo $this->lang->line('LABEL_AIR_FREIGHT_AND_DOCS');?><span style="color:#FF0000">*</span></label>
             </div>
             <div class="col-sm-4 col-xs-8">
-                <input type="text" name="air_freight_and_docs" class="form-control validate[required]" value="<?php if(isset($purchase['air_freight_and_docs'])){echo $purchase['air_freight_and_docs'];}?>" />
+                <input type="text" name="air_freight_and_docs" class="form-control validate[required] quantity" value="<?php if(isset($purchase['air_freight_and_docs'])){echo $purchase['air_freight_and_docs'];}?>" />
             </div>
         </div>
 
@@ -88,7 +88,16 @@
                 <label class="control-label pull-right"><?php echo $this->lang->line('LABEL_CNF');?><span style="color:#FF0000">*</span></label>
             </div>
             <div class="col-sm-4 col-xs-8">
-                <input type="text" name="cnf" class="form-control validate[required]" value="<?php if(isset($purchase['cnf'])){echo $purchase['cnf'];}?>" />
+                <input type="text" name="cnf" class="form-control validate[required] quantity" value="<?php if(isset($purchase['cnf'])){echo $purchase['cnf'];}?>" />
+            </div>
+        </div>
+
+        <div style="" class="row show-grid">
+            <div class="col-xs-4">
+                <label class="control-label pull-right"><?php echo $this->lang->line('LABEL_BANK_OTHER_CHARGES');?><span style="color:#FF0000">*</span></label>
+            </div>
+            <div class="col-sm-4 col-xs-8">
+                <input type="text" name="bank_other_charges" class="form-control validate[required] quantity" value="<?php if(isset($purchase['bank_other_charges'])){echo $purchase['bank_other_charges'];}?>" />
             </div>
         </div>
     </div>
@@ -101,6 +110,11 @@
     {
         $(".form_valid").validationEngine();
         turn_off_triggers();
+
+        $(document).on("keyup", ".quantity", function()
+        {
+            this.value = this.value.replace(/[^0-9\.]/g,'');
+        });
     });
 
 </script>
