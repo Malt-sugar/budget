@@ -115,11 +115,6 @@ class Bonus_setup extends ROOT_Controller
                             $data[$key] = $value;
                         }
 
-//                        if($data['sales_commission']>0 || $data['sales_bonus']>0 || $data['other_incentive']>0)
-//                        {
-//
-//                        }
-
                         if(strlen($year_id)>1)
                         {
                             $data['modified_by'] = $user->user_id;

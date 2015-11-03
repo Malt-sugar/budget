@@ -58,9 +58,9 @@
                     ?>
                 </td>
                 <td><?php echo $variety['varriety_name'];?></td>
-                <td class="text-center"><input type="text" class="form-control" name="bonus[<?php echo $variety['crop_id'];?>][<?php echo $variety['product_type_id'];?>][<?php echo $variety['varriety_id'];?>][sales_commission]" value="<?php echo $bonus_detail['sales_commission'];?>" /></td>
-                <td class="text-center"><input type="text" class="form-control" name="bonus[<?php echo $variety['crop_id'];?>][<?php echo $variety['product_type_id'];?>][<?php echo $variety['varriety_id'];?>][sales_bonus]" value="<?php echo $bonus_detail['sales_bonus'];?>" /></td>
-                <td class="text-center"><input type="text" class="form-control" name="bonus[<?php echo $variety['crop_id'];?>][<?php echo $variety['product_type_id'];?>][<?php echo $variety['varriety_id'];?>][other_incentive]" value="<?php echo $bonus_detail['other_incentive'];?>" /></td>
+                <td class="text-center"><input type="text" class="form-control" name="bonus[<?php echo $variety['crop_id'];?>][<?php echo $variety['product_type_id'];?>][<?php echo $variety['varriety_id'];?>][sales_commission]" value="<?php if(isset($bonus_detail['sales_commission'])){echo $bonus_detail['sales_commission'];}?>" /></td>
+                <td class="text-center"><input type="text" class="form-control" name="bonus[<?php echo $variety['crop_id'];?>][<?php echo $variety['product_type_id'];?>][<?php echo $variety['varriety_id'];?>][sales_bonus]" value="<?php if(isset($bonus_detail['sales_bonus'])){echo $bonus_detail['sales_bonus'];}?>" /></td>
+                <td class="text-center"><input type="text" class="form-control" name="bonus[<?php echo $variety['crop_id'];?>][<?php echo $variety['product_type_id'];?>][<?php echo $variety['varriety_id'];?>][other_incentive]" value="<?php if(isset($bonus_detail['other_incentive'])){echo $bonus_detail['other_incentive'];}?>" /></td>
             </tr>
         <?php
         }

@@ -143,7 +143,7 @@ class Confirmed_quantity_setup_model extends CI_Model
     public function get_budgeted_sales_quantity($year, $crop_id, $type_id, $variety_id)
     {
         $this->db->from('budget_sales_target bst');
-        $this->db->select('bst.budgeted_quantity');
+        $this->db->select('bst.budgeted_quantity, bst.principal_quantity');
 
         $this->db->where('bst.crop_id', $crop_id);
         $this->db->where('bst.type_id', $type_id);
@@ -160,7 +160,7 @@ class Confirmed_quantity_setup_model extends CI_Model
 
         if($result)
         {
-            return $result['budgeted_quantity'];
+            return $result;
         }
         else
         {

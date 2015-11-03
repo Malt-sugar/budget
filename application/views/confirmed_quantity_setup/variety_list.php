@@ -2,7 +2,6 @@
 ?>
 <div class="clearfix"></div>
 
-
 <div class="row show-grid">
     <div class="col-lg-12">
         <table class="table table-hover table-bordered">
@@ -12,6 +11,7 @@
             <th class="text-center"><?php echo $this->lang->line('LABEL_BUDGETED_SALES_QTY_HO')?></th>
             <th class="text-center"><?php echo $this->lang->line('LABEL_VARIANCE')?></th>
             <th class="text-center"><?php echo $this->lang->line('LABEL_BUDGETED_PURCHASE_QUANTITY')?></th>
+            <th class="text-center"><?php echo $this->lang->line('LABEL_PRINCIPAL_QUANTITY')?></th>
             <th class="text-center"><?php echo $this->lang->line('LABEL_ACTUAL_PURCHASE_CONFIRMED')?></th>
             <th class="text-center"><?php echo $this->lang->line('LABEL_PI_VALUE_US')?></th>
             <th class="text-center"><?php echo $this->lang->line('LABEL_MONTH_SETUP')?></th>
@@ -29,9 +29,10 @@
                 <td class="text-center"><?php echo $variety['crop_name'];?></td>
                 <td class="text-center"><?php echo $variety['product_type'];?></td>
                 <td class="text-center"><?php echo $variety['varriety_name'];?></td>
-                <td class="text-center"><?php echo $budgeted_sales_quantity;?></td>
+                <td class="text-center"><?php echo $budgeted_sales_quantity['budgeted_quantity'];?></td>
                 <td class="text-center"><?php echo $current_stock - $min_stock_quantity;?></td>
-                <td class="text-center"><?php echo $budgeted_sales_quantity - ($current_stock - $min_stock_quantity);?></td>
+                <td class="text-center"><?php echo $budgeted_sales_quantity['budgeted_quantity'] - ($current_stock - $min_stock_quantity);?></td>
+                <td class="text-center"><?php echo $budgeted_sales_quantity['principal_quantity'];?></td>
                 <td class="text-center"><input type="text" class="form-control variety_total_quantity confirmed_quantity_input numbersOnly" name="quantity[<?php echo $variety['crop_id'];?>][<?php echo $variety['product_type_id'];?>][<?php echo $variety['varriety_id'];?>][confirmed_quantity]" value="<?php if(isset($existing_confirmed_quantity['confirmed_quantity'])){echo $existing_confirmed_quantity['confirmed_quantity'];}?>" /></td>
                 <td class="text-center"><input type="text" class="form-control variety_total_quantity pi_value_input numbersOnly" name="quantity[<?php echo $variety['crop_id'];?>][<?php echo $variety['product_type_id'];?>][<?php echo $variety['varriety_id'];?>][pi_value]" value="<?php if(isset($existing_confirmed_quantity['pi_value'])){echo $existing_confirmed_quantity['pi_value'];}?>" /></td>
                 <td class="text-center" style="vertical-align: middle;">
@@ -258,7 +259,15 @@
             var confirmed_qty = parseInt($(this).closest('.main_tr').find('.confirmed_quantity_label').html());
             var new_remaining_val = confirmed_qty - sum;
 
-            $(this).closest('.main_tr').find('.remaining_quantity_label').html(new_remaining_val);
+            if(sum > confirmed_qty)
+            {
+                $(this).val('');
+                alert('Quantity Exceeds!')
+            }
+            else
+            {
+                $(this).closest('.main_tr').find('.remaining_quantity_label').html(new_remaining_val);
+            }
         });
 
         $(document).on("click",".crossSpanMonth",function()

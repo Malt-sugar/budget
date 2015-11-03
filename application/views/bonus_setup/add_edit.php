@@ -128,7 +128,7 @@
                     url: base_url+"bonus_setup/get_variety_detail/",
                     type: 'POST',
                     dataType: "JSON",
-                    data:{year_id:$(this).val()},
+                    data:{year: $(this).val()},
                     success: function (data, status)
                     {
 
