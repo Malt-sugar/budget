@@ -70,7 +70,7 @@ class Purchase_helper
 
         if($row_result)
         {
-            $c_stock=($row_result['Total_HQ_Purchase_Quantity']-(($row_result['Total_Sales_Quantity']+$row_result['Total_Bonus_Quantity']+$row_result['Total_Access_Quantity'])-$row_result['Total_Short_Quantity']));
+            $c_stock = ($row_result['Total_HQ_Purchase_Quantity']-(($row_result['Total_Sales_Quantity']+$row_result['Total_Bonus_Quantity']+$row_result['Total_Access_Quantity'])-$row_result['Total_Short_Quantity']));
         }
 
         if(isset($c_stock))
@@ -191,7 +191,7 @@ class Purchase_helper
         }
     }
 
-    public static function get_variety_actual_purchase_values($edit_id, $variety, $total_lc_exp, $total_insurance_exp, $total_packing_material, $total_carriage_inwards, $total_docs, $total_cnf)
+    public static function get_variety_actual_purchase_values($edit_id, $variety, $total_lc_exp, $total_insurance_exp, $total_packing_material, $total_carriage_inwards, $total_docs, $total_cnf, $total_bank_other_charges)
     {
         $CI = & get_instance();
         $data = array();
@@ -220,6 +220,7 @@ class Purchase_helper
         $data['carriage_inwards'] = round(($pi_value_percentage/100)*$total_carriage_inwards, 2);
         $data['docs'] = round(($pi_value_percentage/100)*$total_docs, 2);
         $data['cnf'] = round(($pi_value_percentage/100)*$total_cnf, 2);
+        $data['bank_other_charges'] = round(($pi_value_percentage/100)*$total_bank_other_charges, 2);
         $data['cogs'] = round(($data['pi_value']+$data['lc_exp']+$data['insurance_exp']+$data['packing_material']+$data['carriage_inwards']+$data['docs']+$data['cnf']), 2);
         $data['total_cogs'] = round(($data['cogs']*$data['purchase_quantity']), 2);
 

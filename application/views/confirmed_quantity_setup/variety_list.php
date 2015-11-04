@@ -14,6 +14,7 @@
             <th class="text-center"><?php echo $this->lang->line('LABEL_PRINCIPAL_QUANTITY')?></th>
             <th class="text-center"><?php echo $this->lang->line('LABEL_ACTUAL_PURCHASE_CONFIRMED')?></th>
             <th class="text-center"><?php echo $this->lang->line('LABEL_PI_VALUE_US')?></th>
+            <th class="text-center"><?php echo $this->lang->line('LABEL_BUDGETED_COGS')?></th>
             <th class="text-center"><?php echo $this->lang->line('LABEL_MONTH_SETUP')?></th>
             <th class="text-center"><?php echo $this->lang->line('LABEL_REMARKS')?></th>
             <?php
@@ -24,6 +25,10 @@
                 $current_stock = Purchase_helper::get_current_stock($variety['crop_id'], $variety['product_type_id'], $variety['varriety_id']);
                 $existing_confirmed_quantity = Purchase_helper::get_existing_confirmed_quantity($year, $variety['varriety_id']);
                 $existing_budget_months = Purchase_helper::get_existing_budget_months($year, $variety['varriety_id']);
+                $direct_costs = $this->confirmed_quantity_setup_model->get_direct_costs($year);
+
+                $pi = $existing_confirmed_quantity['pi_value'];
+                $cogs = $pi + ($direct_costs['lc_exp']/100)*$pi + ($direct_costs['insurance_exp']/100)*$pi + ($direct_costs['packing_material']/100)*$pi + ($direct_costs['carriage_inwards']/100)*$pi + ($direct_costs['air_freight_and_docs']/100)*$pi + ($direct_costs['cnf']/100)*$pi + ($direct_costs['bank_other_charges']/100)*$pi;
             ?>
             <tr class="main_tr">
                 <td class="text-center"><?php echo $variety['crop_name'];?></td>
@@ -35,6 +40,7 @@
                 <td class="text-center"><?php echo $budgeted_sales_quantity['principal_quantity'];?></td>
                 <td class="text-center"><input type="text" class="form-control variety_total_quantity confirmed_quantity_input numbersOnly" name="quantity[<?php echo $variety['crop_id'];?>][<?php echo $variety['product_type_id'];?>][<?php echo $variety['varriety_id'];?>][confirmed_quantity]" value="<?php if(isset($existing_confirmed_quantity['confirmed_quantity'])){echo $existing_confirmed_quantity['confirmed_quantity'];}?>" /></td>
                 <td class="text-center"><input type="text" class="form-control variety_total_quantity pi_value_input numbersOnly" name="quantity[<?php echo $variety['crop_id'];?>][<?php echo $variety['product_type_id'];?>][<?php echo $variety['varriety_id'];?>][pi_value]" value="<?php if(isset($existing_confirmed_quantity['pi_value'])){echo $existing_confirmed_quantity['pi_value'];}?>" /></td>
+                <td class="text-center budgeted_cogs"><?php if(isset($cogs)){echo round($cogs, 2);}?></td>
                 <td class="text-center" style="vertical-align: middle;">
                     <label class="label label-info load_month">+S</label>
                     <div class="row popContainer2" style="display: none; max-height: 500px; overflow-y: auto;">

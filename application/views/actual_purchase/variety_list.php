@@ -14,6 +14,7 @@
             <th class="text-center"><?php echo $this->lang->line('LABEL_CARRIAGE_INWARDS_ACTUAL')?></th>
             <th class="text-center"><?php echo $this->lang->line('LABEL_DOCS_ACTUAL')?></th>
             <th class="text-center"><?php echo $this->lang->line('LABEL_CNF')?></th>
+            <th class="text-center"><?php echo $this->lang->line('LABEL_BANK_OTHER_CHARGES')?></th>
             <th class="text-center"><?php echo $this->lang->line('LABEL_COGS')?></th>
             <th class="text-center"><?php echo $this->lang->line('LABEL_TOTAL_COGS')?></th>
             <th class="text-center"><?php echo $this->lang->line('LABEL_REMARKS')?></th>
@@ -27,6 +28,7 @@
                 <td class="text-center"><input type="text" disabled class="form-control carriage_inwards" name="quantity[<?php echo $crop_id;?>][<?php echo $type_id;?>][<?php echo $variety_id;?>][carriage_inwards]" value="" /></td>
                 <td class="text-center"><input type="text" disabled class="form-control docs" name="quantity[<?php echo $crop_id;?>][<?php echo $type_id;?>][<?php echo $variety_id;?>][docs]" value="" /></td>
                 <td class="text-center"><input type="text" disabled class="form-control cnf" name="quantity[<?php echo $crop_id;?>][<?php echo $type_id;?>][<?php echo $variety_id;?>][cnf]" value="" /></td>
+                <td class="text-center"><input type="text" disabled class="form-control bank_other_charges" name="quantity[<?php echo $crop_id;?>][<?php echo $type_id;?>][<?php echo $variety_id;?>][bank_other_charges]" value="" /></td>
                 <td class="text-center"><input type="text" disabled class="form-control cogs" name="" value="" /></td>
                 <td class="text-center"><input type="text" disabled class="form-control total_cogs" name="" value="" /></td>
                 <td class="text-center" style="vertical-align: middle;">

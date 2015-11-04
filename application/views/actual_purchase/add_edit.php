@@ -107,6 +107,15 @@
 
                 <div class="row show-grid">
                     <div class="col-xs-4">
+                        <label class="control-label pull-right"><?php echo $this->lang->line('LABEL_BANK_OTHER_CHARGES');?><span style="color:#FF0000">*</span></label>
+                    </div>
+                    <div class="col-sm-4 col-xs-8">
+                        <input type="text" name="bank_other_charges" class="form-control validate[required] total_bank_other_charges" value="<?php echo $setup['bank_other_charges'];?>" />
+                    </div>
+                </div>
+
+                <div class="row show-grid">
+                    <div class="col-xs-4">
                         <label class="control-label pull-right"><?php echo $this->lang->line('LABEL_MONTH_OF_PURCHASE');?><span style="color:#FF0000">*</span></label>
                     </div>
                     <div class="col-sm-4 col-xs-8">
@@ -199,7 +208,7 @@
 
             <div class="row variety_quantity" id="variety_quantity<?php echo $key;?>" data-varietyDetail-current-id="<?php echo $key;?>">
                 <?php
-                    $variety_values = Purchase_helper::get_variety_actual_purchase_values($edit_id, $quantity['variety_id'], $setup['lc_exp'], $setup['insurance_exp'], $setup['packing_material'], $setup['carriage_inwards'], $setup['docs'], $setup['cnf']);
+                    $variety_values = Purchase_helper::get_variety_actual_purchase_values($edit_id, $quantity['variety_id'], $setup['lc_exp'], $setup['insurance_exp'], $setup['packing_material'], $setup['carriage_inwards'], $setup['docs'], $setup['cnf'], $setup['bank_other_charges']);
                     $grand_total+=$variety_values['total_cogs'];
                 ?>
                 <div class="row show-grid">
@@ -213,6 +222,7 @@
                             <th class="text-center"><?php echo $this->lang->line('LABEL_CARRIAGE_INWARDS_ACTUAL')?></th>
                             <th class="text-center"><?php echo $this->lang->line('LABEL_DOCS_ACTUAL')?></th>
                             <th class="text-center"><?php echo $this->lang->line('LABEL_CNF')?></th>
+                            <th class="text-center"><?php echo $this->lang->line('LABEL_BANK_OTHER_CHARGES')?></th>
                             <th class="text-center"><?php echo $this->lang->line('LABEL_COGS')?></th>
                             <th class="text-center"><?php echo $this->lang->line('LABEL_TOTAL_COGS')?></th>
                             <th class="text-center"><?php echo $this->lang->line('LABEL_REMARKS')?></th>
@@ -226,6 +236,7 @@
                                 <td class="text-center"><input type="text" disabled class="form-control carriage_inwards" name="quantity[<?php echo $quantity['crop_id'];?>][<?php echo $quantity['type_id'];?>][<?php echo $quantity['variety_id'];?>][carriage_inwards]" value="<?php echo $variety_values['carriage_inwards'];?>" /></td>
                                 <td class="text-center"><input type="text" disabled class="form-control docs" name="quantity[<?php echo $quantity['crop_id'];?>][<?php echo $quantity['type_id'];?>][<?php echo $quantity['variety_id'];?>][docs]" value="<?php echo $variety_values['docs'];?>" /></td>
                                 <td class="text-center"><input type="text" disabled class="form-control cnf" name="quantity[<?php echo $quantity['crop_id'];?>][<?php echo $quantity['type_id'];?>][<?php echo $quantity['variety_id'];?>][cnf]" value="<?php echo $variety_values['cnf'];?>" /></td>
+                                <td class="text-center"><input type="text" disabled class="form-control bank_other_charges" name="quantity[<?php echo $quantity['crop_id'];?>][<?php echo $quantity['type_id'];?>][<?php echo $quantity['variety_id'];?>][bank_other_charges]" value="<?php echo $variety_values['bank_other_charges'];?>" /></td>
                                 <td class="text-center"><input type="text" disabled class="form-control cogs" name="" value="<?php echo $variety_values['cogs'];?>" /></td>
                                 <td class="text-center"><input type="text" disabled class="form-control total_cogs" name="" value="<?php echo $variety_values['total_cogs'];?>" /></td>
                                 <td class="text-center" style="vertical-align: middle;">
@@ -334,11 +345,13 @@
                 <th class="text-center" style="display: none;"><?php echo $this->lang->line('LABEL_CARRIAGE_INWARDS_ACTUAL')?></th>
                 <th class="text-center" style="display: none;"><?php echo $this->lang->line('LABEL_DOCS_ACTUAL')?></th>
                 <th class="text-center" style="display: none;"><?php echo $this->lang->line('LABEL_CNF')?></th>
+                <th class="text-center" style="display: none;"><?php echo $this->lang->line('LABEL_BANK_OTHER_CHARGES')?></th>
                 <th class="text-center" style="display: none;"><?php echo $this->lang->line('LABEL_COGS')?></th>
                 <th class="text-center" style="display: none;"><?php echo $this->lang->line('LABEL_TOTAL_COGS')?></th>
                 <th class="text-center" style="display: none;"><?php echo $this->lang->line('LABEL_REMARKS')?></th>
 
                 <tr>
+                    <td class="text-center"></td>
                     <td class="text-center"></td>
                     <td class="text-center"></td>
                     <td class="text-center"></td>
@@ -624,6 +637,7 @@
             var total_carriage_inwards = $(".total_carriage_inwards").val();
             var total_docs = $(".total_docs").val();
             var total_cnf = $(".total_cnf").val();
+            var total_bank_other_charges = $(".total_bank_other_charges").val();
 
             var pi_value = parseInt($(this).closest('tr').find('.pi_value').val());
 
@@ -650,7 +664,8 @@
                 var carriage_inwards = parseFloat(((pi_percentage/100)*total_carriage_inwards).toFixed(2));
                 var docs = parseFloat(((pi_percentage/100)*total_docs).toFixed(2));
                 var cnf = parseFloat(((pi_percentage/100)*total_cnf).toFixed(2));
-                var cogs = (parseFloat(val) + parseFloat(lc_exp) + parseFloat(insurance_exp) + parseFloat(packing_material) + parseFloat(carriage_inwards) + parseFloat(docs) + parseFloat(cnf)).toFixed(2);
+                var bank_other_charges = parseFloat(((pi_percentage/100)*total_bank_other_charges).toFixed(2));
+                var cogs = (parseFloat(val) + parseFloat(lc_exp) + parseFloat(insurance_exp) + parseFloat(packing_material) + parseFloat(carriage_inwards) + parseFloat(docs) + parseFloat(cnf) + parseFloat(bank_other_charges)).toFixed(2);
 
                 var purchase_quantity = $(this).closest('tr').find('.purchase_quantity').val();
                 var total_cogs = (cogs*purchase_quantity).toFixed(2);
@@ -661,6 +676,7 @@
                 $(this).closest('tr').find('.carriage_inwards').val(carriage_inwards);
                 $(this).closest('tr').find('.docs').val(docs);
                 $(this).closest('tr').find('.cnf').val(cnf);
+                $(this).closest('tr').find('.bank_other_charges').val(bank_other_charges);
                 $(this).closest('tr').find('.cogs').val(cogs);
                 $(this).closest('tr').find('.total_cogs').val(total_cogs);
             });

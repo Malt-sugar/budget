@@ -293,23 +293,24 @@ class Confirmed_quantity_setup extends ROOT_Controller
         }
     }
 
-//    public function check_budget_purchase_this_year()
-//    {
-//        $year = $this->input->post('year');
-//        $existence = $this->confirmed_quantity_setup_model->check_quantity_year_existence($year);
-//
-//        if($existence)
-//        {
-//            $ajax['status'] = false;
-//            $ajax['message'] = $this->lang->line("BUDGET_PURCHASE_SET_ALREADY");
-//            $this->jsonReturn($ajax);
-//        }
-//        else
-//        {
-//            $ajax['status'] = true;
-//            $this->jsonReturn($ajax);
-//        }
-//    }
+    public function get_direct_cost_this_year()
+    {
+        $year = $this->input->post('year');
+        $data['costs'] = $this->confirmed_quantity_setup_model->get_direct_costs($year);
+
+        if(isset($year) && strlen($year)>0)
+        {
+            $ajax['status'] = true;
+            $ajax['content'][]=array("id"=>'#direct_cost_div',"html"=>$this->load->view("confirmed_quantity_setup/direct_cost",$data,true));
+            $this->jsonReturn($ajax);
+        }
+        else
+        {
+            $ajax['status'] = true;
+            $ajax['message'] = $this->lang->line("DIRECT_COSTS_NOT_SET");
+            $this->jsonReturn($ajax);
+        }
+    }
 
     public function get_dropDown_type_by_crop()
     {

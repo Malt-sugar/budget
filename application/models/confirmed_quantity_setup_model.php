@@ -289,4 +289,14 @@ class Confirmed_quantity_setup_model extends CI_Model
 
         $this->db->update('budget_purchase_months',$data);
     }
+
+    public function get_direct_costs($year)
+    {
+        $this->db->from('budget_direct_cost bdc');
+        $this->db->select('bdc.*');
+        $this->db->where('bdc.year', $year);
+        $this->db->where('bdc.purchase_type', $this->config->item('purchase_type_budget'));
+        $result = $this->db->get()->row_array();
+        return $result;
+    }
 }

@@ -73,6 +73,10 @@
     <div class="row variety_quantity" id="variety_quantity">
 
     </div>
+
+    <div class="row direct_cost" id="direct_cost_div" style="display: none;">
+
+    </div>
 </div>
 </form>
 <script type="text/javascript">
@@ -98,6 +102,31 @@
                 $("#crop_select_div").hide();
                 $("#type_select_div").hide();
                 $("#variety_quantity").html('');
+            }
+        });
+
+        $(document).on("change","#year",function()
+        {
+            if($(this).val().length>0)
+            {
+                $.ajax({
+                    url: base_url+"confirmed_quantity_setup/get_direct_cost_this_year/",
+                    type: 'POST',
+                    dataType: "JSON",
+                    data:{year:$(this).val()},
+                    success: function (data, status)
+                    {
+
+                    },
+                    error: function (xhr, desc, err)
+                    {
+                        console.log("error");
+                    }
+                });
+            }
+            else
+            {
+                $("#direct_cost_div").html('');
             }
         });
 
@@ -172,26 +201,6 @@
             }
         });
 
-        $(document).on("change","#year",function()
-        {
-//            if($(this).val().length>0)
-//            {
-//                $.ajax({
-//                    url: base_url+"confirmed_quantity_setup/check_budget_purchase_this_year/",
-//                    type: 'POST',
-//                    dataType: "JSON",
-//                    data:{year:$(this).val()},
-//                    success: function (data, status)
-//                    {
-//
-//                    },
-//                    error: function (xhr, desc, err)
-//                    {
-//                        console.log("error");
-//                    }
-//                });
-//            }
-        });
 
         $(document).on("keyup", ".numbersOnly", function()
         {
@@ -206,6 +215,31 @@
         $(document).on("click",".crossSpan",function()
         {
             $(".popContainer").hide();
+        });
+
+        $(document).on("keyup",".pi_value_input",function()
+        {
+            var lc_exp = parseFloat($(".lc_exp").val());
+            var insurance_exp = parseFloat($(".insurance_exp").val());
+            var packing_material = parseFloat($(".packing_material").val());
+            var carriage_inwards = parseFloat($(".carriage_inwards").val());
+            var docs = parseFloat($(".docs").val());
+            var cnf = parseFloat($(".cnf").val());
+            var bank_other_charges = parseFloat($(".bank_other_charges").val());
+            
+            var pi_value = parseFloat($(this).val());
+
+            var lc_exp_per = parseFloat(((pi_value/100)*lc_exp).toFixed(2));
+            var insurance_exp_per = parseFloat(((pi_value/100)*insurance_exp).toFixed(2));
+            var packing_material_per = parseFloat(((pi_value/100)*packing_material).toFixed(2));
+            var carriage_inwards_per = parseFloat(((pi_value/100)*carriage_inwards).toFixed(2));
+            var docs_per = parseFloat(((pi_value/100)*docs).toFixed(2));
+            var cnf_per = parseFloat(((pi_value/100)*cnf).toFixed(2));
+            var bank_other_charges_per = parseFloat(((pi_value/100)*bank_other_charges).toFixed(2));
+
+            var cogs = (parseFloat(pi_value) + parseFloat(lc_exp_per) + parseFloat(insurance_exp_per) + parseFloat(packing_material_per) + parseFloat(carriage_inwards_per) + parseFloat(docs_per) + parseFloat(cnf_per) + parseFloat(bank_other_charges_per)).toFixed(2);
+
+            $(this).closest('tr').find('.budgeted_cogs').html(cogs);
         });
     });
 </script>

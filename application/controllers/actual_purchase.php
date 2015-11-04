@@ -70,7 +70,7 @@ class Actual_purchase extends ROOT_Controller
             $data['setup'] = $this->actual_purchase_model->get_purchase_setup($edit_id);
             $data['purchases'] = $this->actual_purchase_model->get_purchase_detail($edit_id);
             $data['title'] = "Edit Actual Purchase";
-            $ajax['page_url']=base_url()."actual_purchase/index/edit/";
+            $ajax['page_url']=base_url()."actual_purchase";
         }
         else
         {
@@ -78,7 +78,7 @@ class Actual_purchase extends ROOT_Controller
             $data['setup'] = array();
             $data['purchases'] = array();
             $data['title'] = "Actual Purchase";
-            $ajax['page_url'] = base_url()."actual_purchase/index/add";
+            $ajax['page_url'] = base_url()."actual_purchase";
         }
 
         $ajax['status'] = true;
@@ -118,6 +118,7 @@ class Actual_purchase extends ROOT_Controller
             $setup_data['carriage_inwards'] = $this->input->post('carriage_inwards');
             $setup_data['docs'] = $this->input->post('docs');
             $setup_data['cnf'] = $this->input->post('cnf');
+            $setup_data['bank_other_charges'] = $this->input->post('bank_other_charges');
 
             if($edit_id>0)
             {

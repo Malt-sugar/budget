@@ -7,7 +7,7 @@ abstract class ROOT_Controller extends CI_Controller
         parent::__construct();
         if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest')
         {
-            $user=User_helper::get_user();
+            $user = User_helper::get_user();
             if(!$user)
             {
                 if($this->router->class!="home")
