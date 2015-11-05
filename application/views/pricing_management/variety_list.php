@@ -12,10 +12,10 @@
             <th class="text-center"><?php echo $this->lang->line('LABEL_TARGET_PROFIT_PER')?></th>
             <th class="text-center"><?php echo $this->lang->line('LABEL_AUTOMATED_MRP')?></th>
             <th class="text-center"><?php echo $this->lang->line('LABEL_LAST_YEAR_MRP')?></th>
+            <th class="text-center"><?php echo $this->lang->line('LABEL_MRP_BY_MGT')?></th>
             <th class="text-center"><?php echo $this->lang->line('LABEL_SALES_COMMISSION_PER')?></th>
             <th class="text-center"><?php echo $this->lang->line('LABEL_SALES_BONUS_MGT')?></th>
             <th class="text-center"><?php echo $this->lang->line('LABEL_OTHER_INCENTIVE_MGT')?></th>
-            <th class="text-center"><?php echo $this->lang->line('LABEL_MRP_BY_MGT')?></th>
             <th class="text-center"><?php echo $this->lang->line('LABEL_NET_SALES_PRICE')?></th>
             <th class="text-center"><?php echo $this->lang->line('LABEL_NET_PROFIT')?></th>
             <th class="text-center"><?php echo $this->lang->line('LABEL_TOTAL_NET_SALES')?></th>
@@ -99,10 +99,10 @@
                 <td class="text-center"><?php echo $detail['target_profit'];?></td>
                 <td class="text-center"><?php echo $detail['automated_mrp'];?></td>
                 <td class="text-center"><?php echo $detail['last_year_mrp'];?></td>
+                <td class="text-center"><input type="text" name="pricing[<?php echo $variety['crop_id'];?>][<?php echo $variety['product_type_id'];?>][<?php echo $variety['varriety_id'];?>][mrp]" class="form-control mrp_by_mgt numbersOnly" value="<?php echo isset($existing_data['mrp'])?$existing_data['mrp']:'';?>" /></td>
                 <td class="text-center"><?php echo $detail['sales_commission'];?><input type="hidden" name="sales_commission" class="sales_commission" value="<?php echo $detail['sales_commission'];?>" /></td>
                 <td class="text-center"><input type="text" name="pricing[<?php echo $variety['crop_id'];?>][<?php echo $variety['product_type_id'];?>][<?php echo $variety['varriety_id'];?>][sales_bonus]" class="form-control sales_bonus numbersOnly" value="<?php echo isset($existing_data['sales_bonus'])?$existing_data['sales_bonus']:'';?>" /></td>
                 <td class="text-center"><input type="text" name="pricing[<?php echo $variety['crop_id'];?>][<?php echo $variety['product_type_id'];?>][<?php echo $variety['varriety_id'];?>][other_incentive]" class="form-control other_incentive numbersOnly" value="<?php echo isset($existing_data['other_incentive'])?$existing_data['other_incentive']:'';?>" /></td>
-                <td class="text-center"><input type="text" name="pricing[<?php echo $variety['crop_id'];?>][<?php echo $variety['product_type_id'];?>][<?php echo $variety['varriety_id'];?>][mrp]" class="form-control mrp_by_mgt numbersOnly" value="<?php echo isset($existing_data['mrp'])?$existing_data['mrp']:'';?>" /></td>
                 <td class="text-center net_sales_price"><?php if(isset($net_sales_price)){echo $net_sales_price;}?></td>
                 <td class="text-center net_profit"><?php if(isset($net_profit)){echo $net_profit;}?></td>
                 <td class="text-center total_net_sales"><?php if(isset($total_net_sales_price)){echo $total_net_sales_price;}?></td>

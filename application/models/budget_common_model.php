@@ -155,4 +155,25 @@ class Budget_common_model extends CI_Model
         $results = $this->db->get()->result_array();
         return $results;
     }
+
+    public function get_districts_by_territory($territory_id)
+    {
+        $this->db->from('ait_territory_assign_district ati');
+        $this->db->select('ati.*');
+        $this->db->select('az.zillanameeng');
+        $this->db->where('ati.territory_id', $territory_id);
+        $this->db->join('ait_zilla az', 'az.zillaid = ati.zilla_id', 'LEFT');
+        $results = $this->db->get()->result_array();
+        return $results;
+    }
+
+    public function get_customers_by_district($territory_id, $district_id)
+    {
+        $this->db->from('ait_distributor_info adi');
+        $this->db->select('adi.*');
+        $this->db->where('adi.territory_id', $territory_id);
+        $this->db->where('adi.zilla_id', $district_id);
+        $results = $this->db->get()->result_array();
+        return $results;
+    }
 }

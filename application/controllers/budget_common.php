@@ -175,6 +175,48 @@ class Budget_common extends ROOT_Controller
         $this->jsonReturn($ajax);
     }
 
+    public function get_dropDown_district_by_territory()
+    {
+        $zone_id = $this->input->post('zone_id');
+        $territory_id = $this->input->post('territory_id');
+
+        $districts = $this->budget_common_model->get_districts_by_territory($territory_id);
+
+        $data = array();
+        if(is_array($districts) && sizeof($districts)>0)
+        {
+            foreach($districts as $district)
+            {
+                $data[] = array('value'=>$district['zilla_id'], 'text'=>$district['zillanameeng']);
+            }
+        }
+
+        $ajax['status'] = true;
+        $ajax['content'][] = array("id"=>'#district',"html"=>$this->load->view("dropdown",array('drop_down_options'=>$data),true));
+        $this->jsonReturn($ajax);
+    }
+
+    public function get_dropDown_customer_by_district()
+    {
+        $territory_id = $this->input->post('territory_id');
+        $district_id = $this->input->post('district_id');
+
+        $distributors = $this->budget_common_model->get_customers_by_district($territory_id, $district_id);
+
+        $data = array();
+        if(is_array($distributors) && sizeof($distributors)>0)
+        {
+            foreach($distributors as $distributor)
+            {
+                $data[] = array('value'=>$distributor['distributor_id'], 'text'=>$distributor['distributor_name']);
+            }
+        }
+
+        $ajax['status'] = true;
+        $ajax['content'][] = array("id"=>'#customer',"html"=>$this->load->view("dropdown",array('drop_down_options'=>$data),true));
+        $this->jsonReturn($ajax);
+    }
+
 
 
 }

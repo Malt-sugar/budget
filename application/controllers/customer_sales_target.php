@@ -64,6 +64,7 @@ class Customer_sales_target extends ROOT_Controller
         $data['divisions'] = $this->budget_common_model->get_division_by_access();
         $data['zones'] = Query_helper::get_info('ait_zone_info',array('zone_id value','zone_name text'),array('del_status = 0'));
         $data['territories'] = Query_helper::get_info('ait_territory_info',array('territory_id value','territory_name text'),array('del_status = 0'));
+        $data['zillas'] = Query_helper::get_info('ait_zilla',array('zillaid value','zillanameeng text'),array('visible = 0'));
         $data['customers'] = Query_helper::get_info('ait_distributor_info',array('distributor_id value','distributor_name text'),array('del_status = 0'));
         $data['crops'] = $this->budget_common_model->get_ordered_crops();
         $data['types'] = $this->budget_common_model->get_ordered_crop_types();
@@ -106,6 +107,7 @@ class Customer_sales_target extends ROOT_Controller
             $division = $this->input->post('division');
             $zone = $this->input->post('zone');
             $territory = $this->input->post('territory');
+            $district = $this->input->post('district');
             $customer = $this->input->post('customer');
 
             $crop_type_Post = $this->input->post('target');
@@ -131,6 +133,7 @@ class Customer_sales_target extends ROOT_Controller
                             $data['division_id'] = $division;
                             $data['zone_id'] = $zone;
                             $data['territory_id'] = $territory;
+                            $data['zilla_id'] = $district;
                             $data['customer_id'] = $customer;
                             $data['crop_id'] = $crop_type['crop'];
                             $data['type_id'] = $crop_type['type'];
@@ -172,6 +175,7 @@ class Customer_sales_target extends ROOT_Controller
                             $data['division_id'] = $division;
                             $data['zone_id'] = $zone;
                             $data['territory_id'] = $territory;
+                            $data['zilla_id'] = $district;
                             $data['customer_id'] = $customer;
                             $data['crop_id'] = $crop_type['crop'];
                             $data['type_id'] = $crop_type['type'];
@@ -234,6 +238,7 @@ class Customer_sales_target extends ROOT_Controller
         $division = $this->input->post('division');
         $zone = $this->input->post('zone');
         $territory = $this->input->post('territory');
+        $district = $this->input->post('district');
         $customer = $this->input->post('customer');
 
         if(!$year)
@@ -264,6 +269,12 @@ class Customer_sales_target extends ROOT_Controller
         {
             $valid=false;
             $this->message .= $this->lang->line("SET_ZONE").'<br>';
+        }
+
+        if(!$district)
+        {
+            $valid=false;
+            $this->message .= $this->lang->line("SET_DISTRICT").'<br>';
         }
 
         if(!$crop_type_Post || !$quantity_post)

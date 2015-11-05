@@ -14,6 +14,7 @@ if(is_array($targets) && sizeof($targets)>0)
         $arranged_targets['division_id'] = $target['division_id'];
         $arranged_targets['zone_id'] = $target['zone_id'];
         $arranged_targets['territory_id'] = $target['territory_id'];
+        $arranged_targets['zilla_id'] = $target['zilla_id'];
         $arranged_targets['customer_id'] = $target['customer_id'];
         $arranged_targets['year'] = $target['year'];
 
@@ -118,6 +119,27 @@ if(is_array($targets) && sizeof($targets)>0)
                 {
                     ?>
                     <input type="hidden" name="territory" value="<?php echo $arranged_targets['territory_id'];?>" />
+                <?php
+                }
+                ?>
+            </div>
+        </div>
+
+        <div class="row show-grid district" style="display: <?php if(isset($arranged_targets['zilla_id']) && strlen($arranged_targets['zilla_id'])>1){echo 'show';}else{echo 'none';}?>;">
+            <div class="col-xs-4">
+                <label class="control-label pull-right"><?php echo $this->lang->line('LABEL_DISTRICT');?><span style="color:#FF0000">*</span></label>
+            </div>
+            <div class="col-sm-4 col-xs-8">
+                <select name="district" class="form-control validate[required]" id="district" <?php if(isset($arranged_targets['zilla_id']) && strlen($arranged_targets['zilla_id'])>1){echo 'disabled';}?>>
+                    <?php
+                    $this->load->view('dropdown',array('drop_down_options'=>$zillas,'drop_down_selected'=>isset($arranged_targets['zilla_id'])?$arranged_targets['zilla_id']:''));
+                    ?>
+                </select>
+                <?php
+                if(isset($arranged_targets['zilla_id']) && strlen($arranged_targets['zilla_id'])>1)
+                {
+                    ?>
+                    <input type="hidden" name="district" value="<?php echo $arranged_targets['zilla_id'];?>" />
                 <?php
                 }
                 ?>
@@ -409,8 +431,14 @@ if(is_array($targets) && sizeof($targets)>0)
             $("#zone").val('');
             $(".territory").hide();
             $("#territory").val('');
+            $(".district").hide();
+            $("#district").val('');
             $(".customer").hide();
             $("#customer").val('');
+
+            $(".budget_add_more_container").hide();
+            $("#add_more").hide();
+            $(".crop").hide();
 
             if($(this).val().length>0)
             {
@@ -437,17 +465,29 @@ if(is_array($targets) && sizeof($targets)>0)
                 $("#zone").val('');
                 $(".territory").hide();
                 $("#territory").val('');
+                $(".district").hide();
+                $("#district").val('');
                 $(".customer").hide();
                 $("#customer").val('');
+
+                $(".budget_add_more_container").hide();
+                $("#add_more").hide();
+                $(".crop").hide();
             }
         });
 
         $(document).on("change","#zone",function()
         {
             $("#territory").val('');
+            $(".district").hide();
+            $("#district").val('');
             $(".customer").hide();
             $("#customer").val('');
-            // alert($(this).val());
+
+            $(".budget_add_more_container").hide();
+            $("#add_more").hide();
+            $(".crop").hide();
+
             if($(this).val().length>0)
             {
                 $(".territory").show();
@@ -470,20 +510,32 @@ if(is_array($targets) && sizeof($targets)>0)
             {
                 $(".territory").hide();
                 $("#territory").val('');
+                $(".district").hide();
+                $("#district").val('');
                 $(".customer").hide();
                 $("#customer").val('');
+
+                $(".budget_add_more_container").hide();
+                $("#add_more").hide();
+                $(".crop").hide();
             }
         });
 
         $(document).on("change","#territory",function()
         {
+            $("#district").val('');
+            $(".customer").hide();
             $("#customer").val('');
+
+            $(".budget_add_more_container").hide();
+            $("#add_more").hide();
+            $(".crop").hide();
 
             if($(this).val().length>0)
             {
-                $(".customer").show();
+                $(".district").show();
                 $.ajax({
-                    url: base_url+"budget_common/get_dropDown_customer_by_territory/",
+                    url: base_url+"budget_common/get_dropDown_district_by_territory/",
                     type: 'POST',
                     dataType: "JSON",
                     data:{zone_id:$("#zone").val(), territory_id:$(this).val()},
@@ -499,8 +551,51 @@ if(is_array($targets) && sizeof($targets)>0)
             }
             else
             {
+                $(".district").hide();
+                $("#district").val('');
                 $(".customer").hide();
                 $("#customer").val('');
+
+                $(".budget_add_more_container").hide();
+                $("#add_more").hide();
+                $(".crop").hide();
+            }
+        });
+
+        $(document).on("change","#district",function()
+        {
+            $("#customer").val('');
+
+            $(".budget_add_more_container").hide();
+            $("#add_more").hide();
+            $(".crop").hide();
+
+            if($(this).val().length>0)
+            {
+                $(".customer").show();
+                $.ajax({
+                    url: base_url+"budget_common/get_dropDown_customer_by_district/",
+                    type: 'POST',
+                    dataType: "JSON",
+                    data:{territory_id: $("#territory").val(), district_id:$(this).val()},
+                    success: function (data, status)
+                    {
+
+                    },
+                    error: function (xhr, desc, err)
+                    {
+                        console.log("error");
+                    }
+                });
+            }
+            else
+            {
+                $(".customer").hide();
+                $("#customer").val('');
+
+                $(".budget_add_more_container").hide();
+                $("#add_more").hide();
+                $(".crop").hide();
             }
         });
 

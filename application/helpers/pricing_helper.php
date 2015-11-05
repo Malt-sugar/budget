@@ -15,7 +15,6 @@ class Pricing_helper
         $data['marketing'] = isset($result['marketing'])?$result['marketing']:0;
         $data['finance_cost'] = isset($result['finance_cost'])?$result['finance_cost']:0;
         $data['target_profit'] = isset($result['target_profit'])?$result['target_profit']:0;
-        $data['sales_commission'] = isset($result['sales_commission'])?$result['sales_commission']:0;
 
         // Targeted Quantity
         $CI->db->from('budget_sales_target bst');
@@ -37,7 +36,47 @@ class Pricing_helper
         $CI->db->where('bpq.year', $year);
         $CI->db->where('bpq.status', $CI->config->item('status_active'));
         $budget_purchase_result = $CI->db->get()->row_array();
-        $data['pi_value'] = isset($budget_purchase_result['pi_value'])?$budget_purchase_result['pi_value']:0;
+        $pi_value = isset($budget_purchase_result['pi_value'])?$budget_purchase_result['pi_value']:0;
+        $data['pi_value'] = $pi_value;
+
+        // Direct Costs
+        $CI->db->from('budget_direct_cost bdc');
+        $CI->db->select('bdc.*');
+        $CI->db->where('bdc.year', $year);
+        $result = $CI->db->get()->row_array();
+        $lc_exp = isset($result['lc_exp'])?$result['lc_exp']:0;
+        $insurance_exp = isset($result['insurance_exp'])?$result['insurance_exp']:0;
+        $packing_material = isset($result['packing_material'])?$result['packing_material']:0;
+        $carriage_inwards = isset($result['carriage_inwards'])?$result['carriage_inwards']:0;
+        $air_freight_and_docs = isset($result['air_freight_and_docs'])?$result['air_freight_and_docs']:0;
+        $cnf = isset($result['cnf'])?$result['cnf']:0;
+        $bank_other_charges = isset($result['bank_other_charges'])?$result['bank_other_charges']:0;
+        $data['cogs'] = $pi_value + ($pi_value/100)*$lc_exp + ($pi_value/100)*$insurance_exp + ($pi_value/100)*$packing_material + ($pi_value/100)*$carriage_inwards + ($pi_value/100)*$air_freight_and_docs + ($pi_value/100)*$cnf + ($pi_value/100)*$bank_other_charges;
+
+        // Indirect Costs
+        $CI->db->from('budget_indirect_cost_setup bics');
+        $CI->db->select('bics.*');
+        $CI->db->where('bics.year', $year);
+        $result = $CI->db->get()->row_array();
+        $ho_and_gen_exp = isset($result['ho_and_gen_exp'])?$result['ho_and_gen_exp']:0;
+        $marketing = isset($result['marketing'])?$result['marketing']:0;
+        $finance_cost = isset($result['finance_cost'])?$result['finance_cost']:0;
+        $data['target_profit'] = isset($result['target_profit'])?$result['target_profit']:0;
+
+        $data['ho_and_gen_exp'] = ($ho_and_gen_exp/100)*$data['cogs'];
+        $data['marketing'] = ($marketing/100)*$data['cogs'];
+        $data['finance_cost'] = ($finance_cost/100)*$data['cogs'];
+
+        // VarietyWise Bonus Setup
+        $CI->db->from('budget_bonus_setup bbs');
+        $CI->db->select('bbs.*');
+        $CI->db->where('bbs.year', $year);
+        $CI->db->where('bbs.variety_id', $variety);
+        $result = $CI->db->get()->row_array();
+
+        $data['sales_commission'] = $result['sales_commission'];
+        $data['sales_bonus'] = $result['sales_bonus'];
+        $data['other_incentive'] = $result['other_incentive'];
 
         return $data;
     }

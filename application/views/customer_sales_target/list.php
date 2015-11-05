@@ -23,6 +23,7 @@
                     <th><?php echo $this->lang->line("SERIAL"); ?></th>
                     <th><?php echo $this->lang->line("LABEL_YEAR"); ?></th>
                     <th><?php echo $this->lang->line("LABEL_TERRITORY"); ?></th>
+                    <th><?php echo $this->lang->line("LABEL_DISTRICT"); ?></th>
                     <th><?php echo $this->lang->line("LABEL_CUSTOMER_NAME"); ?></th>
                     <th><?php echo $this->lang->line("ACTION"); ?></th>
                 </tr>
@@ -39,6 +40,7 @@
                             <td><?php echo $key+1;?></td>
                             <td><?php echo $sales_target['year_name'];?></td>
                             <td><?php echo $sales_target['territory_name'];?></td>
+                            <td><?php echo $sales_target['zillanameeng'];?></td>
                             <td><?php echo $sales_target['distributor_name'];?></td>
                             <td>
                                 <a href="<?php echo base_url();?>customer_sales_target/index/edit/<?php echo $sales_target['id'];?>/<?php echo $sales_target['customer_id'];?>/<?php echo $sales_target['year'];?>">

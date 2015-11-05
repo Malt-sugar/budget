@@ -48,10 +48,12 @@ class Customer_sales_target_model extends CI_Model
         $this->db->select('ati.territory_name');
         $this->db->select('adi.distributor_name');
         $this->db->select('ay.year_name');
+        $this->db->select('az.zillanameeng');
 
         $this->db->join('ait_territory_info ati', 'ati.territory_id = bst.territory_id', 'left');
         $this->db->join('ait_distributor_info adi', 'adi.distributor_id = bst.customer_id', 'left');
         $this->db->join('ait_year ay', 'ay.year_id = bst.year', 'left');
+        $this->db->join('ait_zilla az', 'az.zillaid = bst.zilla_id', 'left');
 
         $this->db->group_by('bst.customer_id');
         $this->db->group_by('bst.year');
