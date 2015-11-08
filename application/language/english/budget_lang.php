@@ -277,3 +277,4 @@ $lang['LABEL_BONUS_SETUP_DONE_ALREADY']='Bonus Setup Done Already!';
 $lang['LABEL_BANK_OTHER_CHARGES']='Bank Other Charges';
 $lang['LABEL_BUDGETED_COGS']='Budgeted COGS';
 $lang['LABEL_DISTRICT']='District';
+$lang['LABEL_TARGETED_PROFIT_PER']='Targeted Profit (%)';

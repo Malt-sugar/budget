@@ -10,10 +10,10 @@
             <th class="text-center"><?php echo $this->lang->line('LABEL_VARIETY')?></th>
             <th class="text-center"><?php echo $this->lang->line('LABEL_LAST_YEAR_MRP')?></th>
             <th class="text-center"><?php echo $this->lang->line('LABEL_MGT_MRP')?></th>
+            <th class="text-center"><?php echo $this->lang->line('LABEL_MARKETING_MRP')?></th>
             <th class="text-center"><?php echo $this->lang->line('LABEL_SALES_COMMISSION_PER')?></th>
             <th class="text-center"><?php echo $this->lang->line('LABEL_SALES_BONUS_MGT')?></th>
             <th class="text-center"><?php echo $this->lang->line('LABEL_OTHER_INCENTIVE_MGT')?></th>
-            <th class="text-center"><?php echo $this->lang->line('LABEL_MARKETING_MRP')?></th>
             <th class="text-center"><?php echo $this->lang->line('LABEL_NET_SALES_PRICE')?></th>
             <th class="text-center"><?php echo $this->lang->line('LABEL_NET_PROFIT')?></th>
             <th class="text-center"><?php echo $this->lang->line('LABEL_TOTAL_NET_SALES')?></th>
@@ -95,10 +95,10 @@
                 <td class="text-center"><?php echo $variety['varriety_name'];?></td>
                 <td class="text-center"><?php echo $detail['last_year_mrp'];?></td>
                 <td class="text-center"><?php echo $detail['management_mrp'];?></td>
-                <td class="text-center"><?php echo $detail['sales_commission'];?></td>
+                <td class="text-center"><?php echo isset($existing_data['mrp'])?$existing_data['mrp']:'';?></td>
+                <td class="text-center"><?php echo isset($existing_data['sales_commission'])?$existing_data['sales_commission']:'';?></td>
                 <td class="text-center"><?php echo isset($existing_data['sales_bonus'])?$existing_data['sales_bonus']:'';?></td>
                 <td class="text-center"><?php echo isset($existing_data['other_incentive'])?$existing_data['other_incentive']:'';?></td>
-                <td class="text-center"><?php echo isset($existing_data['mrp'])?$existing_data['mrp']:'';?></td>
                 <td class="text-center net_sales_price"><?php if(isset($net_sales_price)){echo $net_sales_price;}?></td>
                 <td class="text-center net_profit"><?php if(isset($net_profit)){echo $net_profit;}?></td>
                 <td class="text-center total_net_sales"><?php if(isset($total_net_sales_price)){echo $total_net_sales_price;}?></td>
@@ -145,31 +145,6 @@
         $(document).on("click",".crossSpan",function()
         {
             $(".popContainer").hide();
-        });
-
-        $(document).on("keyup",".mrp_final",function()
-        {
-            var total_cogs = parseFloat($(this).closest('.main_tr').find(".total_cogs").val());
-            var targeted_quantity = parseInt($(this).closest('.main_tr').find(".targeted_quantity").val());
-            var sales_commission = parseFloat($(this).closest('.main_tr').find(".sales_commission").val());
-            var sales_bonus = parseFloat($(this).closest('.main_tr').find(".sales_bonus").val());
-            var other_incentive = parseFloat($(this).closest('.main_tr').find(".other_incentive").val());
-            var mrp_final = parseFloat($(this).val());
-
-            var net_sales_price = (mrp_final - (sales_commission/100)*mrp_final - (sales_bonus/100)*mrp_final - (other_incentive/100)*mrp_final).toFixed(2);
-            var total_net_sales_price = net_sales_price*targeted_quantity;
-
-            $(this).closest('.main_tr').find(".net_sales_price").html(net_sales_price);
-            $(this).closest('.main_tr').find(".total_net_sales").html(total_net_sales_price);
-
-            var net_profit = (mrp_final - total_cogs).toFixed(2);
-            var total_net_profit = (net_profit*targeted_quantity).toFixed(2);
-
-            $(this).closest('.main_tr').find(".net_profit").html(net_profit);
-            $(this).closest('.main_tr').find(".total_net_profit").html(total_net_profit);
-
-            var profit_percentage = ((total_net_profit/total_cogs)*100).toFixed(2);
-            $(this).closest('.main_tr').find(".profit_percentage").html(profit_percentage);
         });
     });
 </script>

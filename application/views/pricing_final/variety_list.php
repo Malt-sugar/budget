@@ -9,15 +9,15 @@
             <th class="text-center"><?php echo $this->lang->line('LABEL_TYPE')?></th>
             <th class="text-center"><?php echo $this->lang->line('LABEL_VARIETY')?></th>
             <th class="text-center"><?php echo $this->lang->line('LABEL_TARGETED_QUANTITY')?></th>
-            <th class="text-center"><?php echo $this->lang->line('LABEL_TARGET_PROFIT_PER')?></th>
+            <th class="text-center"><?php echo $this->lang->line('LABEL_TARGETED_PROFIT_PER')?></th>
             <th class="text-center"><?php echo $this->lang->line('LABEL_AUTOMATED_MRP')?></th>
             <th class="text-center"><?php echo $this->lang->line('LABEL_LAST_YEAR_MRP')?></th>
             <th class="text-center"><?php echo $this->lang->line('LABEL_MGT_MRP')?></th>
             <th class="text-center"><?php echo $this->lang->line('LABEL_MARKETING_MRP')?></th>
+            <th class="text-center"><?php echo $this->lang->line('LABEL_FINAL_MRP')?></th>
             <th class="text-center"><?php echo $this->lang->line('LABEL_SALES_COMMISSION_PER')?></th>
             <th class="text-center"><?php echo $this->lang->line('LABEL_SALES_BONUS_MGT')?></th>
             <th class="text-center"><?php echo $this->lang->line('LABEL_OTHER_INCENTIVE_MGT')?></th>
-            <th class="text-center"><?php echo $this->lang->line('LABEL_FINAL_MRP')?></th>
             <th class="text-center"><?php echo $this->lang->line('LABEL_NET_SALES_PRICE')?></th>
             <th class="text-center"><?php echo $this->lang->line('LABEL_NET_PROFIT')?></th>
             <th class="text-center"><?php echo $this->lang->line('LABEL_TOTAL_NET_SALES')?></th>
@@ -39,7 +39,7 @@
 
                 $detail = Pricing_helper::get_pricing_final_info($year, $variety['varriety_id']);
 
-                $total_cogs = ($detail['pi_value'] + ($detail['ho_and_gen_exp']/100)*$detail['pi_value'] + ($detail['marketing']/100)*$detail['pi_value'] + ($detail['finance_cost']/100)*$detail['pi_value']);
+                $total_cogs = ($detail['cogs'] + ($detail['ho_and_gen_exp']/100)*$detail['cogs'] + ($detail['marketing']/100)*$detail['cogs'] + ($detail['finance_cost']/100)*$detail['cogs']);
                 $existing_data = Pricing_helper::get_pricing_final_existing_info($year, $variety['varriety_id']);
 
                 if(is_array($existing_data) && sizeof($existing_data)>0)
@@ -98,15 +98,15 @@
                 </td>
                 <td class="text-center"><?php echo $variety['varriety_name'];?><input type="hidden" name="total_cogs" class="total_cogs" value="<?php echo $total_cogs;?>" /></td>
                 <td class="text-center"><?php echo $detail['targeted_quantity'];?><input type="hidden" name="targeted_quantity" class="targeted_quantity" value="<?php echo $detail['targeted_quantity'];?>" /></td>
-                <td class="text-center"><?php echo $detail['target_profit'];?></td>
+                <td class="text-center"><input type="text" name="pricing[<?php echo $variety['crop_id'];?>][<?php echo $variety['product_type_id'];?>][<?php echo $variety['varriety_id'];?>][target_profit]" class="form-control target_profit numbersOnly" value="<?php echo $detail['target_profit'];?>" /></td>
                 <td class="text-center"><?php echo $detail['automated_mrp'];?></td>
                 <td class="text-center"><?php echo $detail['last_year_mrp'];?></td>
                 <td class="text-center"><?php echo $detail['management_mrp'];?></td>
                 <td class="text-center"><?php echo $detail['marketing_mrp'];?></td>
-                <td class="text-center"><?php echo $detail['sales_commission'];?><input type="hidden" name="sales_commission" class="sales_commission" value="<?php echo $detail['sales_commission'];?>" /></td>
-                <td class="text-center"><input type="text" name="pricing[<?php echo $variety['crop_id'];?>][<?php echo $variety['product_type_id'];?>][<?php echo $variety['varriety_id'];?>][sales_bonus]" class="form-control sales_bonus numbersOnly" value="<?php echo isset($existing_data['sales_bonus'])?$existing_data['sales_bonus']:'';?>" /></td>
-                <td class="text-center"><input type="text" name="pricing[<?php echo $variety['crop_id'];?>][<?php echo $variety['product_type_id'];?>][<?php echo $variety['varriety_id'];?>][other_incentive]" class="form-control other_incentive numbersOnly" value="<?php echo isset($existing_data['other_incentive'])?$existing_data['other_incentive']:'';?>" /></td>
                 <td class="text-center"><input type="text" name="pricing[<?php echo $variety['crop_id'];?>][<?php echo $variety['product_type_id'];?>][<?php echo $variety['varriety_id'];?>][mrp]" class="form-control mrp_final numbersOnly" value="<?php echo isset($existing_data['mrp'])?$existing_data['mrp']:'';?>" /></td>
+                <td class="text-center"><input type="text" name="sales_commission" class="form-control sales_commission" value="<?php if(isset($existing_data['sales_bonus'])){echo $existing_data['sales_bonus'];}else{echo $detail['sales_commission'];}?>" /></td>
+                <td class="text-center"><input type="text" name="pricing[<?php echo $variety['crop_id'];?>][<?php echo $variety['product_type_id'];?>][<?php echo $variety['varriety_id'];?>][sales_bonus]" class="form-control sales_bonus numbersOnly" value="<?php if(isset($existing_data['sales_bonus'])){echo $existing_data['sales_bonus'];}else{echo $detail['sales_bonus'];}?>" /></td>
+                <td class="text-center"><input type="text" name="pricing[<?php echo $variety['crop_id'];?>][<?php echo $variety['product_type_id'];?>][<?php echo $variety['varriety_id'];?>][other_incentive]" class="form-control other_incentive numbersOnly" value="<?php if(isset($existing_data['other_incentive'])){echo $existing_data['other_incentive'];}else{echo $detail['other_incentive'];}?>" /></td>
                 <td class="text-center net_sales_price"><?php if(isset($net_sales_price)){echo $net_sales_price;}?></td>
                 <td class="text-center net_profit"><?php if(isset($net_profit)){echo $net_profit;}?></td>
                 <td class="text-center total_net_sales"><?php if(isset($total_net_sales_price)){echo $total_net_sales_price;}?></td>
