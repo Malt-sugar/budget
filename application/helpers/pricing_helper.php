@@ -7,15 +7,6 @@ class Pricing_helper
         $CI = & get_instance();
         $data = array();
 
-        $CI->db->from('budget_indirect_cost_setup bics');
-        $CI->db->select('bics.*');
-        $CI->db->where('bics.year', $year);
-        $result = $CI->db->get()->row_array();
-        $data['ho_and_gen_exp'] = isset($result['ho_and_gen_exp'])?$result['ho_and_gen_exp']:0;
-        $data['marketing'] = isset($result['marketing'])?$result['marketing']:0;
-        $data['finance_cost'] = isset($result['finance_cost'])?$result['finance_cost']:0;
-        $data['target_profit'] = isset($result['target_profit'])?$result['target_profit']:0;
-
         // Targeted Quantity
         $CI->db->from('budget_sales_target bst');
         $CI->db->select('bst.targeted_quantity');
@@ -233,6 +224,23 @@ class Pricing_helper
         $CI->db->where('bpq.status', $CI->config->item('status_active'));
         $budget_purchase_result = $CI->db->get()->row_array();
         $data['pi_value'] = isset($budget_purchase_result['pi_value'])?$budget_purchase_result['pi_value']:0;
+
+        // Budgeted COGS
+        $CI->db->from('budget_direct_cost bdc');
+        $CI->db->select('bdc.*');
+        $CI->db->where('bdc.year', $year);
+        $CI->db->where('bdc.status', $CI->config->item('status_active'));
+        $direct_cost = $CI->db->get()->row_array();
+
+        $lc_exp = isset($direct_cost['lc_exp'])?$direct_cost['lc_exp']:0;
+        $insurance_exp = isset($direct_cost['insurance_exp'])?$direct_cost['insurance_exp']:0;
+        $packing_material = isset($direct_cost['packing_material'])?$direct_cost['packing_material']:0;
+        $carriage_inwards = isset($direct_cost['carriage_inwards'])?$direct_cost['carriage_inwards']:0;
+        $air_freight_and_docs = isset($direct_cost['air_freight_and_docs'])?$direct_cost['air_freight_and_docs']:0;
+        $cnf = isset($direct_cost['cnf'])?$direct_cost['cnf']:0;
+        $bank_other_charges = isset($direct_cost['bank_other_charges'])?$direct_cost['bank_other_charges']:0;
+
+        $data['cogs'] = ($data['pi_value']/100)*$lc_exp + ($data['pi_value']/100)*$insurance_exp + ($data['pi_value']/100)*$packing_material + ($data['pi_value']/100)*$carriage_inwards + ($data['pi_value']/100)*$air_freight_and_docs + ($data['pi_value']/100)*$cnf + ($data['pi_value']/100)*$bank_other_charges;
 
         return $data;
     }

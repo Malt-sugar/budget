@@ -35,7 +35,7 @@
 
                 $detail = Pricing_helper::get_pricing_marketing_detail_info($year, $variety['varriety_id']);
 
-                $total_cogs = ($detail['pi_value'] + ($detail['ho_and_gen_exp']/100)*$detail['pi_value'] + ($detail['marketing']/100)*$detail['pi_value'] + ($detail['finance_cost']/100)*$detail['pi_value']);
+                $total_cogs = ($detail['cogs'] + ($detail['ho_and_gen_exp']/100)*$detail['cogs'] + ($detail['marketing']/100)*$detail['cogs'] + ($detail['finance_cost']/100)*$detail['cogs']);
                 $existing_data = Pricing_helper::get_pricing_marketing_existing_info($year, $variety['varriety_id']);
 
                 if(is_array($existing_data) && sizeof($existing_data)>0)
@@ -134,7 +134,6 @@
 </div>
 
 <script>
-
     jQuery(document).ready(function()
     {
         $(document).on("click", ".load_remark", function(event)
