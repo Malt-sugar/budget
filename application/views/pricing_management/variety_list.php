@@ -96,7 +96,7 @@
                 </td>
                 <td class="text-center"><?php echo $variety['varriety_name'];?><input type="hidden" name="total_cogs" class="total_cogs" value="<?php echo $total_cogs;?>" /></td>
                 <td class="text-center"><?php echo $detail['targeted_quantity'];?><input type="hidden" name="targeted_quantity" class="targeted_quantity" value="<?php echo $detail['targeted_quantity'];?>" /></td>
-                <td class="text-center"><input type="text" name="pricing[<?php echo $variety['crop_id'];?>][<?php echo $variety['product_type_id'];?>][<?php echo $variety['varriety_id'];?>][target_profit]" class="form-control target_profit numbersOnly" value="<?php echo $detail['target_profit'];?>" /></td>
+                <td class="text-center"><input type="text" name="pricing[<?php echo $variety['crop_id'];?>][<?php echo $variety['product_type_id'];?>][<?php echo $variety['varriety_id'];?>][target_profit]" class="form-control target_profit numbersOnly" value="<?php if(isset($existing_data['target_profit'])){echo $existing_data['target_profit'];}else{echo $detail['target_profit'];}?>" /></td>
                 <td class="text-center"><?php echo $detail['automated_mrp'];?></td>
                 <td class="text-center"><?php echo $detail['last_year_mrp'];?></td>
                 <td class="text-center"><input type="text" name="pricing[<?php echo $variety['crop_id'];?>][<?php echo $variety['product_type_id'];?>][<?php echo $variety['varriety_id'];?>][mrp]" class="form-control mrp_by_mgt numbersOnly" value="<?php echo isset($existing_data['mrp'])?$existing_data['mrp']:'';?>" /></td>

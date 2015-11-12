@@ -297,6 +297,22 @@ class Confirmed_quantity_setup_model extends CI_Model
         $this->db->where('bdc.year', $year);
         $this->db->where('bdc.purchase_type', $this->config->item('purchase_type_budget'));
         $result = $this->db->get()->row_array();
-        return $result;
+
+        if(is_array($result) && sizeof($result)>0)
+        {
+            return $result;
+        }
+        else
+        {
+            $result['lc_exp']=0;
+            $result['insurance_exp']=0;
+            $result['packing_material']=0;
+            $result['carriage_inwards']=0;
+            $result['air_freight_and_docs']=0;
+            $result['cnf']=0;
+            $result['bank_other_charges']=0;
+
+            return $result;
+        }
     }
 }

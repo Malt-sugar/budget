@@ -84,30 +84,21 @@
         $(".form_valid").validationEngine();
         turn_off_triggers();
 
-        $(document).on("keyup", ".quantity", function(event)
+        $(document).on("keyup", ".expected_variance", function(event)
         {
-            var attr = $(this).closest('tr').find('.quantity');
-            var sum = 0;
-            attr.each(function()
+            var attr = $(this).closest('tr').find('.expected_variance');
+            var ho_budget = $(this).closest('tr').find('.ho_budget').val();
+
+            if(parseFloat(attr.val())==0 || parseFloat(attr.val())>0)
             {
-                var val = $(this).val();
-                if(val)
-                {
-                    val = parseFloat( val.replace( /^\$/, "" ));
-                    sum += !isNaN( val ) ? val : 0;
-                }
-            });
+                var quantity_needed = ho_budget - parseFloat(attr.val());
+            }
+            else
+            {
+                var quantity_needed = ho_budget;
+            }
 
-            $(this).closest('tr').find('.total').val(sum);
-        });
-
-        $(document).on("keyup", ".total", function(event)
-        {
-            var attr = $(this).closest('tr').find('.total');
-            var required_total_attr = $(this).closest('tr').find('.required_total');
-            var variance = attr.val() - required_total_attr.html().trim();
-
-            $(this).closest('tr').find('.variance').val(variance);
+            $(this).closest('tr').find('.quantity_needed').val(quantity_needed);
         });
 
         $(document).on("change", "#selection_type", function(event)
@@ -201,43 +192,9 @@
                 $("#variety_quantity").html('');
             }
         });
-
-        $(document).on("change","#year",function()
-        {
-//            if($(this).val().length>0)
-//            {
-//                $("#load_variety").show();
-//                $.ajax({
-//                    url: base_url+"principal_quantity_setup/get_variety_detail/",
-//                    type: 'POST',
-//                    dataType: "JSON",
-//                    data:{year_id:$(this).val()},
-//                    success: function (data, status)
-//                    {
-//
-//                    },
-//                    error: function (xhr, desc, err)
-//                    {
-//                        console.log("error");
-//                    }
-//                });
-//                $("#scrollButtons").show();
-//            }
-//            else
-//            {
-//                $("#scrollButtons").hide();
-//                $("#load_variety").html('');
-//                $("#load_variety").hide();
-//            }
-        });
     });
 
     $(document).on("keyup", ".quantity", function()
-    {
-        this.value = this.value.replace(/[^0-9\.]/g,'');
-    });
-
-    $(document).on("keyup", ".total", function()
     {
         this.value = this.value.replace(/[^0-9\.]/g,'');
     });

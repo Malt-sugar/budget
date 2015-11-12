@@ -30,20 +30,15 @@ class Principal_quantity_setup_model extends CI_Model
         return $results;
     }
 
-    public function check_country_variety_existence($year, $variety)
+    public function check_principal_quantity_existence($year, $variety)
     {
-        $this->db->from('budget_sales_target bst');
-        $this->db->select('bst.budgeted_quantity budgeted_quantity');
+        $this->db->from('budget_principal_quantity bpq');
+        $this->db->select('bpq.*');
 
-        $this->db->where('bst.variety_id', $variety);
-        $this->db->where('bst.year', $year);
-        $this->db->where('length(bst.customer_id)<2');
-        $this->db->where('length(bst.territory_id)<2');
-        $this->db->where('length(bst.zone_id)<2');
-        $this->db->where('length(bst.division_id)<2');
-        $this->db->where('bst.budgeted_quantity >', 0);
+        $this->db->where('bpq.variety_id', $variety);
+        $this->db->where('bpq.year', $year);
 
-        $this->db->where('bst.status', $this->config->item('status_active'));
+        $this->db->where('bpq.status', $this->config->item('status_active'));
         $result = $this->db->get()->row_array();
 
         if($result)
@@ -56,21 +51,28 @@ class Principal_quantity_setup_model extends CI_Model
         }
     }
 
-    public function get_country_variety_id($year, $variety)
+    public function get_principal_quantity_id($year, $variety)
     {
-        $this->db->from('budget_sales_target bst');
-        $this->db->select('bst.id');
-        $this->db->where('bst.variety_id', $variety);
-        $this->db->where('bst.year', $year);
-        $this->db->where('length(bst.customer_id)<2');
-        $this->db->where('length(bst.territory_id)<2');
-        $this->db->where('length(bst.zone_id)<2');
-        $this->db->where('length(bst.division_id)<2');
-        $this->db->where('bst.budgeted_quantity >', 0);
+        $this->db->from('budget_principal_quantity bpq');
+        $this->db->select('bpq.id');
+        $this->db->where('bpq.variety_id', $variety);
+        $this->db->where('bpq.year', $year);
 
-        $this->db->where('bst.status', $this->config->item('status_active'));
+        $this->db->where('bpq.status', $this->config->item('status_active'));
         $result = $this->db->get()->row_array();
         return $result['id'];
+    }
+
+    public function get_existing_principal_quantity($year, $variety)
+    {
+        $this->db->from('budget_principal_quantity bpq');
+        $this->db->select('bpq.*');
+        $this->db->where('bpq.variety_id', $variety);
+        $this->db->where('bpq.year', $year);
+
+        $this->db->where('bpq.status', $this->config->item('status_active'));
+        $result = $this->db->get()->row_array();
+        return $result;
     }
 
     public function get_varieties_by_crop_type($crop_id, $type_id)
@@ -105,5 +107,24 @@ class Principal_quantity_setup_model extends CI_Model
         $this->db->where('avi.status', 'Active');
         $results = $this->db->get()->result_array();
         return $results;
+    }
+
+    public function get_budget_min_stock_quantity($crop_id, $type_id, $variety_id)
+    {
+        $this->db->from('budget_min_stock_quantity bms');
+        $this->db->select('bms.min_stock_quantity');
+        $this->db->where('bms.crop_id', $crop_id);
+        $this->db->where('bms.type_id', $type_id);
+        $this->db->where('bms.variety_id', $variety_id);
+        $result = $this->db->get()->row_array();
+
+        if($result)
+        {
+            return $result['min_stock_quantity'];
+        }
+        else
+        {
+            return null;
+        }
     }
 }

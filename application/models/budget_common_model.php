@@ -169,6 +169,8 @@ class Budget_common_model extends CI_Model
 
     public function get_customers_by_district($territory_id, $district_id)
     {
+        $district_id = str_pad($district_id, 2, "0", STR_PAD_LEFT);
+
         $this->db->from('ait_distributor_info adi');
         $this->db->select('adi.*');
         $this->db->where('adi.territory_id', $territory_id);

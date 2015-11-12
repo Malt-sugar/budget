@@ -176,22 +176,18 @@ class Sales_target_helper
         }
     }
 
-    public static function get_required_country_variety_detail_principal($year, $variety)
+    public static function get_principal_quantity_detail($year, $variety)
     {
         $CI = & get_instance();
         $user = User_helper::get_user();
 
-        $CI->db->from('budget_sales_target bst');
-        $CI->db->select('bst.*');
+        $CI->db->from('budget_principal_quantity bpq');
+        $CI->db->select('bpq.*');
 
-        $CI->db->where('bst.variety_id', $variety);
-        $CI->db->where('bst.year', $year);
-        $CI->db->where('length(bst.customer_id)<2');
-        $CI->db->where('length(bst.territory_id)<2');
-        $CI->db->where('length(bst.zone_id)<2');
-        $CI->db->where('length(bst.division_id)<2');
+        $CI->db->where('bpq.variety_id', $variety);
+        $CI->db->where('bpq.year', $year);
 
-        $CI->db->where('bst.status', $CI->config->item('status_active'));
+        $CI->db->where('bpq.status', $CI->config->item('status_active'));
         $result = $CI->db->get()->row_array();
 
         if($result)

@@ -83,12 +83,6 @@
         $(".form_valid").validationEngine();
         turn_off_triggers();
 
-        $(document).on("keyup", ".targeted_total", function(event)
-        {
-            var targeted = $(this).val();
-            $(this).closest('tr').find(".remaining").val(targeted)
-        });
-
         $(document).on("keyup", ".targeted", function(event)
         {
             var attr = $(this).closest('.div_target').find('.targeted');
@@ -104,10 +98,9 @@
                 }
             });
 
-            var targeted_val = $(this).closest('.div_target').closest('tr').find('.targeted_total').val();
+            var targeted_val = parseFloat($(this).closest('.div_target').closest('tr').find('.targeted_total').html());
             var new_remaining_val = targeted_val - sum;
-
-            $(this).closest('.div_target').closest('tr').find('.remaining').val(new_remaining_val);
+            $(this).closest('.div_target').closest('tr').find('.remaining').html(new_remaining_val);
         });
 
         $(document).on("change", "#selection_type", function(event)

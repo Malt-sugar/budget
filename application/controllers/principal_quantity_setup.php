@@ -44,7 +44,6 @@ class Principal_quantity_setup extends ROOT_Controller
         $this->jsonReturn($ajax);
     }
 
-
     public function budget_save()
     {
         $user = User_helper::get_user();
@@ -79,15 +78,20 @@ class Principal_quantity_setup extends ROOT_Controller
                             $data[$key] = $value;
                         }
 
-                        $data['created_by'] = $user->user_id;
-                        $data['creation_date'] = $time;
-
-                        if($data['principal_quantity']>0)
+                        if($data['final_confirmation']>0 && $data['final_targeted_quantity']>0)
                         {
-                            if($this->principal_quantity_setup_model->check_country_variety_existence($year, $variety_id))
+                            if($this->principal_quantity_setup_model->check_principal_quantity_existence($year, $variety_id))
                             {
-                                $id = $this->principal_quantity_setup_model->get_country_variety_id($year, $variety_id);
-                                Query_helper::update('budget_sales_target',$data,array("id ='$id'"));
+                                $id = $this->principal_quantity_setup_model->get_principal_quantity_id($year, $variety_id);
+                                $data['modified_by'] = $user->user_id;
+                                $data['modification_date'] = $time;
+                                Query_helper::update('budget_principal_quantity',$data,array("id ='$id'"));
+                            }
+                            else
+                            {
+                                $data['created_by'] = $user->user_id;
+                                $data['creation_date'] = $time;
+                                Query_helper::add('budget_principal_quantity',$data);
                             }
                         }
                     }
@@ -129,9 +133,9 @@ class Principal_quantity_setup extends ROOT_Controller
                         $data[$key] = $value;
                     }
 
-                    if($data['principal_quantity']>0)
+                    if($data['final_targeted_quantity']>0)
                     {
-                        $validation[] = $data['principal_quantity'];
+                        $validation[] = $data['final_targeted_quantity'];
                     }
                 }
             }
@@ -155,7 +159,6 @@ class Principal_quantity_setup extends ROOT_Controller
         $type_id = $this->input->post('type_id');
 
         $data['year'] = $year;
-        $data['divisions'] = Query_helper::get_info('ait_division_info',array('division_id value','division_name text'),array('del_status =0'));
         $data['varieties'] = $this->principal_quantity_setup_model->get_varieties_by_crop_type($crop_id, $type_id);
 
         if(isset($data['year']) && sizeof($data['varieties'])>0)
