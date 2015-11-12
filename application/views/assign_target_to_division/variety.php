@@ -141,7 +141,10 @@
 
             <td class="text-center" style="padding-top: 45px;"><label class="label label-success"><?php echo $detail['hom_sales_target'];?></label></td>
             <td class="text-center" style="padding-top: 45px;"><label class="label label-success"><?php echo $detail['final_confirmation'];?></label></td>
-            <td class="text-center" style="padding-top: 45px;"><label class="label label-success targeted_total"><?php echo $detail['final_targeted_quantity'];?></label></td>
+            <td class="text-center" style="padding-top: 45px;">
+                <label class="label label-success targeted_total"><?php echo $detail['final_targeted_quantity'];?></label>
+                <input type="hidden" name="detail[<?php echo $variety['varriety_id'];?>][targeted_quantity]" value="<?php echo $detail['final_targeted_quantity'];?>" />
+            </td>
             <td class="text-center" style="padding-top: 45px;"><label class="label label-success remaining"><?php if(isset($detail['final_targeted_quantity']) && $detail['final_targeted_quantity']>0){echo $detail['final_targeted_quantity']-$total_required;}else{echo $detail['final_targeted_quantity'];}?></label></td>
             <td class="text-center" style="padding-top: 45px;">
                 <label class="label label-primary load_remark">+R</label>

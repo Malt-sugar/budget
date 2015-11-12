@@ -63,7 +63,7 @@
                 </td>
                 <td><?php echo $variety['varriety_name'];?></td>
                 <?php
-                    $detail = Sales_target_helper::get_required_country_variety_detail_principal($year, $variety['varriety_id']);
+                    $detail = Sales_target_helper::get_required_country_variety_detail($year, $variety['varriety_id']);
                     $current_stock = Purchase_helper::get_current_stock($variety['crop_id'], $variety['product_type_id'], $variety['varriety_id']);
                     $min_stock = $this->principal_quantity_setup_model->get_budget_min_stock_quantity($variety['crop_id'], $variety['product_type_id'], $variety['varriety_id']);
                     $variance = $current_stock - $min_stock;
