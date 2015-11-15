@@ -42,7 +42,6 @@
         <th class="text-center"><label class="label label-warning text-center"><?php echo $this->lang->line('LABEL_PRINCIPAL');?></label></th>
         <th class="text-center"><label class="label label-warning text-center"><?php echo $this->lang->line('LABEL_TARGETED');?></label></th>
         <th class="text-center"><label class="label label-warning text-center"><?php echo $this->lang->line('LABEL_REMAINING');?></label></th>
-        <th class="text-center"><label class="label label-warning text-center">R</label></th>
     </tr>
 
     <?php
@@ -146,27 +145,6 @@
                 <input type="hidden" name="detail[<?php echo $variety['varriety_id'];?>][targeted_quantity]" value="<?php echo $detail['final_targeted_quantity'];?>" />
             </td>
             <td class="text-center" style="padding-top: 45px;"><label class="label label-success remaining"><?php if(isset($detail['final_targeted_quantity']) && $detail['final_targeted_quantity']>0){echo $detail['final_targeted_quantity']-$total_required;}else{echo $detail['final_targeted_quantity'];}?></label></td>
-            <td class="text-center" style="padding-top: 45px;">
-                <label class="label label-primary load_remark">+R</label>
-                <div class="row popContainer" style="display: none;">
-                    <table class="table table-bordered">
-                        <tr>
-                            <td>
-                                <div class="col-lg-12">
-                                    <textarea class="form-control" name="detail[<?php echo $variety['varriety_id'];?>][top_down_remarks]" placeholder="Add Remarks"><?php echo $detail['top_down_remarks'];?></textarea>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="pull-right" style="border: 0px;">
-                                <div class="col-lg-12">
-                                    <label class="label label-primary crossSpan"><?php echo $this->lang->line('OK');?></label>
-                                </div>
-                            </td>
-                        </tr>
-                    </table>
-                </div>
-            </td>
         </tr>
     <?php
     }

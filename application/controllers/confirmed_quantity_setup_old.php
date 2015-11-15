@@ -11,15 +11,11 @@ class Confirmed_quantity_setup extends ROOT_Controller
         $this->load->model("confirmed_quantity_setup_model");
     }
 
-    public function index($task="list", $year_id=0)
+    public function index($task="list", $id=0)
     {
-        if($task=="list")
+        if($task=="add" || $task=="edit")
         {
-            $this->budget_list();
-        }
-        elseif($task=="add" || $task=="edit")
-        {
-            $this->budget_add_edit($year_id);
+            $this->budget_add_edit($id);
         }
         elseif($task=="save")
         {
@@ -27,54 +23,27 @@ class Confirmed_quantity_setup extends ROOT_Controller
         }
         else
         {
-            $this->budget_list();
+            $this->budget_add_edit($id);
         }
     }
 
-    public function budget_list($page=0)
-    {
-        $config = System_helper::pagination_config(base_url() . "confirmed_quantity_setup/index/list/",$this->confirmed_quantity_setup_model->get_total_purchase_years(),4);
-        $this->pagination->initialize($config);
-        $data["links"] = $this->pagination->create_links();
-
-        if($page>0)
-        {
-            $page=$page-1;
-        }
-
-        $data['setups'] = $this->confirmed_quantity_setup_model->get_purchase_year_info($page);
-        $data['title']="Confirmed Quantity Setup List";
-
-        $ajax['status']=true;
-        $ajax['content'][]=array("id"=>"#content","html"=>$this->load->view("confirmed_quantity_setup/list",$data,true));
-
-        if($this->message)
-        {
-            $ajax['message']=$this->message;
-        }
-
-        $ajax['page_url']=base_url()."confirmed_quantity_setup/index/list/".($page+1);
-        $this->jsonReturn($ajax);
-    }
-
-    public function budget_add_edit($year)
+    public function budget_add_edit($id)
     {
         $data['years'] = Query_helper::get_info('ait_year',array('year_id value','year_name text'),array('del_status = 0'));
         $data['crops'] = $this->budget_common_model->get_ordered_crops();
         $data['types'] = $this->budget_common_model->get_ordered_crop_types();
         $data['varieties'] = $this->budget_common_model->get_ordered_varieties();
 
-        if(strlen($year)>1)
+        if(strlen($id)>1)
         {
-            $data['year'] = $year;
-            $data['quantity_setups'] = $this->confirmed_quantity_setup_model->get_confirmed_quantity_detail($year);
-            $data['title'] = "Edit Confirmed Quantity Setup";
+            $data['quantity_setups'] = $this->confirmed_quantity_setup_model->get_confirmed_quantity_detail($id);
+            $data['title'] = "Edit Budgeted Purchase";
             $ajax['page_url']=base_url()."confirmed_quantity_setup/index/edit/";
         }
         else
         {
             $data['quantity_setups'] = array();
-            $data['title'] = "Confirmed Quantity Setup";
+            $data['title'] = "Budgeted Purchase";
             $ajax['page_url'] = base_url()."confirmed_quantity_setup/index/add";
         }
 
@@ -93,6 +62,9 @@ class Confirmed_quantity_setup extends ROOT_Controller
         $data['year'] = $year;
         $quantityPost = $this->input->post('quantity');
 
+        $month_setup_post = $this->input->post('month_setup');
+        $setup_data = array();
+
         if(!$this->check_validation())
         {
             $ajax['status']=false;
@@ -103,10 +75,7 @@ class Confirmed_quantity_setup extends ROOT_Controller
         {
             $this->db->trans_start();  //DB Transaction Handle START
 
-            if(strlen($this->input->post('year_id'))>1)
-            {
-                $this->confirmed_quantity_setup_model->confirmed_quantity_initial_update($year); // initial update
-            }
+            $this->confirmed_quantity_setup_model->confirmed_quantity_initial_update($year); // initial update
 
             foreach($quantityPost as $crop_id=>$typeVarietyPost)
             {
@@ -122,20 +91,100 @@ class Confirmed_quantity_setup extends ROOT_Controller
                             $data[$detailKey] = $val;
                         }
 
-                        $edit_id = $this->confirmed_quantity_setup_model->check_confirmed_quantity_existence($year, $crop_id, $type_id, $variety_id);
-
-                        if($edit_id>0)
+                        if($data['confirmed_quantity']>0 && $data['pi_value']>0)
                         {
-                            $data['modified_by'] = $user->user_id;
-                            $data['modification_date'] = $time;
-                            $data['status'] = 1;
-                            Query_helper::update('budget_purchase_quantity',$data,array("id ='$edit_id'"));
+                            $edit_id = $this->confirmed_quantity_setup_model->check_confirmed_quantity_existence($year, $crop_id, $type_id, $variety_id);
+
+                            if($edit_id>0)
+                            {
+                                $data['modified_by'] = $user->user_id;
+                                $data['modification_date'] = $time;
+                                $data['status'] = 1;
+                                Query_helper::update('budget_purchase_quantity',$data,array("id ='$edit_id'"));
+                            }
+                            else
+                            {
+                                $data['created_by'] = $user->user_id;
+                                $data['creation_date'] = $time;
+                                Query_helper::add('budget_purchase_quantity', $data);
+                            }
+                        }
+                    }
+                }
+            }
+
+            // MONTH WISE PURCHASE SETUP EXECUTION //
+
+            $this->confirmed_quantity_setup_model->budget_month_initial_update($year); // initial update
+
+            foreach($month_setup_post as $variety_id=>$month_setup_detail)
+            {
+                $new_arr = array();
+                $setup_data = array();
+                $monthArray = array();
+                $quantityArray = array();
+                $setup_data['year'] = $this->input->post('year');
+                $variety_info = $this->confirmed_quantity_setup_model->get_variety_info($variety_id);
+                $setup_data['crop_id'] = $variety_info['crop_id'];
+                $setup_data['type_id'] = $variety_info['product_type_id'];
+                $setup_data['variety_id'] = $variety_id;
+
+                foreach($month_setup_detail as $item=>$detail)
+                {
+                    if($item=='month')
+                    {
+                        foreach($detail as $month)
+                        {
+                            $monthArray[] = $month;
+                        }
+                    }
+
+                    if($item=='quantity')
+                    {
+                        foreach($detail as $quantity)
+                        {
+                            $quantityArray[] = $quantity;
+                        }
+                    }
+
+                    if(isset($monthArray) && isset($quantityArray))
+                    {
+                        foreach($monthArray as $mk=>$month)
+                        {
+                            if(isset($quantityArray[$mk]))
+                            {
+                                $new_arr[] = array(
+                                    'month'=>$month,
+                                    'quantity'=>$quantityArray[$mk]
+                                );
+                            }
+                        }
+                    }
+                }
+
+                foreach($new_arr as $arrayOne)
+                {
+                    foreach($arrayOne as $index=>$val)
+                    {
+                        $setup_data[$index] = $val;
+                    }
+
+                    if($setup_data['month']>0 && $setup_data['quantity']>0)
+                    {
+                        $existing_month_edit_id = $this->confirmed_quantity_setup_model->get_existing_month_edit_id($year, $variety_id, $setup_data['month']);
+
+                        if($existing_month_edit_id>0)
+                        {
+                            $setup_data['modified_by'] = $user->user_id;
+                            $setup_data['modification_date'] = $time;
+                            $setup_data['status'] = 1;
+                            Query_helper::update('budget_purchase_months',$setup_data,array("id ='$existing_month_edit_id'"));
                         }
                         else
                         {
-                            $data['created_by'] = $user->user_id;
-                            $data['creation_date'] = $time;
-                            Query_helper::add('budget_purchase_quantity', $data);
+                            $setup_data['created_by'] = $user->user_id;
+                            $setup_data['creation_date'] = $time;
+                            Query_helper::add('budget_purchase_months', $setup_data);
                         }
                     }
                 }
@@ -143,16 +192,20 @@ class Confirmed_quantity_setup extends ROOT_Controller
 
             $this->db->trans_complete();   //DB Transaction Handle END
 
-            if ($this->db->trans_status() === TRUE)
+            if($this->db->trans_status() === TRUE)
             {
-                $this->message=$this->lang->line("MSG_CREATE_SUCCESS");
+                $ajax['status']=false;
+                $ajax['message']=$this->lang->line("MSG_CREATE_SUCCESS");
+                $this->jsonReturn($ajax);
             }
             else
             {
-                $this->message=$this->lang->line("MSG_NOT_SAVED_SUCCESS");
+                $ajax['status']=false;
+                $ajax['message']=$this->lang->line("MSG_NOT_SAVED_SUCCESS");
+                $this->jsonReturn($ajax);
             }
 
-            $this->budget_list();//this is similar like redirect
+            $this->budget_add_edit(0);//this is similar like redirect
         }
     }
 
@@ -162,7 +215,6 @@ class Confirmed_quantity_setup extends ROOT_Controller
 
         $quantityPost = $this->input->post('quantity');
         $year = $this->input->post('year');
-        $year_id = $this->input->post('year_id');
 
         foreach($quantityPost as $crop_id=>$typeVarietyPost)
         {
@@ -205,15 +257,15 @@ class Confirmed_quantity_setup extends ROOT_Controller
             $this->message .= $this->lang->line("SELECT_YEAR").'<br>';
         }
 
-        if(strlen($year_id)==1)
-        {
-            $existence = $this->confirmed_quantity_setup_model->check_quantity_year_existence($year);
-            if($existence)
-            {
-                $valid=false;
-                $this->message .= $this->lang->line("BUDGET_PURCHASE_SET_ALREADY").'<br>';
-            }
-        }
+//        if(strlen($year_id)==1)
+//        {
+//            $existence = $this->confirmed_quantity_setup_model->check_quantity_year_existence($year);
+//            if($existence)
+//            {
+//                $valid=false;
+//                $this->message .= $this->lang->line("BUDGET_PURCHASE_SET_ALREADY").'<br>';
+//            }
+//        }
 
         return $valid;
     }
@@ -222,24 +274,15 @@ class Confirmed_quantity_setup extends ROOT_Controller
     {
         $crop_id = $this->input->post('crop_id');
         $type_id = $this->input->post('type_id');
-        $variety_id = $this->input->post('variety_id');
-        $current_id = $this->input->post('current_id');
         $data['year'] = $this->input->post('year');
 
-        $data['budgeted_sales_quantity'] = $this->confirmed_quantity_setup_model->get_budgeted_sales_quantity($data['year'], $crop_id, $type_id, $variety_id);
-        $data['min_stock_quantity'] = $this->confirmed_quantity_setup_model->get_budget_min_stock_quantity($crop_id, $type_id, $variety_id);
-        $data['current_stock'] = Purchase_helper::get_current_stock($crop_id, $type_id, $variety_id);
-        $data['variety_info'] = $this->confirmed_quantity_setup_model->get_variety_info($variety_id);
-        $data['crop_id'] = $crop_id;
-        $data['type_id'] = $type_id;
-        $data['variety_id'] = $variety_id;
+        $data['varieties'] = $this->confirmed_quantity_setup_model->get_varieties_by_crop_type($crop_id, $type_id);
 
-        if(isset($data['year']) && $data['budgeted_sales_quantity']>0)
+        if(isset($data['year']) && sizeof($data['varieties'])>0)
         {
-            $data['serial'] = $current_id;
             $data['title'] = 'Confirmed Quantity';
             $ajax['status'] = true;
-            $ajax['content'][]=array("id"=>'#variety_quantity'.$current_id,"html"=>$this->load->view("confirmed_quantity_setup/variety_list",$data,true));
+            $ajax['content'][]=array("id"=>'#variety_quantity',"html"=>$this->load->view("confirmed_quantity_setup/variety_list",$data,true));
             $this->jsonReturn($ajax);
         }
         else
@@ -250,20 +293,21 @@ class Confirmed_quantity_setup extends ROOT_Controller
         }
     }
 
-    public function check_budget_purchase_this_year()
+    public function get_direct_cost_this_year()
     {
         $year = $this->input->post('year');
-        $existence = $this->confirmed_quantity_setup_model->check_quantity_year_existence($year);
+        $data['costs'] = $this->confirmed_quantity_setup_model->get_direct_costs($year);
 
-        if($existence)
+        if(isset($year) && strlen($year)>0)
         {
-            $ajax['status'] = false;
-            $ajax['message'] = $this->lang->line("BUDGET_PURCHASE_SET_ALREADY");
+            $ajax['status'] = true;
+            $ajax['content'][]=array("id"=>'#direct_cost_div',"html"=>$this->load->view("confirmed_quantity_setup/direct_cost",$data,true));
             $this->jsonReturn($ajax);
         }
         else
         {
             $ajax['status'] = true;
+            $ajax['message'] = $this->lang->line("DIRECT_COSTS_NOT_SET");
             $this->jsonReturn($ajax);
         }
     }

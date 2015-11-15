@@ -8,21 +8,19 @@
             <th class="text-center"><?php echo $this->lang->line('LABEL_CROP')?></th>
             <th class="text-center"><?php echo $this->lang->line('LABEL_TYPE')?></th>
             <th class="text-center"><?php echo $this->lang->line('LABEL_VARIETY')?></th>
-            <th class="text-center"><?php echo $this->lang->line('LABEL_BUDGETED_SALES_QTY_HO')?></th>
-            <th class="text-center"><?php echo $this->lang->line('LABEL_VARIANCE')?></th>
-            <th class="text-center"><?php echo $this->lang->line('LABEL_BUDGETED_PURCHASE_QUANTITY')?></th>
-            <th class="text-center"><?php echo $this->lang->line('LABEL_PRINCIPAL_QUANTITY')?></th>
-            <th class="text-center"><?php echo $this->lang->line('LABEL_ACTUAL_PURCHASE_CONFIRMED')?></th>
+            <th class="text-center"><?php echo $this->lang->line('LABEL_HO_BUDGET')?></th>
+            <th class="text-center"><?php echo $this->lang->line('LABEL_ACTUAL_PURCHASE')?></th>
             <th class="text-center"><?php echo $this->lang->line('LABEL_PI_VALUE_US')?></th>
             <th class="text-center"><?php echo $this->lang->line('LABEL_BUDGETED_COGS')?></th>
             <th class="text-center"><?php echo $this->lang->line('LABEL_MONTH_SETUP')?></th>
             <th class="text-center"><?php echo $this->lang->line('LABEL_REMARKS')?></th>
             <?php
+            $crop_name = '';
+            $product_type_name = '';
+
             foreach($varieties as $key=>$variety)
             {
-                $budgeted_sales_quantity = $this->confirmed_quantity_setup_model->get_budgeted_sales_quantity($year, $variety['crop_id'], $variety['product_type_id'], $variety['varriety_id']);
-                $min_stock_quantity = $this->confirmed_quantity_setup_model->get_budget_min_stock_quantity($variety['crop_id'], $variety['product_type_id'], $variety['varriety_id']);
-                $current_stock = Purchase_helper::get_current_stock($variety['crop_id'], $variety['product_type_id'], $variety['varriety_id']);
+                $target_quantity = $this->confirmed_quantity_setup_model->get_target_finalise_quantity($year, $variety['varriety_id']);
                 $existing_confirmed_quantity = Purchase_helper::get_existing_confirmed_quantity($year, $variety['varriety_id']);
                 $existing_budget_months = Purchase_helper::get_existing_budget_months($year, $variety['varriety_id']);
                 $direct_costs = $this->confirmed_quantity_setup_model->get_direct_costs($year);
@@ -31,15 +29,49 @@
                 $cogs = $pi + ($direct_costs['lc_exp']/100)*$pi + ($direct_costs['insurance_exp']/100)*$pi + ($direct_costs['packing_material']/100)*$pi + ($direct_costs['carriage_inwards']/100)*$pi + ($direct_costs['air_freight_and_docs']/100)*$pi + ($direct_costs['cnf']/100)*$pi + ($direct_costs['bank_other_charges']/100)*$pi;
             ?>
             <tr class="main_tr">
-                <td class="text-center"><?php echo $variety['crop_name'];?></td>
-                <td class="text-center"><?php echo $variety['product_type'];?></td>
+                <td class="text-center">
+                    <?php
+                    if($crop_name == '')
+                    {
+                        echo $variety['crop_name'];
+                        $crop_name = $variety['crop_name'];
+                    }
+                    elseif($crop_name == $variety['crop_name'])
+                    {
+                        echo "&nbsp;";
+                    }
+                    else
+                    {
+                        echo $variety['crop_name'];
+                        $crop_name = $variety['crop_name'];
+                    }
+                    ?>
+                </td>
+                <td class="text-center">
+                    <?php
+                    if($product_type_name == '')
+                    {
+                        echo $variety['product_type'];
+                        $product_type_name = $variety['product_type'];
+                    }
+                    elseif($product_type_name == $variety['product_type'])
+                    {
+                        echo "&nbsp;";
+                    }
+                    else
+                    {
+                        echo $variety['product_type'];
+                        $product_type_name = $variety['product_type'];
+                    }
+                    ?>
+                </td>
                 <td class="text-center"><?php echo $variety['varriety_name'];?></td>
-                <td class="text-center"><?php echo $budgeted_sales_quantity['budgeted_quantity'];?></td>
-                <td class="text-center"><?php echo $current_stock - $min_stock_quantity;?></td>
-                <td class="text-center"><?php echo $budgeted_sales_quantity['budgeted_quantity'] - ($current_stock - $min_stock_quantity);?></td>
-                <td class="text-center"><?php echo $budgeted_sales_quantity['principal_quantity'];?></td>
-                <td class="text-center"><input type="text" class="form-control variety_total_quantity confirmed_quantity_input numbersOnly" name="quantity[<?php echo $variety['crop_id'];?>][<?php echo $variety['product_type_id'];?>][<?php echo $variety['varriety_id'];?>][confirmed_quantity]" value="<?php if(isset($existing_confirmed_quantity['confirmed_quantity'])){echo $existing_confirmed_quantity['confirmed_quantity'];}?>" /></td>
-                <td class="text-center"><input type="text" class="form-control variety_total_quantity pi_value_input numbersOnly" name="quantity[<?php echo $variety['crop_id'];?>][<?php echo $variety['product_type_id'];?>][<?php echo $variety['varriety_id'];?>][pi_value]" value="<?php if(isset($existing_confirmed_quantity['pi_value'])){echo $existing_confirmed_quantity['pi_value'];}?>" /></td>
+                <td class="text-center"><?php echo $target_quantity['hom_sales_target'];?></td>
+                <td class="text-center">
+                    <input type="hidden" class="form-control variety_total_quantity confirmed_quantity numbersOnly" name="quantity[<?php echo $variety['crop_id'];?>][<?php echo $variety['product_type_id'];?>][<?php echo $variety['varriety_id'];?>][confirmed_quantity]" value="<?php echo $target_quantity['actual_purchase'];?>" />
+                    <?php echo $target_quantity['actual_purchase'];?>
+                </td>
+                <td class="text-center"><input type="text" class="form-control pi_value_input numbersOnly" name="quantity[<?php echo $variety['crop_id'];?>][<?php echo $variety['product_type_id'];?>][<?php echo $variety['varriety_id'];?>][pi_value]" value="<?php if(isset($existing_confirmed_quantity['pi_value'])){echo $existing_confirmed_quantity['pi_value'];}?>" /></td>
                 <td class="text-center budgeted_cogs"><?php if(isset($cogs)){echo round($cogs, 2);}?></td>
                 <td class="text-center" style="vertical-align: middle;">
                     <label class="label label-info load_month">+S</label>
@@ -218,7 +250,7 @@
         {
             $(this).closest('td').find('.popContainer2').show();
 
-            var confirmed_quantity = parseInt($(this).closest('.main_tr').find('.confirmed_quantity_input').val());
+            var confirmed_quantity = parseInt($(this).closest('.main_tr').find('.confirmed_quantity').val());
 
             if(confirmed_quantity>0)
             {

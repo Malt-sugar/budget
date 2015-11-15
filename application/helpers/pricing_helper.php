@@ -8,17 +8,13 @@ class Pricing_helper
         $data = array();
 
         // Targeted Quantity
-        $CI->db->from('budget_sales_target bst');
-        $CI->db->select('bst.targeted_quantity');
-        $CI->db->where('bst.variety_id', $variety);
-        $CI->db->where('bst.year', $year);
-        $CI->db->where('length(bst.customer_id)<2');
-        $CI->db->where('length(bst.territory_id)<2');
-        $CI->db->where('length(bst.zone_id)<2');
-        $CI->db->where('length(bst.division_id)<2');
-        $CI->db->where('bst.status', $CI->config->item('status_active'));
+        $CI->db->from('budget_principal_quantity bpq');
+        $CI->db->select('bpq.final_targeted_quantity');
+        $CI->db->where('bpq.variety_id', $variety);
+        $CI->db->where('bpq.year', $year);
+        $CI->db->where('bpq.status', $CI->config->item('status_active'));
         $sales_result = $CI->db->get()->row_array();
-        $data['targeted_quantity'] = isset($sales_result['targeted_quantity'])?$sales_result['targeted_quantity']:0;
+        $data['targeted_quantity'] = isset($sales_result['final_targeted_quantity'])?$sales_result['final_targeted_quantity']:0;
 
         // Budgeted PI or COGS
         $CI->db->from('budget_purchase_quantity bpq');
@@ -105,17 +101,13 @@ class Pricing_helper
         $data['target_profit'] = isset($result['target_profit'])?$result['target_profit']:0;
 
         // Targeted Quantity
-        $CI->db->from('budget_sales_target bst');
-        $CI->db->select('bst.targeted_quantity');
-        $CI->db->where('bst.variety_id', $variety);
-        $CI->db->where('bst.year', $year);
-        $CI->db->where('length(bst.customer_id)<2');
-        $CI->db->where('length(bst.territory_id)<2');
-        $CI->db->where('length(bst.zone_id)<2');
-        $CI->db->where('length(bst.division_id)<2');
-        $CI->db->where('bst.status', $CI->config->item('status_active'));
+        $CI->db->from('budget_principal_quantity bpq');
+        $CI->db->select('bpq.final_targeted_quantity');
+        $CI->db->where('bpq.variety_id', $variety);
+        $CI->db->where('bpq.year', $year);
+        $CI->db->where('bpq.status', $CI->config->item('status_active'));
         $sales_result = $CI->db->get()->row_array();
-        $data['targeted_quantity'] = isset($sales_result['targeted_quantity'])?$sales_result['targeted_quantity']:0;
+        $data['targeted_quantity'] = isset($sales_result['final_targeted_quantity'])?$sales_result['final_targeted_quantity']:0;
 
         // Budgeted PI or COGS
         $CI->db->from('budget_purchase_quantity bpq');
@@ -193,17 +185,13 @@ class Pricing_helper
         $data['target_profit'] = isset($result['target_profit'])?$result['target_profit']:0;
 
         // Targeted Quantity
-        $CI->db->from('budget_sales_target bst');
-        $CI->db->select('bst.targeted_quantity');
-        $CI->db->where('bst.variety_id', $variety);
-        $CI->db->where('bst.year', $year);
-        $CI->db->where('length(bst.customer_id)<2');
-        $CI->db->where('length(bst.territory_id)<2');
-        $CI->db->where('length(bst.zone_id)<2');
-        $CI->db->where('length(bst.division_id)<2');
-        $CI->db->where('bst.status', $CI->config->item('status_active'));
+        $CI->db->from('budget_principal_quantity bpq');
+        $CI->db->select('bpq.final_targeted_quantity');
+        $CI->db->where('bpq.variety_id', $variety);
+        $CI->db->where('bpq.year', $year);
+        $CI->db->where('bpq.status', $CI->config->item('status_active'));
         $sales_result = $CI->db->get()->row_array();
-        $data['targeted_quantity'] = isset($sales_result['targeted_quantity'])?$sales_result['targeted_quantity']:0;
+        $data['targeted_quantity'] = isset($sales_result['final_targeted_quantity'])?$sales_result['final_targeted_quantity']:0;
 
         // VarietyWise Bonus Setup
         $CI->db->from('budget_bonus_setup bbs');
@@ -299,17 +287,13 @@ class Pricing_helper
         $data['target_profit'] = isset($result['target_profit'])?$result['target_profit']:0;
 
         // Targeted Quantity
-        $CI->db->from('budget_sales_target bst');
-        $CI->db->select('bst.targeted_quantity');
-        $CI->db->where('bst.variety_id', $variety);
-        $CI->db->where('bst.year', $year);
-        $CI->db->where('length(bst.customer_id)<2');
-        $CI->db->where('length(bst.territory_id)<2');
-        $CI->db->where('length(bst.zone_id)<2');
-        $CI->db->where('length(bst.division_id)<2');
-        $CI->db->where('bst.status', $CI->config->item('status_active'));
+        $CI->db->from('budget_principal_quantity bpq');
+        $CI->db->select('bpq.final_targeted_quantity');
+        $CI->db->where('bpq.variety_id', $variety);
+        $CI->db->where('bpq.year', $year);
+        $CI->db->where('bpq.status', $CI->config->item('status_active'));
         $sales_result = $CI->db->get()->row_array();
-        $data['targeted_quantity'] = isset($sales_result['targeted_quantity'])?$sales_result['targeted_quantity']:0;
+        $data['targeted_quantity'] = isset($sales_result['final_targeted_quantity'])?$sales_result['final_targeted_quantity']:0;
 
         // Budgeted PI or COGS
         $CI->db->from('budget_purchase_quantity bpq');

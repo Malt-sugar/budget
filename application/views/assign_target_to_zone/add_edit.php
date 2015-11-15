@@ -123,10 +123,10 @@
                 }
             });
 
-            var targeted_val = $(this).closest('.div_target').closest('tr').find('.targeted_total').val();
+            var targeted_val = parseFloat($(this).closest('.div_target').closest('tr').find('.targeted_total').val());
             var new_remaining_val = targeted_val - sum;
 
-            $(this).closest('.div_target').closest('tr').find('.remaining').val(new_remaining_val);
+            $(this).closest('.div_target').closest('tr').find('.remaining').html(new_remaining_val);
         });
 
         $(document).on("change", "#crop_select", function(event)
@@ -199,33 +199,6 @@
                 $("#load_variety").html('');
             }
         });
-
-        $(document).on("change","#year",function()
-        {
-            $("#load_variety").html('');
-//            if($(this).val().length>0)
-//            {
-//                $.ajax({
-//                    url: base_url+"assign_target_to_zone/get_variety_detail/",
-//                    type: 'POST',
-//                    dataType: "JSON",
-//                    data:{year_id:$(this).val()},
-//                    success: function (data, status)
-//                    {
-//
-//                    },
-//                    error: function (xhr, desc, err)
-//                    {
-//                        console.log("error");
-//                    }
-//                });
-//            }
-//            else
-//            {
-//                $("#load_variety").html('');
-//            }
-        });
-
 
         $(document).on("click", ".load_remark", function(event)
         {

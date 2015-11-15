@@ -220,6 +220,7 @@ class Actual_purchase extends ROOT_Controller
         $data['crop_id'] = $crop_id;
         $data['type_id'] = $type_id;
         $data['variety_id'] = $variety_id;
+        $data['final_target'] = $this->actual_purchase_model->get_final_target($data['year'], $variety_id);
 
         if(isset($data['year']))
         {

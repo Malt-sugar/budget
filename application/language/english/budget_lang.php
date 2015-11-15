@@ -285,3 +285,5 @@ $lang['LABEL_INITIAL_CONFIRMATION']='Initial Confirmation';
 $lang['LABEL_FINAL_CONFIRMATION']='Final Confirmation';
 $lang['LABEL_ACTUAL_PURCHASE']='Actual Purchase';
 $lang['LABEL_FINAL_TARGETED_QUANTITY']='Finally Targeted Quantity';
+$lang['LABEL_HO_BUDGET']='HO Budget';
+$lang['LABEL_ACTUAL_PURCHASE']='Actual Purchase';

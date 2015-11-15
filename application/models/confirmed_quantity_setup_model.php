@@ -140,46 +140,20 @@ class Confirmed_quantity_setup_model extends CI_Model
         }
     }
 
-    public function get_budgeted_sales_quantity($year, $crop_id, $type_id, $variety_id)
+    public function get_target_finalise_quantity($year, $variety_id)
     {
-        $this->db->from('budget_sales_target bst');
-        $this->db->select('bst.budgeted_quantity, bst.principal_quantity');
+        $this->db->from('budget_principal_quantity bpq');
+        $this->db->select('bpq.*');
 
-        $this->db->where('bst.crop_id', $crop_id);
-        $this->db->where('bst.type_id', $type_id);
-        $this->db->where('bst.variety_id', $variety_id);
-        $this->db->where('bst.year', $year);
+        $this->db->where('bpq.variety_id', $variety_id);
+        $this->db->where('bpq.year', $year);
 
-        $this->db->where('length(bst.customer_id)<2');
-        $this->db->where('length(bst.territory_id)<2');
-        $this->db->where('length(bst.zone_id)<2');
-        $this->db->where('length(bst.division_id)<2');
-
-        $this->db->where('bst.status', $this->config->item('status_active'));
+        $this->db->where('bpq.status', $this->config->item('status_active'));
         $result = $this->db->get()->row_array();
 
         if($result)
         {
             return $result;
-        }
-        else
-        {
-            return null;
-        }
-    }
-
-    public function get_budget_min_stock_quantity($crop_id, $type_id, $variety_id)
-    {
-        $this->db->from('budget_min_stock_quantity bms');
-        $this->db->select('bms.min_stock_quantity');
-        $this->db->where('bms.crop_id', $crop_id);
-        $this->db->where('bms.type_id', $type_id);
-        $this->db->where('bms.variety_id', $variety_id);
-        $result = $this->db->get()->row_array();
-
-        if($result)
-        {
-            return $result['min_stock_quantity'];
         }
         else
         {
@@ -257,7 +231,9 @@ class Confirmed_quantity_setup_model extends CI_Model
 
         $this->db->join("ait_crop_info aci","aci.crop_id = avi.crop_id","LEFT");
         $this->db->join("ait_product_type apt","apt.product_type_id = avi.product_type_id","LEFT");
-
+        $this->db->order_by('aci.order_crop');
+        $this->db->order_by('apt.order_type');
+        $this->db->order_by('avi.order_variety');
         $this->db->where('avi.status', 'Active');
         $results = $this->db->get()->result_array();
         return $results;

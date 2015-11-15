@@ -92,6 +92,7 @@ class Assign_target_to_division extends ROOT_Controller
                             }
                             else
                             {
+                                $notificationData['is_action_taken'] = 1;
                                 $notificationData['assignment_type'] = $this->config->item('assign_type_new');
                             }
 
@@ -113,7 +114,7 @@ class Assign_target_to_division extends ROOT_Controller
 
                             if(isset($old_notification_id) && $old_notification_id>0)
                             {
-                                unset($notificationData['assignment_type']);
+                                //unset($notificationData['assignment_type']);
                                 Query_helper::update('budget_sales_target_notification',$notificationData,array("id ='$old_notification_id'"));
                             }
                             else

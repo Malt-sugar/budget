@@ -20,7 +20,7 @@
             <th class="text-center"><?php echo $this->lang->line('LABEL_REMARKS')?></th>
 
             <tr>
-                <td class="text-center"><input type="text" class="form-control numbersOnly purchase_quantity" name="quantity[<?php echo $crop_id;?>][<?php echo $type_id;?>][<?php echo $variety_id;?>][purchase_quantity]" value="" /></td>
+                <td class="text-center"><input type="text" readonly class="form-control numbersOnly purchase_quantity" name="quantity[<?php echo $crop_id;?>][<?php echo $type_id;?>][<?php echo $variety_id;?>][purchase_quantity]" value="<?php echo $final_target;?>" /></td>
                 <td class="text-center"><input type="text" class="form-control numbersOnly pi_value" name="quantity[<?php echo $crop_id;?>][<?php echo $type_id;?>][<?php echo $variety_id;?>][pi_value]" value="" /></td>
                 <td class="text-center"><input type="text" disabled class="form-control lc_exp" name="quantity[<?php echo $crop_id;?>][<?php echo $type_id;?>][<?php echo $variety_id;?>][lc_exp]" value="" /></td>
                 <td class="text-center"><input type="text" disabled class="form-control insurance_exp" name="quantity[<?php echo $crop_id;?>][<?php echo $type_id;?>][<?php echo $variety_id;?>][insurance_exp]" value="" /></td>

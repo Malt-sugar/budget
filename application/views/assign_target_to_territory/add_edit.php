@@ -106,7 +106,7 @@
             var targeted_val = $(this).closest('.div_target').closest('tr').find('.targeted_total').val();
             var new_remaining_val = targeted_val - sum;
 
-            $(this).closest('.div_target').closest('tr').find('.remaining').val(new_remaining_val);
+            $(this).closest('.div_target').closest('tr').find('.remaining').html(new_remaining_val);
         });
 
         $(document).on("change", "#selection_type", function(event)

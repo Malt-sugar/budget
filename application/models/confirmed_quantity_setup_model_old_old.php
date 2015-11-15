@@ -143,7 +143,7 @@ class Confirmed_quantity_setup_model extends CI_Model
     public function get_budgeted_sales_quantity($year, $crop_id, $type_id, $variety_id)
     {
         $this->db->from('budget_sales_target bst');
-        $this->db->select('bst.budgeted_quantity, bst.principal_quantity');
+        $this->db->select('bst.budgeted_quantity');
 
         $this->db->where('bst.crop_id', $crop_id);
         $this->db->where('bst.type_id', $type_id);
@@ -160,7 +160,7 @@ class Confirmed_quantity_setup_model extends CI_Model
 
         if($result)
         {
-            return $result;
+            return $result['budgeted_quantity'];
         }
         else
         {
@@ -193,7 +193,6 @@ class Confirmed_quantity_setup_model extends CI_Model
         $this->db->select('aci.crop_name');
         $this->db->select('apt.product_type');
         $this->db->from('ait_varriety_info avi');
-        $this->db->select('avi.*');
 
         $this->db->where('avi.type', 0);
         $this->db->where('avi.varriety_id', $variety_id);
@@ -231,88 +230,5 @@ class Confirmed_quantity_setup_model extends CI_Model
         $this->db->where('year',$year);
 
         $this->db->update('budget_purchase_quantity',$data);
-    }
-
-    public function get_varieties_by_crop_type($crop_id, $type_id)
-    {
-        $this->db->select('avi.varriety_name');
-        $this->db->select('aci.crop_name');
-        $this->db->select('apt.product_type');
-        $this->db->select('avi.crop_id');
-        $this->db->select('avi.product_type_id');
-        $this->db->select('avi.varriety_id');
-        $this->db->from('ait_varriety_info avi');
-
-        $this->db->where('avi.type', 0);
-
-        if(isset($crop_id) && strlen($crop_id)>1)
-        {
-            $this->db->where('avi.crop_id', $crop_id);
-        }
-
-        if(isset($type_id) && strlen($type_id)>1)
-        {
-            $this->db->where('avi.product_type_id', $type_id);
-        }
-
-        $this->db->join("ait_crop_info aci","aci.crop_id = avi.crop_id","LEFT");
-        $this->db->join("ait_product_type apt","apt.product_type_id = avi.product_type_id","LEFT");
-
-        $this->db->where('avi.status', 'Active');
-        $results = $this->db->get()->result_array();
-        return $results;
-    }
-
-    public function get_existing_month_edit_id($year, $variety_id, $month)
-    {
-        $this->db->from('budget_purchase_months bpm');
-        $this->db->select('bpm.id');
-        $this->db->where('bpm.year', $year);
-        $this->db->where('bpm.month', $month);
-        $this->db->where('bpm.variety_id', $variety_id);
-        $result = $this->db->get()->row_array();
-
-        if($result)
-        {
-            return $result['id'];
-        }
-        else
-        {
-            return false;
-        }
-    }
-
-    public function budget_month_initial_update($year)
-    {
-        $data = array('status'=>0);
-        $this->db->where('year',$year);
-
-        $this->db->update('budget_purchase_months',$data);
-    }
-
-    public function get_direct_costs($year)
-    {
-        $this->db->from('budget_direct_cost bdc');
-        $this->db->select('bdc.*');
-        $this->db->where('bdc.year', $year);
-        $this->db->where('bdc.purchase_type', $this->config->item('purchase_type_budget'));
-        $result = $this->db->get()->row_array();
-
-        if(is_array($result) && sizeof($result)>0)
-        {
-            return $result;
-        }
-        else
-        {
-            $result['lc_exp']=0;
-            $result['insurance_exp']=0;
-            $result['packing_material']=0;
-            $result['carriage_inwards']=0;
-            $result['air_freight_and_docs']=0;
-            $result['cnf']=0;
-            $result['bank_other_charges']=0;
-
-            return $result;
-        }
     }
 }

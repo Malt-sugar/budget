@@ -35,7 +35,7 @@ class Principal_quantity_setup extends ROOT_Controller
         $data['types'] = $this->budget_common_model->get_ordered_crop_types();
         $data['varieties'] = $this->budget_common_model->get_ordered_varieties();
 
-        $data['title']="Principal Quantity Setup";
+        $data['title']="Target Finalise";
         $ajax['page_url']=base_url()."principal_quantity_setup/index/add";
 
         $ajax['status']=true;

@@ -201,4 +201,22 @@ class Actual_purchase_model extends CI_Model
             return false;
         }
     }
+
+    public function get_final_target($year, $variety)
+    {
+        $this->db->from('budget_principal_quantity bpq');
+        $this->db->select('bpq.actual_purchase');
+        $this->db->where('bpq.year', $year);
+        $this->db->where('bpq.variety_id', $variety);
+        $result = $this->db->get()->row_array();
+
+        if($result)
+        {
+            return $result['actual_purchase'];
+        }
+        else
+        {
+            return 0;
+        }
+    }
 }
