@@ -122,6 +122,9 @@ class Assign_target_to_division extends ROOT_Controller
                                 $notificationData['is_action_taken'] = 0;
                                 Query_helper::add('budget_sales_target_notification', $notificationData);
                             }
+
+                            // Update bottom-up notification (action taken!)
+                            $this->assign_target_to_division_model->update_bottom_up_notification($year, $variety, $division);
                         }
                     }
                 }

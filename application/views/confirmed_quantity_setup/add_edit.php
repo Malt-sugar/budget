@@ -219,6 +219,7 @@
 
         $(document).on("keyup",".pi_value_input",function()
         {
+            var usd_conversion_rate = parseFloat($(".usd_conversion_rate").val());
             var lc_exp = parseFloat($(".lc_exp").val());
             var insurance_exp = parseFloat($(".insurance_exp").val());
             var packing_material = parseFloat($(".packing_material").val());
@@ -227,7 +228,7 @@
             var cnf = parseFloat($(".cnf").val());
             var bank_other_charges = parseFloat($(".bank_other_charges").val());
             
-            var pi_value = parseFloat($(this).val());
+            var pi_value = parseFloat($(this).val())*usd_conversion_rate; // USD converted to BDT
 
             var lc_exp_per = parseFloat(((pi_value/100)*lc_exp).toFixed(2));
             var insurance_exp_per = parseFloat(((pi_value/100)*insurance_exp).toFixed(2));

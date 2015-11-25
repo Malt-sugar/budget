@@ -138,4 +138,21 @@ class Assign_target_to_division_model extends CI_Model
         }
     }
 
+    public function update_bottom_up_notification($year, $variety, $division)
+    {
+        $data = array('is_action_taken'=>1);
+
+        $this->db->where('year',$year);
+        $this->db->where('variety_id',$variety);
+        $this->db->where('sending_division',$division);
+        $this->db->where('sending_zone',null);
+        $this->db->where('sending_territory',null);
+        $this->db->where('receiving_division',null);
+        $this->db->where('receiving_zone',null);
+        $this->db->where('receiving_territory',null);
+        $this->db->where('direction', $this->config->item('direction_up'));
+
+        $this->db->update('budget_sales_target_notification',$data);
+    }
+
 }
