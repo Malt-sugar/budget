@@ -60,10 +60,9 @@ class Pricing_helper
         $CI->db->where('bbs.year', $year);
         $CI->db->where('bbs.variety_id', $variety);
         $result = $CI->db->get()->row_array();
-
-        $data['sales_commission'] = $result['sales_commission'];
-        $data['sales_bonus'] = $result['sales_bonus'];
-        $data['other_incentive'] = $result['other_incentive'];
+        $data['sales_commission'] = isset($result['sales_commission'])?$result['sales_commission']:0;
+        $data['sales_bonus'] = isset($result['sales_bonus'])?$result['sales_bonus']:0;
+        $data['other_incentive'] = isset($result['other_incentive'])?$result['other_incentive']:0;
 
         return $data;
     }
@@ -124,10 +123,9 @@ class Pricing_helper
         $CI->db->where('bbs.year', $year);
         $CI->db->where('bbs.variety_id', $variety);
         $result = $CI->db->get()->row_array();
-
-        $data['sales_commission'] = $result['sales_commission'];
-        $data['sales_bonus'] = $result['sales_bonus'];
-        $data['other_incentive'] = $result['other_incentive'];
+        $data['sales_commission'] = isset($result['sales_commission'])?$result['sales_commission']:0;
+        $data['sales_bonus'] = isset($result['sales_bonus'])?$result['sales_bonus']:0;
+        $data['other_incentive'] = isset($result['other_incentive'])?$result['other_incentive']:0;
 
         // Budgeted COGS
         $CI->db->from('budget_direct_cost bdc');
@@ -199,10 +197,9 @@ class Pricing_helper
         $CI->db->where('bbs.year', $year);
         $CI->db->where('bbs.variety_id', $variety);
         $result = $CI->db->get()->row_array();
-
-        $data['sales_commission'] = $result['sales_commission'];
-        $data['sales_bonus'] = $result['sales_bonus'];
-        $data['other_incentive'] = $result['other_incentive'];
+        $data['sales_commission'] = isset($result['sales_commission'])?$result['sales_commission']:0;
+        $data['sales_bonus'] = isset($result['sales_bonus'])?$result['sales_bonus']:0;
+        $data['other_incentive'] = isset($result['other_incentive'])?$result['other_incentive']:0;
 
         // Budgeted PI or COGS
         $CI->db->from('budget_purchase_quantity bpq');
@@ -310,10 +307,9 @@ class Pricing_helper
         $CI->db->where('bbs.year', $year);
         $CI->db->where('bbs.variety_id', $variety);
         $result = $CI->db->get()->row_array();
-
-        $data['sales_commission'] = $result['sales_commission'];
-        $data['sales_bonus'] = $result['sales_bonus'];
-        $data['other_incentive'] = $result['other_incentive'];
+        $data['sales_commission'] = isset($result['sales_commission'])?$result['sales_commission']:0;
+        $data['sales_bonus'] = isset($result['sales_bonus'])?$result['sales_bonus']:0;
+        $data['other_incentive'] = isset($result['other_incentive'])?$result['other_incentive']:0;
 
         // Budgeted COGS
         $CI->db->from('budget_direct_cost bdc');
@@ -323,13 +319,13 @@ class Pricing_helper
         $CI->db->where('bdc.status', $CI->config->item('status_active'));
         $direct_cost = $CI->db->get()->row_array();
 
-        $lc_exp = $direct_cost['lc_exp'];
-        $insurance_exp = $direct_cost['insurance_exp'];
-        $packing_material = $direct_cost['packing_material'];
-        $carriage_inwards = $direct_cost['carriage_inwards'];
-        $air_freight_and_docs = $direct_cost['air_freight_and_docs'];
-        $cnf = $direct_cost['cnf'];
-        $bank_other_charges = $direct_cost['bank_other_charges'];
+        $lc_exp = isset($direct_cost['lc_exp'])?$direct_cost['lc_exp']:0;
+        $insurance_exp = isset($direct_cost['insurance_exp'])?$direct_cost['insurance_exp']:0;
+        $packing_material = isset($direct_cost['packing_material'])?$direct_cost['packing_material']:0;
+        $carriage_inwards = isset($direct_cost['carriage_inwards'])?$direct_cost['carriage_inwards']:0;
+        $air_freight_and_docs = isset($direct_cost['air_freight_and_docs'])?$direct_cost['air_freight_and_docs']:0;
+        $cnf = isset($direct_cost['cnf'])?$direct_cost['cnf']:0;
+        $bank_other_charges = isset($direct_cost['bank_other_charges'])?$direct_cost['bank_other_charges']:0;
 
         $data['cogs'] = ($data['pi_value']/100)*$lc_exp + ($data['pi_value']/100)*$insurance_exp + ($data['pi_value']/100)*$packing_material + ($data['pi_value']/100)*$carriage_inwards + ($data['pi_value']/100)*$air_freight_and_docs + ($data['pi_value']/100)*$cnf + ($data['pi_value']/100)*$bank_other_charges;
 

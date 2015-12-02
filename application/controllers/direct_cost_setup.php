@@ -95,7 +95,9 @@ class Direct_cost_setup extends ROOT_Controller
             'carriage_inwards'=>$this->input->post('carriage_inwards'),
             'air_freight_and_docs'=>$this->input->post('air_freight_and_docs'),
             'cnf'=>$this->input->post('cnf'),
-            'bank_other_charges'=>$this->input->post('bank_other_charges')
+            'bank_other_charges'=>$this->input->post('bank_other_charges'),
+            'ait'=>$this->input->post('ait'),
+            'miscellaneous'=>$this->input->post('miscellaneous')
         );
 
         if(!$this->check_validation())

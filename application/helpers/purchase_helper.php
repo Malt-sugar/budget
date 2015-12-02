@@ -191,7 +191,7 @@ class Purchase_helper
         }
     }
 
-    public static function get_variety_actual_purchase_values($edit_id, $variety, $total_lc_exp, $total_insurance_exp, $total_packing_material, $total_carriage_inwards, $total_docs, $total_cnf, $total_bank_other_charges)
+    public static function get_variety_actual_purchase_values($edit_id, $variety, $usd_conversion_rate, $total_lc_exp, $total_insurance_exp, $total_packing_material, $total_carriage_inwards, $total_docs, $total_cnf, $total_bank_other_charges, $total_ait, $total_miscellaneous)
     {
         $CI = & get_instance();
         $data = array();
@@ -199,9 +199,7 @@ class Purchase_helper
 
         $CI->db->from('budget_purchases bp');
         $CI->db->select('bp.*');
-
         $CI->db->select('(SELECT SUM(pi_value) FROM `budget_purchases` bp WHERE bp.setup_id="'.$edit_id.'" AND bp.status="'.$active.'") as total_pi_value');
-
         $CI->db->where('bp.setup_id', $edit_id);
         $CI->db->where('bp.variety_id', $variety);
         $CI->db->where('bp.status', $CI->config->item('status_active'));
@@ -221,8 +219,11 @@ class Purchase_helper
         $data['docs'] = round(($pi_value_percentage/100)*$total_docs, 2);
         $data['cnf'] = round(($pi_value_percentage/100)*$total_cnf, 2);
         $data['bank_other_charges'] = round(($pi_value_percentage/100)*$total_bank_other_charges, 2);
-        $data['cogs'] = round(($data['pi_value']+$data['lc_exp']+$data['insurance_exp']+$data['packing_material']+$data['carriage_inwards']+$data['docs']+$data['cnf']), 2);
-        $data['total_cogs'] = round(($data['cogs']*$data['purchase_quantity']), 2);
+        $data['ait'] = round(($pi_value_percentage/100)*$total_ait, 2);
+        $data['miscellaneous'] = round(($pi_value_percentage/100)*$total_miscellaneous, 2);
+
+        $data['total_cogs'] = round((($data['pi_value']*$data['purchase_quantity']*$usd_conversion_rate)+$data['lc_exp']+$data['insurance_exp']+$data['packing_material']+$data['carriage_inwards']+$data['docs']+$data['cnf']+$data['ait']+$data['miscellaneous']), 2);
+        $data['cogs'] = round(($data['total_cogs']/$data['purchase_quantity']), 2);
 
         return $data;
     }

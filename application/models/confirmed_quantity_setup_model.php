@@ -258,6 +258,24 @@ class Confirmed_quantity_setup_model extends CI_Model
         }
     }
 
+    public function get_packing_material_status($variety_id)
+    {
+        $this->db->from('budget_packing_material_setup bpm');
+        $this->db->select('bpm.*');
+        $this->db->where('bpm.variety_id', $variety_id);
+        $this->db->where('bpm.packing_material', 1);
+        $result = $this->db->get()->row_array();
+
+        if($result)
+        {
+            return 1;
+        }
+        else
+        {
+            return 0;
+        }
+    }
+
     public function budget_month_initial_update($year)
     {
         $data = array('status'=>0);

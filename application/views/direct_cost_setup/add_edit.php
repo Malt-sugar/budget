@@ -100,6 +100,24 @@
                 <input type="text" name="bank_other_charges" class="form-control validate[required] quantity" value="<?php if(isset($purchase['bank_other_charges'])){echo $purchase['bank_other_charges'];}?>" />
             </div>
         </div>
+
+        <div style="" class="row show-grid">
+            <div class="col-xs-4">
+                <label class="control-label pull-right"><?php echo $this->lang->line('LABEL_AIT');?><span style="color:#FF0000">*</span></label>
+            </div>
+            <div class="col-sm-4 col-xs-8">
+                <input type="text" name="ait" class="form-control validate[required] quantity" value="<?php if(isset($purchase['ait'])){echo $purchase['ait'];}?>" />
+            </div>
+        </div>
+
+        <div style="" class="row show-grid">
+            <div class="col-xs-4">
+                <label class="control-label pull-right"><?php echo $this->lang->line('LABEL_MISCELLANEOUS');?><span style="color:#FF0000">*</span></label>
+            </div>
+            <div class="col-sm-4 col-xs-8">
+                <input type="text" name="miscellaneous" class="form-control validate[required] quantity" value="<?php if(isset($purchase['miscellaneous'])){echo $purchase['miscellaneous'];}?>" />
+            </div>
+        </div>
     </div>
     <div class="clearfix"></div>
 </form>

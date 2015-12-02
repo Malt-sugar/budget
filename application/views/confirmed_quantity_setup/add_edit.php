@@ -227,7 +227,11 @@
             var docs = parseFloat($(".docs").val());
             var cnf = parseFloat($(".cnf").val());
             var bank_other_charges = parseFloat($(".bank_other_charges").val());
-            
+            var ait = parseFloat($(".ait").val());
+            var miscellaneous = parseFloat($(".miscellaneous").val());
+
+            var packing_status = parseFloat($(".packing_status").val());
+
             var pi_value = parseFloat($(this).val())*usd_conversion_rate; // USD converted to BDT
 
             var lc_exp_per = parseFloat(((pi_value/100)*lc_exp).toFixed(2));
@@ -237,10 +241,26 @@
             var docs_per = parseFloat(((pi_value/100)*docs).toFixed(2));
             var cnf_per = parseFloat(((pi_value/100)*cnf).toFixed(2));
             var bank_other_charges_per = parseFloat(((pi_value/100)*bank_other_charges).toFixed(2));
+            var ait_per = parseFloat(((pi_value/100)*ait).toFixed(2));
+            var miscellaneous_per = parseFloat(((pi_value/100)*miscellaneous).toFixed(2));
 
-            var cogs = (parseFloat(pi_value) + parseFloat(lc_exp_per) + parseFloat(insurance_exp_per) + parseFloat(packing_material_per) + parseFloat(carriage_inwards_per) + parseFloat(docs_per) + parseFloat(cnf_per) + parseFloat(bank_other_charges_per)).toFixed(2);
+            if(packing_status==1)
+            {
+                var cogs = (parseFloat(pi_value) + parseFloat(lc_exp_per) + parseFloat(insurance_exp_per) + parseFloat(packing_material_per) + parseFloat(carriage_inwards_per) + parseFloat(docs_per) + parseFloat(cnf_per) + parseFloat(bank_other_charges_per) + parseFloat(ait_per) + parseFloat(miscellaneous_per)).toFixed(2);
+            }
+            else
+            {
+                var cogs = (parseFloat(pi_value) + parseFloat(lc_exp_per) + parseFloat(insurance_exp_per) + parseFloat(carriage_inwards_per) + parseFloat(docs_per) + parseFloat(cnf_per) + parseFloat(bank_other_charges_per) + parseFloat(ait_per) + parseFloat(miscellaneous_per)).toFixed(2);
+            }
 
-            $(this).closest('tr').find('.budgeted_cogs').html(cogs);
+            if(cogs)
+            {
+                $(this).closest('tr').find('.budgeted_cogs').html(cogs);
+            }
+            else
+            {
+                $(this).closest('tr').find('.budgeted_cogs').html(0);
+            }
         });
     });
 </script>

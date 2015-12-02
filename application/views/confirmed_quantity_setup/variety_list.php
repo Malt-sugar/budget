@@ -24,9 +24,18 @@
                 $existing_confirmed_quantity = Purchase_helper::get_existing_confirmed_quantity($year, $variety['varriety_id']);
                 $existing_budget_months = Purchase_helper::get_existing_budget_months($year, $variety['varriety_id']);
                 $direct_costs = $this->confirmed_quantity_setup_model->get_direct_costs($year);
+                $packing_status = $this->confirmed_quantity_setup_model->get_packing_material_status($variety['varriety_id']);
 
-                $pi = $existing_confirmed_quantity['pi_value'];
-                $cogs = $pi + ($direct_costs['lc_exp']/100)*$pi + ($direct_costs['insurance_exp']/100)*$pi + ($direct_costs['packing_material']/100)*$pi + ($direct_costs['carriage_inwards']/100)*$pi + ($direct_costs['air_freight_and_docs']/100)*$pi + ($direct_costs['cnf']/100)*$pi + ($direct_costs['bank_other_charges']/100)*$pi;
+                $pi = $existing_confirmed_quantity['pi_value']*$direct_costs['usd_conversion_rate'];
+
+                if($packing_status==1)
+                {
+                    $cogs = $pi + ($direct_costs['lc_exp']/100)*$pi + ($direct_costs['insurance_exp']/100)*$pi + ($direct_costs['packing_material']/100)*$pi + ($direct_costs['carriage_inwards']/100)*$pi + ($direct_costs['air_freight_and_docs']/100)*$pi + ($direct_costs['cnf']/100)*$pi + ($direct_costs['bank_other_charges']/100)*$pi + ($direct_costs['ait']/100)*$pi + ($direct_costs['miscellaneous']/100)*$pi;
+                }
+                else
+                {
+                    $cogs = $pi + ($direct_costs['lc_exp']/100)*$pi + ($direct_costs['insurance_exp']/100)*$pi + ($direct_costs['carriage_inwards']/100)*$pi + ($direct_costs['air_freight_and_docs']/100)*$pi + ($direct_costs['cnf']/100)*$pi + ($direct_costs['bank_other_charges']/100)*$pi + ($direct_costs['ait']/100)*$pi + ($direct_costs['miscellaneous']/100)*$pi;
+                }
             ?>
             <tr class="main_tr">
                 <td class="text-center">
@@ -69,6 +78,7 @@
                 <td class="text-center"><?php echo $target_quantity['hom_sales_target'];?></td>
                 <td class="text-center">
                     <input type="hidden" class="form-control variety_total_quantity confirmed_quantity numbersOnly" name="quantity[<?php echo $variety['crop_id'];?>][<?php echo $variety['product_type_id'];?>][<?php echo $variety['varriety_id'];?>][confirmed_quantity]" value="<?php echo $target_quantity['actual_purchase'];?>" />
+                    <input type="hidden" class="form-control packing_status" name="" value="<?php echo $packing_status;?>" />
                     <?php echo $target_quantity['actual_purchase'];?>
                 </td>
                 <td class="text-center"><input type="text" class="form-control pi_value_input numbersOnly" name="quantity[<?php echo $variety['crop_id'];?>][<?php echo $variety['product_type_id'];?>][<?php echo $variety['varriety_id'];?>][pi_value]" value="<?php if(isset($existing_confirmed_quantity['pi_value'])){echo $existing_confirmed_quantity['pi_value'];}?>" /></td>

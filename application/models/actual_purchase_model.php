@@ -219,4 +219,22 @@ class Actual_purchase_model extends CI_Model
             return 0;
         }
     }
+
+    public function get_purchase_month_quantity($year, $variety, $month)
+    {
+        $this->db->from('budget_purchase_months bpm');
+        $this->db->select('bpm.quantity');
+        $this->db->where('bpm.year', $year);
+        $this->db->where('bpm.variety_id', $variety);
+        $this->db->where('bpm.month', $month);
+        $result = $this->db->get()->row_array();
+        if($result)
+        {
+            return $result['quantity'];
+        }
+        else
+        {
+            return 0;
+        }
+    }
 }

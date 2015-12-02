@@ -15,12 +15,14 @@
             <th class="text-center"><?php echo $this->lang->line('LABEL_DOCS_ACTUAL')?></th>
             <th class="text-center"><?php echo $this->lang->line('LABEL_CNF')?></th>
             <th class="text-center"><?php echo $this->lang->line('LABEL_BANK_OTHER_CHARGES')?></th>
-            <th class="text-center"><?php echo $this->lang->line('LABEL_COGS')?></th>
-            <th class="text-center"><?php echo $this->lang->line('LABEL_TOTAL_COGS')?></th>
+<!--            <th class="text-center">--><?php //echo $this->lang->line('LABEL_AIT')?><!--</th>-->
+<!--            <th class="text-center">--><?php //echo $this->lang->line('LABEL_MISCELLANEOUS')?><!--</th>-->
+            <th class="text-center"><?php echo $this->lang->line('LABEL_COGS_TAKA')?></th>
+            <th class="text-center"><?php echo $this->lang->line('LABEL_TOTAL_COGS_TAKA')?></th>
             <th class="text-center"><?php echo $this->lang->line('LABEL_REMARKS')?></th>
 
             <tr>
-                <td class="text-center"><input type="text" readonly class="form-control numbersOnly purchase_quantity" name="quantity[<?php echo $crop_id;?>][<?php echo $type_id;?>][<?php echo $variety_id;?>][purchase_quantity]" value="<?php echo $final_target;?>" /></td>
+                <td class="text-center"><input type="text" readonly class="form-control numbersOnly purchase_quantity" name="quantity[<?php echo $crop_id;?>][<?php echo $type_id;?>][<?php echo $variety_id;?>][purchase_quantity]" value="<?php echo $month_quantity;?>" /></td>
                 <td class="text-center"><input type="text" class="form-control numbersOnly pi_value" name="quantity[<?php echo $crop_id;?>][<?php echo $type_id;?>][<?php echo $variety_id;?>][pi_value]" value="" /></td>
                 <td class="text-center"><input type="text" disabled class="form-control lc_exp" name="quantity[<?php echo $crop_id;?>][<?php echo $type_id;?>][<?php echo $variety_id;?>][lc_exp]" value="" /></td>
                 <td class="text-center"><input type="text" disabled class="form-control insurance_exp" name="quantity[<?php echo $crop_id;?>][<?php echo $type_id;?>][<?php echo $variety_id;?>][insurance_exp]" value="" /></td>
@@ -28,7 +30,11 @@
                 <td class="text-center"><input type="text" disabled class="form-control carriage_inwards" name="quantity[<?php echo $crop_id;?>][<?php echo $type_id;?>][<?php echo $variety_id;?>][carriage_inwards]" value="" /></td>
                 <td class="text-center"><input type="text" disabled class="form-control docs" name="quantity[<?php echo $crop_id;?>][<?php echo $type_id;?>][<?php echo $variety_id;?>][docs]" value="" /></td>
                 <td class="text-center"><input type="text" disabled class="form-control cnf" name="quantity[<?php echo $crop_id;?>][<?php echo $type_id;?>][<?php echo $variety_id;?>][cnf]" value="" /></td>
-                <td class="text-center"><input type="text" disabled class="form-control bank_other_charges" name="quantity[<?php echo $crop_id;?>][<?php echo $type_id;?>][<?php echo $variety_id;?>][bank_other_charges]" value="" /></td>
+                <td class="text-center">
+                    <input type="text" disabled class="form-control bank_other_charges" name="quantity[<?php echo $crop_id;?>][<?php echo $type_id;?>][<?php echo $variety_id;?>][bank_other_charges]" value="" />
+                    <input type="hidden" disabled class="form-control ait" name="quantity[<?php echo $crop_id;?>][<?php echo $type_id;?>][<?php echo $variety_id;?>][ait]" value="" />
+                    <input type="hidden" disabled class="form-control miscellaneous" name="quantity[<?php echo $crop_id;?>][<?php echo $type_id;?>][<?php echo $variety_id;?>][miscellaneous]" value="" />
+                </td>
                 <td class="text-center"><input type="text" disabled class="form-control cogs" name="" value="" /></td>
                 <td class="text-center"><input type="text" disabled class="form-control total_cogs" name="" value="" /></td>
                 <td class="text-center" style="vertical-align: middle;">

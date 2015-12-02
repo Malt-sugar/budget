@@ -215,12 +215,14 @@ class Actual_purchase extends ROOT_Controller
         $variety_id = $this->input->post('variety_id');
         $current_id = $this->input->post('current_id');
         $data['year'] = $this->input->post('year');
+        $month_of_purchase = $this->input->post('month_of_purchase');
+        $data['month_quantity'] = $this->actual_purchase_model->get_purchase_month_quantity($data['year'], $variety_id, $month_of_purchase);
 
         $data['variety_info'] = $this->actual_purchase_model->get_variety_info($variety_id);
         $data['crop_id'] = $crop_id;
         $data['type_id'] = $type_id;
         $data['variety_id'] = $variety_id;
-        $data['final_target'] = $this->actual_purchase_model->get_final_target($data['year'], $variety_id);
+        //$data['final_target'] = $this->actual_purchase_model->get_final_target($data['year'], $variety_id);
 
         if(isset($data['year']))
         {

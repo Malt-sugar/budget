@@ -47,7 +47,7 @@
                         <label class="control-label pull-right"><?php echo $this->lang->line('LABEL_USD_CONVERSION_RATE');?><span style="color:#FF0000">*</span></label>
                     </div>
                     <div class="col-sm-4 col-xs-8">
-                        <input type="text" name="usd_conversion_rate" class="form-control validate[required] total_usd_conversion_rate" value="<?php echo $setup['usd_conversion_rate'];?>" />
+                        <input type="text" name="usd_conversion_rate" class="form-control validate[required] usd_conversion_rate" value="<?php echo $setup['usd_conversion_rate'];?>" />
                     </div>
                 </div>
 
@@ -116,10 +116,28 @@
 
                 <div class="row show-grid">
                     <div class="col-xs-4">
+                        <label class="control-label pull-right"><?php echo $this->lang->line('LABEL_AIT');?><span style="color:#FF0000">*</span></label>
+                    </div>
+                    <div class="col-sm-4 col-xs-8">
+                        <input type="text" name="ait" class="form-control validate[required] total_ait" value="<?php echo $setup['ait'];?>" />
+                    </div>
+                </div>
+
+                <div class="row show-grid">
+                    <div class="col-xs-4">
+                        <label class="control-label pull-right"><?php echo $this->lang->line('LABEL_MISCELLANEOUS');?><span style="color:#FF0000">*</span></label>
+                    </div>
+                    <div class="col-sm-4 col-xs-8">
+                        <input type="text" name="miscellaneous" class="form-control validate[required] total_miscellaneous" value="<?php echo $setup['miscellaneous'];?>" />
+                    </div>
+                </div>
+
+                <div class="row show-grid">
+                    <div class="col-xs-4">
                         <label class="control-label pull-right"><?php echo $this->lang->line('LABEL_MONTH_OF_PURCHASE');?><span style="color:#FF0000">*</span></label>
                     </div>
                     <div class="col-sm-4 col-xs-8">
-                        <select name="month_of_purchase" class="form-control validate[required]">
+                        <select name="month_of_purchase" id="month_of_purchase" class="form-control validate[required]">
                             <option value=""><?php echo $this->lang->line('SELECT');?></option>
                             <?php
                             $months = $this->config->item('month');
@@ -208,7 +226,7 @@
 
             <div class="row variety_quantity" id="variety_quantity<?php echo $key;?>" data-varietyDetail-current-id="<?php echo $key;?>">
                 <?php
-                    $variety_values = Purchase_helper::get_variety_actual_purchase_values($edit_id, $quantity['variety_id'], $setup['lc_exp'], $setup['insurance_exp'], $setup['packing_material'], $setup['carriage_inwards'], $setup['docs'], $setup['cnf'], $setup['bank_other_charges']);
+                    $variety_values = Purchase_helper::get_variety_actual_purchase_values($edit_id, $quantity['variety_id'], $setup['usd_conversion_rate'], $setup['lc_exp'], $setup['insurance_exp'], $setup['packing_material'], $setup['carriage_inwards'], $setup['docs'], $setup['cnf'], $setup['bank_other_charges'], $setup['ait'], $setup['miscellaneous']);
                     $grand_total+=$variety_values['total_cogs'];
                 ?>
                 <div class="row show-grid">
@@ -223,12 +241,12 @@
                             <th class="text-center"><?php echo $this->lang->line('LABEL_DOCS_ACTUAL')?></th>
                             <th class="text-center"><?php echo $this->lang->line('LABEL_CNF')?></th>
                             <th class="text-center"><?php echo $this->lang->line('LABEL_BANK_OTHER_CHARGES')?></th>
-                            <th class="text-center"><?php echo $this->lang->line('LABEL_COGS')?></th>
-                            <th class="text-center"><?php echo $this->lang->line('LABEL_TOTAL_COGS')?></th>
+                            <th class="text-center"><?php echo $this->lang->line('LABEL_COGS_TAKA')?></th>
+                            <th class="text-center"><?php echo $this->lang->line('LABEL_TOTAL_COGS_TAKA')?></th>
                             <th class="text-center"><?php echo $this->lang->line('LABEL_REMARKS')?></th>
 
                             <tr>
-                                <td class="text-center"><input type="text" class="form-control numbersOnly purchase_quantity" name="quantity[<?php echo $quantity['crop_id'];?>][<?php echo $quantity['type_id'];?>][<?php echo $quantity['variety_id'];?>][purchase_quantity]" value="<?php echo $variety_values['purchase_quantity'];?>" /></td>
+                                <td class="text-center"><input type="text" disabled class="form-control numbersOnly purchase_quantity" name="quantity[<?php echo $quantity['crop_id'];?>][<?php echo $quantity['type_id'];?>][<?php echo $quantity['variety_id'];?>][purchase_quantity]" value="<?php echo $variety_values['purchase_quantity'];?>" /></td>
                                 <td class="text-center"><input type="text" class="form-control numbersOnly pi_value" name="quantity[<?php echo $quantity['crop_id'];?>][<?php echo $quantity['type_id'];?>][<?php echo $quantity['variety_id'];?>][pi_value]" value="<?php echo $variety_values['pi_value'];?>" /></td>
                                 <td class="text-center"><input type="text" disabled class="form-control lc_exp" name="quantity[<?php echo $quantity['crop_id'];?>][<?php echo $quantity['type_id'];?>][<?php echo $quantity['variety_id'];?>][lc_exp]" value="<?php echo $variety_values['lc_exp'];?>" /></td>
                                 <td class="text-center"><input type="text" disabled class="form-control insurance_exp" name="quantity[<?php echo $quantity['crop_id'];?>][<?php echo $quantity['type_id'];?>][<?php echo $quantity['variety_id'];?>][insurance_exp]" value="<?php echo $variety_values['insurance_exp'];?>" /></td>
@@ -236,7 +254,11 @@
                                 <td class="text-center"><input type="text" disabled class="form-control carriage_inwards" name="quantity[<?php echo $quantity['crop_id'];?>][<?php echo $quantity['type_id'];?>][<?php echo $quantity['variety_id'];?>][carriage_inwards]" value="<?php echo $variety_values['carriage_inwards'];?>" /></td>
                                 <td class="text-center"><input type="text" disabled class="form-control docs" name="quantity[<?php echo $quantity['crop_id'];?>][<?php echo $quantity['type_id'];?>][<?php echo $quantity['variety_id'];?>][docs]" value="<?php echo $variety_values['docs'];?>" /></td>
                                 <td class="text-center"><input type="text" disabled class="form-control cnf" name="quantity[<?php echo $quantity['crop_id'];?>][<?php echo $quantity['type_id'];?>][<?php echo $quantity['variety_id'];?>][cnf]" value="<?php echo $variety_values['cnf'];?>" /></td>
-                                <td class="text-center"><input type="text" disabled class="form-control bank_other_charges" name="quantity[<?php echo $quantity['crop_id'];?>][<?php echo $quantity['type_id'];?>][<?php echo $quantity['variety_id'];?>][bank_other_charges]" value="<?php echo $variety_values['bank_other_charges'];?>" /></td>
+                                <td class="text-center">
+                                    <input type="text" disabled class="form-control bank_other_charges" name="quantity[<?php echo $quantity['crop_id'];?>][<?php echo $quantity['type_id'];?>][<?php echo $quantity['variety_id'];?>][bank_other_charges]" value="<?php echo $variety_values['bank_other_charges'];?>" />
+                                    <input type="hidden" disabled class="form-control ait" name="quantity[<?php echo $quantity['crop_id'];?>][<?php echo $quantity['type_id'];?>][<?php echo $quantity['variety_id'];?>][ait]" value="<?php echo $variety_values['ait'];?>" />
+                                    <input type="hidden" disabled class="form-control miscellaneous" name="quantity[<?php echo $quantity['crop_id'];?>][<?php echo $quantity['type_id'];?>][<?php echo $quantity['variety_id'];?>][miscellaneous]" value="<?php echo $variety_values['miscellaneous'];?>" />
+                                </td>
                                 <td class="text-center"><input type="text" disabled class="form-control cogs" name="" value="<?php echo $variety_values['cogs'];?>" /></td>
                                 <td class="text-center"><input type="text" disabled class="form-control total_cogs" name="" value="<?php echo $variety_values['total_cogs'];?>" /></td>
                                 <td class="text-center" style="vertical-align: middle;">
@@ -346,8 +368,8 @@
                 <th class="text-center" style="display: none;"><?php echo $this->lang->line('LABEL_DOCS_ACTUAL')?></th>
                 <th class="text-center" style="display: none;"><?php echo $this->lang->line('LABEL_CNF')?></th>
                 <th class="text-center" style="display: none;"><?php echo $this->lang->line('LABEL_BANK_OTHER_CHARGES')?></th>
-                <th class="text-center" style="display: none;"><?php echo $this->lang->line('LABEL_COGS')?></th>
-                <th class="text-center" style="display: none;"><?php echo $this->lang->line('LABEL_TOTAL_COGS')?></th>
+                <th class="text-center" style="display: none;"><?php echo $this->lang->line('LABEL_COGS_TAKA')?></th>
+                <th class="text-center" style="display: none;"><?php echo $this->lang->line('LABEL_TOTAL_COGS_TAKA')?></th>
                 <th class="text-center" style="display: none;"><?php echo $this->lang->line('LABEL_REMARKS')?></th>
 
                 <tr>
@@ -534,7 +556,7 @@
                     url: base_url+"actual_purchase/get_purchase_detail_by_variety/",
                     type: 'POST',
                     dataType: "JSON",
-                    data:{crop_id: $("#crop"+current_id).val(), type_id: $("#type"+current_id).val(), variety_id: $(this).val(), current_id: current_id, year: $("#year").val()},
+                    data:{crop_id: $("#crop"+current_id).val(), type_id: $("#type"+current_id).val(), variety_id: $(this).val(), current_id: current_id, year: $("#year").val(), month_of_purchase: $("#month_of_purchase").val()},
                     success: function (data, status)
                     {
 
@@ -631,15 +653,18 @@
 
         $(document).on("keyup",".pi_value",function()
         {
-            var total_lc_exp = $(".total_lc_exp").val();
-            var total_insurance_exp = $(".total_insurance_exp").val();
-            var total_packing_material = $(".total_packing_material").val();
-            var total_carriage_inwards = $(".total_carriage_inwards").val();
-            var total_docs = $(".total_docs").val();
-            var total_cnf = $(".total_cnf").val();
-            var total_bank_other_charges = $(".total_bank_other_charges").val();
+            var usd_conversion_rate = parseFloat($(".usd_conversion_rate").val());
+            var total_lc_exp = parseFloat($(".total_lc_exp").val());
+            var total_insurance_exp = parseFloat($(".total_insurance_exp").val());
+            var total_packing_material = parseFloat($(".total_packing_material").val());
+            var total_carriage_inwards = parseFloat($(".total_carriage_inwards").val());
+            var total_docs = parseFloat($(".total_docs").val());
+            var total_cnf = parseFloat($(".total_cnf").val());
+            var total_bank_other_charges = parseFloat($(".total_bank_other_charges").val());
+            var total_ait = parseFloat($(".total_ait").val());
+            var total_miscellaneous = parseFloat($(".total_miscellaneous").val());
 
-            var pi_value = parseInt($(this).closest('tr').find('.pi_value').val());
+            var pi_value = parseFloat($(this).closest('tr').find('.pi_value').val());
 
             var pi_attr = $(this).closest('.main_div').find('.pi_value');
             var pi_sum = 0;
@@ -656,8 +681,12 @@
 
             pi_attr.each(function()
             {
-                var val = $(this).val();
-                var pi_percentage = parseFloat(((val/pi_sum)*100).toFixed(2));
+                var purchase_quantity = $(this).closest('tr').find('.purchase_quantity').val();
+                var val = $(this).val()*usd_conversion_rate*purchase_quantity;
+                var this_pi_val = $(this).val();
+
+                var pi_percentage = parseFloat(((this_pi_val/pi_sum)*100).toFixed(2));
+
                 var lc_exp = parseFloat(((pi_percentage/100)*total_lc_exp).toFixed(2));
                 var insurance_exp = parseFloat(((pi_percentage/100)*total_insurance_exp).toFixed(2));
                 var packing_material = parseFloat(((pi_percentage/100)*total_packing_material).toFixed(2));
@@ -665,10 +694,11 @@
                 var docs = parseFloat(((pi_percentage/100)*total_docs).toFixed(2));
                 var cnf = parseFloat(((pi_percentage/100)*total_cnf).toFixed(2));
                 var bank_other_charges = parseFloat(((pi_percentage/100)*total_bank_other_charges).toFixed(2));
-                var cogs = (parseFloat(val) + parseFloat(lc_exp) + parseFloat(insurance_exp) + parseFloat(packing_material) + parseFloat(carriage_inwards) + parseFloat(docs) + parseFloat(cnf) + parseFloat(bank_other_charges)).toFixed(2);
+                var ait = parseFloat(((pi_percentage/100)*total_ait).toFixed(2));
+                var miscellaneous = parseFloat(((pi_percentage/100)*total_miscellaneous).toFixed(2));
 
-                var purchase_quantity = $(this).closest('tr').find('.purchase_quantity').val();
-                var total_cogs = (cogs*purchase_quantity).toFixed(2);
+                var total_cogs = (parseFloat(val) + parseFloat(lc_exp) + parseFloat(insurance_exp) + parseFloat(packing_material) + parseFloat(carriage_inwards) + parseFloat(docs) + parseFloat(cnf) + parseFloat(bank_other_charges) + parseFloat(ait) + parseFloat(miscellaneous)).toFixed(2);
+                var cogs = (total_cogs/purchase_quantity).toFixed(2);
 
                 $(this).closest('tr').find('.lc_exp').val(lc_exp);
                 $(this).closest('tr').find('.insurance_exp').val(insurance_exp);
@@ -677,6 +707,8 @@
                 $(this).closest('tr').find('.docs').val(docs);
                 $(this).closest('tr').find('.cnf').val(cnf);
                 $(this).closest('tr').find('.bank_other_charges').val(bank_other_charges);
+                $(this).closest('tr').find('.ait').val(ait);
+                $(this).closest('tr').find('.miscellaneous').val(miscellaneous);
                 $(this).closest('tr').find('.cogs').val(cogs);
                 $(this).closest('tr').find('.total_cogs').val(total_cogs);
             });
