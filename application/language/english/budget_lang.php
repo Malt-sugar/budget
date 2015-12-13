@@ -192,6 +192,7 @@ $lang['LABEL_TOTAL_SALES'] = 'Total Sales';
 $lang['LABEL_PRICE_PER_KG']='Price/ Kg';
 $lang['LABEL_TOTAL_PRICE']='Total Price';
 $lang['LABEL_TOTAL']='Total';
+$lang['LABEL_TARGET_PROFIT']='Target Profit';
 
 $lang['LABEL_SELECT_DIVISION']='Please Select Division';
 $lang['LABEL_SELECT_ZONE']='Please Select Zone';
