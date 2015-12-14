@@ -155,12 +155,13 @@ class Pricing_helper
         $last_year = Pricing_helper::get_last_year($year);
 
         $CI->db->from('budget_sales_pricing bsp');
-        $CI->db->select('bsp.mrp');
+        $CI->db->select('bsp.*');
         $CI->db->where('bsp.year', $last_year);
         $CI->db->where('bsp.variety_id', $variety);
         $CI->db->where('bsp.pricing_type', $CI->config->item('pricing_type_marketing'));
         $result = $CI->db->get()->row_array();
         $data['last_year_mrp'] = isset($result['mrp'])?$result['mrp']:0;
+
 
         // MGT INITIAL MRP
         $CI->db->from('budget_sales_pricing bsp');
@@ -190,16 +191,6 @@ class Pricing_helper
         $sales_result = $CI->db->get()->row_array();
         $data['targeted_quantity'] = isset($sales_result['final_targeted_quantity'])?$sales_result['final_targeted_quantity']:0;
 
-        // VarietyWise Bonus Setup
-        $CI->db->from('budget_bonus_setup bbs');
-        $CI->db->select('bbs.*');
-        $CI->db->where('bbs.year', $year);
-        $CI->db->where('bbs.variety_id', $variety);
-        $result = $CI->db->get()->row_array();
-        $data['sales_commission'] = isset($result['sales_commission'])?$result['sales_commission']:0;
-        $data['sales_bonus'] = isset($result['sales_bonus'])?$result['sales_bonus']:0;
-        $data['other_incentive'] = isset($result['other_incentive'])?$result['other_incentive']:0;
-
         // Budgeted PI or COGS
         $CI->db->from('budget_purchase_quantity bpq');
         $CI->db->select('bpq.pi_value');
@@ -225,7 +216,7 @@ class Pricing_helper
         $cnf = isset($direct_cost['cnf'])?$direct_cost['cnf']:0;
         $bank_other_charges = isset($direct_cost['bank_other_charges'])?$direct_cost['bank_other_charges']:0;
         $pi_value = $pi_value*$usd_conversion_rate;
-        $data['cogs'] = ($pi_value/100)*$lc_exp + ($pi_value/100)*$insurance_exp + ($pi_value/100)*$packing_material + ($pi_value/100)*$carriage_inwards + ($pi_value/100)*$air_freight_and_docs + ($pi_value/100)*$cnf + ($pi_value/100)*$bank_other_charges;
+        $data['cogs'] = $pi_value + ($pi_value/100)*$lc_exp + ($pi_value/100)*$insurance_exp + ($pi_value/100)*$packing_material + ($pi_value/100)*$carriage_inwards + ($pi_value/100)*$air_freight_and_docs + ($pi_value/100)*$cnf + ($pi_value/100)*$bank_other_charges;
 
         return $data;
     }
@@ -255,12 +246,15 @@ class Pricing_helper
 
         // MGT MKT
         $CI->db->from('budget_sales_pricing bsp');
-        $CI->db->select('bsp.mrp');
+        $CI->db->select('bsp.*');
         $CI->db->where('bsp.year', $year);
         $CI->db->where('bsp.variety_id', $variety);
         $CI->db->where('bsp.pricing_type', $CI->config->item('pricing_type_marketing'));
         $result = $CI->db->get()->row_array();
         $data['marketing_mrp'] = isset($result['mrp'])?$result['mrp']:0;
+        $data['sales_commission'] = isset($result['sales_commission'])?$result['sales_commission']:0;
+        $data['sales_bonus'] = isset($result['sales_bonus'])?$result['sales_bonus']:0;
+        $data['other_incentive'] = isset($result['other_incentive'])?$result['other_incentive']:0;
 
         // LAST YEAR MRP (Final)
         $last_year = Pricing_helper::get_last_year($year);
@@ -301,16 +295,6 @@ class Pricing_helper
         $budget_purchase_result = $CI->db->get()->row_array();
         $pi_value = isset($budget_purchase_result['pi_value'])?$budget_purchase_result['pi_value']:0;
 
-        // VarietyWise Bonus Setup
-        $CI->db->from('budget_bonus_setup bbs');
-        $CI->db->select('bbs.*');
-        $CI->db->where('bbs.year', $year);
-        $CI->db->where('bbs.variety_id', $variety);
-        $result = $CI->db->get()->row_array();
-        $data['sales_commission'] = isset($result['sales_commission'])?$result['sales_commission']:0;
-        $data['sales_bonus'] = isset($result['sales_bonus'])?$result['sales_bonus']:0;
-        $data['other_incentive'] = isset($result['other_incentive'])?$result['other_incentive']:0;
-
         // Budgeted COGS
         $CI->db->from('budget_direct_cost bdc');
         $CI->db->select('bdc.*');
@@ -328,7 +312,7 @@ class Pricing_helper
         $cnf = isset($direct_cost['cnf'])?$direct_cost['cnf']:0;
         $bank_other_charges = isset($direct_cost['bank_other_charges'])?$direct_cost['bank_other_charges']:0;
         $pi_value = $pi_value*$usd_conversion_rate;
-        $data['cogs'] = ($pi_value/100)*$lc_exp + ($pi_value/100)*$insurance_exp + ($pi_value/100)*$packing_material + ($pi_value/100)*$carriage_inwards + ($pi_value/100)*$air_freight_and_docs + ($pi_value/100)*$cnf + ($pi_value/100)*$bank_other_charges;
+        $data['cogs'] = $pi_value + ($pi_value/100)*$lc_exp + ($pi_value/100)*$insurance_exp + ($pi_value/100)*$packing_material + ($pi_value/100)*$carriage_inwards + ($pi_value/100)*$air_freight_and_docs + ($pi_value/100)*$cnf + ($pi_value/100)*$bank_other_charges;
 
         return $data;
     }
@@ -423,6 +407,31 @@ class Pricing_helper
         $result = $CI->db->get()->row_array();
         $data['last_year_mrp'] = isset($result['mrp'])?$result['mrp']:0;
 
+        // Budgeted PI or COGS
+        $CI->db->from('budget_purchase_quantity bpq');
+        $CI->db->select('bpq.pi_value');
+        $CI->db->where('bpq.variety_id', $variety);
+        $CI->db->where('bpq.year', $year);
+        $CI->db->where('bpq.status', $CI->config->item('status_active'));
+        $budget_purchase_result = $CI->db->get()->row_array();
+        $pi_value = isset($budget_purchase_result['pi_value'])?$budget_purchase_result['pi_value']:0;
+
+        // Budgeted COGS
+        $CI->db->from('budget_direct_cost bdc');
+        $CI->db->select('bdc.*');
+        $CI->db->where('bdc.year', $year);
+        $CI->db->where('bdc.status', $CI->config->item('status_active'));
+        $direct_cost = $CI->db->get()->row_array();
+        $usd_conversion_rate = isset($direct_cost['usd_conversion_rate'])?$direct_cost['usd_conversion_rate']:0;
+        $lc_exp = isset($direct_cost['lc_exp'])?$direct_cost['lc_exp']:0;
+        $insurance_exp = isset($direct_cost['insurance_exp'])?$direct_cost['insurance_exp']:0;
+        $packing_material = isset($direct_cost['packing_material'])?$direct_cost['packing_material']:0;
+        $carriage_inwards = isset($direct_cost['carriage_inwards'])?$direct_cost['carriage_inwards']:0;
+        $air_freight_and_docs = isset($direct_cost['air_freight_and_docs'])?$direct_cost['air_freight_and_docs']:0;
+        $cnf = isset($direct_cost['cnf'])?$direct_cost['cnf']:0;
+        $bank_other_charges = isset($direct_cost['bank_other_charges'])?$direct_cost['bank_other_charges']:0;
+        $pi_value = $pi_value*$usd_conversion_rate;
+        $data['cogs'] = $pi_value + ($pi_value/100)*$lc_exp + ($pi_value/100)*$insurance_exp + ($pi_value/100)*$packing_material + ($pi_value/100)*$carriage_inwards + ($pi_value/100)*$air_freight_and_docs + ($pi_value/100)*$cnf + ($pi_value/100)*$bank_other_charges;
         return $data;
     }
 

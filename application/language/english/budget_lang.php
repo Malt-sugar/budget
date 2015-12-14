@@ -292,3 +292,6 @@ $lang['LABEL_COGS_TAKA']='COGS(BDT)';
 $lang['LABEL_TOTAL_COGS_TAKA']='Total COGS(BDT)';
 $lang['LABEL_AIT']='Ait';
 $lang['LABEL_MISCELLANEOUS']='Miscellaneous Cost';
+$lang['LABEL_SALES_COMMISSION_AMOUNT']='Sales Commission Amount';
+$lang['LABEL_SALES_BONUS_AMOUNT']='Sales Bonus Amount';
+$lang['LABEL_OTHER_INCENTIVE_AMOUNT']='Other Incentive Amount';

@@ -1,7 +1,9 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
     $data["link_new"]="#";
     $data["hide_new"]="1";
+    $data["hide_save"]="1";
     $data["link_back"]="#";
+    $data["link_save"]="#";
     $data["hide_approve"]="1";
     $data["hide_back"]="1";
 

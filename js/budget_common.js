@@ -246,6 +246,10 @@ function turn_off_triggers()
     $(document).off("change", "#crop_select");
     $(document).off("change", "#type_select");
     $(document).off("blur", ".consignment_no");
+    $(document).off("keyup", ".trigger_class");
+    $(document).off("keyup", ".sales_commission");
+    $(document).off("keyup", ".sales_bonus");
+    $(document).off("keyup", ".other_incentive");
 }
 
 function isNumberKey(evt)
