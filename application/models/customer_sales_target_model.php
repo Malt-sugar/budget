@@ -158,4 +158,78 @@ class Customer_sales_target_model extends CI_Model
         }
     }
 
+    public function get_prediction_years($year_id)
+    {
+        $prediction_array = array();
+        $prediction_config = $this->config->item('prediction_years');
+
+        $this->db->from('ait_year year');
+        $this->db->select('year.year_name');
+        $this->db->where('year.year_id',$year_id);
+        $result = $this->db->get()->row_array();
+        $year = $result['year_name'];
+
+        for($i=0; $i<$prediction_config; $i++)
+        {
+            $year++;
+            $this->db->from('ait_year year');
+            $this->db->select('year.year_id');
+            $this->db->where('year.year_name',$year);
+            $result = $this->db->get()->row_array();
+            if(sizeof($result)>0 && strlen($result['year_id'])>1)
+            {
+                $prediction_array[] = array('year_id'=>$result['year_id'], 'year_name'=>$year);
+            }
+        }
+        return $prediction_array;
+    }
+
+    public function prediction_initial_update($year, $customer)
+    {
+        $data = array('status'=>0);
+        $this->db->where('prediction_year', $year);
+        $this->db->where('customer_id', $customer);
+        $this->db->update('budget_sales_target_prediction',$data);
+    }
+
+    public function get_existing_predictions($prediction_year, $customer, $year, $variety_id)
+    {
+        $this->db->from('budget_sales_target_prediction bstp');
+        $this->db->select('bstp.*');
+        $this->db->where('bstp.prediction_year',$prediction_year);
+        $this->db->where('bstp.year',$year);
+        $this->db->where('bstp.variety_id',$variety_id);
+        $this->db->where('bstp.customer_id',$customer);
+        $result = $this->db->get()->row_array();
+
+        if(is_array($result) && sizeof($result)>0)
+        {
+            return $result['id'];
+        }
+        else
+        {
+            return null;
+        }
+    }
+
+    public function get_prediction_quantity($prediction_year, $year, $variety, $customer)
+    {
+        $this->db->from('budget_sales_target_prediction bstp');
+        $this->db->select('bstp.*');
+        $this->db->where('bstp.prediction_year',$prediction_year);
+        $this->db->where('bstp.year',$year);
+        $this->db->where('bstp.variety_id',$variety);
+        $this->db->where('bstp.customer_id',$customer);
+        $result = $this->db->get()->row_array();
+
+        if(is_array($result) && sizeof($result)>0)
+        {
+            return $result['budgeted_quantity'];
+        }
+        else
+        {
+            return 0;
+        }
+    }
+
 }

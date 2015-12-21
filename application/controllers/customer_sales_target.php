@@ -162,6 +162,55 @@ class Customer_sales_target extends ROOT_Controller
                         }
                     }
                 }
+
+                // Prediction Info
+                $prediction_data = array();
+                $prediction_post = $this->input->post('prediction');
+
+                // Initial Update
+                $this->customer_sales_target_model->prediction_initial_update($this->input->post('year'), $this->input->post('customer'));
+
+                foreach($prediction_post as $crop_id=>$predictionTypeVariety)
+                {
+                    foreach($predictionTypeVariety as $type_id=>$predictionVariety)
+                    {
+                        foreach($predictionVariety as $variety_id=>$YearDetail)
+                        {
+                            foreach($YearDetail as $year=>$quantity)
+                            {
+                                $prediction_data['year'] = $year;
+                                $prediction_data['prediction_year'] = $this->input->post('year');
+                                $prediction_data['division_id'] = $this->input->post('division');
+                                $prediction_data['zone_id'] = $this->input->post('zone');
+                                $prediction_data['territory_id'] = $this->input->post('territory');
+                                $prediction_data['zilla_id'] = $this->input->post('district');
+                                $prediction_data['customer_id'] = $this->input->post('customer');
+                                $prediction_data['crop_id'] = $crop_id;
+                                $prediction_data['type_id'] = $type_id;
+                                $prediction_data['variety_id'] = $variety_id;
+                                $prediction_data['budgeted_quantity'] = $quantity;
+
+                                if($quantity>0)
+                                {
+                                    $existing_prediction_id = $this->customer_sales_target_model->get_existing_predictions($this->input->post('year'), $this->input->post('customer'), $year, $variety_id);
+                                    if($existing_prediction_id>0)
+                                    {
+                                        $prediction_data['status'] = 1;
+                                        $prediction_data['modified_by'] = $user->user_id;
+                                        $prediction_data['modification_date'] = time();
+                                        Query_helper::update('budget_sales_target_prediction',$prediction_data,array('id ='.$existing_prediction_id));
+                                    }
+                                    else
+                                    {
+                                        $prediction_data['created_by'] = $user->user_id;
+                                        $prediction_data['creation_date'] = time();
+                                        Query_helper::add('budget_sales_target_prediction',$prediction_data);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
             }
             else
             {
@@ -187,6 +236,40 @@ class Customer_sales_target extends ROOT_Controller
                                 $data['created_by'] = $user->user_id;
                                 $data['creation_date'] = time();
                                 Query_helper::add('budget_sales_target',$data);
+                            }
+                        }
+                    }
+                }
+
+                // Prediction Info
+                $prediction_data = array();
+                $prediction_post = $this->input->post('prediction');
+                foreach($prediction_post as $crop_id=>$predictionTypeVariety)
+                {
+                    foreach($predictionTypeVariety as $type_id=>$predictionVariety)
+                    {
+                        foreach($predictionVariety as $variety_id=>$YearDetail)
+                        {
+                            foreach($YearDetail as $year=>$quantity)
+                            {
+                                $prediction_data['year'] = $year;
+                                $prediction_data['prediction_year'] = $this->input->post('year');
+                                $prediction_data['division_id'] = $this->input->post('division');
+                                $prediction_data['zone_id'] = $this->input->post('zone');
+                                $prediction_data['territory_id'] = $this->input->post('territory');
+                                $prediction_data['zilla_id'] = $this->input->post('district');
+                                $prediction_data['customer_id'] = $this->input->post('customer');
+                                $prediction_data['crop_id'] = $crop_id;
+                                $prediction_data['type_id'] = $type_id;
+                                $prediction_data['variety_id'] = $variety_id;
+                                $prediction_data['budgeted_quantity'] = $quantity;
+
+                                if($quantity>0)
+                                {
+                                    $prediction_data['created_by'] = $user->user_id;
+                                    $prediction_data['creation_date'] = time();
+                                    Query_helper::add('budget_sales_target_prediction',$prediction_data);
+                                }
                             }
                         }
                     }
@@ -297,10 +380,14 @@ class Customer_sales_target extends ROOT_Controller
 
     public function get_varieties_by_crop_type()
     {
+        $year = $this->input->post('year');
         $crop_id = $this->input->post('crop_id');
         $type_id = $this->input->post('type_id');
         $current_id = $this->input->post('current_id');
 
+        $data['prediction_years'] = $this->customer_sales_target_model->get_prediction_years($year);
+        $data['crop_id'] = $crop_id;
+        $data['type_id'] = $type_id;
         $data['varieties'] = $this->customer_sales_target_model->get_variety_by_crop_type($crop_id, $type_id);
 
         if(sizeof($data['varieties'])>0)

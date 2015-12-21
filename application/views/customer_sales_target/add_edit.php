@@ -23,7 +23,6 @@ if(is_array($targets) && sizeof($targets)>0)
         $arranged_targets['crop'][$target['crop_id']][$target['type_id']]['variety'][$target['variety_id']]['created_by'] = $target['created_by'];
     }
 }
-
 //echo '<pre>';
 //print_r($arranged_targets);
 //echo '</pre>';
@@ -255,9 +254,18 @@ if(is_array($targets) && sizeof($targets)>0)
                                             <?php
                                             if(is_array($typeVal['variety']) && sizeof($typeVal['variety'])>0)
                                             {
+                                                $prediction_years = $this->customer_sales_target_model->get_prediction_years($arranged_targets['year']);
                                                 ?>
                                                 <th><?php echo $this->lang->line('LABEL_VARIETY')?></th>
                                                 <th><?php echo $this->lang->line('LABEL_QUANTITY_KG')?></th>
+                                                <?php
+                                                foreach($prediction_years as $year)
+                                                {
+                                                    ?>
+                                                    <th><?php echo $year['year_name'].' (Prediction)';?></th>
+                                                <?php
+                                                }
+                                                ?>
                                                 <?php
                                                 foreach($typeVal['variety'] as $varKey=>$detail)
                                                 {
@@ -267,6 +275,15 @@ if(is_array($targets) && sizeof($targets)>0)
                                                         <td>
                                                             <input type="text" class="form-control variety_quantity" <?php if((!User_helper::check_edit_permission($detail['created_by']) && $detail['budgeted_quantity']>0)){echo 'readonly';}?> name="quantity[<?php echo $sl;?>][<?php echo $varKey;?>]" value="<?php if(isset($detail['budgeted_quantity'])){echo $detail['budgeted_quantity'];}?>" />
                                                         </td>
+                                                        <?php
+                                                        foreach($prediction_years as $year)
+                                                        {
+                                                            $prediction_quantity = $this->customer_sales_target_model->get_prediction_quantity($arranged_targets['year'], $year['year_id'], $varKey, $arranged_targets['customer_id']);
+                                                            ?>
+                                                            <td><input type="text" class="form-control" name="prediction[<?php echo $key;?>][<?php echo $typeKey;?>][<?php echo $varKey;?>][<?php echo $year['year_id'];?>]" value="<?php echo $prediction_quantity;?>" /></td>
+                                                        <?php
+                                                        }
+                                                        ?>
                                                     </tr>
                                                 <?php
                                                 }

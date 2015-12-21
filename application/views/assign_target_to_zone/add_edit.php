@@ -127,6 +127,27 @@
             var new_remaining_val = targeted_val - sum;
 
             $(this).closest('.div_target').closest('tr').find('.remaining').html(new_remaining_val);
+
+            if(new_remaining_val<0)
+            {
+                alert('Quantity Exceeds!');
+                $(this).val(0);
+                var sum = 0;
+
+                attr.each(function()
+                {
+                    var val = $(this).val();
+                    if(val)
+                    {
+                        val = parseFloat( val.replace( /^\$/, "" ));
+                        sum += !isNaN( val ) ? val : 0;
+                    }
+                });
+
+                var targeted_val = parseFloat($(this).closest('.div_target').closest('tr').find('.targeted_total').html());
+                var new_remaining_val = targeted_val - sum;
+                $(this).closest('.div_target').closest('tr').find('.remaining').html(new_remaining_val);
+            }
         });
 
         $(document).on("change", "#crop_select", function(event)

@@ -1,5 +1,5 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
-    $data["link_new"]=base_url()."assign_target_to_territory/index/add";
+    $data["link_new"]=base_url()."assign_target_to_customer/index/add";
     $data["link_back"]=base_url()."home";
     $data["link_approve"]="#";
     $data["hide_approve"]="1";
@@ -7,7 +7,7 @@
     $this->load->view("action_buttons_edit",$data);
 ?>
 
-<form class="form_valid" id="save_form" action="<?php echo base_url();?>assign_target_to_territory/index/save" method="post">
+<form class="form_valid" id="save_form" action="<?php echo base_url();?>assign_target_to_customer/index/save" method="post">
     <div class="row widget">
         <div class="widget-header">
             <div class="title">
@@ -154,7 +154,7 @@
             if($(this).val().length>1 && $("#selection_type").val()==1)
             {
                 $.ajax({
-                    url: base_url+"assign_target_to_territory/get_variety_detail/",
+                    url: base_url+"assign_target_to_customer/get_variety_detail/",
                     type: 'POST',
                     dataType: "JSON",
                     data:{crop_id: $(this).val(), type_id: 0, year: $("#year").val()},
@@ -174,7 +174,7 @@
                 $("#type_select_div").show();
 
                 $.ajax({
-                    url: base_url+"assign_target_to_territory/get_dropDown_type_by_crop/",
+                    url: base_url+"assign_target_to_customer/get_dropDown_type_by_crop/",
                     type: 'POST',
                     dataType: "JSON",
                     data:{crop_id:$(this).val()},
@@ -200,7 +200,7 @@
             if($(this).val().length>1 && $("#crop_select").val().length>1 && $("#selection_type").val()==2)
             {
                 $.ajax({
-                    url: base_url+"assign_target_to_territory/get_variety_detail/",
+                    url: base_url+"assign_target_to_customer/get_variety_detail/",
                     type: 'POST',
                     dataType: "JSON",
                     data:{crop_id: $("#crop_select").val(), type_id: $(this).val(), year: $("#year").val()},
@@ -219,32 +219,6 @@
                 $("#load_variety").html('');
             }
         });
-        
-        $(document).on("change","#year",function()
-        {
-//            if($(this).val().length>0)
-//            {
-//                $.ajax({
-//                    url: base_url+"assign_target_to_territory/get_variety_detail/",
-//                    type: 'POST',
-//                    dataType: "JSON",
-//                    data:{year_id:$(this).val()},
-//                    success: function (data, status)
-//                    {
-//
-//                    },
-//                    error: function (xhr, desc, err)
-//                    {
-//                        console.log("error");
-//                    }
-//                });
-//            }
-//            else
-//            {
-//                $("#load_variety").html('');
-//            }
-        });
-
 
         $(document).on("click", ".load_remark", function(event)
         {

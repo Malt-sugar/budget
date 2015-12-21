@@ -54,3 +54,6 @@ $config['pricing_type_automated'] = 1;
 $config['pricing_type_initial'] = 2;
 $config['pricing_type_marketing'] = 3;
 $config['pricing_type_final'] = 4;
+
+// Prediction Years
+$config['prediction_years'] = 2;
