@@ -295,3 +295,7 @@ $lang['LABEL_MISCELLANEOUS']='Miscellaneous Cost';
 $lang['LABEL_SALES_COMMISSION_AMOUNT']='Sales Commission Amount';
 $lang['LABEL_SALES_BONUS_AMOUNT']='Sales Bonus Amount';
 $lang['LABEL_OTHER_INCENTIVE_AMOUNT']='Other Incentive Amount';
+$lang['LABEL_PACKING_MATERIAL_STATUS']='Packing Status';
+$lang['LABEL_PACKING_MATERIAL_COST']='Packing Cost';
+$lang['LABEL_STICKER_STATUS']='Sticker Status';
+$lang['LABEL_STICKER_COST']='Sticker Cost';

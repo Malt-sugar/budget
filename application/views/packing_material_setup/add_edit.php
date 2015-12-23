@@ -24,7 +24,10 @@
                     <th><?php echo $this->lang->line('LABEL_CROP');?></th>
                     <th><?php echo $this->lang->line('LABEL_PRODUCT_TYPE');?></th>
                     <th><?php echo $this->lang->line('LABEL_VARIETY');?></th>
-                    <th class="text-center"><label class="label label-success text-center"><?php echo $this->lang->line('LABEL_PACKING_MATERIAL_NEED');?></label></th>
+                    <th class="text-center" style="vertical-align: middle;"><label class="label label-success text-center"><?php echo $this->lang->line('LABEL_PACKING_MATERIAL_STATUS');?></label></th>
+                    <th class="text-center" style="vertical-align: middle;"><label class="label label-success text-center"><?php echo $this->lang->line('LABEL_PACKING_MATERIAL_COST');?></label></th>
+                    <th class="text-center" style="vertical-align: middle;"><label class="label label-success text-center"><?php echo $this->lang->line('LABEL_STICKER_STATUS');?></label></th>
+                    <th class="text-center" style="vertical-align: middle;"><label class="label label-success text-center"><?php echo $this->lang->line('LABEL_STICKER_COST');?></label></th>
                 </tr>
 
                 <?php
@@ -72,9 +75,10 @@
                             ?>
                         </td>
                         <td><?php echo $variety['varriety_name'];?></td>
-                        <td class="text-center">
-                            <input type="checkbox" <?php if($variety['packing_material']==1){echo 'checked';}?> name="pack[<?php echo $variety['varriety_id'];?>]" value="1" />
-                        </td>
+                        <td class="text-center"><input type="checkbox" name="setup[<?php echo $variety['varriety_id'];?>][packing_status]" value="1" /></td>
+                        <td class="text-center"><input type="text" class="form-control quantity" name="setup[<?php echo $variety['varriety_id'];?>][packing_material_cost]" value="" /></td>
+                        <td class="text-center"><input type="checkbox" name="setup[<?php echo $variety['varriety_id'];?>][sticker_status]" value="1" /></td>
+                        <td class="text-center"><input type="text" class="form-control quantity" name="setup[<?php echo $variety['varriety_id'];?>][sticker_cost]" value="" /></td>
                     </tr>
                 <?php
                 }
@@ -91,15 +95,15 @@
 //    {
 //
 //    });
-//
-//    $(document).on("keyup", ".quantity", function()
-//    {
-//        this.value = this.value.replace(/[^0-9\.]/g,'');
-//    });
-//
-//    $(document).on("keyup", ".total", function()
-//    {
-//        this.value = this.value.replace(/[^0-9\.]/g,'');
-//    });
+
+    $(document).on("keyup", ".quantity", function()
+    {
+        this.value = this.value.replace(/[^0-9\.]/g,'');
+    });
+
+    $(document).on("keyup", ".total", function()
+    {
+        this.value = this.value.replace(/[^0-9\.]/g,'');
+    });
 
 </script>

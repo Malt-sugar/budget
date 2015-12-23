@@ -32,7 +32,7 @@ class Packing_material_setup extends ROOT_Controller
         $user = User_helper::get_user();
         $data['years'] = Query_helper::get_info('ait_year',array('year_id value','year_name text'),array('del_status = 0'));
         $data['varieties'] = $this->packing_material_setup_model->get_variety_info();
-        $data['title']="Packing Material Setup";
+        $data['title']="Packing Material & Sticker Setup";
         $ajax['page_url']=base_url()."packing_material_setup/index/add";
 
         $ajax['status']=true;
@@ -57,33 +57,34 @@ class Packing_material_setup extends ROOT_Controller
         {
             $this->db->trans_start();  //DB Transaction Handle START
 
-            $packPost = $this->input->post('pack');
+            $setupPost = $this->input->post('setup');
 
-            // Initial Update
-            $this->packing_material_setup_model->packing_material_initial_update();
-
-            foreach($packPost as $variety_id=>$detail)
+            foreach($setupPost as $variety=>$detail)
             {
-                $data['packing_material'] = 1;
-                $data['modified_by'] = $user->user_id;
-                $data['modification_date'] = $time;
+                unset($data['packing_status']);
+                unset($data['sticker_status']);
 
-                if($this->packing_material_setup_model->check_variety_existence($variety_id))
+                foreach($detail as $field=>$value)
                 {
-                    Query_helper::update('budget_packing_material_setup',$data,array("variety_id ='$variety_id'"));
+                    $data[$field] = $value;
+                }
+
+                if($this->packing_material_setup_model->check_variety_existence($variety))
+                {
+                    $data['modified_by'] = $user->user_id;
+                    $data['modification_date'] = $time;
+                    Query_helper::update('budget_packing_material_setup',$data,array("variety_id ='$variety'"));
                 }
                 else
                 {
-                    $variety_data = $this->packing_material_setup_model->get_variety_detail($variety_id);
-                    $insert_data['crop_id'] = $variety_data['crop_id'];
-                    $insert_data['product_type_id'] = $variety_data['product_type_id'];
-                    $insert_data['variety_id'] = $variety_data['varriety_id'];
-                    $insert_data['variety_name'] = $variety_data['varriety_name'];
-                    $insert_data['packing_material'] = 1;
-                    $insert_data['modified_by'] = $user->user_id;
-                    $insert_data['modification_date'] = $time;
-
-                    Query_helper::add('budget_packing_material_setup',$insert_data);
+                    $variety_data = $this->packing_material_setup_model->get_variety_detail($variety);
+                    $data['crop_id'] = $variety_data['crop_id'];
+                    $data['product_type_id'] = $variety_data['product_type_id'];
+                    $data['variety_id'] = $variety_data['varriety_id'];
+                    $data['variety_name'] = $variety_data['varriety_name'];
+                    $data['created_by'] = $user->user_id;
+                    $data['creation_date'] = $time;
+                    Query_helper::add('budget_packing_material_setup',$data);
                 }
             }
 
@@ -108,25 +109,7 @@ class Packing_material_setup extends ROOT_Controller
 
     private function check_validation()
     {
-        $packPost = $this->input->post('pack');
-        $validation = array();
-
-        foreach($packPost as $variety_id=>$detail)
-        {
-            if($detail==1)
-            {
-                $validation[] = $detail;
-            }
-        }
-
-        if(sizeof($validation)>0)
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
+        return true;
     }
 
 }

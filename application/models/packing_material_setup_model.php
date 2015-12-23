@@ -16,7 +16,6 @@ class Packing_material_setup_model extends CI_Model
         $this->db->select('aci.crop_name, aci.order_crop');
         $this->db->select('apt.product_type, apt.order_type');
         $this->db->select('avi.crop_id, avi.product_type_id');
-        $this->db->select('bpms.packing_material');
         $this->db->from('ait_varriety_info avi');
 
         $this->db->where('avi.type', 0);
@@ -36,7 +35,6 @@ class Packing_material_setup_model extends CI_Model
     public function packing_material_initial_update()
     {
         $data = array('packing_material'=>0);
-
         $this->db->update('budget_packing_material_setup',$data);
     }
 
