@@ -91,7 +91,6 @@ class Direct_cost_setup extends ROOT_Controller
             'usd_conversion_rate'=>$this->input->post('usd_conversion_rate'),
             'lc_exp'=>$this->input->post('lc_exp'),
             'insurance_exp'=>$this->input->post('insurance_exp'),
-            'packing_material'=>$this->input->post('packing_material'),
             'carriage_inwards'=>$this->input->post('carriage_inwards'),
             'air_freight_and_docs'=>$this->input->post('air_freight_and_docs'),
             'cnf'=>$this->input->post('cnf'),
@@ -171,7 +170,6 @@ class Direct_cost_setup extends ROOT_Controller
             $this->form_validation->set_rules('usd_conversion_rate',$this->lang->line('LABEL_USD_CONVERSION_RATE'),'required');
             $this->form_validation->set_rules('lc_exp',$this->lang->line('LABEL_LC_EXP'),'required');
             $this->form_validation->set_rules('insurance_exp',$this->lang->line('LABEL_INSURANCE_EXP'),'required');
-            $this->form_validation->set_rules('packing_material',$this->lang->line('LABEL_PACKING_MATERIAL'),'required');
             $this->form_validation->set_rules('carriage_inwards',$this->lang->line('LABEL_CARRIAGE_INWARDS'),'required');
             $this->form_validation->set_rules('air_freight_and_docs',$this->lang->line('LABEL_AIR_FREIGHT_AND_DOCS'),'required');
             $this->form_validation->set_rules('cnf',$this->lang->line('LABEL_CNF'),'required');

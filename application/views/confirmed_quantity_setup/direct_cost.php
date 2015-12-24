@@ -32,15 +32,6 @@
 
 <div class="row show-grid">
     <div class="col-xs-4">
-        <label class="control-label pull-right"><?php echo $this->lang->line('LABEL_PACKING_MATERIAL_ACTUAL');?><span style="color:#FF0000">*</span></label>
-    </div>
-    <div class="col-sm-4 col-xs-8">
-        <input type="text" name="packing_material" class="form-control packing_material" value="<?php echo $costs['packing_material'];?>" />
-    </div>
-</div>
-
-<div class="row show-grid">
-    <div class="col-xs-4">
         <label class="control-label pull-right"><?php echo $this->lang->line('LABEL_CARRIAGE_INWARDS_ACTUAL');?><span style="color:#FF0000">*</span></label>
     </div>
     <div class="col-sm-4 col-xs-8">

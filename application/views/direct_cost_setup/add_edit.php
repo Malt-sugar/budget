@@ -58,15 +58,6 @@
 
         <div style="" class="row show-grid">
             <div class="col-xs-4">
-                <label class="control-label pull-right"><?php echo $this->lang->line('LABEL_PACKING_MATERIAL');?><span style="color:#FF0000">*</span></label>
-            </div>
-            <div class="col-sm-4 col-xs-8">
-                <input type="text" name="packing_material" class="form-control validate[required] quantity" value="<?php if(isset($purchase['packing_material'])){echo $purchase['packing_material'];}?>" />
-            </div>
-        </div>
-
-        <div style="" class="row show-grid">
-            <div class="col-xs-4">
                 <label class="control-label pull-right"><?php echo $this->lang->line('LABEL_CARRIAGE_INWARDS');?><span style="color:#FF0000">*</span></label>
             </div>
             <div class="col-sm-4 col-xs-8">

@@ -222,7 +222,7 @@
             var usd_conversion_rate = parseFloat($(".usd_conversion_rate").val());
             var lc_exp = parseFloat($(".lc_exp").val());
             var insurance_exp = parseFloat($(".insurance_exp").val());
-            var packing_material = parseFloat($(".packing_material").val());
+            var sticker_cost = parseFloat($(".sticker_cost").val());
             var carriage_inwards = parseFloat($(".carriage_inwards").val());
             var docs = parseFloat($(".docs").val());
             var cnf = parseFloat($(".cnf").val());
@@ -231,12 +231,34 @@
             var miscellaneous = parseFloat($(".miscellaneous").val());
 
             var packing_status = parseFloat($(".packing_status").val());
+            var sticker_status = parseFloat($(".sticker_status").val());
+
+            if(packing_status==1)
+            {
+                var packing_material_cost = parseFloat($(".packing_material_cost").val());
+            }
+            else
+            {
+                var packing_material_cost = 0;
+            }
+
+            if(sticker_status==1)
+            {
+                var sticker_cost = parseFloat($(".sticker_cost").val());
+            }
+            else
+            {
+                var sticker_cost = 0;
+            }
 
             var pi_value = parseFloat($(this).val())*usd_conversion_rate; // USD converted to BDT
 
             var lc_exp_per = parseFloat(((pi_value/100)*lc_exp).toFixed(2));
             var insurance_exp_per = parseFloat(((pi_value/100)*insurance_exp).toFixed(2));
-            var packing_material_per = parseFloat(((pi_value/100)*packing_material).toFixed(2));
+
+            var packing_material_per = parseFloat(((pi_value/100)*packing_material_cost).toFixed(2));
+            var sticker_per = parseFloat(((pi_value/100)*sticker_cost).toFixed(2));
+
             var carriage_inwards_per = parseFloat(((pi_value/100)*carriage_inwards).toFixed(2));
             var docs_per = parseFloat(((pi_value/100)*docs).toFixed(2));
             var cnf_per = parseFloat(((pi_value/100)*cnf).toFixed(2));
@@ -244,14 +266,7 @@
             var ait_per = parseFloat(((pi_value/100)*ait).toFixed(2));
             var miscellaneous_per = parseFloat(((pi_value/100)*miscellaneous).toFixed(2));
 
-            if(packing_status==1)
-            {
-                var cogs = (parseFloat(pi_value) + parseFloat(lc_exp_per) + parseFloat(insurance_exp_per) + parseFloat(packing_material_per) + parseFloat(carriage_inwards_per) + parseFloat(docs_per) + parseFloat(cnf_per) + parseFloat(bank_other_charges_per) + parseFloat(ait_per) + parseFloat(miscellaneous_per)).toFixed(2);
-            }
-            else
-            {
-                var cogs = (parseFloat(pi_value) + parseFloat(lc_exp_per) + parseFloat(insurance_exp_per) + parseFloat(carriage_inwards_per) + parseFloat(docs_per) + parseFloat(cnf_per) + parseFloat(bank_other_charges_per) + parseFloat(ait_per) + parseFloat(miscellaneous_per)).toFixed(2);
-            }
+            var cogs = (parseFloat(pi_value) + parseFloat(lc_exp_per) + parseFloat(insurance_exp_per) + parseFloat(packing_material_per) + parseFloat(sticker_per) + parseFloat(carriage_inwards_per) + parseFloat(docs_per) + parseFloat(cnf_per) + parseFloat(bank_other_charges_per) + parseFloat(ait_per) + parseFloat(miscellaneous_per)).toFixed(2);
 
             if(cogs)
             {
