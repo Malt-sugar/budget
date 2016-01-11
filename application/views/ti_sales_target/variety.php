@@ -7,28 +7,15 @@
             <th><?php echo $this->lang->line('LABEL_CROP');?></th>
             <th><?php echo $this->lang->line('LABEL_PRODUCT_TYPE');?></th>
             <th><?php echo $this->lang->line('LABEL_VARIETY');?></th>
-            <td class="text-center">
-                <table class="table table-bordered">
-                    <tr>
-                        <td class="text-center"><label class="label label-success">Customers</label></td>
-                    </tr>
-                </table>
-
-                <table class="table table-bordered">
+            <td class="text-center text-center" style="vertical-align: middle;">
+                <table class="table table-bordered" style="margin-bottom: 0px;">
                     <tr>
                         <?php
                         foreach($distributors as $key=>$distributor)
                         {
                         ?>
-                            <td class="customer" style="width: 120px;">
-                                <table class="table table-bordered">
-                                    <tr style="height: 65px;">
-                                        <td class="text-center"><?php echo $distributor['text'];?></td>
-                                    </tr>
-                                    <tr>
-                                        <td class="text-center"><label class="label label-info"><?php echo $this->lang->line('REQUIRED');?></label></td>
-                                    </tr>
-                                </table>
+                            <td class="customer text-center" style="width: 120px; vertical-align: middle;">
+                                <label class="label label-primary"><?php echo $distributor['text'];?></label>
                             </td>
                         <?php
                         }
@@ -36,10 +23,10 @@
                     </tr>
                 </table>
             </td>
-            <th class="text-center"><label class="label label-success text-center"><?php echo $this->lang->line('LABEL_TOTAL');?> (kg)</label></th>
-            <th class="text-center"><label class="label label-success text-center"><?php echo $this->lang->line('LABEL_TERRITORY_BUDGET');?></label></th>
-            <th class="text-center"><label class="label label-success text-center"><?php echo $this->lang->line('LABEL_VARIANCE');?></label></th>
-            <th class="text-center"><label class="label label-success text-center"><?php echo $this->lang->line('LABEL_REMARKS');?></label></th>
+            <th class="text-center" style="vertical-align: middle;"><label class="label label-success text-center"><?php echo $this->lang->line('LABEL_TOTAL');?> (kg)</label></th>
+            <th class="text-center" style="vertical-align: middle;"><label class="label label-success text-center"><?php echo $this->lang->line('LABEL_TERRITORY_BUDGET');?></label></th>
+            <th class="text-center" style="vertical-align: middle;"><label class="label label-success text-center"><?php echo $this->lang->line('LABEL_VARIANCE');?></label></th>
+            <th class="text-center" style="vertical-align: middle;"><label class="label label-success text-center"><?php echo $this->lang->line('LABEL_REMARKS');?></label></th>
         </tr>
 
         <?php
@@ -87,8 +74,8 @@
                     ?>
                 </td>
                 <td><?php echo $variety['varriety_name'];?></td>
-                <td>
-                    <table class="table table-bordered">
+                <td class="text-center" style="vertical-align: middle;">
+                    <table class="table table-bordered" style="margin-bottom: 0px;">
                         <tr>
                             <?php
                             $total_required = 0;
@@ -99,7 +86,7 @@
                                 ?>
                                 <td class="customer_value text-center">
                                     <div class="col-lg-12" style="width: 120px;">
-                                        <label class="label label-warning"><?php if($required){echo $required;}else{echo 0;}?></label>
+                                        <label class="label label-default"><?php if($required){echo $required;}else{echo 0;}?></label>
                                     </div>
                                 </td>
                             <?php
@@ -109,10 +96,10 @@
                         </tr>
                     </table>
                 </td>
-                <td class="text-center"><label class="label label-info required_total"><?php echo $total_required;?></label> </td>
-                <td><input type="text" <?php if(Sales_target_helper::check_ti_edit_target_permission($year, $variety['varriety_id'])){echo 'readonly';}?> name="variety[<?php echo $variety['crop_id']?>][<?php echo $variety['product_type_id']?>][<?php echo $variety['varriety_id'];?>][budgeted_quantity]" class="form-control total" value="<?php echo $detail['budgeted_quantity'];?>" /></td>
-                <td><input type="text" readonly class="form-control variance" value="<?php if(isset($detail['budgeted_quantity'])){echo $detail['budgeted_quantity']-$total_required;}?>" /></td>
-                <td>
+                <td class="text-center" style="vertical-align: middle;"><label class="label label-info required_total"><?php echo $total_required;?></label> </td>
+                <td class="text-center" style="vertical-align: middle;"><input type="text" <?php if(Sales_target_helper::check_ti_edit_target_permission($year, $variety['varriety_id'])){echo 'readonly';}?> name="variety[<?php echo $variety['crop_id']?>][<?php echo $variety['product_type_id']?>][<?php echo $variety['varriety_id'];?>][budgeted_quantity]" class="form-control total" value="<?php echo $detail['budgeted_quantity'];?>" /></td>
+                <td class="text-center" style="vertical-align: middle;"><input type="text" readonly class="form-control variance" value="<?php if(isset($detail['budgeted_quantity'])){echo $detail['budgeted_quantity']-$total_required;}?>" /></td>
+                <td class="text-center" style="vertical-align: middle;">
                     <div class="col-lg-2">
                         <label data-toggle="tooltip" data-placement="left" title="<?php echo $detail['bottom_up_remarks'];?>" class="label label-primary load_remark">+R</label>
                     </div>
@@ -147,13 +134,12 @@
             <td class="text-center">
                 <div class="row">
                     <div class="col-lg-12">
-                        <input type="checkbox" name="forward" value="1"/> <label class="label label-primary"><?php echo $this->lang->line('LABEL_FORWARD');?></label>
+                        <input type="checkbox" name="forward" value="1" /> <label class="label label-primary"><?php echo $this->lang->line('LABEL_FORWARD');?></label>
                     </div>
                 </div>
             </td>
         </tr>
     </table>
-
 </div>
 
 <script>

@@ -5,6 +5,7 @@ $data["hide_back"]="1";
 $data["hide_save"]="1";
 $data["hide_approve"]="1";
 $this->load->view("action_buttons_edit",$data);
+
 ?>
 
 <div class="row widget hidden-print">
@@ -30,47 +31,57 @@ $this->load->view("action_buttons_edit",$data);
 
     <div class="row show-grid">
         <div class="col-xs-4">
-            <label class="control-label pull-right"><?php echo $this->lang->line('LABEL_DIVISION');?></label>
+            <label class="control-label pull-right"><?php echo $this->lang->line('LABEL_MONTH_FROM');?><span style="color:#FF0000">*</span></label>
         </div>
         <div class="col-sm-4 col-xs-8">
-            <select name="division" class="form-control validate[required]" id="division">
+            <select name="from_month" id="from_month" class="form-control validate[required]">
                 <?php
-                $this->load->view('dropdown',array('drop_down_options'=>$divisions,'drop_down_selected'=>''));
+                $monthConfig = $this->config->item('month');
+                foreach($monthConfig as $val=>$month)
+                {
+                ?>
+                    <option value="<?php echo $val;?>"><?php echo $month;?></option>
+                <?php
+                }
                 ?>
             </select>
         </div>
     </div>
 
-    <div class="row show-grid zone" style="display: none;">
+    <div class="row show-grid">
         <div class="col-xs-4">
-            <label class="control-label pull-right"><?php echo $this->lang->line('LABEL_ZONE');?></label>
+            <label class="control-label pull-right"><?php echo $this->lang->line('LABEL_MONTH_TO');?><span style="color:#FF0000">*</span></label>
         </div>
-
         <div class="col-sm-4 col-xs-8">
-            <select name="zone" class="form-control validate[required]" id="zone">
-
+            <select name="to_month" id="to_month" class="form-control validate[required]">
+                <?php
+                $monthConfig = $this->config->item('month');
+                foreach($monthConfig as $val=>$month)
+                {
+                    ?>
+                    <option value="<?php echo $val;?>"><?php echo $month;?></option>
+                    <?php
+                }
+                ?>
             </select>
         </div>
     </div>
 
-    <div class="row show-grid territory" style="display: none;">
+    <div class="row show-grid">
         <div class="col-xs-4">
-            <label class="control-label pull-right"><?php echo $this->lang->line('LABEL_TERRITORY');?></label>
+            <label class="control-label pull-right"><?php echo $this->lang->line('LABEL_TYPE');?><span style="color:#FF0000">*</span></label>
         </div>
         <div class="col-sm-4 col-xs-8">
-            <select name="territory" class="form-control validate[required]" id="territory">
-
-            </select>
-        </div>
-    </div>
-
-    <div class="row show-grid customer" style="display: none;">
-        <div class="col-xs-4">
-            <label class="control-label pull-right"><?php echo $this->lang->line('LABEL_CUSTOMER');?></label>
-        </div>
-        <div class="col-sm-4 col-xs-8">
-            <select name="customer" class="form-control validate[required]" id="customer">
-
+            <select name="report_type" id="report_type" class="form-control validate[required]">
+                <?php
+                $typeConfig = $this->config->item('purchase_report_type');
+                foreach($typeConfig as $val=>$type)
+                {
+                    ?>
+                    <option value="<?php echo $val;?>"><?php echo $type;?></option>
+                    <?php
+                }
+                ?>
             </select>
         </div>
     </div>
@@ -130,114 +141,6 @@ $this->load->view("action_buttons_edit",$data);
     jQuery(document).ready(function()
     {
         turn_off_triggers();
-
-        $(document).on("change", "#division", function()
-        {
-            $("#report_list").html("");
-
-            $(".zone").show();
-
-            $("#zone").val('');
-            $(".territory").hide();
-            $("#territory").val('');
-            $(".customer").hide();
-            $("#customer").val('');
-
-            if($(this).val().length>0)
-            {
-                $.ajax({
-                    url: base_url+"budget_common/get_zone_by_access/",
-                    type: 'POST',
-                    dataType: "JSON",
-                    data:{division_id:$(this).val()},
-                    success: function (data, status)
-                    {
-
-                    },
-                    error: function (xhr, desc, err)
-                    {
-                        console.log("error");
-                    }
-                });
-            }
-            else
-            {
-                $(".zone").hide();
-                $("#zone").val('');
-                $(".territory").hide();
-                $("#territory").val('');
-                $(".customer").hide();
-                $("#customer").val('');
-            }
-        });
-
-        $(document).on("change","#zone",function()
-        {
-            $("#report_list").html("");
-
-            $(".territory").show();
-            $("#territory").val('');
-            $(".customer").hide();
-            $("#customer").val('');
-
-            if($(this).val().length>0)
-            {
-                $(".territory").show();
-                $.ajax({
-                    url: base_url+"budget_common/get_territory_by_access/",
-                    type: 'POST',
-                    dataType: "JSON",
-                    data:{zone_id:$(this).val()},
-                    success: function (data, status)
-                    {
-
-                    },
-                    error: function (xhr, desc, err)
-                    {
-                        console.log("error");
-                    }
-                });
-            }
-            else
-            {
-                $(".territory").hide();
-                $("#territory").val('');
-                $(".customer").hide();
-                $("#customer").val('');
-            }
-        });
-
-        $(document).on("change","#territory",function()
-        {
-            $("#report_list").html("");
-
-            $(".customer").hide();
-            $("#customer").val('');
-
-            if($(this).val().length>0)
-            {
-                $(".customer").show();
-                $.ajax({
-                    url: base_url+"budget_common/get_dropDown_customer_by_territory/",
-                    type: 'POST',
-                    dataType: "JSON",
-                    data:{zone_id:$("#zone").val(), territory_id:$(this).val()},
-                    success: function (data, status)
-                    {
-
-                    },
-                    error: function (xhr, desc, err)
-                    {
-                        console.log("error");
-                    }
-                });
-            }
-            else
-            {
-                $(".customer").hide();
-                $("#customer").val('');
-            }
-        });
 
         $(document).on("change","#crop",function()
         {
@@ -304,10 +207,10 @@ $this->load->view("action_buttons_edit",$data);
         {
             $("#report_list").html("");
             $.ajax({
-                url: base_url+"report_customer_sales_target/index/report",
+                url: base_url+"report_purchase/index/report",
                 type: 'POST',
                 dataType: "JSON",
-                data:{year:$("#year").val(),crop_id:$("#crop").val(), type_id:$("#type").val(), variety_id:$("#variety").val(), division: $("#division").val(), zone: $("#zone").val(), territory: $("#territory").val(), customer: $("#customer").val()},
+                data:{year:$("#year").val(),from_month:$("#from_month").val(), to_month:$("#to_month").val(), report_type:$("#report_type").val(), crop_id:$("#crop").val(), type_id:$("#type").val(), variety_id:$("#variety").val()},
                 success: function (data, status)
                 {
 

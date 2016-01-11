@@ -25,7 +25,29 @@ class Pricing_helper
         $budget_purchase_result = $CI->db->get()->row_array();
         $pi_value = isset($budget_purchase_result['pi_value'])?$budget_purchase_result['pi_value']:0;
 
-        // Direct Costs
+        // packing and sticker data
+        $CI->db->from('budget_packing_material_setup bpm');
+        $CI->db->select('bpm.*');
+        $CI->db->where('bpm.variety_id', $variety);
+        $packing_result = $CI->db->get()->row_array();
+        if(isset($packing_result['packing_material_cost']) && $packing_result['packing_status']==1)
+        {
+            $packing_material_cost = $packing_result['packing_material_cost'];
+        }
+        else
+        {
+            $packing_material_cost = 0;
+        }
+        if(isset($packing_result['sticker_cost']) && $packing_result['sticker_status']==1)
+        {
+            $sticker_cost = $packing_result['sticker_cost'];
+        }
+        else
+        {
+            $sticker_cost = 0;
+        }
+
+        // COGS
         $CI->db->from('budget_direct_cost bdc');
         $CI->db->select('bdc.*');
         $CI->db->where('bdc.year', $year);
@@ -33,14 +55,14 @@ class Pricing_helper
         $usd_conversion_rate = isset($result['usd_conversion_rate'])?$result['usd_conversion_rate']:0;
         $lc_exp = isset($result['lc_exp'])?$result['lc_exp']:0;
         $insurance_exp = isset($result['insurance_exp'])?$result['insurance_exp']:0;
-        $packing_material = isset($result['packing_material'])?$result['packing_material']:0;
         $carriage_inwards = isset($result['carriage_inwards'])?$result['carriage_inwards']:0;
         $air_freight_and_docs = isset($result['air_freight_and_docs'])?$result['air_freight_and_docs']:0;
         $cnf = isset($result['cnf'])?$result['cnf']:0;
         $bank_other_charges = isset($result['bank_other_charges'])?$result['bank_other_charges']:0;
+
         $pi_value = $pi_value*$usd_conversion_rate;
         $data['pi_value'] = $pi_value;
-        $data['cogs'] = $pi_value + ($pi_value/100)*$lc_exp + ($pi_value/100)*$insurance_exp + ($pi_value/100)*$packing_material + ($pi_value/100)*$carriage_inwards + ($pi_value/100)*$air_freight_and_docs + ($pi_value/100)*$cnf + ($pi_value/100)*$bank_other_charges;
+        $data['cogs'] = $pi_value + ($pi_value/100)*$lc_exp + ($pi_value/100)*$insurance_exp + ($pi_value/100)*$carriage_inwards + ($pi_value/100)*$air_freight_and_docs + ($pi_value/100)*$cnf + ($pi_value/100)*$bank_other_charges + $packing_material_cost + $sticker_cost;
 
         // Indirect Costs
         $CI->db->from('budget_indirect_cost_setup bics');
@@ -63,6 +85,27 @@ class Pricing_helper
         $data['other_incentive'] = isset($result['other_incentive'])?$result['other_incentive']:0;
 
         return $data;
+    }
+
+    public static function get_opening_balance($variety)
+    {
+        $CI = & get_instance();
+        $year = System_helper::get_current_year();
+
+        $CI->db->from('ait_product_purchase_info ppi');
+        $CI->db->select('SUM(ppi.opening_balance) opening_balance');
+        $CI->db->where('ppi.year_id', $year);
+        $CI->db->where('ppi.varriety_id', $variety);
+        $result = $CI->db->get()->row_array();
+
+        if($result)
+        {
+            return $result['opening_balance'];
+        }
+        else
+        {
+            return 0;
+        }
     }
 
     public static function get_pricing_management_info($year, $variety)
@@ -125,6 +168,28 @@ class Pricing_helper
         $data['sales_bonus'] = isset($result['sales_bonus'])?$result['sales_bonus']:0;
         $data['other_incentive'] = isset($result['other_incentive'])?$result['other_incentive']:0;
 
+        // packing and sticker data
+        $CI->db->from('budget_packing_material_setup bpm');
+        $CI->db->select('bpm.*');
+        $CI->db->where('bpm.variety_id', $variety);
+        $packing_result = $CI->db->get()->row_array();
+        if(isset($packing_result['packing_material_cost']) && $packing_result['packing_status']==1)
+        {
+            $packing_material_cost = $packing_result['packing_material_cost'];
+        }
+        else
+        {
+            $packing_material_cost = 0;
+        }
+        if(isset($packing_result['sticker_cost']) && $packing_result['sticker_status']==1)
+        {
+            $sticker_cost = $packing_result['sticker_cost'];
+        }
+        else
+        {
+            $sticker_cost = 0;
+        }
+
         // Budgeted COGS
         $CI->db->from('budget_direct_cost bdc');
         $CI->db->select('bdc.*');
@@ -135,14 +200,13 @@ class Pricing_helper
         $usd_conversion_rate = isset($direct_cost['usd_conversion_rate'])?$direct_cost['usd_conversion_rate']:0;
         $lc_exp = isset($direct_cost['lc_exp'])?$direct_cost['lc_exp']:0;
         $insurance_exp = isset($direct_cost['insurance_exp'])?$direct_cost['insurance_exp']:0;
-        $packing_material = isset($direct_cost['packing_material'])?$direct_cost['packing_material']:0;
         $carriage_inwards = isset($direct_cost['carriage_inwards'])?$direct_cost['carriage_inwards']:0;
         $air_freight_and_docs = isset($direct_cost['air_freight_and_docs'])?$direct_cost['air_freight_and_docs']:0;
         $cnf = isset($direct_cost['cnf'])?$direct_cost['cnf']:0;
         $bank_other_charges = isset($direct_cost['bank_other_charges'])?$direct_cost['bank_other_charges']:0;
         $pi_value = $pi_value*$usd_conversion_rate;
-        $data['cogs'] = $pi_value + ($pi_value/100)*$lc_exp + ($pi_value/100)*$insurance_exp + ($pi_value/100)*$packing_material + ($pi_value/100)*$carriage_inwards + ($pi_value/100)*$air_freight_and_docs + ($pi_value/100)*$cnf + ($pi_value/100)*$bank_other_charges;
 
+        $data['cogs'] = $pi_value + ($pi_value/100)*$lc_exp + ($pi_value/100)*$insurance_exp + ($pi_value/100)*$carriage_inwards + ($pi_value/100)*$air_freight_and_docs + ($pi_value/100)*$cnf + ($pi_value/100)*$bank_other_charges + $packing_material_cost + $sticker_cost;
         return $data;
     }
 
@@ -200,6 +264,28 @@ class Pricing_helper
         $budget_purchase_result = $CI->db->get()->row_array();
         $pi_value = isset($budget_purchase_result['pi_value'])?$budget_purchase_result['pi_value']:0;
 
+        // packing and sticker data
+        $CI->db->from('budget_packing_material_setup bpm');
+        $CI->db->select('bpm.*');
+        $CI->db->where('bpm.variety_id', $variety);
+        $packing_result = $CI->db->get()->row_array();
+        if(isset($packing_result['packing_material_cost']) && $packing_result['packing_status']==1)
+        {
+            $packing_material_cost = $packing_result['packing_material_cost'];
+        }
+        else
+        {
+            $packing_material_cost = 0;
+        }
+        if(isset($packing_result['sticker_cost']) && $packing_result['sticker_status']==1)
+        {
+            $sticker_cost = $packing_result['sticker_cost'];
+        }
+        else
+        {
+            $sticker_cost = 0;
+        }
+
         // Budgeted COGS
         $CI->db->from('budget_direct_cost bdc');
         $CI->db->select('bdc.*');
@@ -210,14 +296,13 @@ class Pricing_helper
         $usd_conversion_rate = isset($direct_cost['usd_conversion_rate'])?$direct_cost['usd_conversion_rate']:0;
         $lc_exp = isset($direct_cost['lc_exp'])?$direct_cost['lc_exp']:0;
         $insurance_exp = isset($direct_cost['insurance_exp'])?$direct_cost['insurance_exp']:0;
-        $packing_material = isset($direct_cost['packing_material'])?$direct_cost['packing_material']:0;
         $carriage_inwards = isset($direct_cost['carriage_inwards'])?$direct_cost['carriage_inwards']:0;
         $air_freight_and_docs = isset($direct_cost['air_freight_and_docs'])?$direct_cost['air_freight_and_docs']:0;
         $cnf = isset($direct_cost['cnf'])?$direct_cost['cnf']:0;
         $bank_other_charges = isset($direct_cost['bank_other_charges'])?$direct_cost['bank_other_charges']:0;
         $pi_value = $pi_value*$usd_conversion_rate;
-        $data['cogs'] = $pi_value + ($pi_value/100)*$lc_exp + ($pi_value/100)*$insurance_exp + ($pi_value/100)*$packing_material + ($pi_value/100)*$carriage_inwards + ($pi_value/100)*$air_freight_and_docs + ($pi_value/100)*$cnf + ($pi_value/100)*$bank_other_charges;
 
+        $data['cogs'] = $pi_value + ($pi_value/100)*$lc_exp + ($pi_value/100)*$insurance_exp + ($pi_value/100)*$carriage_inwards + ($pi_value/100)*$air_freight_and_docs + ($pi_value/100)*$cnf + ($pi_value/100)*$bank_other_charges + $packing_material_cost + $sticker_cost;
         return $data;
     }
 
@@ -295,6 +380,28 @@ class Pricing_helper
         $budget_purchase_result = $CI->db->get()->row_array();
         $pi_value = isset($budget_purchase_result['pi_value'])?$budget_purchase_result['pi_value']:0;
 
+        // packing and sticker data
+        $CI->db->from('budget_packing_material_setup bpm');
+        $CI->db->select('bpm.*');
+        $CI->db->where('bpm.variety_id', $variety);
+        $packing_result = $CI->db->get()->row_array();
+        if(isset($packing_result['packing_material_cost']) && $packing_result['packing_status']==1)
+        {
+            $packing_material_cost = $packing_result['packing_material_cost'];
+        }
+        else
+        {
+            $packing_material_cost = 0;
+        }
+        if(isset($packing_result['sticker_cost']) && $packing_result['sticker_status']==1)
+        {
+            $sticker_cost = $packing_result['sticker_cost'];
+        }
+        else
+        {
+            $sticker_cost = 0;
+        }
+
         // Budgeted COGS
         $CI->db->from('budget_direct_cost bdc');
         $CI->db->select('bdc.*');
@@ -306,14 +413,13 @@ class Pricing_helper
         $usd_conversion_rate = isset($direct_cost['usd_conversion_rate'])?$direct_cost['usd_conversion_rate']:0;
         $lc_exp = isset($direct_cost['lc_exp'])?$direct_cost['lc_exp']:0;
         $insurance_exp = isset($direct_cost['insurance_exp'])?$direct_cost['insurance_exp']:0;
-        $packing_material = isset($direct_cost['packing_material'])?$direct_cost['packing_material']:0;
         $carriage_inwards = isset($direct_cost['carriage_inwards'])?$direct_cost['carriage_inwards']:0;
         $air_freight_and_docs = isset($direct_cost['air_freight_and_docs'])?$direct_cost['air_freight_and_docs']:0;
         $cnf = isset($direct_cost['cnf'])?$direct_cost['cnf']:0;
         $bank_other_charges = isset($direct_cost['bank_other_charges'])?$direct_cost['bank_other_charges']:0;
         $pi_value = $pi_value*$usd_conversion_rate;
-        $data['cogs'] = $pi_value + ($pi_value/100)*$lc_exp + ($pi_value/100)*$insurance_exp + ($pi_value/100)*$packing_material + ($pi_value/100)*$carriage_inwards + ($pi_value/100)*$air_freight_and_docs + ($pi_value/100)*$cnf + ($pi_value/100)*$bank_other_charges;
 
+        $data['cogs'] = $pi_value + ($pi_value/100)*$lc_exp + ($pi_value/100)*$insurance_exp + ($pi_value/100)*$carriage_inwards + ($pi_value/100)*$air_freight_and_docs + ($pi_value/100)*$cnf + ($pi_value/100)*$bank_other_charges + $packing_material_cost + $sticker_cost;
         return $data;
     }
 
@@ -416,6 +522,28 @@ class Pricing_helper
         $budget_purchase_result = $CI->db->get()->row_array();
         $pi_value = isset($budget_purchase_result['pi_value'])?$budget_purchase_result['pi_value']:0;
 
+        // packing and sticker data
+        $CI->db->from('budget_packing_material_setup bpm');
+        $CI->db->select('bpm.*');
+        $CI->db->where('bpm.variety_id', $variety);
+        $packing_result = $CI->db->get()->row_array();
+        if(isset($packing_result['packing_material_cost']) && $packing_result['packing_status']==1)
+        {
+            $packing_material_cost = $packing_result['packing_material_cost'];
+        }
+        else
+        {
+            $packing_material_cost = 0;
+        }
+        if(isset($packing_result['sticker_cost']) && $packing_result['sticker_status']==1)
+        {
+            $sticker_cost = $packing_result['sticker_cost'];
+        }
+        else
+        {
+            $sticker_cost = 0;
+        }
+
         // Budgeted COGS
         $CI->db->from('budget_direct_cost bdc');
         $CI->db->select('bdc.*');
@@ -425,13 +553,12 @@ class Pricing_helper
         $usd_conversion_rate = isset($direct_cost['usd_conversion_rate'])?$direct_cost['usd_conversion_rate']:0;
         $lc_exp = isset($direct_cost['lc_exp'])?$direct_cost['lc_exp']:0;
         $insurance_exp = isset($direct_cost['insurance_exp'])?$direct_cost['insurance_exp']:0;
-        $packing_material = isset($direct_cost['packing_material'])?$direct_cost['packing_material']:0;
         $carriage_inwards = isset($direct_cost['carriage_inwards'])?$direct_cost['carriage_inwards']:0;
         $air_freight_and_docs = isset($direct_cost['air_freight_and_docs'])?$direct_cost['air_freight_and_docs']:0;
         $cnf = isset($direct_cost['cnf'])?$direct_cost['cnf']:0;
         $bank_other_charges = isset($direct_cost['bank_other_charges'])?$direct_cost['bank_other_charges']:0;
         $pi_value = $pi_value*$usd_conversion_rate;
-        $data['cogs'] = $pi_value + ($pi_value/100)*$lc_exp + ($pi_value/100)*$insurance_exp + ($pi_value/100)*$packing_material + ($pi_value/100)*$carriage_inwards + ($pi_value/100)*$air_freight_and_docs + ($pi_value/100)*$cnf + ($pi_value/100)*$bank_other_charges;
+        $data['cogs'] = $pi_value + ($pi_value/100)*$lc_exp + ($pi_value/100)*$insurance_exp + ($pi_value/100)*$carriage_inwards + ($pi_value/100)*$air_freight_and_docs + ($pi_value/100)*$cnf + ($pi_value/100)*$bank_other_charges + $packing_material_cost + $sticker_cost;
         return $data;
     }
 

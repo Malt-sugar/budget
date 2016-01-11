@@ -217,7 +217,7 @@ class Actual_purchase extends ROOT_Controller
         $data['year'] = $this->input->post('year');
         $month_of_purchase = $this->input->post('month_of_purchase');
         $data['month_quantity'] = $this->actual_purchase_model->get_purchase_month_quantity($data['year'], $variety_id, $month_of_purchase);
-
+        $data['packing_data'] = $this->actual_purchase_model->get_packing_and_sticker_info($variety_id);
         $data['variety_info'] = $this->actual_purchase_model->get_variety_info($variety_id);
         $data['crop_id'] = $crop_id;
         $data['type_id'] = $type_id;

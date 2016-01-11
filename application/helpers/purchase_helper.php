@@ -191,7 +191,7 @@ class Purchase_helper
         }
     }
 
-    public static function get_variety_actual_purchase_values($edit_id, $variety, $usd_conversion_rate, $total_lc_exp, $total_insurance_exp, $total_packing_material, $total_carriage_inwards, $total_docs, $total_cnf, $total_bank_other_charges, $total_ait, $total_miscellaneous)
+    public static function get_variety_actual_purchase_values($edit_id, $variety, $usd_conversion_rate, $total_lc_exp, $total_insurance_exp, $total_packing_material, $total_carriage_inwards, $total_docs, $total_cnf, $total_bank_other_charges, $total_ait, $total_miscellaneous, $packing_material, $sticker)
     {
         $CI = & get_instance();
         $data = array();
@@ -214,7 +214,6 @@ class Purchase_helper
 
         $data['lc_exp'] = round(($pi_value_percentage/100)*$total_lc_exp, 2);
         $data['insurance_exp'] = round(($pi_value_percentage/100)*$total_insurance_exp, 2);
-        $data['packing_material'] = round(($pi_value_percentage/100)*$total_packing_material, 2);
         $data['carriage_inwards'] = round(($pi_value_percentage/100)*$total_carriage_inwards, 2);
         $data['docs'] = round(($pi_value_percentage/100)*$total_docs, 2);
         $data['cnf'] = round(($pi_value_percentage/100)*$total_cnf, 2);
@@ -222,7 +221,7 @@ class Purchase_helper
         $data['ait'] = round(($pi_value_percentage/100)*$total_ait, 2);
         $data['miscellaneous'] = round(($pi_value_percentage/100)*$total_miscellaneous, 2);
 
-        $data['total_cogs'] = round((($data['pi_value']*$data['purchase_quantity']*$usd_conversion_rate)+$data['lc_exp']+$data['insurance_exp']+$data['packing_material']+$data['carriage_inwards']+$data['docs']+$data['cnf']+$data['ait']+$data['miscellaneous']), 2);
+        $data['total_cogs'] = round((($data['pi_value']*$data['purchase_quantity']*$usd_conversion_rate)+$data['lc_exp']+$data['insurance_exp']+$data['carriage_inwards']+$data['docs']+$data['cnf']+$data['bank_other_charges']+$data['ait']+$data['miscellaneous'] + $packing_material*$data['purchase_quantity'] + $sticker*$data['purchase_quantity']), 2);
         $data['cogs'] = round(($data['total_cogs']/$data['purchase_quantity']), 2);
 
         return $data;

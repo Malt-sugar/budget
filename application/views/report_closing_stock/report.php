@@ -5,6 +5,9 @@
 //echo "</pre>";
 
 ?>
+<div class="row">
+    <div class="col-lg-12"><?php $this->load->view('print_header');?></div>
+</div>
 <section class="">
     <div class="show-grid container" style="width: 100%">
         <table class="table table-hover table-bordered" >
@@ -14,7 +17,6 @@
                 <th><?php echo $this->lang->line("LABEL_CROP_NAME"); ?><div><?php echo $this->lang->line("LABEL_CROP_NAME"); ?></div></th>
                 <th><?php echo $this->lang->line("LABEL_PRODUCT_TYPE"); ?><div><?php echo $this->lang->line("LABEL_PRODUCT_TYPE"); ?></div></th>
                 <th><?php echo $this->lang->line("LABEL_VARIETY"); ?><div><?php echo $this->lang->line("LABEL_VARIETY"); ?></div></th>
-                <th><?php echo $this->lang->line("LABEL_OPENING_BALANCE"); ?><div><?php echo $this->lang->line("LABEL_OPENING_BALANCE"); ?></div></th>
                 <th><?php echo $this->lang->line("LABEL_BUDGETED_MIN_STOCK"); ?><div><?php echo $this->lang->line("LABEL_BUDGETED_MIN_STOCK"); ?></div></th>
                 <th><?php echo $this->lang->line("LABEL_CURRENT_STOCK"); ?><div><?php echo $this->lang->line("LABEL_CURRENT_STOCK"); ?></div></th>
                 <th><?php echo $this->lang->line("LABEL_VARIANCE_QTY"); ?><div><?php echo $this->lang->line("LABEL_VARIANCE_QTY"); ?></div></th>
@@ -24,16 +26,51 @@
                 <?php
                 if(sizeof($stocks)>0)
                 {
+                    $crop_name = '';
+                    $type_name = '';
                     foreach($stocks as $key=>$stock)
                     {
-                        $current_stock = System_helper::get_current_stock($stock['crop_id'], $stock['product_type_id'], $stock['varriety_id']);
+                        $current_stock = Purchase_helper::get_current_stock($stock['crop_id'], $stock['product_type_id'], $stock['varriety_id']);
                         ?>
                         <tr>
                             <td><?php echo $key+1;?></td>
-                            <td><?php echo $stock['crop_name'];?></td>
-                            <td><?php echo $stock['type_name'];?></td>
+                            <td>
+                                <?php
+                                if($crop_name == '')
+                                {
+                                    echo $stock['crop_name'];
+                                    $crop_name = $stock['crop_name'];
+                                }
+                                elseif($crop_name == $stock['crop_name'])
+                                {
+                                    echo "&nbsp;";
+                                }
+                                else
+                                {
+                                    echo $stock['crop_name'];
+                                    $crop_name = $stock['crop_name'];
+                                }
+                                ?>
+                            </td>
+                            <td>
+                                <?php
+                                if($type_name == '')
+                                {
+                                    echo $stock['type_name'];
+                                    $type_name = $stock['type_name'];
+                                }
+                                elseif($type_name == $stock['type_name'])
+                                {
+                                    echo "&nbsp;";
+                                }
+                                else
+                                {
+                                    echo $stock['type_name'];
+                                    $type_name = $stock['type_name'];
+                                }
+                                ?>
+                            </td>
                             <td><?php echo $stock['varriety_name'];?></td>
-                            <td><?php echo System_helper::get_opening_balance($stock['varriety_id'])?System_helper::get_opening_balance($stock['varriety_id']):'Not Available';?></td>
                             <td><?php echo $stock['min_stock_quantity']?$stock['min_stock_quantity']:'Not Set';?></td>
                             <td><?php echo $current_stock;?></td>
                             <td><?php if(isset($stock['min_stock_quantity']) && isset($current_stock)){echo $current_stock-$stock['min_stock_quantity'];}?></td>
@@ -54,6 +91,9 @@
                 ?>
             </tbody>
         </table>
+        <div class="col-lg-12">
+            <?php $this->load->view('print_footer');?>
+        </div>
     </div>
 </section>
 

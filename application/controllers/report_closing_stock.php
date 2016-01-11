@@ -54,13 +54,11 @@ class Report_closing_stock extends ROOT_Controller
         }
         else
         {
-            //$year = $this->input->post('year');
-
-            $year = System_helper::get_current_year();
             $crop_id = $this->input->post('crop_id');
             $type_id = $this->input->post('type_id');
             $variety_id = $this->input->post('variety_id');
 
+            $data['title'] = 'Closing Stock Report';
             $data['stocks'] = $this->report_closing_stock_model->get_closing_stock_info($crop_id, $type_id, $variety_id);
             $ajax['status'] = true;
             $ajax['content'][] = array("id" => "#report_list", "html" => $this->load->view("report_closing_stock/report", $data, true));

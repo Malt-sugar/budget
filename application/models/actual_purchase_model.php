@@ -237,4 +237,33 @@ class Actual_purchase_model extends CI_Model
             return 0;
         }
     }
+
+    public function get_packing_and_sticker_info($variety_id)
+    {
+        $return_array = array();
+        $this->db->from('budget_packing_material_setup bpms');
+        $this->db->select('bpms.*');
+        $this->db->where('bpms.variety_id', $variety_id);
+        $result = $this->db->get()->row_array();
+
+        if(isset($result['packing_status']) && $result['packing_status']==1)
+        {
+            $return_array['packing_material_cost'] = $result['packing_material_cost'];
+        }
+        else
+        {
+            $return_array['packing_material_cost'] = 0;
+        }
+
+        if(isset($result['sticker_status']) && $result['sticker_status']==1)
+        {
+            $return_array['sticker_cost'] = $result['sticker_cost'];
+        }
+        else
+        {
+            $return_array['sticker_cost'] = 0;
+        }
+
+        return $return_array;
+    }
 }

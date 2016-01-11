@@ -31,7 +31,11 @@ class Report_closing_stock_model extends CI_Model
             $this->db->where('avi.varriety_id', $variety_id);
         }
 
-//        $this->db->order_by('avi.order_variety');
+        $this->db->order_by('aci.order_crop');
+        $this->db->order_by('ati.order_type');
+        $this->db->order_by('avi.order_variety');
+        $this->db->where('avi.type', 0);
+        $this->db->where('avi.status', 'Active');
 
         $this->db->join('budget_min_stock_quantity bmsq', 'bmsq.variety_id = avi.varriety_id', 'left');
         $this->db->join('ait_crop_info aci', 'aci.crop_id = avi.crop_id', 'left');

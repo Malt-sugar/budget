@@ -71,15 +71,6 @@
 
                 <div class="row show-grid">
                     <div class="col-xs-4">
-                        <label class="control-label pull-right"><?php echo $this->lang->line('LABEL_PACKING_MATERIAL_ACTUAL');?><span style="color:#FF0000">*</span></label>
-                    </div>
-                    <div class="col-sm-4 col-xs-8">
-                        <input type="text" name="packing_material" class="form-control validate[required] total_packing_material" value="<?php echo $setup['packing_material'];?>" />
-                    </div>
-                </div>
-
-                <div class="row show-grid">
-                    <div class="col-xs-4">
                         <label class="control-label pull-right"><?php echo $this->lang->line('LABEL_CARRIAGE_INWARDS_ACTUAL');?><span style="color:#FF0000">*</span></label>
                     </div>
                     <div class="col-sm-4 col-xs-8">
@@ -226,7 +217,7 @@
 
             <div class="row variety_quantity" id="variety_quantity<?php echo $key;?>" data-varietyDetail-current-id="<?php echo $key;?>">
                 <?php
-                    $variety_values = Purchase_helper::get_variety_actual_purchase_values($edit_id, $quantity['variety_id'], $setup['usd_conversion_rate'], $setup['lc_exp'], $setup['insurance_exp'], $setup['packing_material'], $setup['carriage_inwards'], $setup['docs'], $setup['cnf'], $setup['bank_other_charges'], $setup['ait'], $setup['miscellaneous']);
+                    $variety_values = Purchase_helper::get_variety_actual_purchase_values($edit_id, $quantity['variety_id'], $setup['usd_conversion_rate'], $setup['lc_exp'], $setup['insurance_exp'], $setup['packing_material'], $setup['carriage_inwards'], $setup['docs'], $setup['cnf'], $setup['bank_other_charges'], $setup['ait'], $setup['miscellaneous'], $setup['packing_material'], $setup['sticker_cost']);
                     $grand_total+=$variety_values['total_cogs'];
                 ?>
                 <div class="row show-grid">
@@ -250,7 +241,7 @@
                                 <td class="text-center"><input type="text" class="form-control numbersOnly pi_value" name="quantity[<?php echo $quantity['crop_id'];?>][<?php echo $quantity['type_id'];?>][<?php echo $quantity['variety_id'];?>][pi_value]" value="<?php echo $variety_values['pi_value'];?>" /></td>
                                 <td class="text-center"><input type="text" disabled class="form-control lc_exp" name="quantity[<?php echo $quantity['crop_id'];?>][<?php echo $quantity['type_id'];?>][<?php echo $quantity['variety_id'];?>][lc_exp]" value="<?php echo $variety_values['lc_exp'];?>" /></td>
                                 <td class="text-center"><input type="text" disabled class="form-control insurance_exp" name="quantity[<?php echo $quantity['crop_id'];?>][<?php echo $quantity['type_id'];?>][<?php echo $quantity['variety_id'];?>][insurance_exp]" value="<?php echo $variety_values['insurance_exp'];?>" /></td>
-                                <td class="text-center"><input type="text" disabled class="form-control packing_material" name="quantity[<?php echo $quantity['crop_id'];?>][<?php echo $quantity['type_id'];?>][<?php echo $quantity['variety_id'];?>][packing_material]" value="<?php echo $variety_values['packing_material'];?>" /></td>
+                                <td class="text-center"><input type="text" disabled class="form-control packing_material" name="quantity[<?php echo $quantity['crop_id'];?>][<?php echo $quantity['type_id'];?>][<?php echo $quantity['variety_id'];?>][packing_material]" value="<?php echo $setup['packing_material'];?>" /></td>
                                 <td class="text-center"><input type="text" disabled class="form-control carriage_inwards" name="quantity[<?php echo $quantity['crop_id'];?>][<?php echo $quantity['type_id'];?>][<?php echo $quantity['variety_id'];?>][carriage_inwards]" value="<?php echo $variety_values['carriage_inwards'];?>" /></td>
                                 <td class="text-center"><input type="text" disabled class="form-control docs" name="quantity[<?php echo $quantity['crop_id'];?>][<?php echo $quantity['type_id'];?>][<?php echo $quantity['variety_id'];?>][docs]" value="<?php echo $variety_values['docs'];?>" /></td>
                                 <td class="text-center"><input type="text" disabled class="form-control cnf" name="quantity[<?php echo $quantity['crop_id'];?>][<?php echo $quantity['type_id'];?>][<?php echo $quantity['variety_id'];?>][cnf]" value="<?php echo $variety_values['cnf'];?>" /></td>
@@ -258,6 +249,7 @@
                                     <input type="text" disabled class="form-control bank_other_charges" name="quantity[<?php echo $quantity['crop_id'];?>][<?php echo $quantity['type_id'];?>][<?php echo $quantity['variety_id'];?>][bank_other_charges]" value="<?php echo $variety_values['bank_other_charges'];?>" />
                                     <input type="hidden" disabled class="form-control ait" name="quantity[<?php echo $quantity['crop_id'];?>][<?php echo $quantity['type_id'];?>][<?php echo $quantity['variety_id'];?>][ait]" value="<?php echo $variety_values['ait'];?>" />
                                     <input type="hidden" disabled class="form-control miscellaneous" name="quantity[<?php echo $quantity['crop_id'];?>][<?php echo $quantity['type_id'];?>][<?php echo $quantity['variety_id'];?>][miscellaneous]" value="<?php echo $variety_values['miscellaneous'];?>" />
+                                    <input type="hidden" disabled class="form-control sticker" name="quantity[<?php echo $quantity['crop_id'];?>][<?php echo $quantity['type_id'];?>][<?php echo $quantity['variety_id'];?>][sticker_cost]" value="<?php echo $setup['sticker_cost'];?>" />
                                 </td>
                                 <td class="text-center"><input type="text" disabled class="form-control cogs" name="" value="<?php echo $variety_values['cogs'];?>" /></td>
                                 <td class="text-center"><input type="text" disabled class="form-control total_cogs" name="" value="<?php echo $variety_values['total_cogs'];?>" /></td>
@@ -656,7 +648,6 @@
             var usd_conversion_rate = parseFloat($(".usd_conversion_rate").val());
             var total_lc_exp = parseFloat($(".total_lc_exp").val());
             var total_insurance_exp = parseFloat($(".total_insurance_exp").val());
-            var total_packing_material = parseFloat($(".total_packing_material").val());
             var total_carriage_inwards = parseFloat($(".total_carriage_inwards").val());
             var total_docs = parseFloat($(".total_docs").val());
             var total_cnf = parseFloat($(".total_cnf").val());
@@ -682,35 +673,43 @@
             pi_attr.each(function()
             {
                 var purchase_quantity = $(this).closest('tr').find('.purchase_quantity').val();
-                var val = $(this).val()*usd_conversion_rate*purchase_quantity;
-                var this_pi_val = $(this).val();
+                if(purchase_quantity>0)
+                {
+                    var packing_material = $(this).closest('tr').find('.packing_material').val();
+                    var sticker = $(this).closest('tr').find('.sticker').val();
 
-                var pi_percentage = parseFloat(((this_pi_val/pi_sum)*100).toFixed(2));
+                    var val = $(this).val()*usd_conversion_rate*purchase_quantity;
+                    var this_pi_val = $(this).val();
 
-                var lc_exp = parseFloat(((pi_percentage/100)*total_lc_exp).toFixed(2));
-                var insurance_exp = parseFloat(((pi_percentage/100)*total_insurance_exp).toFixed(2));
-                var packing_material = parseFloat(((pi_percentage/100)*total_packing_material).toFixed(2));
-                var carriage_inwards = parseFloat(((pi_percentage/100)*total_carriage_inwards).toFixed(2));
-                var docs = parseFloat(((pi_percentage/100)*total_docs).toFixed(2));
-                var cnf = parseFloat(((pi_percentage/100)*total_cnf).toFixed(2));
-                var bank_other_charges = parseFloat(((pi_percentage/100)*total_bank_other_charges).toFixed(2));
-                var ait = parseFloat(((pi_percentage/100)*total_ait).toFixed(2));
-                var miscellaneous = parseFloat(((pi_percentage/100)*total_miscellaneous).toFixed(2));
+                    var pi_percentage = parseFloat(((this_pi_val/pi_sum)*100).toFixed(2));
 
-                var total_cogs = (parseFloat(val) + parseFloat(lc_exp) + parseFloat(insurance_exp) + parseFloat(packing_material) + parseFloat(carriage_inwards) + parseFloat(docs) + parseFloat(cnf) + parseFloat(bank_other_charges) + parseFloat(ait) + parseFloat(miscellaneous)).toFixed(2);
-                var cogs = (total_cogs/purchase_quantity).toFixed(2);
+                    var lc_exp = parseFloat(((pi_percentage/100)*total_lc_exp).toFixed(2));
+                    var insurance_exp = parseFloat(((pi_percentage/100)*total_insurance_exp).toFixed(2));
+                    var carriage_inwards = parseFloat(((pi_percentage/100)*total_carriage_inwards).toFixed(2));
+                    var docs = parseFloat(((pi_percentage/100)*total_docs).toFixed(2));
+                    var cnf = parseFloat(((pi_percentage/100)*total_cnf).toFixed(2));
+                    var bank_other_charges = parseFloat(((pi_percentage/100)*total_bank_other_charges).toFixed(2));
+                    var ait = parseFloat(((pi_percentage/100)*total_ait).toFixed(2));
+                    var miscellaneous = parseFloat(((pi_percentage/100)*total_miscellaneous).toFixed(2));
 
-                $(this).closest('tr').find('.lc_exp').val(lc_exp);
-                $(this).closest('tr').find('.insurance_exp').val(insurance_exp);
-                $(this).closest('tr').find('.packing_material').val(packing_material);
-                $(this).closest('tr').find('.carriage_inwards').val(carriage_inwards);
-                $(this).closest('tr').find('.docs').val(docs);
-                $(this).closest('tr').find('.cnf').val(cnf);
-                $(this).closest('tr').find('.bank_other_charges').val(bank_other_charges);
-                $(this).closest('tr').find('.ait').val(ait);
-                $(this).closest('tr').find('.miscellaneous').val(miscellaneous);
-                $(this).closest('tr').find('.cogs').val(cogs);
-                $(this).closest('tr').find('.total_cogs').val(total_cogs);
+                    var total_cogs = (parseFloat(val) + parseFloat(lc_exp) + parseFloat(insurance_exp) + parseFloat(carriage_inwards) + parseFloat(docs) + parseFloat(cnf) + parseFloat(bank_other_charges) + parseFloat(ait) + parseFloat(miscellaneous) + parseFloat(packing_material*purchase_quantity) + parseFloat(sticker*purchase_quantity)).toFixed(2);
+                    var cogs = (total_cogs/purchase_quantity).toFixed(2);
+
+                    $(this).closest('tr').find('.lc_exp').val(lc_exp);
+                    $(this).closest('tr').find('.insurance_exp').val(insurance_exp);
+                    $(this).closest('tr').find('.carriage_inwards').val(carriage_inwards);
+                    $(this).closest('tr').find('.docs').val(docs);
+                    $(this).closest('tr').find('.cnf').val(cnf);
+                    $(this).closest('tr').find('.bank_other_charges').val(bank_other_charges);
+                    $(this).closest('tr').find('.ait').val(ait);
+                    $(this).closest('tr').find('.miscellaneous').val(miscellaneous);
+                    $(this).closest('tr').find('.cogs').val(cogs);
+                    $(this).closest('tr').find('.total_cogs').val(total_cogs);
+                }
+                else
+                {
+                    alert('No Purchase Quantity!');
+                }
             });
 
             // Grand Total

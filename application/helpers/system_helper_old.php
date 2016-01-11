@@ -599,27 +599,6 @@ class System_helper
         }
     }
 
-    public static function get_opening_balance($variety)
-    {
-        $CI = & get_instance();
-        $year = System_helper::get_current_year();
-
-        $CI->db->from('ait_product_purchase_info ppi');
-        $CI->db->select('SUM(ppi.opening_balance) opening_balance');
-        $CI->db->where('ppi.year_id', $year);
-        $CI->db->where('ppi.varriety_id', $variety);
-        $result = $CI->db->get()->row_array();
-
-        if($result)
-        {
-            return $result['opening_balance'];
-        }
-        else
-        {
-            return 0;
-        }
-    }
-
     public static function get_sales_target_record_data($year, $variety, $customer)
     {
         $CI = & get_instance();

@@ -57,3 +57,25 @@ $config['pricing_type_final'] = 4;
 
 // Prediction Years
 $config['prediction_years'] = 2;
+
+// Purchase Report Type
+$config['purchase_report_type'][1] = 'Budget';
+$config['purchase_report_type'][2] = 'Actual';
+$config['purchase_report_type'][3] = 'Budget Vs. Actual';
+
+// Pricing Report Type
+$config['pricing_report_type'][1] = 'Automated';
+$config['pricing_report_type'][2] = 'Management';
+$config['pricing_report_type'][3] = 'Marketing';
+$config['pricing_report_type'][4] = 'Final';
+$config['pricing_report_type'][5] = 'Comparison';
+$config['pricing_report_type'][6] = 'Budget Vs. Actual';
+
+// Pricing Comparison Type
+$config['pricing_report_comparison'][1] = 'Commission';
+$config['pricing_report_comparison'][2] = 'Bonus';
+$config['pricing_report_comparison'][3] = 'Incentive';
+$config['pricing_report_comparison'][4] = 'Net Profit';
+$config['pricing_report_comparison'][5] = 'Net Sales Price';
+$config['pricing_report_comparison'][6] = 'Total Net Profit';
+$config['pricing_report_comparison'][7] = 'Total Net Sales Price';

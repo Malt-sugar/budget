@@ -250,6 +250,7 @@ function turn_off_triggers()
     $(document).off("keyup", ".sales_commission");
     $(document).off("keyup", ".sales_bonus");
     $(document).off("keyup", ".other_incentive");
+    $(document).off("change", "#report_type");
 }
 
 function isNumberKey(evt)
@@ -259,4 +260,11 @@ function isNumberKey(evt)
         return false;
 
     return true;
+}
+
+function print_rpt(){
+    URL= base_url + "print_page/Print_a4_Eng.php?selLayer=PrintArea";
+    day = new Date();
+    id = day.getTime();
+    eval("page" + id + " = window.open(URL, '" + id + "', 'toolbar=yes,scrollbars=yes ,location=0,statusbar=0 ,menubar=yes,resizable=1,width=880,height=600,left = 20,top = 50');");
 }
