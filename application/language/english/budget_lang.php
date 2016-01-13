@@ -344,3 +344,4 @@ $lang['LABEL_MGT'] = 'MGT';
 $lang['LABEL_MKT'] = 'MKT';
 $lang['LABEL_FINAL'] = 'FINAL';
 $lang['LABEL_TOTAL_NET_SALES_PRICE'] = 'Total Net Sales Price';
+$lang['LABEL_FINAL_NET_SALES_PRICE'] = 'Net Sales Price';
