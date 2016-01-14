@@ -345,3 +345,7 @@ $lang['LABEL_MKT'] = 'MKT';
 $lang['LABEL_FINAL'] = 'FINAL';
 $lang['LABEL_TOTAL_NET_SALES_PRICE'] = 'Total Net Sales Price';
 $lang['LABEL_FINAL_NET_SALES_PRICE'] = 'Net Sales Price';
+$lang['LABEL_UPPER_LIMIT'] = 'Upper Limit';
+$lang['LABEL_LOWER_LIMIT'] = 'Lower Limit';
+$lang['LABEL_AMOUNT_100PER'] = 'Amount (100%)';
+$lang['LABEL_ACHIEVEMENT_PER'] = 'Achievement (%)';

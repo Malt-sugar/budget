@@ -132,7 +132,7 @@ class Report_pricing extends ROOT_Controller
             }
             elseif($report_type==6)
             {
-                $data['title'] = 'Budget Vs. Actual Comparison Report';
+                $data['title'] = 'Budget vs. Actual Comparison Report';
                 $data['pricingData'] = $this->report_pricing_model->get_budget_actual_comparison_info($year, $crop_id, $type_id, $variety_id);
                 $ajax['status'] = true;
                 $ajax['content'][] = array("id" => "#report_list", "html" => $this->load->view("report_pricing/budget_vs_actual_comparison_report", $data, true));
