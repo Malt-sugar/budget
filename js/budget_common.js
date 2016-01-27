@@ -224,6 +224,7 @@ function turn_off_triggers()
     $(document).off("change", "#division");
     $(document).off("change", "#zone");
     $(document).off("change", "#territory");
+    $(document).off("change", "#district");
     $(document).off("change", "#customer");
     $(document).off("change", "#crop");
     $(document).off("change", "#type");

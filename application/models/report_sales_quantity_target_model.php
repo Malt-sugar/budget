@@ -21,7 +21,7 @@ class Report_sales_quantity_target_model extends CI_Model
         $this->db->select('bstm.month selling_month');
         $this->db->select('bpq.final_targeted_quantity final_target');
         $this->db->select('bsp.mrp unit_price_per_kg');
-        $this->db->select('SUM(bst.budgeted_quantity) target_from_customer');
+        $this->db->select('bst.budgeted_quantity target_from_customer');
         $this->db->where('bst.status',$this->config->item('status_active'));
 
         if(strlen($year)>1)
@@ -60,22 +60,22 @@ class Report_sales_quantity_target_model extends CI_Model
         {
             $this->db->where('bst.customer_id', $customer);
         }
-        if(strlen($from_month)>0 && strlen($to_month)>0)
+        if(strlen($from_month)>1 && strlen($to_month)>1)
         {
             $this->db->where('bstm.month >=', $from_month);
             $this->db->where('bstm.month <=', $to_month);
         }
 
-        $this->db->where('bsp.pricing_type', $this->config->item('pricing_type_final'));
-        $this->db->where('length(bstm.territory_id)>2');
+//        $this->db->where('bsp.pricing_type', $this->config->item('pricing_type_final'));
+//        $this->db->where('length(bstm.territory_id)>2');
 
         $this->db->join('ait_varriety_info avi', 'avi.varriety_id = bst.variety_id', 'LEFT');
         $this->db->join('ait_crop_info aci', 'aci.crop_id = bst.crop_id', 'LEFT');
         $this->db->join('ait_product_type ati', 'ati.product_type_id = bst.type_id', 'LEFT');
         $this->db->join('ait_year ay', 'ay.year_id = bst.year', 'LEFT');
-        $this->db->join('budget_sales_target_monthwise bstm', 'bstm.sales_target_id = bst.id', 'INNER');
+        $this->db->join('budget_sales_target_monthwise bstm', 'bstm.sales_target_id = bst.id AND LENGTH(bstm.territory_id)>2', 'LEFT');
         $this->db->join('budget_principal_quantity bpq', 'bpq.variety_id = bst.variety_id AND bpq.year = bst.year', 'LEFT');
-        $this->db->join('budget_sales_pricing bsp', 'bsp.variety_id = bst.variety_id AND bsp.year = bst.year', 'LEFT');
+        $this->db->join('budget_sales_pricing bsp', 'bsp.variety_id = bst.variety_id AND bsp.year = bst.year AND bsp.pricing_type="'.$this->config->item('pricing_type_final').'"', 'LEFT');
         $results = $this->db->get()->result_array();
 
         foreach($results as $key=>&$result)

@@ -37,14 +37,37 @@ class Incentive_setup_model extends CI_Model
         return $query->result_array();
     }
 
-    public function get_budget_purchase_data($id)
+    public function get_incentive_data($id)
     {
-        $this->db->select('bdc.*');
-        $this->db->from('budget_direct_cost bdc');
-        $this->db->where('bdc.id', $id);
-        $this->db->where('bdc.purchase_type', $this->config->item('purchase_type_budget'));
-        $query = $this->db->get();
-        return $query->row_array();
+        $this->db->select('bis.*');
+        $this->db->from('budget_incentive_setup bis');
+        $this->db->where('bis.id', $id);
+        $result = $this->db->get()->row_array();
+
+        if($result)
+        {
+            $this->db->select('bid.setup_id, bid.lower_limit, bid.upper_limit, bid.achievement');
+            $this->db->from('budget_incentive_detail bid');
+            $this->db->where('bid.setup_id', $id);
+            $this->db->where('bid.status', $this->config->item('status_active'));
+            $query = $this->db->get();
+            $detail_result = $query->result_array();
+            if($detail_result && sizeof($detail_result)>0)
+            {
+                $result['detail'] = $detail_result;
+            }
+            else
+            {
+                $result['detail'] = array();
+            }
+        }
+        return $result;
+    }
+
+    public function initial_update_incentive_detail($id)
+    {
+        $this->db->where('setup_id', $id);
+        $this->db->delete('budget_incentive_detail');
     }
 
     public function check_budget_purchase_year_existence($id, $year)

@@ -26,6 +26,7 @@
             {
                 $detail = Pricing_helper::get_pricing_marketing_info($year, $variety['varriety_id']);
                 $existing_data = Pricing_helper::get_pricing_marketing_existing_info($year, $variety['varriety_id']);
+                $existing_mrp = isset($existing_data['mrp'])?$existing_data['mrp']:0;
             ?>
             <tr class="main_tr">
                 <td class="text-center">
@@ -67,13 +68,13 @@
                 <td class="text-center"><?php echo $variety['varriety_name'];?><input type="hidden" name="cogs" class="cogs" value="<?php echo $detail['cogs'];?>" /></td>
                 <td class="text-center"><?php echo $detail['last_year_mrp'];?></td>
                 <td class="text-center"><?php echo $detail['mrp_by_mgt'];?></td>
-                <td class="text-center"><input type="text" name="pricing[<?php echo $variety['crop_id'];?>][<?php echo $variety['product_type_id'];?>][<?php echo $variety['varriety_id'];?>][mrp]" class="form-control numbersOnly" value="<?php echo isset($existing_data['mrp'])?$existing_data['mrp']:'';?>" /></td>
+                <td class="text-center"><input type="text" name="pricing[<?php echo $variety['crop_id'];?>][<?php echo $variety['product_type_id'];?>][<?php echo $variety['varriety_id'];?>][mrp]" class="marketing_mrp form-control numbersOnly" value="<?php echo isset($existing_data['mrp'])?$existing_data['mrp']:'';?>" /></td>
                 <td class="text-center"><input type="text" name="pricing[<?php echo $variety['crop_id'];?>][<?php echo $variety['product_type_id'];?>][<?php echo $variety['varriety_id'];?>][sales_commission]" class="form-control sales_commission numbersOnly" value="<?php echo isset($existing_data['sales_commission'])?$existing_data['sales_commission']:$detail['sales_commission'];?>" /></td>
-                <td class="text-center sales_commission_amount"><?php if(isset($existing_data['sales_commission'])){echo ($existing_data['sales_commission']/100)*$detail['cogs'];}else{echo ($detail['sales_commission']/100)*$detail['cogs'];}?></td>
+                <td class="text-center sales_commission_amount"><?php if(isset($existing_data['sales_commission'])){echo round(($existing_data['sales_commission']/100)*$existing_mrp);}else{echo round(($detail['sales_commission']/100)*$existing_mrp);}?></td>
                 <td class="text-center"><input type="text" name="pricing[<?php echo $variety['crop_id'];?>][<?php echo $variety['product_type_id'];?>][<?php echo $variety['varriety_id'];?>][sales_bonus]" class="form-control sales_bonus numbersOnly" value="<?php echo isset($existing_data['sales_bonus'])?$existing_data['sales_bonus']:$detail['sales_bonus'];?>" /></td>
-                <td class="text-center sales_bonus_amount"><?php if(isset($existing_data['sales_bonus'])){echo ($existing_data['sales_bonus']/100)*$detail['cogs'];}else{echo ($detail['sales_bonus']/100)*$detail['cogs'];}?></td>
+                <td class="text-center sales_bonus_amount"><?php if(isset($existing_data['sales_bonus'])){echo round(($existing_data['sales_bonus']/100)*$existing_mrp);}else{echo round(($detail['sales_bonus']/100)*$existing_mrp);}?></td>
                 <td class="text-center"><input type="text" name="pricing[<?php echo $variety['crop_id'];?>][<?php echo $variety['product_type_id'];?>][<?php echo $variety['varriety_id'];?>][other_incentive]" class="form-control other_incentive numbersOnly" value="<?php echo isset($existing_data['other_incentive'])?$existing_data['other_incentive']:$detail['other_incentive'];?>" /></td>
-                <td class="text-center other_incentive_amount"><?php if(isset($existing_data['other_incentive'])){echo ($existing_data['other_incentive']/100)*$detail['cogs'];}else{echo ($detail['other_incentive']/100)*$detail['cogs'];}?></td>
+                <td class="text-center other_incentive_amount"><?php if(isset($existing_data['other_incentive'])){echo round(($existing_data['other_incentive']/100)*$existing_mrp);}else{echo round(($detail['other_incentive']/100)*$existing_mrp);}?></td>
                 <td class="text-center" style="vertical-align: middle;">
                     <label class="label label-primary load_remark">+R</label>
                     <div class="row popContainer" style="display: none;">
@@ -120,25 +121,24 @@
         // Bonus Amount Showing
         $(document).on("keyup",".sales_commission",function()
         {
-            var cogs = parseFloat($(this).closest('.main_tr').find('.cogs').val());
+            var marketing_mrp = parseFloat($(this).closest('.main_tr').find('.marketing_mrp').val());
             var sales_commission = parseFloat($(this).val());
-            var sales_commission_amount = ((sales_commission/100)*cogs).toFixed(2);
+            var sales_commission_amount = Math.round(((sales_commission/100)*marketing_mrp));
             $(this).closest('.main_tr').find('.sales_commission_amount').html(sales_commission_amount);
         });
         $(document).on("keyup",".sales_bonus",function()
         {
-            var cogs = parseFloat($(this).closest('.main_tr').find('.cogs').val());
+            var marketing_mrp = parseFloat($(this).closest('.main_tr').find('.marketing_mrp').val());
             var sales_bonus = parseFloat($(this).val());
-            var sales_bonus_amount = ((sales_bonus/100)*cogs).toFixed(2);
+            var sales_bonus_amount = Math.round(((sales_bonus/100)*marketing_mrp));
             $(this).closest('.main_tr').find('.sales_bonus_amount').html(sales_bonus_amount);
         });
         $(document).on("keyup",".other_incentive",function()
         {
-            var cogs = parseFloat($(this).closest('.main_tr').find('.cogs').val());
+            var marketing_mrp = parseFloat($(this).closest('.main_tr').find('.marketing_mrp').val());
             var other_incentive = parseFloat($(this).val());
-            var other_incentive_amount = ((other_incentive/100)*cogs).toFixed(2);
+            var other_incentive_amount = Math.round(((other_incentive/100)*marketing_mrp));
             $(this).closest('.main_tr').find('.other_incentive_amount').html(other_incentive_amount);
         });
-
     });
 </script>

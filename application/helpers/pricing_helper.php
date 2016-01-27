@@ -311,47 +311,6 @@ class Pricing_helper
         $CI = & get_instance();
         $data = array();
 
-        // Automated MRP
-        $CI->db->from('budget_sales_pricing bsp');
-        $CI->db->select('bsp.mrp');
-        $CI->db->where('bsp.year', $year);
-        $CI->db->where('bsp.variety_id', $variety);
-        $CI->db->where('bsp.pricing_type', $CI->config->item('pricing_type_automated'));
-        $result = $CI->db->get()->row_array();
-        $data['automated_mrp'] = isset($result['mrp'])?$result['mrp']:0;
-
-        // MGT INITIAL MRP
-        $CI->db->from('budget_sales_pricing bsp');
-        $CI->db->select('bsp.mrp');
-        $CI->db->where('bsp.year', $year);
-        $CI->db->where('bsp.variety_id', $variety);
-        $CI->db->where('bsp.pricing_type', $CI->config->item('pricing_type_initial'));
-        $result = $CI->db->get()->row_array();
-        $data['management_mrp'] = isset($result['mrp'])?$result['mrp']:0;
-
-        // MGT MKT
-        $CI->db->from('budget_sales_pricing bsp');
-        $CI->db->select('bsp.*');
-        $CI->db->where('bsp.year', $year);
-        $CI->db->where('bsp.variety_id', $variety);
-        $CI->db->where('bsp.pricing_type', $CI->config->item('pricing_type_marketing'));
-        $result = $CI->db->get()->row_array();
-        $data['marketing_mrp'] = isset($result['mrp'])?$result['mrp']:0;
-        $data['sales_commission'] = isset($result['sales_commission'])?$result['sales_commission']:0;
-        $data['sales_bonus'] = isset($result['sales_bonus'])?$result['sales_bonus']:0;
-        $data['other_incentive'] = isset($result['other_incentive'])?$result['other_incentive']:0;
-
-        // LAST YEAR MRP (Final)
-        $last_year = Pricing_helper::get_last_year($year);
-
-        $CI->db->from('budget_sales_pricing bsp');
-        $CI->db->select('bsp.mrp');
-        $CI->db->where('bsp.year', $last_year);
-        $CI->db->where('bsp.variety_id', $variety);
-        $CI->db->where('bsp.pricing_type', $CI->config->item('pricing_type_final'));
-        $result = $CI->db->get()->row_array();
-        $data['last_year_mrp'] = isset($result['mrp'])?$result['mrp']:0;
-
         // Indirect Cost
         $CI->db->from('budget_indirect_cost_setup bics');
         $CI->db->select('bics.*');
@@ -361,15 +320,6 @@ class Pricing_helper
         $data['marketing'] = isset($result['marketing'])?$result['marketing']:0;
         $data['finance_cost'] = isset($result['finance_cost'])?$result['finance_cost']:0;
         $data['target_profit'] = isset($result['target_profit'])?$result['target_profit']:0;
-
-        // Targeted Quantity
-        $CI->db->from('budget_principal_quantity bpq');
-        $CI->db->select('bpq.final_targeted_quantity');
-        $CI->db->where('bpq.variety_id', $variety);
-        $CI->db->where('bpq.year', $year);
-        $CI->db->where('bpq.status', $CI->config->item('status_active'));
-        $sales_result = $CI->db->get()->row_array();
-        $data['targeted_quantity'] = isset($sales_result['final_targeted_quantity'])?$sales_result['final_targeted_quantity']:0;
 
         // Budgeted PI or COGS
         $CI->db->from('budget_purchase_quantity bpq');
@@ -420,6 +370,73 @@ class Pricing_helper
         $pi_value = $pi_value*$usd_conversion_rate;
 
         $data['cogs'] = $pi_value + ($pi_value/100)*$lc_exp + ($pi_value/100)*$insurance_exp + ($pi_value/100)*$carriage_inwards + ($pi_value/100)*$air_freight_and_docs + ($pi_value/100)*$cnf + ($pi_value/100)*$bank_other_charges + $packing_material_cost + $sticker_cost;
+        $data['total_cogs'] = $data['cogs'] + ($data['ho_and_gen_exp']/100)*$data['cogs'] + ($data['marketing']/100)*$data['cogs'] + ($data['finance_cost']/100)*$data['cogs'];
+
+        // Automated MRP
+        $CI->db->from('budget_sales_pricing bsp');
+        $CI->db->select('bsp.*');
+        $CI->db->where('bsp.year', $year);
+        $CI->db->where('bsp.variety_id', $variety);
+        $CI->db->where('bsp.pricing_type', $CI->config->item('pricing_type_automated'));
+        $result = $CI->db->get()->row_array();
+        $automated_mrp = isset($result['mrp'])?$result['mrp']:0;
+        $automated_sales_commission = isset($result['sales_commission'])?$result['sales_commission']:0;
+        $automated_sales_bonus = isset($result['sales_bonus'])?$result['sales_bonus']:0;
+        $automated_other_incentive = isset($result['other_incentive'])?$result['other_incentive']:0;
+        $data['automated_mrp'] = $automated_mrp;
+        $automated_net_sales_price = $automated_mrp - ($automated_sales_commission/100)*$automated_mrp - ($automated_sales_bonus/100)*$automated_mrp - ($automated_other_incentive/100)*$automated_mrp;
+        $data['automated_net_profit'] = round($automated_net_sales_price - $data['total_cogs']);
+
+        // MGT INITIAL MRP
+        $CI->db->from('budget_sales_pricing bsp');
+        $CI->db->select('bsp.*');
+        $CI->db->where('bsp.year', $year);
+        $CI->db->where('bsp.variety_id', $variety);
+        $CI->db->where('bsp.pricing_type', $CI->config->item('pricing_type_initial'));
+        $result = $CI->db->get()->row_array();
+        $management_mrp = isset($result['mrp'])?$result['mrp']:0;
+        $management_sales_commission = isset($result['sales_commission'])?$result['sales_commission']:0;
+        $management_sales_bonus = isset($result['sales_bonus'])?$result['sales_bonus']:0;
+        $management_other_incentive = isset($result['other_incentive'])?$result['other_incentive']:0;
+        $data['management_mrp'] = $management_mrp;
+        $management_net_sales_price = $management_mrp - ($management_sales_commission/100)*$management_mrp - ($management_sales_bonus/100)*$management_mrp - ($management_other_incentive/100)*$management_mrp;
+        $data['management_net_profit'] = round($management_net_sales_price - $data['total_cogs']);
+
+        // MGT MKT
+        $CI->db->from('budget_sales_pricing bsp');
+        $CI->db->select('bsp.*');
+        $CI->db->where('bsp.year', $year);
+        $CI->db->where('bsp.variety_id', $variety);
+        $CI->db->where('bsp.pricing_type', $CI->config->item('pricing_type_marketing'));
+        $result = $CI->db->get()->row_array();
+        $marketing_mrp = isset($result['mrp'])?$result['mrp']:0;
+        $data['sales_commission'] = isset($result['sales_commission'])?$result['sales_commission']:0;
+        $data['sales_bonus'] = isset($result['sales_bonus'])?$result['sales_bonus']:0;
+        $data['other_incentive'] = isset($result['other_incentive'])?$result['other_incentive']:0;
+
+        $data['marketing_mrp'] = $marketing_mrp;
+        $marketing_net_sales_price = $marketing_mrp - ($data['sales_commission']/100)*$marketing_mrp - ($data['sales_bonus']/100)*$marketing_mrp - ($data['other_incentive']/100)*$marketing_mrp;
+        $data['marketing_net_profit'] = round($marketing_net_sales_price - $data['total_cogs']);
+
+        // LAST YEAR MRP (Final)
+        $last_year = Pricing_helper::get_last_year($year);
+
+        $CI->db->from('budget_sales_pricing bsp');
+        $CI->db->select('bsp.mrp');
+        $CI->db->where('bsp.year', $last_year);
+        $CI->db->where('bsp.variety_id', $variety);
+        $CI->db->where('bsp.pricing_type', $CI->config->item('pricing_type_final'));
+        $result = $CI->db->get()->row_array();
+        $data['last_year_mrp'] = isset($result['mrp'])?$result['mrp']:0;
+
+        // Targeted Quantity
+        $CI->db->from('budget_principal_quantity bpq');
+        $CI->db->select('bpq.final_targeted_quantity');
+        $CI->db->where('bpq.variety_id', $variety);
+        $CI->db->where('bpq.year', $year);
+        $CI->db->where('bpq.status', $CI->config->item('status_active'));
+        $sales_result = $CI->db->get()->row_array();
+        $data['targeted_quantity'] = isset($sales_result['final_targeted_quantity'])?$sales_result['final_targeted_quantity']:0;
         return $data;
     }
 

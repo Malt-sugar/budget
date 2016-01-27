@@ -64,7 +64,7 @@ class Incentive_setup extends ROOT_Controller
         if($id>0)
         {
             $data['title']="Edit Incentive Setup";
-            $data["purchase"] = $this->incentive_setup_model->get_budget_purchase_data($id);
+            $data["details"] = $this->incentive_setup_model->get_incentive_data($id);
             $ajax['page_url']=base_url()."incentive_setup/index/edit";
         }
         else
@@ -100,11 +100,33 @@ class Incentive_setup extends ROOT_Controller
             {
                 $this->db->trans_start();  //DB Transaction Handle START
 
-//                $data['modified_by'] = $user->user_id;
-//                $data['modification_date'] = time();
-//
-//                Query_helper::update('budget_incentive',$data,array("id = ".$id));
-//
+                $data['year'] = $this->input->post('year');
+                $data['from_month'] = $this->input->post('from_month');
+                $data['to_month'] = $this->input->post('to_month');
+                $data['total'] = $this->input->post('total');
+                $data['modified_by'] = $user->user_id;
+                $data['modification_date'] = time();
+                Query_helper::update('budget_incentive_setup',$data,array("id = ".$id));
+
+                // Incentive detail table operation
+                $lower_limit_post = $this->input->post('lower_limit');
+                $upper_limit_post = $this->input->post('upper_limit');
+                $achievement_post = $this->input->post('achievement');
+
+                // initial update
+                $this->incentive_setup_model->initial_update_incentive_detail($id);
+
+                for($i=0; $i<sizeof($lower_limit_post); $i++)
+                {
+                    $detail_data['setup_id'] = $id;
+                    $detail_data['lower_limit'] = $lower_limit_post[$i];
+                    $detail_data['upper_limit'] = $upper_limit_post[$i];
+                    $detail_data['achievement'] = $achievement_post[$i];
+                    $detail_data['created_by'] = $user->user_id;
+                    $detail_data['creation_date'] = time();
+                    Query_helper::add('budget_incentive_detail',$detail_data);
+                }
+
                 $this->db->trans_complete();   //DB Transaction Handle END
 
                 if ($this->db->trans_status() === TRUE)

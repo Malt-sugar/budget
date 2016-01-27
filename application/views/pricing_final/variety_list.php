@@ -22,7 +22,10 @@
             <th class="text-center"><?php echo $this->lang->line('LABEL_OTHER_INCENTIVE_MGT')?></th>
             <th class="text-center"><?php echo $this->lang->line('LABEL_OTHER_INCENTIVE_AMOUNT')?></th>
             <th class="text-center"><?php echo $this->lang->line('LABEL_NET_SALES_PRICE')?></th>
-            <th class="text-center"><?php echo $this->lang->line('LABEL_NET_PROFIT')?></th>
+            <th class="text-center"><?php echo $this->lang->line('LABEL_FINAL_NET_PROFIT')?></th>
+            <th class="text-center"><?php echo $this->lang->line('LABEL_MARKETING_NET_PROFIT')?></th>
+            <th class="text-center"><?php echo $this->lang->line('LABEL_MANAGEMENT_NET_PROFIT')?></th>
+            <th class="text-center"><?php echo $this->lang->line('LABEL_AUTOMATED_NET_PROFIT')?></th>
             <th class="text-center"><?php echo $this->lang->line('LABEL_TOTAL_NET_SALES')?></th>
             <th class="text-center"><?php echo $this->lang->line('LABEL_TOTAL_NET_PROFIT')?></th>
             <th class="text-center"><?php echo $this->lang->line('LABEL_PROFIT_PER')?></th>
@@ -43,21 +46,20 @@
                 $profit_percentage = 0;
 
                 $detail = Pricing_helper::get_pricing_final_info($year, $variety['varriety_id']);
-
-                $total_cogs = ($detail['cogs'] + ($detail['ho_and_gen_exp']/100)*$detail['cogs'] + ($detail['marketing']/100)*$detail['cogs'] + ($detail['finance_cost']/100)*$detail['cogs']);
                 $existing_data = Pricing_helper::get_pricing_final_existing_info($year, $variety['varriety_id']);
+                $existing_mrp = isset($existing_data['mrp'])?$existing_data['mrp']:0;
 
                 if(is_array($existing_data) && sizeof($existing_data)>0)
                 {
-                    $net_sales_price = round($existing_data['mrp'] - ($existing_data['sales_bonus']/100)*$existing_data['mrp'] - ($existing_data['other_incentive']/100)*$existing_data['mrp'] - ($detail['sales_commission']/100)*$existing_data['mrp'], 2);
-                    $total_net_sales_price = round($net_sales_price*$detail['targeted_quantity'], 2);
+                    $net_sales_price = round($existing_data['mrp'] - ($existing_data['sales_bonus']/100)*$existing_data['mrp'] - ($existing_data['other_incentive']/100)*$existing_data['mrp'] - ($existing_data['sales_commission']/100)*$existing_data['mrp']);
+                    $total_net_sales_price = round($net_sales_price*$detail['targeted_quantity']);
                     $grand_total_net_sales += $total_net_sales_price;
-                    $net_profit = round($net_sales_price - $total_cogs, 2);
-                    $total_net_profit = round($net_profit*$detail['targeted_quantity'], 2);
+                    $net_profit = round($net_sales_price - $detail['total_cogs']);
+                    $total_net_profit = round($net_profit*$detail['targeted_quantity']);
                     $grand_total_net_profit += $total_net_profit;
-                    if($total_cogs>0)
+                    if($detail['total_cogs']>0)
                     {
-                        $profit_percentage = round(($net_profit/$net_sales_price)*100, 2);
+                        $profit_percentage = round(($net_profit/$net_sales_price)*100);
                     }
                     else
                     {
@@ -102,22 +104,25 @@
                     }
                     ?>
                 </td>
-                <td class="text-center"><?php echo $variety['varriety_name'];?><input type="hidden" name="total_cogs" class="total_cogs" value="<?php echo $total_cogs;?>" /><input type="hidden" name="cogs" class="cogs" value="<?php echo $detail['cogs'];?>" /></td>
+                <td class="text-center"><?php echo $variety['varriety_name'];?><input type="hidden" name="total_cogs" class="total_cogs" value="<?php echo $detail['total_cogs'];?>" /><input type="hidden" name="cogs" class="cogs" value="<?php echo $detail['cogs'];?>" /></td>
                 <td class="text-center"><?php echo $detail['targeted_quantity'];?><input type="hidden" name="targeted_quantity" class="targeted_quantity" value="<?php echo $detail['targeted_quantity'];?>" /></td>
-                <td class="text-center"><input type="text" name="pricing[<?php echo $variety['crop_id'];?>][<?php echo $variety['product_type_id'];?>][<?php echo $variety['varriety_id'];?>][target_profit]" class="form-control target_profit numbersOnly" value="<?php if(isset($existing_data['target_profit'])){echo $existing_data['target_profit'];}else{echo $detail['target_profit'];}?>" /></td>
+                <td class="text-center"><input type="text" name="pricing[<?php echo $variety['crop_id'];?>][<?php echo $variety['product_type_id'];?>][<?php echo $variety['varriety_id'];?>][target_profit]" class="form-control target_profit numbersOnly" value="<?php if(isset($existing_data['target_profit'])){echo round($existing_data['target_profit']);}else{echo round($detail['target_profit']);}?>" /></td>
                 <td class="text-center"><?php echo $detail['last_year_mrp'];?></td>
                 <td class="text-center"><?php echo $detail['automated_mrp'];?></td>
                 <td class="text-center"><?php echo $detail['management_mrp'];?></td>
                 <td class="text-center"><?php echo $detail['marketing_mrp'];?></td>
                 <td class="text-center"><input type="text" name="pricing[<?php echo $variety['crop_id'];?>][<?php echo $variety['product_type_id'];?>][<?php echo $variety['varriety_id'];?>][mrp]" class="form-control mrp_final numbersOnly trigger_class" value="<?php echo isset($existing_data['mrp'])?$existing_data['mrp']:'';?>" /></td>
                 <td class="text-center"><input type="text" name="pricing[<?php echo $variety['crop_id'];?>][<?php echo $variety['product_type_id'];?>][<?php echo $variety['varriety_id'];?>][sales_commission]" class="form-control sales_commission trigger_class" value="<?php if(isset($existing_data['sales_commission'])){echo $existing_data['sales_commission'];}else{echo $detail['sales_commission'];}?>" /></td>
-                <td class="text-center sales_commission_amount"><?php if(isset($existing_data['sales_commission'])){echo ($existing_data['sales_commission']/100)*$detail['cogs'];}else{echo ($detail['sales_commission']/100)*$detail['cogs'];}?></td>
+                <td class="text-center sales_commission_amount"><?php if(isset($existing_data['sales_commission'])){echo round(($existing_data['sales_commission']/100)*$existing_mrp);}else{echo round(($detail['sales_commission']/100)*$existing_mrp);}?></td>
                 <td class="text-center"><input type="text" name="pricing[<?php echo $variety['crop_id'];?>][<?php echo $variety['product_type_id'];?>][<?php echo $variety['varriety_id'];?>][sales_bonus]" class="form-control sales_bonus numbersOnly trigger_class" value="<?php if(isset($existing_data['sales_bonus'])){echo $existing_data['sales_bonus'];}else{echo $detail['sales_bonus'];}?>" /></td>
-                <td class="text-center sales_bonus_amount"><?php if(isset($existing_data['sales_bonus'])){echo ($existing_data['sales_bonus']/100)*$detail['cogs'];}else{echo ($detail['sales_bonus']/100)*$detail['cogs'];}?></td>
+                <td class="text-center sales_bonus_amount"><?php if(isset($existing_data['sales_bonus'])){echo round(($existing_data['sales_bonus']/100)*$existing_mrp);}else{echo round(($detail['sales_bonus']/100)*$existing_mrp);}?></td>
                 <td class="text-center"><input type="text" name="pricing[<?php echo $variety['crop_id'];?>][<?php echo $variety['product_type_id'];?>][<?php echo $variety['varriety_id'];?>][other_incentive]" class="form-control other_incentive numbersOnly trigger_class" value="<?php if(isset($existing_data['other_incentive'])){echo $existing_data['other_incentive'];}else{echo $detail['other_incentive'];}?>" /></td>
-                <td class="text-center other_incentive_amount"><?php if(isset($existing_data['other_incentive'])){echo ($existing_data['other_incentive']/100)*$detail['cogs'];}else{echo ($detail['other_incentive']/100)*$detail['cogs'];}?></td>
+                <td class="text-center other_incentive_amount"><?php if(isset($existing_data['other_incentive'])){echo round(($existing_data['other_incentive']/100)*$existing_mrp);}else{echo round(($detail['other_incentive']/100)*$existing_mrp);}?></td>
                 <td class="text-center net_sales_price"><?php if(isset($net_sales_price)){echo $net_sales_price;}?></td>
-                <td class="text-center net_profit"><?php if(isset($net_profit)){echo $net_profit;}?></td>
+                <td class="text-center net_profit"><?php if(isset($net_profit)){echo round($net_profit);}?></td>
+                <td class="text-center"><?php echo isset($detail['marketing_net_profit'])?$detail['marketing_net_profit']:0;?></td>
+                <td class="text-center"><?php echo isset($detail['management_net_profit'])?$detail['management_net_profit']:0;?></td>
+                <td class="text-center"><?php echo isset($detail['automated_net_profit'])?$detail['automated_net_profit']:0;?></td>
                 <td class="text-center total_net_sales"><?php if(isset($total_net_sales_price)){echo $total_net_sales_price;}?></td>
                 <td class="text-center total_net_profit"><?php if(isset($total_net_profit)){echo $total_net_profit;}?></td>
                 <td class="text-center profit_percentage"><?php if(isset($profit_percentage)){echo $profit_percentage;}?></td>
@@ -147,6 +152,9 @@
             }
             ?>
             <tr>
+                <td class="text-center"></td>
+                <td class="text-center"></td>
+                <td class="text-center"></td>
                 <td class="text-center"></td>
                 <td class="text-center"></td>
                 <td class="text-center"></td>
@@ -197,19 +205,19 @@
             var other_incentive = parseFloat($(this).closest('.main_tr').find(".other_incentive").val());
             var mrp_final = parseFloat($(this).closest('.main_tr').find(".mrp_final").val());
 
-            var net_sales_price = (mrp_final - (sales_commission/100)*mrp_final - (sales_bonus/100)*mrp_final - (other_incentive/100)*mrp_final).toFixed(2);
-            var total_net_sales_price = (net_sales_price*targeted_quantity).toFixed(2);
+            var net_sales_price = Math.round(mrp_final - (sales_commission/100)*mrp_final - (sales_bonus/100)*mrp_final - (other_incentive/100)*mrp_final);
+            var total_net_sales_price = Math.round(net_sales_price*targeted_quantity);
 
             $(this).closest('.main_tr').find(".net_sales_price").html(net_sales_price);
             $(this).closest('.main_tr').find(".total_net_sales").html(total_net_sales_price);
 
-            var net_profit = (net_sales_price - total_cogs).toFixed(2);
-            var total_net_profit = (net_profit*targeted_quantity).toFixed(2);
+            var net_profit = Math.round(net_sales_price - total_cogs);
+            var total_net_profit = Math.round(net_profit*targeted_quantity);
 
             $(this).closest('.main_tr').find(".net_profit").html(net_profit);
             $(this).closest('.main_tr').find(".total_net_profit").html(total_net_profit);
 
-            var profit_percentage = ((net_profit/net_sales_price)*100).toFixed(2);
+            var profit_percentage = Math.round((net_profit/net_sales_price)*100);
             $(this).closest('.main_tr').find(".profit_percentage").html(profit_percentage);
 
             // Calculate Grand totals (Net Profit and sales)
@@ -228,7 +236,7 @@
                 }
             });
 
-            var grand_total_net_profit = total_net_profit_sum.toFixed(2);
+            var grand_total_net_profit = Math.round(total_net_profit_sum);
             $(".grand_total_net_profit").html(grand_total_net_profit);
 
             total_net_sales_attr.each(function()
@@ -241,30 +249,30 @@
                 }
             });
 
-            var grand_total_net_sales = total_net_sales_sum.toFixed(2);
+            var grand_total_net_sales = Math.round(total_net_sales_sum);
             $(".grand_total_net_sales").html(grand_total_net_sales);
         });
 
         // Bonus Amount Showing
         $(document).on("keyup",".sales_commission",function()
         {
-            var cogs = parseFloat($(this).closest('.main_tr').find('.cogs').val());
+            var mrp_final = parseFloat($(this).closest('.main_tr').find('.mrp_final').val());
             var sales_commission = parseFloat($(this).val());
-            var sales_commission_amount = ((sales_commission/100)*cogs).toFixed(2);
+            var sales_commission_amount = Math.round((sales_commission/100)*mrp_final);
             $(this).closest('.main_tr').find('.sales_commission_amount').html(sales_commission_amount);
         });
         $(document).on("keyup",".sales_bonus",function()
         {
-            var cogs = parseFloat($(this).closest('.main_tr').find('.cogs').val());
+            var mrp_final = parseFloat($(this).closest('.main_tr').find('.mrp_final').val());
             var sales_bonus = parseFloat($(this).val());
-            var sales_bonus_amount = ((sales_bonus/100)*cogs).toFixed(2);
+            var sales_bonus_amount = Math.round((sales_bonus/100)*mrp_final);
             $(this).closest('.main_tr').find('.sales_bonus_amount').html(sales_bonus_amount);
         });
         $(document).on("keyup",".other_incentive",function()
         {
-            var cogs = parseFloat($(this).closest('.main_tr').find('.cogs').val());
+            var mrp_final = parseFloat($(this).closest('.main_tr').find('.mrp_final').val());
             var other_incentive = parseFloat($(this).val());
-            var other_incentive_amount = ((other_incentive/100)*cogs).toFixed(2);
+            var other_incentive_amount = Math.round((other_incentive/100)*mrp_final);
             $(this).closest('.main_tr').find('.other_incentive_amount').html(other_incentive_amount);
         });
     });

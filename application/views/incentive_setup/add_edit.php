@@ -4,10 +4,13 @@
     $data["link_back"]=base_url().'incentive_setup/index/list';
     $data["hide_approve"]="1";
     $this->load->view("action_buttons_edit",$data);
-//print_r($purchase);
+
+//echo '<pre>';
+//print_r($details);
+//echo '</pre>';
 ?>
 <form class="form_valid" id="save_form" action="<?php echo base_url();?>incentive_setup/index/save" method="post">
-    <input type="hidden" name="setup_id" value="0" />
+    <input type="hidden" name="setup_id" value="<?php echo isset($details['id'])?$details['id']:0; ?>" />
     <div class="row widget">
         <div class="widget-header">
             <div class="title">
@@ -23,7 +26,7 @@
             <div class="col-sm-4 col-xs-8">
                 <select name="year" id="year" class="form-control validate[required]">
                     <?php
-                    $this->load->view('dropdown',array('drop_down_options'=>$years,'drop_down_selected'=>''));
+                    $this->load->view('dropdown',array('drop_down_options'=>$years,'drop_down_selected'=>isset($details['year'])?$details['year']:''));
                     ?>
                 </select>
             </div>
@@ -40,7 +43,7 @@
                     foreach($monthConfig as $val=>$month)
                     {
                         ?>
-                        <option value="<?php echo $val;?>"><?php echo $month;?></option>
+                        <option value="<?php echo $val;?>" <?php if(isset($details['from_month']) && $val==$details['from_month']){echo 'selected';}?>><?php echo $month;?></option>
                         <?php
                     }
                     ?>
@@ -59,7 +62,7 @@
                     foreach($monthConfig as $val=>$month)
                     {
                         ?>
-                        <option value="<?php echo $val;?>"><?php echo $month;?></option>
+                        <option value="<?php echo $val;?>" <?php if(isset($details['to_month']) && $val==$details['to_month']){echo 'selected';}?>><?php echo $month;?></option>
                         <?php
                     }
                     ?>
@@ -72,7 +75,7 @@
                 <label class="control-label pull-right"><?php echo $this->lang->line('LABEL_AMOUNT_100PER');?><span style="color:#FF0000">*</span></label>
             </div>
             <div class="col-sm-4 col-xs-8">
-                <input type="text" name="total" class="form-control validate[required] quantity" value="" />
+                <input type="text" name="total" class="form-control validate[required] quantity" value="<?php echo isset($details['total'])?$details['total']:''; ?>" />
             </div>
         </div>
 
@@ -88,25 +91,61 @@
                         </tr>
                     </thead>
                     <tbody>
+                    <?php
+                    if(isset($details['detail']) && sizeof($details['detail'])>0)
+                    {
+                        foreach($details['detail'] as $detail)
+                        {
+                            ?>
+                            <tr class="edit_tr">
+                                <td>
+                                    <div>
+                                        <input type="text" name="lower_limit[]" class="form-control validate[required] quantity" value="<?php echo $detail['lower_limit']?>"/>
+                                    </div>
+                                </td>
+
+                                <td>
+                                    <div>
+                                        <input type="text" name="upper_limit[]" class="form-control validate[required] quantity" value="<?php echo $detail['upper_limit']?>"/>
+                                    </div>
+                                </td>
+
+                                <td>
+                                    <input type="text" name="achievement[]" class="form-control validate[required] quantity" value="<?php echo $detail['achievement']?>"/>
+                                </td>
+                                <td style="min-width: 25px;">
+                                    <img class="remove" style='width: 25px; height: 25px;' src='<?php echo base_url().'images/xmark.png'?>' />
+                                </td>
+                            </tr>
+                            <?php
+                        }
+                    }
+                    else
+                    {
+                        ?>
                         <tr>
                             <td>
                                 <div>
-                                    <input type="text" name="lower_limit[]" class="form-control validate[required] quantity" value="" />
+                                    <input type="text" name="lower_limit[]" class="form-control validate[required] quantity" value=""/>
                                 </div>
                             </td>
 
                             <td>
                                 <div>
-                                    <input type="text" name="upper_limit[]" class="form-control validate[required] quantity" value="" />
+                                    <input type="text" name="upper_limit[]" class="form-control validate[required] quantity" value=""/>
                                 </div>
                             </td>
 
                             <td>
-                                <input type="text" name="achievement[]" class="form-control validate[required] quantity" value="" />
+                                <input type="text" name="achievement[]" class="form-control validate[required] quantity" value=""/>
                             </td>
                             <td style="min-width: 25px;">
+
                             </td>
                         </tr>
+                    <?php
+                    }
+                    ?>
                     </tbody>
                 </table>
 
@@ -132,6 +171,11 @@
         $(document).on("keyup", ".quantity", function()
         {
             this.value = this.value.replace(/[^0-9\.]/g,'');
+        });
+
+        $(document).on("click", ".remove", function()
+        {
+            $(this).closest('.edit_tr').remove();
         });
     });
 
