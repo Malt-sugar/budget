@@ -81,6 +81,13 @@ foreach($pricingData as $pricing)
                     $type_name = '';
                     $variety_name = '';
 
+                    $sum_final_quantity = 0;
+                    $sum_ho_and_gen_exp = 0;
+                    $sum_marketing = 0;
+                    $sum_finance_cost = 0;
+                    $sum_total_net_profit = 0;
+                    $sum_total_net_sales = 0;
+
                     foreach($arranged as $crop_id=>$cropArranged)
                     {
                         foreach ($cropArranged as $type_id => $typeArranged)
@@ -182,9 +189,35 @@ foreach($pricingData as $pricing)
                                     <td><?php echo round($net_sales_price*$detail['final_targeted_quantity']);?></td>
                                 </tr>
                                 <?php
+                                $sum_final_quantity+=$detail['final_targeted_quantity'];
+                                $sum_ho_and_gen_exp+=round(($detail['ho_and_gen_exp']/100)*$pi_value);
+                                $sum_marketing+=round(($detail['marketing']/100)*$pi_value);
+                                $sum_finance_cost+=round(($detail['finance_cost']/100)*$pi_value);
+                                $sum_total_net_profit+=round(($detail['target_profit']/100)*$cogs*$detail['final_targeted_quantity']);
+                                $sum_total_net_sales+=round($net_sales_price*$detail['final_targeted_quantity']);
                             }
                         }
                     }
+                    ?>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td style="vertical-align: middle;" class="text-center"><label class="label label-danger"><?php echo $this->lang->line('LABEL_TOTAL')?></label></td>
+                        <td><?php echo $sum_final_quantity;?></td>
+                        <td></td>
+                        <td><?php echo $sum_ho_and_gen_exp;?></td>
+                        <td><?php echo $sum_marketing;?></td>
+                        <td><?php echo $sum_finance_cost;?></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td><?php echo $sum_total_net_profit;?></td>
+                        <td><?php echo $sum_total_net_sales;?></td>
+                    </tr>
+                    <?php
                 }
                 else
                 {

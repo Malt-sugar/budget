@@ -75,6 +75,17 @@ foreach($purchases as $purchase)
                     $type_name = '';
                     $variety_name = '';
 
+                    $sum_insurance_exp=0;
+                    $sum_lc_exp=0;
+                    $sum_bank_other_charges=0;
+                    $sum_air_freight_and_docs=0;
+                    $sum_carriage_inwards=0;
+                    $sum_cnf=0;
+                    $sum_ait=0;
+                    $sum_miscellaneous=0;
+                    $sum_cogs=0;
+                    $sum_total_cogs=0;
+
                     foreach($arranged as $crop_id=>$cropArranged)
                     {
                         foreach ($cropArranged as $type_id => $typeArranged)
@@ -179,10 +190,60 @@ foreach($purchases as $purchase)
                                         <td><?php echo round($total_cogs); ?></td>
                                     </tr>
                                     <?php
+                                    $sum_insurance_exp+=round(($pi_percentage/100)*$detail['insurance_exp']);
+                                    $sum_lc_exp+=round(($pi_percentage/100)*$detail['lc_exp']);
+                                    $sum_bank_other_charges+=round(($pi_percentage/100)*$detail['bank_other_charges']);
+                                    $sum_air_freight_and_docs+=round(($pi_percentage/100)*$detail['air_freight_and_docs']);
+                                    $sum_carriage_inwards+=round(($pi_percentage/100)*$detail['carriage_inwards']);
+                                    $sum_cnf+=round(($pi_percentage/100)*$detail['cnf']);
+                                    $sum_ait+=round(($pi_percentage/100)*$detail['ait']);
+                                    $sum_miscellaneous+=round(($pi_percentage/100)*$detail['miscellaneous']);
+                                    $sum_cogs+=round($total_cogs/$detail['quantity']);
+                                    $sum_total_cogs+=round($total_cogs);
                                 }
                             }
                         }
                     }
+                    ?>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td style="vertical-align: middle;" class="text-center"><label class="label label-danger"><?php echo $this->lang->line('LABEL_TOTAL')?></label></td>
+                        <td><?php echo $sum_insurance_exp; ?></td>
+                        <td><?php echo $sum_lc_exp; ?></td>
+                        <td><?php echo $sum_bank_other_charges; ?></td>
+                        <td><?php echo $sum_air_freight_and_docs; ?></td>
+                        <td><?php echo $sum_carriage_inwards; ?></td>
+                        <td><?php echo $sum_cnf; ?></td>
+                        <td><?php echo $sum_ait; ?></td>
+                        <td><?php echo $sum_miscellaneous; ?></td>
+                        <td><?php echo $sum_cogs; ?></td>
+                        <td><?php echo $sum_total_cogs; ?></td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td style="vertical-align: middle;" class="text-center"><label class="label label-danger"><?php echo $this->lang->line('LABEL_PERCENTAGE')?></label></td>
+                        <td><?php echo round(($sum_insurance_exp/$sum_total_cogs)*100, 2); ?></td>
+                        <td><?php echo round(($sum_lc_exp/$sum_total_cogs)*100, 2); ?></td>
+                        <td><?php echo round(($sum_bank_other_charges/$sum_total_cogs)*100, 2); ?></td>
+                        <td><?php echo round(($sum_air_freight_and_docs/$sum_total_cogs)*100, 2); ?></td>
+                        <td><?php echo round(($sum_carriage_inwards/$sum_total_cogs)*100, 2); ?></td>
+                        <td><?php echo round(($sum_cnf/$sum_total_cogs)*100, 2); ?></td>
+                        <td><?php echo round(($sum_ait/$sum_total_cogs)*100, 2); ?></td>
+                        <td><?php echo round(($sum_miscellaneous/$sum_total_cogs)*100, 2); ?></td>
+                        <td><?php echo ''; ?></td>
+                        <td><?php echo ''; ?></td>
+                    </tr>
+                    <?php
                 }
                 else
                 {

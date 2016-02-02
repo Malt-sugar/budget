@@ -44,15 +44,28 @@
                         $actual_sales = Report_helper::get_actual_sales_qty($target['year'], $target['zone_id'], $target['territory_id'], $target['customer_id'], $target['variety_id']);
                         $months = $this->config->item('month');
                         ?>
-                        <tr>
+                        <tr class="tr_class">
                             <td><?php echo $target['crop_name'];?></td>
                             <td><?php echo $target['type_name'];?></td>
-                            <td><?php echo $target['variety_name'];?></td>
+                            <td><?php echo $target['variety_name'];?><input type="hidden" name="variety_id" id="variety_id" value="<?php echo $target['variety_id'];?>"></td>
                             <td><?php echo isset($target['selling_month'])?$months[str_pad($target['selling_month'], 2,0, STR_PAD_LEFT)]:'';?></td>
-                            <td><?php echo $target['target_from_customer'];?></td>
-                            <td><?php echo $target['final_target'];?></td>
+                            <td>
+                                <?php echo $target['total_budgeted'];?>
+                                <label class="label label-default pull-right target_from_customer"><?php echo $this->lang->line('LABEL_DETAIL');?></label>
+                                <input type="hidden" name="serial" class="serial" value="<?php echo $key?>" />
+                                <div id="totalBudgeted<?php echo $key?>" class="row popBudgetContainer" style="display: none;">
+
+                                </div>
+                            </td>
+                            <td>
+                                <?php echo $target['total_targeted'];?>
+                                <label class="label label-default pull-right final_target"><?php echo $this->lang->line('LABEL_DETAIL');?></label>
+                                <div id="totalTargeted<?php echo $key?>" class="row popTargetContainer" style="display: none;">
+
+                                </div>
+                            </td>
                             <td><?php echo $actual_sales?$actual_sales:0;?></td>
-                            <td><?php echo $target['final_target']-$actual_sales;?></td>
+                            <td><?php echo $target['total_targeted']-$actual_sales;?></td>
                             <td><?php echo $target['unit_price_per_kg'];?></td>
                             <td><?php echo $actual_sales*$target['unit_price_per_kg'];?></td>
                         </tr>
@@ -78,3 +91,127 @@
         </div>
     </div>
 </div>
+
+<script>
+    jQuery(document).ready(function()
+    {
+        $(document).off("click", ".target_from_customer");
+        $(document).off("click", ".final_target");
+
+        $(document).on("click",".crossSpan",function()
+        {
+            $(".popBudgetContainer").hide();
+            $(".popTargetContainer").hide();
+        });
+
+        $(document).on("click", ".target_from_customer", function(event)
+        {
+            $(this).closest('.tr_class').find('.popBudgetContainer').html('');
+            var year = $("#year").val();
+            var variety = $(this).closest('.tr_class').find('#variety_id').val();
+            var division = $("#division").val();
+            var zone = $("#zone").val();
+            var territory = $("#territory").val();
+            var district = $("#district").val();
+            var customer = $("#customer").val();
+
+            if((division).length<2 && (zone).length<2 && (territory).length<2 && !district && (customer).length<2)
+            {
+                var selection_type = 0;
+            }
+            else if((division).length>2 && (zone).length<2 && (territory).length<2 && !district && (customer).length<2)
+            {
+                var selection_type = 1;
+            }
+            else if((division).length>2 && (zone).length>2 && (territory).length<2 && !district && (customer).length<2)
+            {
+                var selection_type = 2;
+            }
+            else if((division).length>2 && (zone).length>2 && (territory).length>2 && !district && (customer).length<2)
+            {
+                var selection_type = 3;
+            }
+            else if((division).length>2 && (zone).length>2 && (territory).length>2 && district>0 && (customer).length<2)
+            {
+                var selection_type = 4;
+            }
+            else if((division).length>2 && (zone).length>2 && (territory).length>2 && district>0 && (customer).length>2)
+            {
+                var selection_type = 5;
+            }
+
+            var sl = $(this).closest('.tr_class').find('.serial').val();
+            $(this).closest('.tr_class').find('.popBudgetContainer').show();
+
+            $.ajax({
+                url: base_url+"report_sales_quantity_target/get_budgeted_detail_info",
+                type: 'POST',
+                dataType: "JSON",
+                data:{data_type:1, sl:sl, selection_type:selection_type, year:year, variety:variety, division:division, zone:zone, territory:territory, district:district, customer:customer},
+                success: function (data, status)
+                {
+
+                },
+                error: function (xhr, desc, err)
+                {
+                    console.log("error");
+                }
+            });
+        });
+
+        $(document).on("click", ".final_target", function(event)
+        {
+            $(this).closest('.tr_class').find('.popTargetContainer').html('');
+            var year = $("#year").val();
+            var variety = $(this).closest('.tr_class').find('#variety_id').val();
+            var division = $("#division").val();
+            var zone = $("#zone").val();
+            var territory = $("#territory").val();
+            var district = $("#district").val();
+            var customer = $("#customer").val();
+
+            if((division).length<2 && (zone).length<2 && (territory).length<2 && !district && (customer).length<2)
+            {
+                var selection_type = 0;
+            }
+            else if((division).length>2 && (zone).length<2 && (territory).length<2 && !district && (customer).length<2)
+            {
+                var selection_type = 1;
+            }
+            else if((division).length>2 && (zone).length>2 && (territory).length<2 && !district && (customer).length<2)
+            {
+                var selection_type = 2;
+            }
+            else if((division).length>2 && (zone).length>2 && (territory).length>2 && !district && (customer).length<2)
+            {
+                var selection_type = 3;
+            }
+            else if((division).length>2 && (zone).length>2 && (territory).length>2 && district>0 && (customer).length<2)
+            {
+                var selection_type = 4;
+            }
+            else if((division).length>2 && (zone).length>2 && (territory).length>2 && district>0 && (customer).length>2)
+            {
+                var selection_type = 5;
+            }
+
+            var sl = $(this).closest('.tr_class').find('.serial').val();
+            $(this).closest('.tr_class').find('.popTargetContainer').show();
+
+            $.ajax({
+                url: base_url+"report_sales_quantity_target/get_budgeted_detail_info",
+                type: 'POST',
+                dataType: "JSON",
+                data:{data_type:2, sl:sl, selection_type:selection_type, year:year, variety:variety, division:division, zone:zone, territory:territory, district:district, customer:customer},
+                success: function (data, status)
+                {
+
+                },
+                error: function (xhr, desc, err)
+                {
+                    console.log("error");
+                }
+            });
+        });
+    });
+</script>

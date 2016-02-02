@@ -353,3 +353,6 @@ $lang['LABEL_FINAL_NET_PROFIT'] = 'Final Net Profit';
 $lang['LABEL_MARKETING_NET_PROFIT'] = 'MKT Net Profit';
 $lang['LABEL_MANAGEMENT_NET_PROFIT'] = 'MGT Net Profit';
 $lang['LABEL_AUTOMATED_NET_PROFIT'] = 'Auto Net Profit';
+$lang['LABEL_DETAIL'] = 'Detail';
+$lang['LABEL_LOCATION'] = 'Location';
+$lang['LABEL_PERCENTAGE'] = 'Percentage';

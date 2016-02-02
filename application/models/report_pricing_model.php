@@ -193,7 +193,6 @@ class Report_pricing_model extends CI_Model
         return $result;
     }
 
-
     public function get_packing_and_sticker_cost($variety_id)
     {
         $this->db->from('budget_packing_material_setup bpm');

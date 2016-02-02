@@ -54,6 +54,14 @@ foreach($purchases as $purchase)
                     <th><?php echo $this->lang->line("LABEL_VARIETY"); ?></th>
                     <th><?php echo $this->lang->line("LABEL_MONTH_OF_PURCHASE"); ?></th>
                     <th><?php echo $this->lang->line("LABEL_USD_CONVERSION_RATE"); ?></th>
+                    <th><?php echo $this->lang->line("LABEL_INSURANCE_EXPENSE"); ?></th>
+                    <th><?php echo $this->lang->line("LABEL_LC_EXPENSE"); ?></th>
+                    <th><?php echo $this->lang->line("LABEL_BANK_OTHER_CHARGES"); ?></th>
+                    <th><?php echo $this->lang->line("LABEL_AIR_FREIGHT"); ?></th>
+                    <th><?php echo $this->lang->line("LABEL_CARRIAGE"); ?></th>
+                    <th><?php echo $this->lang->line("LABEL_CNF"); ?></th>
+                    <th><?php echo $this->lang->line("LABEL_AIT"); ?></th>
+                    <th><?php echo $this->lang->line("LABEL_MISC"); ?></th>
                     <th>
                         <table class="table table-bordered" style="margin-bottom: 0px;">
                             <tr>
@@ -303,6 +311,14 @@ foreach($purchases as $purchase)
                                         </td>
                                         <td><?php echo isset($month)?$monthConfig[str_pad($month, 2,0, STR_PAD_LEFT)]:''; ?></td>
                                         <td><?php echo $detail['usd_conversion_rate']; ?></td>
+                                        <td><?php echo round(($budgeted_data['insurance_exp']/100)*$budgeted_data['pi_value']*$budgeted_data['usd_conversion_rate'])*$budgeted_data['final_quantity']; ?></td>
+                                        <td><?php echo round(($budgeted_data['lc_exp']/100)*$budgeted_data['pi_value']*$budgeted_data['usd_conversion_rate'])*$budgeted_data['final_quantity']; ?></td>
+                                        <td><?php echo round(($budgeted_data['bank_other_charges']/100)*$budgeted_data['pi_value']*$budgeted_data['usd_conversion_rate'])*$budgeted_data['final_quantity']; ?></td>
+                                        <td><?php echo round(($budgeted_data['air_freight_and_docs']/100)*$detail['pi_value']*$detail['usd_conversion_rate'])*$budgeted_data['final_quantity']; ?></td>
+                                        <td><?php echo round(($budgeted_data['carriage_inwards']/100)*$budgeted_data['pi_value']*$budgeted_data['usd_conversion_rate'])*$budgeted_data['final_quantity']; ?></td>
+                                        <td><?php echo round(($budgeted_data['cnf']/100)*$budgeted_data['pi_value']*$budgeted_data['usd_conversion_rate'])*$budgeted_data['final_quantity']; ?></td>
+                                        <td><?php echo round(($budgeted_data['ait']/100)*$budgeted_data['pi_value']*$budgeted_data['usd_conversion_rate'])*$budgeted_data['final_quantity']; ?></td>
+                                        <td><?php echo round(($budgeted_data['miscellaneous']/100)*$budgeted_data['pi_value']*$budgeted_data['usd_conversion_rate'])*$budgeted_data['final_quantity']; ?></td>
                                         <td>
                                             <table class="table table-bordered" style="margin-bottom: 0px;">
                                                 <tr>

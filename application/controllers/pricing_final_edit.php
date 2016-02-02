@@ -1,14 +1,14 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 require APPPATH.'/libraries/root_controller.php';
 
-class Pricing_final extends ROOT_Controller
+class Pricing_final_edit extends ROOT_Controller
 {
     private  $message;
     public function __construct()
     {
         parent::__construct();
         $this->message="";
-        $this->load->model("pricing_final_model");
+        $this->load->model("pricing_final_edit_model");
     }
 
     public function index($task="list", $id=0)
@@ -36,17 +36,17 @@ class Pricing_final extends ROOT_Controller
 
         if(strlen($id)>1)
         {
-            $data['title'] = "Edit Pricing Final";
-            $ajax['page_url']=base_url()."pricing_final/index/edit/";
+            $data['title'] = "Pricing Final Edit";
+            $ajax['page_url']=base_url()."pricing_final_edit/index/edit/";
         }
         else
         {
-            $data['title'] = "Pricing Final";
-            $ajax['page_url'] = base_url()."pricing_final/index/add";
+            $data['title'] = "Pricing Final Edit";
+            $ajax['page_url'] = base_url()."pricing_final_edit/index/add";
         }
 
         $ajax['status'] = true;
-        $ajax['content'][] = array("id"=>"#content","html"=>$this->load->view("pricing_final/add_edit",$data,true));
+        $ajax['content'][] = array("id"=>"#content","html"=>$this->load->view("pricing_final_edit/add_edit",$data,true));
         $this->jsonReturn($ajax);
     }
 
@@ -84,11 +84,18 @@ class Pricing_final extends ROOT_Controller
                             $data[$detailKey] = $val;
                         }
 
-                        if(isset($data['mrp']) && $data['mrp']>0)
+                        if($data['mrp']>0)
                         {
-                            $edit_id = $this->pricing_final_model->check_sales_pricing_existence($year, $crop_id, $type_id, $variety_id);
+                            $edit_id = $this->pricing_final_edit_model->check_sales_pricing_existence($year, $crop_id, $type_id, $variety_id);
 
-                            if(!($edit_id>0))
+                            if($edit_id>0)
+                            {
+                                $data['modified_by'] = $user->user_id;
+                                $data['modification_date'] = $time;
+                                $data['status'] = 1;
+                                Query_helper::update('budget_sales_pricing',$data,array("id ='$edit_id'"));
+                            }
+                            else
                             {
                                 $data['created_by'] = $user->user_id;
                                 $data['creation_date'] = $time;
@@ -130,13 +137,13 @@ class Pricing_final extends ROOT_Controller
         $type_id = $this->input->post('type_id');
         $data['year'] = $this->input->post('year');
 
-        $data['varieties'] = $this->pricing_final_model->get_varieties_by_crop_type($crop_id, $type_id);
+        $data['varieties'] = $this->pricing_final_edit_model->get_varieties_by_crop_type($crop_id, $type_id);
 
         if(isset($data['year']) && sizeof($data['varieties'])>0)
         {
             $data['title'] = 'Pricing Final';
             $ajax['status'] = true;
-            $ajax['content'][] = array("id"=>'#variety_quantity',"html"=>$this->load->view("pricing_final/variety_list",$data,true));
+            $ajax['content'][] = array("id"=>'#variety_quantity',"html"=>$this->load->view("pricing_final_edit/variety_list",$data,true));
             $this->jsonReturn($ajax);
         }
         else
@@ -146,24 +153,6 @@ class Pricing_final extends ROOT_Controller
             $this->jsonReturn($ajax);
         }
     }
-
-//    public function check_budget_purchase_this_year()
-//    {
-//        $year = $this->input->post('year');
-//        $existence = $this->pricing_final_model->check_quantity_year_existence($year);
-//
-//        if($existence)
-//        {
-//            $ajax['status'] = false;
-//            $ajax['message'] = $this->lang->line("BUDGET_PURCHASE_SET_ALREADY");
-//            $this->jsonReturn($ajax);
-//        }
-//        else
-//        {
-//            $ajax['status'] = true;
-//            $this->jsonReturn($ajax);
-//        }
-//    }
 
     public function get_dropDown_type_by_crop()
     {

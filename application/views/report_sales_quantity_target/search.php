@@ -48,7 +48,6 @@ $this->load->view("action_buttons_edit",$data);
 <script type="text/javascript">
     jQuery(document).ready(function()
     {
-//        turn_off_triggers();
         $(document).on("click", "#load_report", function(event)
         {
             $("#report_list").html("");

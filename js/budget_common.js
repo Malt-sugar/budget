@@ -252,6 +252,7 @@ function turn_off_triggers()
     $(document).off("keyup", ".sales_bonus");
     $(document).off("keyup", ".other_incentive");
     $(document).off("change", "#report_type");
+    $(document).off("click", ".target_from_customer");
 }
 
 function isNumberKey(evt)
