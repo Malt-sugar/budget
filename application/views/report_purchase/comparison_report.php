@@ -68,9 +68,9 @@ foreach($purchases as $purchase)
                                 <td colspan="3" class="text-center"><?php echo $this->lang->line("LABEL_QUANTITY"); ?></td>
                             </tr>
                             <tr>
-                                <td><?php echo $this->lang->line('LABEL_BUDGETED');?></td>
-                                <td><?php echo $this->lang->line('LABEL_ACTUAL');?></td>
-                                <td><?php echo $this->lang->line('LABEL_VARIANCE');?></td>
+                                <td style="width: 33%"><?php echo $this->lang->line('LABEL_BUDGETED');?></td>
+                                <td style="width: 33%"><?php echo $this->lang->line('LABEL_ACTUAL');?></td>
+                                <td style="width: 33%"><?php echo $this->lang->line('LABEL_VARIANCE');?></td>
                             </tr>
                         </table>
                     </th>
@@ -80,9 +80,9 @@ foreach($purchases as $purchase)
                                 <td colspan="3" class="text-center"><?php echo $this->lang->line("LABEL_PI_VALUE_USD"); ?></td>
                             </tr>
                             <tr>
-                                <td><?php echo $this->lang->line('LABEL_BUDGETED');?></td>
-                                <td><?php echo $this->lang->line('LABEL_ACTUAL');?></td>
-                                <td><?php echo $this->lang->line('LABEL_VARIANCE');?></td>
+                                <td style="width: 33%"><?php echo $this->lang->line('LABEL_BUDGETED');?></td>
+                                <td style="width: 33%"><?php echo $this->lang->line('LABEL_ACTUAL');?></td>
+                                <td style="width: 33%"><?php echo $this->lang->line('LABEL_VARIANCE');?></td>
                             </tr>
                         </table>
                     </th>
@@ -92,9 +92,9 @@ foreach($purchases as $purchase)
                                 <td colspan="3" class="text-center"><?php echo $this->lang->line("LABEL_INSURANCE_EXPENSE"); ?></td>
                             </tr>
                             <tr>
-                                <td><?php echo $this->lang->line('LABEL_BUDGETED');?></td>
-                                <td><?php echo $this->lang->line('LABEL_ACTUAL');?></td>
-                                <td><?php echo $this->lang->line('LABEL_VARIANCE');?></td>
+                                <td style="width: 33%"><?php echo $this->lang->line('LABEL_BUDGETED');?></td>
+                                <td style="width: 33%"><?php echo $this->lang->line('LABEL_ACTUAL');?></td>
+                                <td style="width: 33%"><?php echo $this->lang->line('LABEL_VARIANCE');?></td>
                             </tr>
                         </table>
                     </th>
@@ -104,9 +104,9 @@ foreach($purchases as $purchase)
                                 <td colspan="3" class="text-center"><?php echo $this->lang->line("LABEL_LC_EXPENSE"); ?></td>
                             </tr>
                             <tr>
-                                <td><?php echo $this->lang->line('LABEL_BUDGETED');?></td>
-                                <td><?php echo $this->lang->line('LABEL_ACTUAL');?></td>
-                                <td><?php echo $this->lang->line('LABEL_VARIANCE');?></td>
+                                <td style="width: 33%"><?php echo $this->lang->line('LABEL_BUDGETED');?></td>
+                                <td style="width: 33%"><?php echo $this->lang->line('LABEL_ACTUAL');?></td>
+                                <td style="width: 33%"><?php echo $this->lang->line('LABEL_VARIANCE');?></td>
                             </tr>
                         </table>
                     </th>
@@ -116,9 +116,9 @@ foreach($purchases as $purchase)
                                 <td colspan="3" class="text-center"><?php echo $this->lang->line("LABEL_BANK_OTHER_CHARGES"); ?></td>
                             </tr>
                             <tr>
-                                <td><?php echo $this->lang->line('LABEL_BUDGETED');?></td>
-                                <td><?php echo $this->lang->line('LABEL_ACTUAL');?></td>
-                                <td><?php echo $this->lang->line('LABEL_VARIANCE');?></td>
+                                <td style="width: 33%" style="width: 33%"><?php echo $this->lang->line('LABEL_BUDGETED');?></td>
+                                <td style="width: 33%" style="width: 33%"><?php echo $this->lang->line('LABEL_ACTUAL');?></td>
+                                <td style="width: 33%" style="width: 33%"><?php echo $this->lang->line('LABEL_VARIANCE');?></td>
                             </tr>
                         </table>
                     </th>
@@ -128,9 +128,9 @@ foreach($purchases as $purchase)
                                 <td colspan="3" class="text-center"><?php echo $this->lang->line("LABEL_AIR_FREIGHT"); ?></td>
                             </tr>
                             <tr>
-                                <td><?php echo $this->lang->line('LABEL_BUDGETED');?></td>
-                                <td><?php echo $this->lang->line('LABEL_ACTUAL');?></td>
-                                <td><?php echo $this->lang->line('LABEL_VARIANCE');?></td>
+                                <td style="width: 33%"><?php echo $this->lang->line('LABEL_BUDGETED');?></td>
+                                <td style="width: 33%"><?php echo $this->lang->line('LABEL_ACTUAL');?></td>
+                                <td style="width: 33%"><?php echo $this->lang->line('LABEL_VARIANCE');?></td>
                             </tr>
                         </table>
                     </th>
@@ -140,9 +140,9 @@ foreach($purchases as $purchase)
                                 <td colspan="3" class="text-center"><?php echo $this->lang->line("LABEL_CARRIAGE"); ?></td>
                             </tr>
                             <tr>
-                                <td><?php echo $this->lang->line('LABEL_BUDGETED');?></td>
-                                <td><?php echo $this->lang->line('LABEL_ACTUAL');?></td>
-                                <td><?php echo $this->lang->line('LABEL_VARIANCE');?></td>
+                                <td style="width: 33%"><?php echo $this->lang->line('LABEL_BUDGETED');?></td>
+                                <td style="width: 33%"><?php echo $this->lang->line('LABEL_ACTUAL');?></td>
+                                <td style="width: 33%"><?php echo $this->lang->line('LABEL_VARIANCE');?></td>
                             </tr>
                         </table>
                     </th>
@@ -152,9 +152,9 @@ foreach($purchases as $purchase)
                                 <td colspan="3" class="text-center"><?php echo $this->lang->line("LABEL_CNF"); ?></td>
                             </tr>
                             <tr>
-                                <td><?php echo $this->lang->line('LABEL_BUDGETED');?></td>
-                                <td><?php echo $this->lang->line('LABEL_ACTUAL');?></td>
-                                <td><?php echo $this->lang->line('LABEL_VARIANCE');?></td>
+                                <td style="width: 33%"><?php echo $this->lang->line('LABEL_BUDGETED');?></td>
+                                <td style="width: 33%"><?php echo $this->lang->line('LABEL_ACTUAL');?></td>
+                                <td style="width: 33%"><?php echo $this->lang->line('LABEL_VARIANCE');?></td>
                             </tr>
                         </table>
                     </th>
@@ -164,9 +164,9 @@ foreach($purchases as $purchase)
                                 <td colspan="3" class="text-center"><?php echo $this->lang->line("LABEL_AIT"); ?></td>
                             </tr>
                             <tr>
-                                <td><?php echo $this->lang->line('LABEL_BUDGETED');?></td>
-                                <td><?php echo $this->lang->line('LABEL_ACTUAL');?></td>
-                                <td><?php echo $this->lang->line('LABEL_VARIANCE');?></td>
+                                <td style="width: 33%"><?php echo $this->lang->line('LABEL_BUDGETED');?></td>
+                                <td style="width: 33%"><?php echo $this->lang->line('LABEL_ACTUAL');?></td>
+                                <td style="width: 33%"><?php echo $this->lang->line('LABEL_VARIANCE');?></td>
                             </tr>
                         </table>
                     </th>
@@ -176,9 +176,9 @@ foreach($purchases as $purchase)
                                 <td colspan="3" class="text-center"><?php echo $this->lang->line("LABEL_MISC"); ?></td>
                             </tr>
                             <tr>
-                                <td><?php echo $this->lang->line('LABEL_BUDGETED');?></td>
-                                <td><?php echo $this->lang->line('LABEL_ACTUAL');?></td>
-                                <td><?php echo $this->lang->line('LABEL_VARIANCE');?></td>
+                                <td style="width: 33%"><?php echo $this->lang->line('LABEL_BUDGETED');?></td>
+                                <td style="width: 33%"><?php echo $this->lang->line('LABEL_ACTUAL');?></td>
+                                <td style="width: 33%"><?php echo $this->lang->line('LABEL_VARIANCE');?></td>
                             </tr>
                         </table>
                     </th>
@@ -188,9 +188,9 @@ foreach($purchases as $purchase)
                                 <td colspan="3" class="text-center"><?php echo $this->lang->line("LABEL_COGS_KG"); ?></td>
                             </tr>
                             <tr>
-                                <td><?php echo $this->lang->line('LABEL_BUDGETED');?></td>
-                                <td><?php echo $this->lang->line('LABEL_ACTUAL');?></td>
-                                <td><?php echo $this->lang->line('LABEL_VARIANCE');?></td>
+                                <td style="width: 33%"><?php echo $this->lang->line('LABEL_BUDGETED');?></td>
+                                <td style="width: 33%"><?php echo $this->lang->line('LABEL_ACTUAL');?></td>
+                                <td style="width: 33%"><?php echo $this->lang->line('LABEL_VARIANCE');?></td>
                             </tr>
                         </table>
                     </th>
@@ -200,9 +200,9 @@ foreach($purchases as $purchase)
                                 <td colspan="3" class="text-center"><?php echo $this->lang->line("LABEL_TOTAL_COGS"); ?></td>
                             </tr>
                             <tr>
-                                <td><?php echo $this->lang->line('LABEL_BUDGETED');?></td>
-                                <td><?php echo $this->lang->line('LABEL_ACTUAL');?></td>
-                                <td><?php echo $this->lang->line('LABEL_VARIANCE');?></td>
+                                <td style="width: 33%"><?php echo $this->lang->line('LABEL_BUDGETED');?></td>
+                                <td style="width: 33%"><?php echo $this->lang->line('LABEL_ACTUAL');?></td>
+                                <td style="width: 33%"><?php echo $this->lang->line('LABEL_VARIANCE');?></td>
                             </tr>
                         </table>
                     </th>
@@ -322,108 +322,108 @@ foreach($purchases as $purchase)
                                         <td>
                                             <table class="table table-bordered" style="margin-bottom: 0px;">
                                                 <tr>
-                                                    <td><?php echo $budgeted_data['quantity']; ?></td>
-                                                    <td><?php echo $detail['quantity']; ?></td>
-                                                    <td><?php echo abs($budgeted_data['quantity']-$detail['quantity']); ?></td>
+                                                    <td style="width: 33%"><?php echo $budgeted_data['quantity']; ?></td>
+                                                    <td style="width: 33%"><?php echo $detail['quantity']; ?></td>
+                                                    <td style="width: 33%"><?php echo abs($budgeted_data['quantity']-$detail['quantity']); ?></td>
                                                 </tr>
                                             </table>
                                         </td>
                                         <td>
                                             <table class="table table-bordered" style="margin-bottom: 0px;">
                                                 <tr>
-                                                    <td><?php echo $budgeted_data['pi_value'];?></td>
-                                                    <td><?php echo $detail['pi_value']; ?></td>
-                                                    <td><?php echo abs($budgeted_data['pi_value']- $detail['pi_value']);?></td>
+                                                    <td style="width: 33%"><?php echo $budgeted_data['pi_value'];?></td>
+                                                    <td style="width: 33%"><?php echo $detail['pi_value']; ?></td>
+                                                    <td style="width: 33%"><?php echo abs($budgeted_data['pi_value']- $detail['pi_value']);?></td>
                                                 </tr>
                                             </table>
                                         </td>
                                         <td>
                                             <table class="table table-bordered" style="margin-bottom: 0px;">
                                                 <tr>
-                                                    <td><?php echo round(($budgeted_data['insurance_exp']/100)*$budgeted_data['pi_value']*$budgeted_data['usd_conversion_rate']*$budgeted_data['final_quantity']);?></td>
-                                                    <td><?php echo round(($pi_percentage/100)*$detail['insurance_exp']); ?></td>
-                                                    <td><?php echo abs(round(($pi_percentage/100)*$detail['insurance_exp'])-round(($budgeted_data['insurance_exp']/100)*$budgeted_data['pi_value']*$budgeted_data['usd_conversion_rate']*$budgeted_data['final_quantity']));?></td>
+                                                    <td style="width: 33%"><?php echo round(($budgeted_data['insurance_exp']/100)*$budgeted_data['pi_value']*$budgeted_data['usd_conversion_rate']*$budgeted_data['final_quantity']);?></td>
+                                                    <td style="width: 33%"><?php echo round(($pi_percentage/100)*$detail['insurance_exp']); ?></td>
+                                                    <td style="width: 33%"><?php echo abs(round(($pi_percentage/100)*$detail['insurance_exp'])-round(($budgeted_data['insurance_exp']/100)*$budgeted_data['pi_value']*$budgeted_data['usd_conversion_rate']*$budgeted_data['final_quantity']));?></td>
                                                 </tr>
                                             </table>
                                         </td>
                                         <td>
                                             <table class="table table-bordered" style="margin-bottom: 0px;">
                                                 <tr>
-                                                    <td><?php echo round(($budgeted_data['lc_exp']/100)*$budgeted_data['pi_value']*$budgeted_data['usd_conversion_rate']*$budgeted_data['final_quantity']);?></td>
-                                                    <td><?php echo round(($pi_percentage/100)*$detail['lc_exp']); ?></td>
-                                                    <td><?php echo abs(round(($pi_percentage/100)*$detail['lc_exp'])-round(($budgeted_data['lc_exp']/100)*$budgeted_data['pi_value']*$budgeted_data['usd_conversion_rate']*$budgeted_data['final_quantity']));?></td>
+                                                    <td style="width: 33%"><?php echo round(($budgeted_data['lc_exp']/100)*$budgeted_data['pi_value']*$budgeted_data['usd_conversion_rate']*$budgeted_data['final_quantity']);?></td>
+                                                    <td style="width: 33%"><?php echo round(($pi_percentage/100)*$detail['lc_exp']); ?></td>
+                                                    <td style="width: 33%"><?php echo abs(round(($pi_percentage/100)*$detail['lc_exp'])-round(($budgeted_data['lc_exp']/100)*$budgeted_data['pi_value']*$budgeted_data['usd_conversion_rate']*$budgeted_data['final_quantity']));?></td>
                                                 </tr>
                                             </table>
                                         </td>
                                         <td>
                                             <table class="table table-bordered" style="margin-bottom: 0px;">
                                                 <tr>
-                                                    <td><?php echo round(($budgeted_data['bank_other_charges']/100)*$budgeted_data['pi_value']*$budgeted_data['usd_conversion_rate']*$budgeted_data['final_quantity']);?></td>
-                                                    <td><?php echo round(($pi_percentage/100)*$detail['bank_other_charges']); ?></td>
-                                                    <td><?php echo abs(round(($pi_percentage/100)*$detail['bank_other_charges'])-round(($budgeted_data['lc_exp']/100)*$budgeted_data['pi_value']*$budgeted_data['usd_conversion_rate']*$budgeted_data['final_quantity']));?></td>
+                                                    <td style="width: 33%"><?php echo round(($budgeted_data['bank_other_charges']/100)*$budgeted_data['pi_value']*$budgeted_data['usd_conversion_rate']*$budgeted_data['final_quantity']);?></td>
+                                                    <td style="width: 33%"><?php echo round(($pi_percentage/100)*$detail['bank_other_charges']); ?></td>
+                                                    <td style="width: 33%"><?php echo abs(round(($pi_percentage/100)*$detail['bank_other_charges'])-round(($budgeted_data['lc_exp']/100)*$budgeted_data['pi_value']*$budgeted_data['usd_conversion_rate']*$budgeted_data['final_quantity']));?></td>
                                                 </tr>
                                             </table>
                                         </td>
                                         <td>
                                             <table class="table table-bordered" style="margin-bottom: 0px;">
                                                 <tr>
-                                                    <td><?php echo round(($budgeted_data['air_freight_and_docs']/100)*$budgeted_data['pi_value']*$budgeted_data['usd_conversion_rate']*$budgeted_data['final_quantity']);?></td>
-                                                    <td><?php echo round(($pi_percentage/100)*$detail['air_freight_and_docs']); ?></td>
-                                                    <td><?php echo abs(round(($pi_percentage/100)*$detail['air_freight_and_docs'])-round(($budgeted_data['air_freight_and_docs']/100)*$budgeted_data['pi_value']*$budgeted_data['usd_conversion_rate']*$budgeted_data['final_quantity']));?></td>
+                                                    <td style="width: 33%"><?php echo round(($budgeted_data['air_freight_and_docs']/100)*$budgeted_data['pi_value']*$budgeted_data['usd_conversion_rate']*$budgeted_data['final_quantity']);?></td>
+                                                    <td style="width: 33%"><?php echo round(($pi_percentage/100)*$detail['air_freight_and_docs']); ?></td>
+                                                    <td style="width: 33%"><?php echo abs(round(($pi_percentage/100)*$detail['air_freight_and_docs'])-round(($budgeted_data['air_freight_and_docs']/100)*$budgeted_data['pi_value']*$budgeted_data['usd_conversion_rate']*$budgeted_data['final_quantity']));?></td>
                                                 </tr>
                                             </table>
                                         </td>
                                         <td>
                                             <table class="table table-bordered" style="margin-bottom: 0px;">
                                                 <tr>
-                                                    <td><?php echo round(($budgeted_data['carriage_inwards']/100)*$budgeted_data['pi_value']*$budgeted_data['usd_conversion_rate']*$budgeted_data['final_quantity']);?></td>
-                                                    <td><?php echo round(($pi_percentage/100)*$detail['carriage_inwards']); ?></td>
-                                                    <td><?php echo abs(round(($pi_percentage/100)*$detail['carriage_inwards'])-round(($budgeted_data['carriage_inwards']/100)*$budgeted_data['pi_value']*$budgeted_data['usd_conversion_rate']*$budgeted_data['final_quantity']));?></td>
+                                                    <td style="width: 33%"><?php echo round(($budgeted_data['carriage_inwards']/100)*$budgeted_data['pi_value']*$budgeted_data['usd_conversion_rate']*$budgeted_data['final_quantity']);?></td>
+                                                    <td style="width: 33%"><?php echo round(($pi_percentage/100)*$detail['carriage_inwards']); ?></td>
+                                                    <td style="width: 33%"><?php echo abs(round(($pi_percentage/100)*$detail['carriage_inwards'])-round(($budgeted_data['carriage_inwards']/100)*$budgeted_data['pi_value']*$budgeted_data['usd_conversion_rate']*$budgeted_data['final_quantity']));?></td>
                                                 </tr>
                                             </table>
                                         </td>
                                         <td>
                                             <table class="table table-bordered" style="margin-bottom: 0px;">
                                                 <tr>
-                                                    <td><?php echo round(($budgeted_data['cnf']/100)*$budgeted_data['pi_value']*$budgeted_data['usd_conversion_rate']*$budgeted_data['final_quantity']);?></td>
-                                                    <td><?php echo round(($pi_percentage/100)*$detail['cnf']); ?></td>
-                                                    <td><?php echo abs(round(($pi_percentage/100)*$detail['cnf'])-round(($budgeted_data['cnf']/100)*$budgeted_data['pi_value']*$budgeted_data['usd_conversion_rate']*$budgeted_data['final_quantity']));?></td>
+                                                    <td style="width: 33%"><?php echo round(($budgeted_data['cnf']/100)*$budgeted_data['pi_value']*$budgeted_data['usd_conversion_rate']*$budgeted_data['final_quantity']);?></td>
+                                                    <td style="width: 33%"><?php echo round(($pi_percentage/100)*$detail['cnf']); ?></td>
+                                                    <td style="width: 33%"><?php echo abs(round(($pi_percentage/100)*$detail['cnf'])-round(($budgeted_data['cnf']/100)*$budgeted_data['pi_value']*$budgeted_data['usd_conversion_rate']*$budgeted_data['final_quantity']));?></td>
                                                 </tr>
                                             </table>
                                         </td>
                                         <td>
                                             <table class="table table-bordered" style="margin-bottom: 0px;">
                                                 <tr>
-                                                    <td><?php echo round(($budgeted_data['ait']/100)*$budgeted_data['pi_value']*$budgeted_data['usd_conversion_rate']*$budgeted_data['final_quantity']);?></td>
-                                                    <td><?php echo round(($pi_percentage/100)*$detail['ait']);?></td>
-                                                    <td><?php echo abs(round(($pi_percentage/100)*$detail['ait'])-round(($budgeted_data['ait']/100)*$budgeted_data['pi_value']*$budgeted_data['usd_conversion_rate']*$budgeted_data['final_quantity']));?></td>
+                                                    <td style="width: 33%"><?php echo round(($budgeted_data['ait']/100)*$budgeted_data['pi_value']*$budgeted_data['usd_conversion_rate']*$budgeted_data['final_quantity']);?></td>
+                                                    <td style="width: 33%"><?php echo round(($pi_percentage/100)*$detail['ait']);?></td>
+                                                    <td style="width: 33%"><?php echo abs(round(($pi_percentage/100)*$detail['ait'])-round(($budgeted_data['ait']/100)*$budgeted_data['pi_value']*$budgeted_data['usd_conversion_rate']*$budgeted_data['final_quantity']));?></td>
                                                 </tr>
                                             </table>
                                         </td>
                                         <td>
                                             <table class="table table-bordered" style="margin-bottom: 0px;">
                                                 <tr>
-                                                    <td><?php echo round(($budgeted_data['miscellaneous']/100)*$budgeted_data['pi_value']*$budgeted_data['usd_conversion_rate']*$budgeted_data['final_quantity']);?></td>
-                                                    <td><?php echo round(($pi_percentage/100)*$detail['miscellaneous']); ?></td>
-                                                    <td><?php echo abs(round(($pi_percentage/100)*$detail['miscellaneous'])-round(($budgeted_data['miscellaneous']/100)*$budgeted_data['pi_value']*$budgeted_data['usd_conversion_rate']*$budgeted_data['final_quantity']));?></td>
+                                                    <td style="width: 33%"><?php echo round(($budgeted_data['miscellaneous']/100)*$budgeted_data['pi_value']*$budgeted_data['usd_conversion_rate']*$budgeted_data['final_quantity']);?></td>
+                                                    <td style="width: 33%"><?php echo round(($pi_percentage/100)*$detail['miscellaneous']); ?></td>
+                                                    <td style="width: 33%"><?php echo abs(round(($pi_percentage/100)*$detail['miscellaneous'])-round(($budgeted_data['miscellaneous']/100)*$budgeted_data['pi_value']*$budgeted_data['usd_conversion_rate']*$budgeted_data['final_quantity']));?></td>
                                                 </tr>
                                             </table>
                                         </td>
                                         <td>
                                             <table class="table table-bordered" style="margin-bottom: 0px;">
                                                 <tr>
-                                                    <td><?php echo round($budgeted_total_cogs/$budgeted_data['quantity']);?></td>
-                                                    <td><?php echo round($total_cogs/$detail['quantity']); ?></td>
-                                                    <td><?php echo abs(round($total_cogs/$detail['quantity'])-round($budgeted_total_cogs/$budgeted_data['quantity']));?></td>
+                                                    <td style="width: 33%"><?php echo round($budgeted_total_cogs/$budgeted_data['quantity']);?></td>
+                                                    <td style="width: 33%"><?php echo round($total_cogs/$detail['quantity']); ?></td>
+                                                    <td style="width: 33%"><?php echo abs(round($total_cogs/$detail['quantity'])-round($budgeted_total_cogs/$budgeted_data['quantity']));?></td>
                                                 </tr>
                                             </table>
                                         </td>
                                         <td>
                                             <table class="table table-bordered" style="margin-bottom: 0px;">
                                                 <tr>
-                                                    <td><?php echo round($budgeted_total_cogs);?></td>
-                                                    <td><?php echo round($total_cogs); ?></td>
-                                                    <td><?php echo abs(round($total_cogs)-round($budgeted_total_cogs));?></td>
+                                                    <td style="width: 33%"><?php echo round($budgeted_total_cogs);?></td>
+                                                    <td style="width: 33%"><?php echo round($total_cogs); ?></td>
+                                                    <td style="width: 33%"><?php echo abs(round($total_cogs)-round($budgeted_total_cogs));?></td>
                                                 </tr>
                                             </table>
                                         </td>

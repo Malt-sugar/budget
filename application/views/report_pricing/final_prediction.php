@@ -205,12 +205,12 @@ foreach($pricingData as $pricing)
                                 <td>
                                     <table class="table table-bordered" style="margin-bottom: 0px;">
                                         <tr>
-                                            <td><?php echo $detail['final_targeted_quantity']; ?></td>
+                                            <td style="width: 33%"><?php echo $detail['final_targeted_quantity']; ?></td>
                                             <?php
                                             foreach($prediction_years as $prediction_year)
                                             {
                                                 ?>
-                                                <td><?php echo $this->report_pricing_model->get_prediction_year_quantity($prediction_year['year_id'], $variety_id);?></td>
+                                                <td style="width: 33%"><?php echo $this->report_pricing_model->get_prediction_year_quantity($prediction_year['year_id'], $variety_id);?></td>
                                                 <?php
                                             }
                                             ?>
@@ -220,12 +220,12 @@ foreach($pricingData as $pricing)
                                 <td>
                                     <table class="table table-bordered" style="margin-bottom: 0px;">
                                         <tr>
-                                            <td><?php echo $detail['final_targeted_quantity']*round($net_sales_price); ?></td>
+                                            <td style="width: 33%"><?php echo $detail['final_targeted_quantity']*round($net_sales_price); ?></td>
                                             <?php
                                             foreach($prediction_years as $prediction_year)
                                             {
                                                 ?>
-                                                <td><?php echo $this->report_pricing_model->get_prediction_year_quantity($prediction_year['year_id'], $variety_id)*round($net_sales_price);?></td>
+                                                <td style="width: 33%"><?php echo $this->report_pricing_model->get_prediction_year_quantity($prediction_year['year_id'], $variety_id)*round($net_sales_price);?></td>
                                                 <?php
                                             }
                                             ?>
@@ -235,12 +235,12 @@ foreach($pricingData as $pricing)
                                 <td>
                                     <table class="table table-bordered" style="margin-bottom: 0px;">
                                         <tr>
-                                            <td><?php echo $detail['final_targeted_quantity']*round(($detail['target_profit']/100)*$cogs); ?></td>
+                                            <td style="width: 33%"><?php echo $detail['final_targeted_quantity']*round(($detail['target_profit']/100)*$cogs); ?></td>
                                             <?php
                                             foreach($prediction_years as $prediction_year)
                                             {
                                                 ?>
-                                                <td><?php echo $this->report_pricing_model->get_prediction_year_quantity($prediction_year['year_id'], $variety_id)*round(($detail['target_profit']/100)*$cogs);?></td>
+                                                <td style="width: 33%"><?php echo $this->report_pricing_model->get_prediction_year_quantity($prediction_year['year_id'], $variety_id)*round(($detail['target_profit']/100)*$cogs);?></td>
                                                 <?php
                                             }
                                             ?>
