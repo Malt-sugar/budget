@@ -119,4 +119,42 @@ class System_helper
         $result = $CI->db->get()->row_array();
         return $result['year_id'];
     }
+
+    public static function get_prediction_years($year_id)
+    {
+        $CI = & get_instance();
+        $prediction_array = array();
+        $prediction_config = $CI->config->item('prediction_years');
+
+        $CI->db->from('ait_year year');
+        $CI->db->select('year.year_name');
+        $CI->db->where('year.year_id',$year_id);
+        $result = $CI->db->get()->row_array();
+        $year = $result['year_name'];
+
+        for($i=0; $i<$prediction_config; $i++)
+        {
+            $year++;
+            $CI->db->from('ait_year year');
+            $CI->db->select('year.year_id');
+            $CI->db->where('year.year_name',$year);
+            $result = $CI->db->get()->row_array();
+            if(sizeof($result)>0 && strlen($result['year_id'])>1)
+            {
+                $prediction_array[] = array('year_id'=>$result['year_id'], 'year_name'=>$year);
+            }
+        }
+        return $prediction_array;
+    }
+
+    public static function get_year_name($year_id)
+    {
+        $CI = & get_instance();
+        $CI->db->from('ait_year year');
+        $CI->db->select('year.year_name');
+        $CI->db->where('year.year_id',$year_id);
+        $result = $CI->db->get()->row_array();
+        $year_name = $result['year_name'];
+        return $year_name;
+    }
 }

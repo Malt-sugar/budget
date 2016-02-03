@@ -288,4 +288,16 @@ class Report_pricing_model extends CI_Model
         return $results;
     }
 
+    public function get_prediction_year_quantity($year, $variety)
+    {
+        $this->db->from('budget_sales_target_prediction bstp');
+        $this->db->select('SUM(bstp.budgeted_quantity) total');
+        $this->db->where('bstp.year', $year);
+        $this->db->where('bstp.variety_id', $variety);
+        $this->db->where('LENGTH(bstp.division_id)<', 2);
+        $result = $this->db->get()->row_array();
+        $budgeted_quantity = isset($result['total'])?$result['total']:0;
+        return $budgeted_quantity;
+    }
+
 }

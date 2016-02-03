@@ -385,7 +385,7 @@ class Customer_sales_target extends ROOT_Controller
         $type_id = $this->input->post('type_id');
         $current_id = $this->input->post('current_id');
 
-        $data['prediction_years'] = $this->customer_sales_target_model->get_prediction_years($year);
+        $data['prediction_years'] = System_helper::get_prediction_years($year);
         $data['crop_id'] = $crop_id;
         $data['type_id'] = $type_id;
         $data['varieties'] = $this->customer_sales_target_model->get_variety_by_crop_type($crop_id, $type_id);

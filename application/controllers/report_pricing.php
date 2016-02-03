@@ -55,7 +55,6 @@ class Report_pricing extends ROOT_Controller
         }
         else
         {
-            $user = User_helper::get_user();
             $year = $this->input->post('year');
             $report_type = $this->input->post('report_type');
             $comparison_type = $this->input->post('comparison_type');
@@ -139,10 +138,19 @@ class Report_pricing extends ROOT_Controller
             }
             elseif($report_type==7)
             {
-                $data['title'] = 'Final Prediction Pricing';
-                $data['pricingData'] = $this->report_pricing_model->get_final_prediction_info($year, $crop_id, $type_id, $variety_id);
-                $ajax['status'] = true;
-                $ajax['content'][] = array("id" => "#report_list", "html" => $this->load->view("report_pricing/budget_vs_actual_comparison_report", $data, true));
+                if(strlen($year)>2)
+                {
+                    $data['title'] = 'Final Prediction Pricing';
+                    $data['pricingData'] = $this->report_pricing_model->get_final_prediction_info($year, $crop_id, $type_id, $variety_id);
+                    $ajax['status'] = true;
+                    $ajax['content'][] = array("id" => "#report_list", "html" => $this->load->view("report_pricing/final_prediction", $data, true));
+                }
+                else
+                {
+                    $ajax['status'] = false;
+                    $ajax['message'] = "Please select a Year!";
+                    $this->jsonReturn($ajax);
+                }
             }
 
             $this->jsonReturn($ajax);

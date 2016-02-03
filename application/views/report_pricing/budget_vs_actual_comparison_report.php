@@ -160,7 +160,7 @@ foreach($pricingData as $pricing)
                                 $actual_net_profit = $final_net_sales_price - $actual_cogs_expenses;
                                 $total_budgeted_net_profit = $budgeted_net_profit*$budgeted_data['final_quantity'];
                                 $total_actual_net_profit = $budgeted_net_profit*$detail['quantity'];
-                                $actual_sales = Report_helper::get_actual_sales_qty($detail['year'], null, null, null, $detail['variety_id']);
+                                $actual_sales = Report_helper::get_actual_sales_qty($detail['year'], null, null, null, $variety_id);
                                 ?>
                                 <tr>
                                     <td>

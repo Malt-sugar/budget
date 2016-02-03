@@ -254,7 +254,7 @@ if(is_array($targets) && sizeof($targets)>0)
                                             <?php
                                             if(is_array($typeVal['variety']) && sizeof($typeVal['variety'])>0)
                                             {
-                                                $prediction_years = $this->customer_sales_target_model->get_prediction_years($arranged_targets['year']);
+                                                $prediction_years = System_helper::get_prediction_years($arranged_targets['year']);
                                                 ?>
                                                 <th><?php echo $this->lang->line('LABEL_VARIETY')?></th>
                                                 <th><?php echo $this->lang->line('LABEL_QUANTITY_KG')?></th>

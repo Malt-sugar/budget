@@ -158,32 +158,6 @@ class Customer_sales_target_model extends CI_Model
         }
     }
 
-    public function get_prediction_years($year_id)
-    {
-        $prediction_array = array();
-        $prediction_config = $this->config->item('prediction_years');
-
-        $this->db->from('ait_year year');
-        $this->db->select('year.year_name');
-        $this->db->where('year.year_id',$year_id);
-        $result = $this->db->get()->row_array();
-        $year = $result['year_name'];
-
-        for($i=0; $i<$prediction_config; $i++)
-        {
-            $year++;
-            $this->db->from('ait_year year');
-            $this->db->select('year.year_id');
-            $this->db->where('year.year_name',$year);
-            $result = $this->db->get()->row_array();
-            if(sizeof($result)>0 && strlen($result['year_id'])>1)
-            {
-                $prediction_array[] = array('year_id'=>$result['year_id'], 'year_name'=>$year);
-            }
-        }
-        return $prediction_array;
-    }
-
     public function prediction_initial_update($year, $customer)
     {
         $data = array('status'=>0);
