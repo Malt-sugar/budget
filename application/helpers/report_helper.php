@@ -1,7 +1,7 @@
 <?php
 class Report_helper
 {
-    public static function get_actual_sales_qty($year, $zone, $territory, $customer, $variety)
+    public static function get_actual_sales_qty($year, $zone=null, $territory=null, $customer=null, $variety)
     {
         $CI = & get_instance();
         $user = User_helper::get_user();

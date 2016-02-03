@@ -106,6 +106,7 @@ class Report_sales_quantity_target_model extends CI_Model
                 if(isset($district) && $district>0)
                 {
                     $this->db->where('zilla_id', $district);
+                    $this->db->where('LENGTH(customer_id)<', 2);
                 }
             }
             elseif($selection_type==3)
@@ -121,6 +122,7 @@ class Report_sales_quantity_target_model extends CI_Model
                 if(isset($territory) && strlen($territory)>1)
                 {
                     $this->db->where('territory_id', $territory);
+                    $this->db->where('zilla_id', null);
                 }
             }
             elseif($selection_type==2)
@@ -132,6 +134,7 @@ class Report_sales_quantity_target_model extends CI_Model
                 if(isset($zone) && strlen($zone)>1)
                 {
                     $this->db->where('zone_id', $zone);
+                    $this->db->where('LENGTH(territory_id)<', 2);
                 }
             }
             elseif($selection_type==1)
@@ -139,11 +142,12 @@ class Report_sales_quantity_target_model extends CI_Model
                 if(isset($division) && strlen($division)>1)
                 {
                     $this->db->where('division_id', $division);
+                    $this->db->where('LENGTH(zone_id)<', 2);
                 }
             }
             elseif($selection_type==0)
             {
-                $this->db->where('LENGTH(division_id)>', 1);
+                $this->db->where('LENGTH(division_id)<', 2);
             }
 
             if(isset($result['year']) && strlen($result['year'])>1)
@@ -212,18 +216,22 @@ class Report_sales_quantity_target_model extends CI_Model
         if($selection_type==0)
         {
             $this->db->where('division_id', $location);
+            $this->db->where('LENGTH(zone_id)<', 2);
         }
         elseif($selection_type==1)
         {
             $this->db->where('zone_id', $location);
+            $this->db->where('LENGTH(territory_id)<', 2);
         }
         elseif($selection_type==2)
         {
             $this->db->where('territory_id', $location);
+            $this->db->where('zilla_id', null);
         }
         elseif($selection_type==3)
         {
             $this->db->where('zilla_id', $location);
+            $this->db->where('LENGTH(customer_id)<', 2);
         }
         elseif($selection_type==4)
         {

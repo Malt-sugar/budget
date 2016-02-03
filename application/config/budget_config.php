@@ -70,6 +70,7 @@ $config['pricing_report_type'][3] = 'Marketing';
 $config['pricing_report_type'][4] = 'Final';
 $config['pricing_report_type'][5] = 'Comparison';
 $config['pricing_report_type'][6] = 'Budget Vs. Actual';
+$config['pricing_report_type'][7] = 'Final Prediction Pricing';
 
 // Pricing Comparison Type
 $config['pricing_report_comparison'][1] = 'Commission';

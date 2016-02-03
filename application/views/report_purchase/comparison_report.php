@@ -340,72 +340,72 @@ foreach($purchases as $purchase)
                                         <td>
                                             <table class="table table-bordered" style="margin-bottom: 0px;">
                                                 <tr>
-                                                    <td><?php echo round(($budgeted_data['insurance_exp']/100)*$budgeted_data['pi_value']*$budgeted_data['usd_conversion_rate']);?></td>
+                                                    <td><?php echo round(($budgeted_data['insurance_exp']/100)*$budgeted_data['pi_value']*$budgeted_data['usd_conversion_rate']*$budgeted_data['final_quantity']);?></td>
                                                     <td><?php echo round(($pi_percentage/100)*$detail['insurance_exp']); ?></td>
-                                                    <td><?php echo abs(round(($pi_percentage/100)*$detail['insurance_exp'])-round(($budgeted_data['insurance_exp']/100)*$budgeted_data['pi_value']*$budgeted_data['usd_conversion_rate']));?></td>
+                                                    <td><?php echo abs(round(($pi_percentage/100)*$detail['insurance_exp'])-round(($budgeted_data['insurance_exp']/100)*$budgeted_data['pi_value']*$budgeted_data['usd_conversion_rate']*$budgeted_data['final_quantity']));?></td>
                                                 </tr>
                                             </table>
                                         </td>
                                         <td>
                                             <table class="table table-bordered" style="margin-bottom: 0px;">
                                                 <tr>
-                                                    <td><?php echo round(($budgeted_data['lc_exp']/100)*$budgeted_data['pi_value']*$budgeted_data['usd_conversion_rate']);?></td>
+                                                    <td><?php echo round(($budgeted_data['lc_exp']/100)*$budgeted_data['pi_value']*$budgeted_data['usd_conversion_rate']*$budgeted_data['final_quantity']);?></td>
                                                     <td><?php echo round(($pi_percentage/100)*$detail['lc_exp']); ?></td>
-                                                    <td><?php echo abs(round(($pi_percentage/100)*$detail['lc_exp'])-round(($budgeted_data['lc_exp']/100)*$budgeted_data['pi_value']*$budgeted_data['usd_conversion_rate']));?></td>
+                                                    <td><?php echo abs(round(($pi_percentage/100)*$detail['lc_exp'])-round(($budgeted_data['lc_exp']/100)*$budgeted_data['pi_value']*$budgeted_data['usd_conversion_rate']*$budgeted_data['final_quantity']));?></td>
                                                 </tr>
                                             </table>
                                         </td>
                                         <td>
                                             <table class="table table-bordered" style="margin-bottom: 0px;">
                                                 <tr>
-                                                    <td><?php echo round(($budgeted_data['bank_other_charges']/100)*$budgeted_data['pi_value']*$budgeted_data['usd_conversion_rate']);?></td>
+                                                    <td><?php echo round(($budgeted_data['bank_other_charges']/100)*$budgeted_data['pi_value']*$budgeted_data['usd_conversion_rate']*$budgeted_data['final_quantity']);?></td>
                                                     <td><?php echo round(($pi_percentage/100)*$detail['bank_other_charges']); ?></td>
-                                                    <td><?php echo abs(round(($pi_percentage/100)*$detail['bank_other_charges'])-round(($budgeted_data['lc_exp']/100)*$budgeted_data['pi_value']*$budgeted_data['usd_conversion_rate']));?></td>
+                                                    <td><?php echo abs(round(($pi_percentage/100)*$detail['bank_other_charges'])-round(($budgeted_data['lc_exp']/100)*$budgeted_data['pi_value']*$budgeted_data['usd_conversion_rate']*$budgeted_data['final_quantity']));?></td>
                                                 </tr>
                                             </table>
                                         </td>
                                         <td>
                                             <table class="table table-bordered" style="margin-bottom: 0px;">
                                                 <tr>
-                                                    <td><?php echo round(($budgeted_data['air_freight_and_docs']/100)*$budgeted_data['pi_value']*$budgeted_data['usd_conversion_rate']);?></td>
+                                                    <td><?php echo round(($budgeted_data['air_freight_and_docs']/100)*$budgeted_data['pi_value']*$budgeted_data['usd_conversion_rate']*$budgeted_data['final_quantity']);?></td>
                                                     <td><?php echo round(($pi_percentage/100)*$detail['air_freight_and_docs']); ?></td>
-                                                    <td><?php echo abs(round(($pi_percentage/100)*$detail['air_freight_and_docs'])-round(($budgeted_data['air_freight_and_docs']/100)*$budgeted_data['pi_value']*$budgeted_data['usd_conversion_rate']));?></td>
+                                                    <td><?php echo abs(round(($pi_percentage/100)*$detail['air_freight_and_docs'])-round(($budgeted_data['air_freight_and_docs']/100)*$budgeted_data['pi_value']*$budgeted_data['usd_conversion_rate']*$budgeted_data['final_quantity']));?></td>
                                                 </tr>
                                             </table>
                                         </td>
                                         <td>
                                             <table class="table table-bordered" style="margin-bottom: 0px;">
                                                 <tr>
-                                                    <td><?php echo round(($budgeted_data['carriage_inwards']/100)*$budgeted_data['pi_value']*$budgeted_data['usd_conversion_rate']);?></td>
+                                                    <td><?php echo round(($budgeted_data['carriage_inwards']/100)*$budgeted_data['pi_value']*$budgeted_data['usd_conversion_rate']*$budgeted_data['final_quantity']);?></td>
                                                     <td><?php echo round(($pi_percentage/100)*$detail['carriage_inwards']); ?></td>
-                                                    <td><?php echo abs(round(($pi_percentage/100)*$detail['carriage_inwards'])-round(($budgeted_data['carriage_inwards']/100)*$budgeted_data['pi_value']*$budgeted_data['usd_conversion_rate']));?></td>
+                                                    <td><?php echo abs(round(($pi_percentage/100)*$detail['carriage_inwards'])-round(($budgeted_data['carriage_inwards']/100)*$budgeted_data['pi_value']*$budgeted_data['usd_conversion_rate']*$budgeted_data['final_quantity']));?></td>
                                                 </tr>
                                             </table>
                                         </td>
                                         <td>
                                             <table class="table table-bordered" style="margin-bottom: 0px;">
                                                 <tr>
-                                                    <td><?php echo round(($budgeted_data['cnf']/100)*$budgeted_data['pi_value']*$budgeted_data['usd_conversion_rate']);?></td>
+                                                    <td><?php echo round(($budgeted_data['cnf']/100)*$budgeted_data['pi_value']*$budgeted_data['usd_conversion_rate']*$budgeted_data['final_quantity']);?></td>
                                                     <td><?php echo round(($pi_percentage/100)*$detail['cnf']); ?></td>
-                                                    <td><?php echo abs(round(($pi_percentage/100)*$detail['cnf'])-round(($budgeted_data['cnf']/100)*$budgeted_data['pi_value']*$budgeted_data['usd_conversion_rate']));?></td>
+                                                    <td><?php echo abs(round(($pi_percentage/100)*$detail['cnf'])-round(($budgeted_data['cnf']/100)*$budgeted_data['pi_value']*$budgeted_data['usd_conversion_rate']*$budgeted_data['final_quantity']));?></td>
                                                 </tr>
                                             </table>
                                         </td>
                                         <td>
                                             <table class="table table-bordered" style="margin-bottom: 0px;">
                                                 <tr>
-                                                    <td><?php echo round(($budgeted_data['ait']/100)*$budgeted_data['pi_value']*$budgeted_data['usd_conversion_rate']);?></td>
+                                                    <td><?php echo round(($budgeted_data['ait']/100)*$budgeted_data['pi_value']*$budgeted_data['usd_conversion_rate']*$budgeted_data['final_quantity']);?></td>
                                                     <td><?php echo round(($pi_percentage/100)*$detail['ait']);?></td>
-                                                    <td><?php echo abs(round(($pi_percentage/100)*$detail['ait'])-round(($budgeted_data['ait']/100)*$budgeted_data['pi_value']*$budgeted_data['usd_conversion_rate']));?></td>
+                                                    <td><?php echo abs(round(($pi_percentage/100)*$detail['ait'])-round(($budgeted_data['ait']/100)*$budgeted_data['pi_value']*$budgeted_data['usd_conversion_rate']*$budgeted_data['final_quantity']));?></td>
                                                 </tr>
                                             </table>
                                         </td>
                                         <td>
                                             <table class="table table-bordered" style="margin-bottom: 0px;">
                                                 <tr>
-                                                    <td><?php echo round(($budgeted_data['miscellaneous']/100)*$budgeted_data['pi_value']*$budgeted_data['usd_conversion_rate']);?></td>
+                                                    <td><?php echo round(($budgeted_data['miscellaneous']/100)*$budgeted_data['pi_value']*$budgeted_data['usd_conversion_rate']*$budgeted_data['final_quantity']);?></td>
                                                     <td><?php echo round(($pi_percentage/100)*$detail['miscellaneous']); ?></td>
-                                                    <td><?php echo abs(round(($pi_percentage/100)*$detail['miscellaneous'])-round(($budgeted_data['miscellaneous']/100)*$budgeted_data['pi_value']*$budgeted_data['usd_conversion_rate']));?></td>
+                                                    <td><?php echo abs(round(($pi_percentage/100)*$detail['miscellaneous'])-round(($budgeted_data['miscellaneous']/100)*$budgeted_data['pi_value']*$budgeted_data['usd_conversion_rate']*$budgeted_data['final_quantity']));?></td>
                                                 </tr>
                                             </table>
                                         </td>

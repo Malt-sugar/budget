@@ -187,7 +187,6 @@ class Report_sales_quantity_target extends ROOT_Controller
                 $detail[] = array('location_id'=>$customer['distributor_id'], 'location_name'=>$customer['distributor_name'], 'budgeted'=>$quantity);
             }
         }
-        //print_r($detail);
 
         $data['detail'] = $detail;
         $ajax['status'] = true;

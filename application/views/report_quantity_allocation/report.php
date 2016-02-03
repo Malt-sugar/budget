@@ -25,14 +25,16 @@
                     <th><?php echo $this->lang->line("LABEL_CROP"); ?></th>
                     <th><?php echo $this->lang->line("LABEL_TYPE"); ?></th>
                     <th><?php echo $this->lang->line("LABEL_VARIETY"); ?></th>
-                    <th><?php echo $this->lang->line("LABEL_BUDGETED"); ?></th>
-                    <th><?php echo $this->lang->line("LABEL_TARGETED"); ?></th>
+                    <th class="text-center"><?php echo $this->lang->line("LABEL_BUDGETED"); ?></th>
+                    <th class="text-center"><?php echo $this->lang->line("LABEL_TARGETED"); ?></th>
                 </tr>
             </thead>
             <tbody>
                 <?php
                 if(sizeof($allocations)>0)
                 {
+                    $sum_total_budgeted = 0;
+                    $sum_total_targeted = 0;
                     foreach($allocations as $key=>$allocation)
                     {
                         ?>
@@ -40,11 +42,22 @@
                             <td><?php echo $allocation['crop_name'];?></td>
                             <td><?php echo $allocation['type_name'];?></td>
                             <td><?php echo $allocation['variety_name'];?></td>
-                            <td><?php echo $allocation['total_budgeted_quantity'];?></td>
-                            <td><?php echo $allocation['total_targeted_quantity'];?></td>
+                            <td class="text-center"><?php echo $allocation['total_budgeted'];?></td>
+                            <td class="text-center"><?php echo $allocation['total_targeted'];?></td>
                         </tr>
                         <?php
+                        $sum_total_budgeted+=$allocation['total_budgeted'];
+                        $sum_total_targeted+=$allocation['total_targeted'];
                     }
+                    ?>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td style="vertical-align: middle;"><label class="label label-danger pull-right"><?php echo $this->lang->line('LABEL_TOTAL')?></label></td>
+                        <td class="text-center"><?php echo $sum_total_budgeted;?></td>
+                        <td class="text-center"><?php echo $sum_total_targeted;?></td>
+                    </tr>
+                    <?php
                 }
                 else
                 {

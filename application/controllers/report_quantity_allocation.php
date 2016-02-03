@@ -57,6 +57,7 @@ class Report_quantity_allocation extends ROOT_Controller
         else
         {
             $user = User_helper::get_user();
+            $selection_type = $this->input->post('selection_type');
             $year = $this->input->post('year');
             $from_month = $this->input->post('from_month');
             $to_month = $this->input->post('to_month');
@@ -90,7 +91,7 @@ class Report_quantity_allocation extends ROOT_Controller
             else
             {
                 $data['title'] = "Quantity Allocation Report";
-                $data['allocations'] = $this->report_quantity_allocation_model->get_quantity_allocation_info($year, $from_month, $to_month, $division, $zone, $territory, $district, $customer, $crop_id, $type_id, $variety_id);
+                $data['allocations'] = $this->report_quantity_allocation_model->get_quantity_allocation_info($selection_type, $year, $from_month, $to_month, $division, $zone, $territory, $district, $customer, $crop_id, $type_id, $variety_id);
                 $ajax['status'] = true;
                 $ajax['content'][] = array("id" => "#report_list", "html" => $this->load->view("report_quantity_allocation/report", $data, true));
                 $this->jsonReturn($ajax);

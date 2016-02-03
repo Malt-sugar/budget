@@ -10,7 +10,7 @@ class Report_quantity_allocation_model extends CI_Model
         parent::__construct();
     }
 
-    public function get_quantity_allocation_info($year, $from_month, $to_month, $division, $zone, $territory, $district, $customer, $crop_id, $type_id, $variety_id)
+    public function get_quantity_allocation_info($selection_type, $year, $from_month, $to_month, $division, $zone, $territory, $district, $customer, $crop_id, $type_id, $variety_id)
     {
         $this->db->from('budget_sales_target bst');
         $this->db->select('bst.*');
@@ -19,8 +19,8 @@ class Report_quantity_allocation_model extends CI_Model
         $this->db->select('ati.product_type type_name');
         $this->db->select('ay.year_name year_name');
         $this->db->select('bstm.month selling_month');
-        $this->db->select('SUM(bst.budgeted_quantity) total_budgeted_quantity');
-        $this->db->select('SUM(bst.targeted_quantity) total_targeted_quantity');
+        $this->db->select('bsp.mrp unit_price_per_kg');
+
         $this->db->where('bst.status',$this->config->item('status_active'));
 
         if(strlen($year)>1)
@@ -39,49 +39,142 @@ class Report_quantity_allocation_model extends CI_Model
         {
             $this->db->where('bst.variety_id', $variety_id);
         }
-        if(strlen($division)>1)
-        {
-            $this->db->where('bst.division_id', $division);
-        }
-        if(strlen($zone)>1)
-        {
-            $this->db->where('bst.zone_id', $zone);
-        }
-        if(strlen($territory)>1)
-        {
-            $this->db->where('bst.territory_id', $territory);
-        }
-        if($district>0)
-        {
-            $this->db->where('bst.zilla_id', $district);
-        }
-        if(strlen($customer)>1)
-        {
-            $this->db->where('bst.customer_id', $customer);
-        }
-        if(strlen($from_month)>0 && strlen($to_month)>0)
+
+        if(strlen($from_month)>1 && strlen($to_month)>1)
         {
             $this->db->where('bstm.month >=', $from_month);
             $this->db->where('bstm.month <=', $to_month);
         }
 
-        $this->db->where('length(bstm.territory_id)>2');
-
         $this->db->join('ait_varriety_info avi', 'avi.varriety_id = bst.variety_id', 'LEFT');
         $this->db->join('ait_crop_info aci', 'aci.crop_id = bst.crop_id', 'LEFT');
         $this->db->join('ait_product_type ati', 'ati.product_type_id = bst.type_id', 'LEFT');
         $this->db->join('ait_year ay', 'ay.year_id = bst.year', 'LEFT');
-        $this->db->join('budget_sales_target_monthwise bstm', 'bstm.sales_target_id = bst.id', 'INNER');
+        $this->db->join('budget_sales_target_monthwise bstm', 'bstm.sales_target_id = bst.id AND LENGTH(bstm.territory_id)>2', 'LEFT');
+        $this->db->join('budget_principal_quantity bpq', 'bpq.variety_id = bst.variety_id AND bpq.year = bst.year', 'LEFT');
+        $this->db->join('budget_sales_pricing bsp', 'bsp.variety_id = bst.variety_id AND bsp.year = bst.year AND bsp.pricing_type="'.$this->config->item('pricing_type_final').'"', 'LEFT');
+
+        $this->db->group_by('bst.crop_id');
+        $this->db->group_by('bst.type_id');
+        $this->db->group_by('bst.variety_id');
+
         $results = $this->db->get()->result_array();
 
-        foreach($results as $key=>&$result)
+        foreach($results as &$result)
         {
-            if(!($result['total_budgeted_quantity']>0))
+            $this->db->from('budget_sales_target');
+            $this->db->select('SUM(budgeted_quantity) total_budgeted');
+            $this->db->select('SUM(targeted_quantity) total_targeted');
+
+            if($selection_type==5)
             {
-                unset($results[$key]);
+                if(isset($division) && strlen($division)>1)
+                {
+                    $this->db->where('division_id', $division);
+                }
+                if(isset($zone) && strlen($zone)>1)
+                {
+                    $this->db->where('zone_id', $zone);
+                }
+                if(isset($territory) && strlen($territory)>1)
+                {
+                    $this->db->where('territory_id', $territory);
+                }
+                if(isset($district) && $district>0)
+                {
+                    $this->db->where('zilla_id', $district);
+                }
+                if(isset($customer) && strlen($customer)>1)
+                {
+                    $this->db->where('customer_id', $customer);
+                }
             }
+            elseif($selection_type==4)
+            {
+                if(isset($division) && strlen($division)>1)
+                {
+                    $this->db->where('division_id', $division);
+                }
+                if(isset($zone) && strlen($zone)>1)
+                {
+                    $this->db->where('zone_id', $zone);
+                }
+                if(isset($territory) && strlen($territory)>1)
+                {
+                    $this->db->where('territory_id', $territory);
+                }
+                if(isset($district) && $district>0)
+                {
+                    $this->db->where('zilla_id', $district);
+                    $this->db->where('LENGTH(customer_id)<', 2);
+                }
+            }
+            elseif($selection_type==3)
+            {
+                if(isset($division) && strlen($division)>1)
+                {
+                    $this->db->where('division_id', $division);
+                }
+                if(isset($zone) && strlen($zone)>1)
+                {
+                    $this->db->where('zone_id', $zone);
+                }
+                if(isset($territory) && strlen($territory)>1)
+                {
+                    $this->db->where('territory_id', $territory);
+                    $this->db->where('zilla_id', null);
+                }
+            }
+            elseif($selection_type==2)
+            {
+                if(isset($division) && strlen($division)>1)
+                {
+                    $this->db->where('division_id', $division);
+                }
+                if(isset($zone) && strlen($zone)>1)
+                {
+                    $this->db->where('zone_id', $zone);
+                    $this->db->where('LENGTH(territory_id)<', 2);
+                }
+            }
+            elseif($selection_type==1)
+            {
+                if(isset($division) && strlen($division)>1)
+                {
+                    $this->db->where('division_id', $division);
+                    $this->db->where('LENGTH(zone_id)<', 2);
+                }
+            }
+            elseif($selection_type==0)
+            {
+                $this->db->where('LENGTH(division_id)<', 2);
+            }
+
+            if(isset($result['year']) && strlen($result['year'])>1)
+            {
+                $this->db->where('year', $result['year']);
+            }
+            if(isset($result['crop_id']) && strlen($result['crop_id'])>1)
+            {
+                $this->db->where('crop_id', $result['crop_id']);
+            }
+            if(isset($result['type_id']) && strlen($result['type_id'])>1)
+            {
+                $this->db->where('type_id', $result['type_id']);
+            }
+            if(isset($result['variety_id']) && strlen($result['variety_id'])>1)
+            {
+                $this->db->where('variety_id', $result['variety_id']);
+            }
+
+            $this->db->where('status',$this->config->item('status_active'));
+            $sub_result = $this->db->get()->row_array();
+
+            $result['total_budgeted'] = isset($sub_result['total_budgeted'])?$sub_result['total_budgeted']:0;
+            $result['total_targeted'] = isset($sub_result['total_targeted'])?$sub_result['total_targeted']:0;
         }
-        return array_values($results);
+
+        return $results;
     }
 
     public function get_division_user_zones($user_division)

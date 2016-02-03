@@ -225,6 +225,7 @@ class Report_pricing_model extends CI_Model
         $this->db->where('bsp.variety_id', $variety_id);
         $this->db->where('bsp.pricing_type', $this->config->item('pricing_type_final'));
         $result = $this->db->get()->row_array();
+
         $mrp = isset($result['mrp'])?$result['mrp']:0;
 
         $this->db->from('budget_bonus_setup bbs');
@@ -238,6 +239,53 @@ class Report_pricing_model extends CI_Model
 
         $final_net_sales_price = $mrp - ($sales_commission/100)*$mrp - ($sales_bonus/100)*$mrp - ($other_incentive/100)*$mrp;
         return $final_net_sales_price;
+    }
+
+    public function get_final_prediction_info($year, $crop_id, $type_id, $variety_id)
+    {
+        $this->db->from('budget_sales_pricing bsp');
+        $this->db->select('bsp.*');
+        $this->db->select('avi.varriety_name variety_name');
+        $this->db->select('aci.crop_name crop_name');
+        $this->db->select('ati.product_type type_name');
+        $this->db->select('ay.year_name year_name');
+        $this->db->select('bpq.pi_value');
+        $this->db->select('bprin.final_targeted_quantity');
+        $this->db->select('bics.ho_and_gen_exp, bics.marketing, bics.finance_cost, bics.target_profit');
+        $this->db->select('bbs.sales_commission, bbs.sales_bonus, bbs.other_incentive');
+        $this->db->select('bdc.usd_conversion_rate, bdc.lc_exp, bdc.insurance_exp, bdc.packing_material, bdc.carriage_inwards, bdc.air_freight_and_docs, bdc.cnf, bdc.bank_other_charges, bdc.ait, bdc.miscellaneous');
+        $this->db->where('bsp.status',$this->config->item('status_active'));
+
+        if(strlen($year)>1)
+        {
+            $this->db->where('bsp.year', $year);
+        }
+        if(strlen($crop_id)>1)
+        {
+            $this->db->where('bsp.crop_id', $crop_id);
+        }
+        if(strlen($type_id)>1)
+        {
+            $this->db->where('bsp.type_id', $type_id);
+        }
+        if(strlen($variety_id)>1)
+        {
+            $this->db->where('bsp.variety_id', $variety_id);
+        }
+
+        $this->db->where('bsp.pricing_type', $this->config->item('pricing_type_final'));
+
+        $this->db->join('ait_varriety_info avi', 'avi.varriety_id = bsp.variety_id', 'LEFT');
+        $this->db->join('ait_crop_info aci', 'aci.crop_id = bsp.crop_id', 'LEFT');
+        $this->db->join('ait_product_type ati', 'ati.product_type_id = bsp.type_id', 'LEFT');
+        $this->db->join('ait_year ay', 'ay.year_id = bsp.year', 'LEFT');
+        $this->db->join('budget_direct_cost bdc', 'bdc.year = bsp.year', 'LEFT');
+        $this->db->join('budget_indirect_cost_setup bics', 'bics.year = bsp.year', 'LEFT');
+        $this->db->join('budget_purchase_quantity bpq', 'bpq.year = bsp.year AND bpq.variety_id = bsp.variety_id', 'LEFT');
+        $this->db->join('budget_principal_quantity bprin', 'bprin.year = bsp.year AND bprin.variety_id = bsp.variety_id', 'LEFT');
+        $this->db->join('budget_bonus_setup bbs', 'bbs.year = bsp.year AND bbs.variety_id = bsp.variety_id', 'LEFT');
+        $results = $this->db->get()->result_array();
+        return $results;
     }
 
 }

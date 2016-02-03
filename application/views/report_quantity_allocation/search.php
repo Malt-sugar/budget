@@ -52,11 +52,42 @@ $this->load->view("action_buttons_edit",$data);
         $(document).on("click", "#load_report", function(event)
         {
             $("#report_list").html("");
+            var division = $("#division").val();
+            var zone = $("#zone").val();
+            var territory = $("#territory").val();
+            var district = $("#district").val();
+            var customer = $("#customer").val();
+
+            if((division).length<2 && (zone).length<2 && (territory).length<2 && !district && (customer).length<2)
+            {
+                var selection_type = 0;
+            }
+            else if((division).length>2 && (zone).length<2 && (territory).length<2 && !district && (customer).length<2)
+            {
+                var selection_type = 1;
+            }
+            else if((division).length>2 && (zone).length>2 && (territory).length<2 && !district && (customer).length<2)
+            {
+                var selection_type = 2;
+            }
+            else if((division).length>2 && (zone).length>2 && (territory).length>2 && !district && (customer).length<2)
+            {
+                var selection_type = 3;
+            }
+            else if((division).length>2 && (zone).length>2 && (territory).length>2 && district>0 && (customer).length<2)
+            {
+                var selection_type = 4;
+            }
+            else if((division).length>2 && (zone).length>2 && (territory).length>2 && district>0 && (customer).length>2)
+            {
+                var selection_type = 5;
+            }
+
             $.ajax({
                 url: base_url+"report_quantity_allocation/index/report",
                 type: 'POST',
                 dataType: "JSON",
-                data:{year:$("#year").val(),from_month:$("#from_month").val(), to_month:$("#to_month").val(), crop_id:$("#crop").val(), type_id:$("#type").val(), variety_id:$("#variety").val(), division: $("#division").val(), zone: $("#zone").val(), territory: $("#territory").val(), district: $("#district").val(), customer: $("#customer").val()},
+                data:{selection_type:selection_type,year:$("#year").val(),from_month:$("#from_month").val(), to_month:$("#to_month").val(), crop_id:$("#crop").val(), type_id:$("#type").val(), variety_id:$("#variety").val(), division: $("#division").val(), zone: $("#zone").val(), territory: $("#territory").val(), district: $("#district").val(), customer: $("#customer").val()},
                 success: function (data, status)
                 {
 

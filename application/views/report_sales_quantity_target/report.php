@@ -29,16 +29,21 @@
                 <th><?php echo $this->lang->line("LABEL_SELLING_MONTH"); ?></th>
                 <th><?php echo $this->lang->line("LABEL_TARGET_FROM_CUSTOMER"); ?></th>
                 <th><?php echo $this->lang->line("LABEL_FINAL_TARGETED_SALES"); ?></th>
-                <th><?php echo $this->lang->line("LABEL_ACTUAL_SALES_QTY"); ?></th>
-                <th><?php echo $this->lang->line("LABEL_VARIANCE"); ?></th>
-                <th><?php echo $this->lang->line("LABEL_UNIT_PRICE_PER_KG"); ?></th>
-                <th><?php echo $this->lang->line("LABEL_TOTAL_SALES_TK"); ?></th>
+                <th class="text-center"><?php echo $this->lang->line("LABEL_ACTUAL_SALES_QTY"); ?></th>
+                <th class="text-center"><?php echo $this->lang->line("LABEL_VARIANCE"); ?></th>
+                <th class="text-center"><?php echo $this->lang->line("LABEL_UNIT_PRICE_PER_KG"); ?></th>
+                <th class="text-center"><?php echo $this->lang->line("LABEL_TOTAL_SALES_TK"); ?></th>
             </tr>
             </thead>
             <tbody>
                 <?php
                 if(sizeof($targets)>0)
                 {
+                    $sum_total_budgeted = 0;
+                    $sum_total_targeted = 0;
+                    $sum_actual_sales = 0;
+                    $sum_total_sales = 0;
+
                     foreach($targets as $key=>$target)
                     {
                         $actual_sales = Report_helper::get_actual_sales_qty($target['year'], $target['zone_id'], $target['territory_id'], $target['customer_id'], $target['variety_id']);
@@ -64,13 +69,31 @@
 
                                 </div>
                             </td>
-                            <td><?php echo $actual_sales?$actual_sales:0;?></td>
-                            <td><?php echo $target['total_targeted']-$actual_sales;?></td>
-                            <td><?php echo $target['unit_price_per_kg'];?></td>
-                            <td><?php echo $actual_sales*$target['unit_price_per_kg'];?></td>
+                            <td class="text-center"><?php echo $actual_sales?$actual_sales:0;?></td>
+                            <td class="text-center"><?php echo $target['total_targeted']-$actual_sales;?></td>
+                            <td class="text-center"><?php echo $target['unit_price_per_kg'];?></td>
+                            <td class="text-center"><?php echo $actual_sales*$target['unit_price_per_kg'];?></td>
                         </tr>
                         <?php
+                        $sum_total_budgeted += $target['total_budgeted'];
+                        $sum_total_targeted += $target['total_targeted'];
+                        $sum_actual_sales += $actual_sales?$actual_sales:0;
+                        $sum_total_sales += $actual_sales*$target['unit_price_per_kg'];
                     }
+                    ?>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td style="vertical-align: middle;" class="text-center"><label class="label label-danger"><?php echo $this->lang->line('LABEL_TOTAL')?></label></td>
+                        <td class="text-center"><?php echo $sum_total_budgeted;?></td>
+                        <td class="text-center"><?php echo $sum_total_targeted;?></td>
+                        <td class="text-center"><?php echo $sum_actual_sales;?></td>
+                        <td></td>
+                        <td></td>
+                        <td class="text-center"><?php echo $sum_total_sales;?></td>
+                    </tr>
+                    <?php
                 }
                 else
                 {

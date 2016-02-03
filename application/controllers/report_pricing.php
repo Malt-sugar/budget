@@ -137,6 +137,13 @@ class Report_pricing extends ROOT_Controller
                 $ajax['status'] = true;
                 $ajax['content'][] = array("id" => "#report_list", "html" => $this->load->view("report_pricing/budget_vs_actual_comparison_report", $data, true));
             }
+            elseif($report_type==7)
+            {
+                $data['title'] = 'Final Prediction Pricing';
+                $data['pricingData'] = $this->report_pricing_model->get_final_prediction_info($year, $crop_id, $type_id, $variety_id);
+                $ajax['status'] = true;
+                $ajax['content'][] = array("id" => "#report_list", "html" => $this->load->view("report_pricing/budget_vs_actual_comparison_report", $data, true));
+            }
 
             $this->jsonReturn($ajax);
         }

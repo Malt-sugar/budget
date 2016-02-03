@@ -11,6 +11,7 @@ foreach($pricingData as $pricing)
     $arranged[$pricing['crop_id']][$pricing['type_id']][$pricing['variety_id']]['crop_name'] = $pricing['crop_name'];
     $arranged[$pricing['crop_id']][$pricing['type_id']][$pricing['variety_id']]['type_name'] = $pricing['type_name'];
     $arranged[$pricing['crop_id']][$pricing['type_id']][$pricing['variety_id']]['variety_name'] = $pricing['variety_name'];
+    $arranged[$pricing['crop_id']][$pricing['type_id']][$pricing['variety_id']]['variety_id'] = $pricing['variety_id'];
     $arranged[$pricing['crop_id']][$pricing['type_id']][$pricing['variety_id']]['pi_value'] = $pricing['pi_value'];
     $arranged[$pricing['crop_id']][$pricing['type_id']][$pricing['variety_id']]['quantity'] = $pricing['quantity'];
     $arranged[$pricing['crop_id']][$pricing['type_id']][$pricing['variety_id']]['usd_conversion_rate'] = $pricing['usd_conversion_rate'];
@@ -91,6 +92,18 @@ foreach($pricingData as $pricing)
                             </tr>
                         </table>
                     </th>
+                    <th>
+                        <table class="table table-bordered" style="margin-bottom: 0px;">
+                            <tr>
+                                <td colspan="3" class="text-center"><?php echo $this->lang->line("LABEL_TOTAL_NET_SALES"); ?></td>
+                            </tr>
+                            <tr>
+                                <td width="70"><?php echo $this->lang->line('LABEL_BUDGETED');?></td>
+                                <td width="70"><?php echo $this->lang->line('LABEL_ACTUAL');?></td>
+                                <td width="70"><?php echo $this->lang->line('LABEL_VARIANCE');?></td>
+                            </tr>
+                        </table>
+                    </th>
                 </tr>
             </thead>
             <tbody>
@@ -139,14 +152,15 @@ foreach($pricingData as $pricing)
                                 $budgeted_cogs = $budgeted_total_cogs/$budgeted_data['final_quantity'];
 
                                 // COGS Expenses (COGS + Indirect expenses)
-                                $budgeted_cogs_expenses = $this->report_pricing_model->get_cogs_expenses($year, $budgeted_cogs);
-                                $actual_cogs_expenses = $this->report_pricing_model->get_cogs_expenses($year, $cogs);
+                                $budgeted_cogs_expenses = $this->report_pricing_model->get_cogs_expenses($detail['year'], $budgeted_cogs);
+                                $actual_cogs_expenses = $this->report_pricing_model->get_cogs_expenses($detail['year'], $cogs);
 
-                                $final_net_sales_price = $this->report_pricing_model->get_final_net_sales_price($year, $variety_id);
+                                $final_net_sales_price = $this->report_pricing_model->get_final_net_sales_price($detail['year'], $variety_id);
                                 $budgeted_net_profit = $final_net_sales_price - $budgeted_cogs_expenses;
                                 $actual_net_profit = $final_net_sales_price - $actual_cogs_expenses;
                                 $total_budgeted_net_profit = $budgeted_net_profit*$budgeted_data['final_quantity'];
                                 $total_actual_net_profit = $budgeted_net_profit*$detail['quantity'];
+                                $actual_sales = Report_helper::get_actual_sales_qty($detail['year'], null, null, null, $detail['variety_id']);
                                 ?>
                                 <tr>
                                     <td>
@@ -229,6 +243,15 @@ foreach($pricingData as $pricing)
                                                 <td width="70"><?php echo round($total_budgeted_net_profit); ?></td>
                                                 <td width="70"><?php echo round($total_actual_net_profit); ?></td>
                                                 <td width="70"><?php echo round($total_budgeted_net_profit-$total_actual_net_profit); ?></td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                    <td>
+                                        <table class="table table-bordered" style="margin-bottom: 0px;">
+                                            <tr>
+                                                <td width="70"><?php echo round($final_net_sales_price*$budgeted_data['final_quantity']); ?></td>
+                                                <td width="70"><?php echo round($final_net_sales_price*$actual_sales); ?></td>
+                                                <td width="70"><?php echo round($final_net_sales_price*$budgeted_data['final_quantity'])-round($final_net_sales_price*$actual_sales); ?></td>
                                             </tr>
                                         </table>
                                     </td>
